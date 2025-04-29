@@ -1,0 +1,69 @@
+# Unity 기본 빌드 무시 대상
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+[Mm]emoryCaptures/
+sysinfo.txt
+
+# Unity 사용 시 생성되는 설정 파일 무시
+*.pidb
+*.booproj
+*.svd
+*.userprefs
+*.unityproj
+*.sln
+*.csproj
+
+# OS/에디터 불필요한 파일 무시
+.DS_Store
+*.swp
+*.lock
+*.tmp
+*.bak
+*.orig
+*.old
+
+# Rider / VS / VSCode 설정 무시
+.idea/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Crashlytics & Gradle (모바일 빌드 시 무시)
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/tasks.xml
+/.idea/gradle.xml
+/.idea/assetWizardSettings.xml
+*.iml
+
+# Unity Cache
+*.apk
+*.aab
+
+# 빌드 결과물 무시
+*.exe
+*.app
+*.so
+*.dll
+*.dylib
+*.pdb
+
+# Exclude all by default, allow only main Unity folders
+/*
+!.gitignore
+!Assets/
+!Packages/
+!ProjectSettings/
+
+.DS_Store
