@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 
 public class Character : MonoBehaviour
 {
-    protected Rigidbody2D test;
     [SerializeField]
     protected Transform frontRay;
     [SerializeField]
@@ -46,24 +45,19 @@ public class Character : MonoBehaviour
             Debug.DrawLine(hit.point - perp * 0.5f, (hit.point - perp * 0.5f) + perp, Color.red);
             Debug.Log(perp);
         }
+        Movement();
     }
     void OnCollisionEnter2D(Collision2D col){
-        Debug.Log(col.gameObject.name);
         foreach(ContactPoint2D c in col.contacts){
             if(c.collider.gameObject.layer.Equals(7)){
             }
         }
     }
-    public void OnMovement(InputAction.CallbackContext context){
-        moveVec = context.ReadValue<Vector2>();
-        if(moveVec.x > 0) sprite.flipX = true; 
-        else if(moveVec.x < 0) sprite.flipX = false;
-        rigid.constraints = moveVec.x == 0.0f ? RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation : RigidbodyConstraints2D.FreezeRotation;
-    }
-    void Movement(){
-        Debug.Log($"Slope : {isSlope} / Ground : {isGround}");
+    protected void Movement(){
+        //Debug.Log($"Slope : {isSlope} / Ground : {isGround}");
         if(isSlope && isGround){
-            rigid.linearVelocity = 1.2f * movementSpeed * new Vector2(perp.x * moveVec.x, perp.y * moveVec.x);
+            rigid.AddForceX(1.2f);
+            //rigid.linearVelocity = 1.2f * movementSpeed * new Vector2(perp.x * moveVec.x, perp.y * moveVec.x);
         }else if(!isSlope && isGround){
             rigid.linearVelocity = new(movementSpeed * moveVec.x, 0);
         }else if(!isSlope && !isGround){
@@ -75,6 +69,7 @@ public class Character : MonoBehaviour
         return !Mathf.Approximately(cAngle, 0.0f);
     }
     private bool GroundCheck(){
+        Debug.Log(foot.position);
         return Physics2D.OverlapCircle(foot.position, chkGroundRad, LayerMask.GetMask("Floor"));
     }
 }
