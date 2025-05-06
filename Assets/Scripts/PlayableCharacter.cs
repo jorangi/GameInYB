@@ -19,9 +19,6 @@ public class PlayableCharacter : Character
     
     [SerializeField]
     protected Transform arm;
-   [SerializeField]
-    private float jumpPower = 8.0f;
-    public int jumpCnt;
     private bool isHealing;
     private Coroutine hpSmooth;
     private float hp;
@@ -32,7 +29,6 @@ public class PlayableCharacter : Character
 
             hp = value;
             hpVal.text = $"{Mathf.FloorToInt(value)} / {Mathf.FloorToInt(maxHp)}";
-            
             //HpBar fills out smoothly
             if(hpSmooth != null) 
                 StopCoroutine(hpSmooth);
@@ -58,16 +54,17 @@ public class PlayableCharacter : Character
         jumpCnt = 2;
         MaxHp = 100.0f;
         Hp = 100.0f;
-        chkGroundRad = 0.1f;
     }
     void OnEnable()
     {
         inputAction.Enable();
         inputAction.Player.Move.performed += OnMovement;
+        inputAction.Player.Move.canceled += OnMovement;
         inputAction.Player.Jump.performed += OnJump;
     }
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         Vector3 dir = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float armAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         arm.rotation = Quaternion.Euler(0, 0, armAngle + 90);
@@ -84,48 +81,32 @@ public class PlayableCharacter : Character
         }
         bar.fillAmount = (float)Mathf.FloorToInt(Hp) / Mathf.FloorToInt(maxHp);
     }
-    void FixedUpdate(){
-        isSlope = false;
-        isGround = GroundCheck();
-        RaycastHit2D hit = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor"));
-        Debug.DrawRay(foot.position, Vector2.down * rayDistance, Color.yellow);
-
-        if(hit){
-            Debug.DrawLine(hit.point, hit.point + hit.normal, Color.blue);
-            cAngle = Vector2.Angle(hit.normal, Vector2.up);
-            isSlope = SlopeCheck();
-            perp = Vector2.Perpendicular(hit.normal).normalized;
-            Debug.DrawLine(hit.point - perp * 0.5f, (hit.point - perp * 0.5f) + perp, Color.red);
-        }
-        Debug.Log(rigid.linearVelocityX);
+    protected override void FixedUpdate(){
+        base.FixedUpdate();
     }
-    void OnCollisionEnter2D(Collision2D col){
-        foreach(ContactPoint2D c in col.contacts){
-            if(c.collider.gameObject.layer.Equals(7)){
-            //if(c.collider.gameObject.layer.Equals(7) && Mathf.RoundToInt(rigid.linearVelocityY) == 0){
-                jumpCnt = 2;
-            }
-        }
-    }
-    public void OnMovement(InputAction.CallbackContext context){
+    public void OnMovement(InputAction.CallbackContext context)
+    {
         moveVec = context.ReadValue<Vector2>();
-        if(moveVec.x > 0) sprite.flipX = true; 
-        else if(moveVec.x < 0) sprite.flipX = false;
-        rigid.constraints = moveVec.x == 0.0f ? RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation : RigidbodyConstraints2D.FreezeRotation;
-        Movement();
+        if (moveVec.x > 0){
+          sprite.flipX = true;
+          frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x), frontRay.localPosition.y);
+        } 
+        else if (moveVec.x < 0){
+            sprite.flipX = false;
+            frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x) * -1, frontRay.localPosition.y);
+        } 
+
+        rigid.constraints = moveVec.x == 0.0f ?
+            RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation :
+            RigidbodyConstraints2D.FreezeRotation;
     }
-    public void OnJump(InputAction.CallbackContext context){
-        if(context.performed && jumpCnt > 0){
-            Debug.Log(rigid.linearVelocityY + jumpPower + " / " + jumpPower);
-            rigid.linearVelocityY = Mathf.Min(rigid.linearVelocityY + jumpPower, jumpPower);
-            //rigid.linearVelocityY += 100;
+
+   public void OnJump(InputAction.CallbackContext context){
+        if ((jumpCnt > 0 || isGround) && context.performed){
+            rigid.gravityScale = 1.5f;
+            isJump = true;
+            rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, jumpPower);
             jumpCnt--;
         }
-    }
-    private bool SlopeCheck(){
-        return !Mathf.Approximately(cAngle, 0.0f);
-    }
-    private bool GroundCheck(){
-        return Physics2D.OverlapCircle(foot.position, chkGroundRad, LayerMask.GetMask("Floor"));
     }
 }
