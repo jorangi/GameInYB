@@ -2,7 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Character : MonoBehaviour
+public class Character : ParentObject
 {
     [SerializeField] protected Transform frontRay;
     [SerializeField] protected Transform foot;
@@ -63,7 +63,6 @@ public class Character : MonoBehaviour
 
     protected void Movement()
     {
-        Debug.Log(isSlope);
         if (isGround && isSlope && !isJump)
         {
             rigid.linearVelocity = Mathf.Abs(moveVec.x) * movementSpeed * perp;

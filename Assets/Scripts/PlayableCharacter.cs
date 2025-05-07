@@ -3,9 +3,15 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayableCharacter : Character
-{
+{   
+    public static PlayableCharacter Inst{get; set;}
+    private Image messagePortrait;
+    private TextMeshProUGUI unitName, message;
+    public GameObject messageObj;
+    private RectTransform messageBox;
     private InputSystem_Actions inputAction;
     private const float hpBarSpd = 5.0f;
 
@@ -50,10 +56,19 @@ public class PlayableCharacter : Character
         }
     }
     void Awake(){
+        if(PlayableCharacter.Inst != null && PlayableCharacter.Inst != this){
+            Destroy(PlayableCharacter.Inst);
+            return;
+        }
+        PlayableCharacter.Inst = this;
+        DontDestroyOnLoad(gameObject);
+        
         inputAction = new();
         jumpCnt = 2;
         MaxHp = 100.0f;
         Hp = 100.0f;
+
+        SetupMessageBox();
     }
     void OnEnable()
     {
@@ -101,12 +116,36 @@ public class PlayableCharacter : Character
             RigidbodyConstraints2D.FreezeRotation;
     }
 
-   public void OnJump(InputAction.CallbackContext context){
+    public void OnJump(InputAction.CallbackContext context){
         if ((jumpCnt > 0 || isGround) && context.performed){
             rigid.gravityScale = 1.5f;
             isJump = true;
             rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, jumpPower);
             jumpCnt--;
         }
+    }
+    private void SetupMessageBox(){
+        messagePortrait = messageObj.transform.Find("portraitBox").Find("portrait").GetComponent<Image>();
+        unitName = messageObj.transform.Find("portraitBox").Find("unitNameBox").Find("unitName").GetComponent<TextMeshProUGUI>();
+        message = messageObj.transform.Find("messageBox").Find("message").GetComponent<TextMeshProUGUI>();
+        messageBox = message.transform.parent.GetComponent<RectTransform>();
+    }
+    public void ShowMessage(string[] info)
+    {
+        messageObj.SetActive(true);
+        if(string.IsNullOrEmpty(info[0])){
+            messagePortrait.transform.parent.gameObject.SetActive(false);
+            messageBox.offsetMin = new(50.0f, messageBox.offsetMin.y);
+        }
+        else{
+            messageBox.offsetMin = new(318f, messageBox.offsetMin.y);
+            messagePortrait.transform.parent.gameObject.SetActive(true);
+            messagePortrait.sprite = null;
+            unitName.text = info[1];
+            message.text = info[2];
+        }
+    }
+    public void ShowMessage(){
+        messageObj.SetActive(false);
     }
 }

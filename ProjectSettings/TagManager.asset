@@ -13,7 +13,7 @@ TagManager:
   - UI
   - Character
   - Floor
-  - 
+  - Player
   - 
   - 
   - 
@@ -43,6 +43,9 @@ TagManager:
     locked: 0
   - name: Character
     uniqueID: 3928382231
+    locked: 0
+  - name: UI
+    uniqueID: 1581125099
     locked: 0
   m_RenderingLayers:
   - Default
