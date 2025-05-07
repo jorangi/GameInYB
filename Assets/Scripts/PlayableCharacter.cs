@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class PlayableCharacter : Character
 {   
     public static PlayableCharacter Inst{get; set;}
-    private Image messagePortrait;
+    private Image messagePortrait, imageOnMessage;
     private TextMeshProUGUI unitName, message;
     public GameObject messageObj;
     private RectTransform messageBox;
@@ -129,6 +129,7 @@ public class PlayableCharacter : Character
         unitName = messageObj.transform.Find("portraitBox").Find("unitNameBox").Find("unitName").GetComponent<TextMeshProUGUI>();
         message = messageObj.transform.Find("messageBox").Find("message").GetComponent<TextMeshProUGUI>();
         messageBox = message.transform.parent.GetComponent<RectTransform>();
+        imageOnMessage = messageObj.transform.Find("imageBox").Find("image").GetComponent<Image>();
     }
     public void ShowMessage(string[] info)
     {
@@ -143,6 +144,13 @@ public class PlayableCharacter : Character
             messagePortrait.sprite = null;
             unitName.text = info[1];
             message.text = info[2];
+        }
+        if(string.IsNullOrEmpty(info[3])){
+            imageOnMessage.transform.parent.gameObject.SetActive(false);
+        }
+        else{
+            imageOnMessage.transform.parent.gameObject.SetActive(true);
+            imageOnMessage.sprite = null;
         }
     }
     public void ShowMessage(){

@@ -10,7 +10,6 @@ public class InformationObject : ParentObject, IInformation
     }
     protected virtual void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log(col.gameObject.layer.Equals(LayerMask.NameToLayer("Player")));
         if(col.gameObject.layer.Equals(LayerMask.NameToLayer("Player"))){
             PlayableCharacter.Inst.ShowMessage(info);
         }
