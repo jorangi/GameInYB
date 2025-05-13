@@ -25,6 +25,7 @@ public class PlayableCharacter : Character
     
     [SerializeField]
     protected Transform arm;
+    private SpriteRenderer weaponSprite;
     private bool isHealing;
     private Coroutine hpSmooth;
     private float hp;
@@ -67,7 +68,7 @@ public class PlayableCharacter : Character
         jumpCnt = 2;
         MaxHp = 100.0f;
         Hp = 100.0f;
-
+        weaponSprite = arm.GetChild(0).GetComponent<SpriteRenderer>();
         SetupMessageBox();
     }
     void OnEnable()
@@ -76,6 +77,15 @@ public class PlayableCharacter : Character
         inputAction.Player.Move.performed += OnMovement;
         inputAction.Player.Move.canceled += OnMovement;
         inputAction.Player.Jump.performed += OnJump;
+        inputAction.Player.Attack.performed += OnAttack;
+    }
+
+    private void OnAttack(InputAction.CallbackContext context)
+    {
+        Attack();
+    }
+    protected override void Attack(){
+        base.Attack();
     }
     protected override void Update()
     {

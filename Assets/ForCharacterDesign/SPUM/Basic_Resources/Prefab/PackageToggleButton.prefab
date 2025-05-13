@@ -102,7 +102,7 @@ MonoBehaviour:
   _index: 0
   _title: {fileID: 673028823249307567}
   PackageToggleButton: {fileID: 4264543546162115494}
-  _spumManager: {fileID: 0}
+  _Manager: {fileID: 0}
 --- !u!1 &2951802512535670929
 GameObject:
   m_ObjectHideFlags: 0

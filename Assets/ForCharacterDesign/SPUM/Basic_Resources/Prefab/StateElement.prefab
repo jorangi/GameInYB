@@ -141,7 +141,6 @@ MonoBehaviour:
   RemoveButton: {fileID: 3265623299429847643}
   StateSubTypeText: {fileID: 5757981551285392132}
   StatePackageText: {fileID: 5205134663123355316}
-  EditButton: {fileID: 0}
 --- !u!1 &364444501642563534
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,7 +849,6 @@ MonoBehaviour:
   RemoveButton: {fileID: 0}
   StateSubTypeText: {fileID: 0}
   StatePackageText: {fileID: 0}
-  EditButton: {fileID: 0}
 --- !u!1 &3191706520733485064
 GameObject:
   m_ObjectHideFlags: 0
@@ -1295,7 +1293,6 @@ MonoBehaviour:
   RemoveButton: {fileID: 3265623299429847643}
   StateSubTypeText: {fileID: 5757981551285392132}
   StatePackageText: {fileID: 5205134663123355316}
-  EditButton: {fileID: 0}
 --- !u!1 &6181838839105065435
 GameObject:
   m_ObjectHideFlags: 0

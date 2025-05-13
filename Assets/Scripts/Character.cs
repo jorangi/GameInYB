@@ -60,7 +60,9 @@ public class Character : ParentObject
     {  
         Movement();
     }
-
+    protected virtual void Attack(){
+        
+    }
     protected void Movement()
     {
         if (isGround && isSlope && !isJump)

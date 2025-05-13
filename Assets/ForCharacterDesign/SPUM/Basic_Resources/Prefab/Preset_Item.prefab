@@ -268,7 +268,10 @@ MonoBehaviour:
   NamePanel: {fileID: 6881311279358817586}
   inputName: {fileID: 5125680923461711993}
   NameEditPanel: {fileID: 7123665882824653844}
-  spumPackages: []
+  animPreset:
+    UnitType: 
+    PresetName: 
+    Packages: []
   animationManager: {fileID: 0}
 --- !u!1 &2111498829300376818
 GameObject:
