@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class PlayableCharacter : Character
 {   
+    public int d;
     public static PlayableCharacter Inst{get; set;}
     private Image messagePortrait, imageOnMessage;
     private TextMeshProUGUI unitName, message;
@@ -26,6 +27,7 @@ public class PlayableCharacter : Character
     [SerializeField]
     protected Transform arm;
     private SpriteRenderer weaponSprite;
+    private Weapon weaponScript;
     private bool isHealing;
     private Coroutine hpSmooth;
     private float hp;
@@ -69,6 +71,7 @@ public class PlayableCharacter : Character
         MaxHp = 100.0f;
         Hp = 100.0f;
         weaponSprite = arm.GetChild(0).GetComponent<SpriteRenderer>();
+        weaponScript = weaponSprite.GetComponent<Weapon>();
         SetupMessageBox();
     }
     void OnEnable()
@@ -86,14 +89,19 @@ public class PlayableCharacter : Character
     }
     protected override void Attack(){
         base.Attack();
+        weaponScript.StartSwing();
     }
     protected override void Update()
     {
         base.Update();
         Vector3 dir = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float armAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        arm.rotation = Quaternion.Euler(0, 0, armAngle + 90);
-
+        if(!weaponScript.isSwing){
+            if(armAngle + 90 <= 180 && armAngle + 90 >= 0)
+                arm.rotation = Quaternion.Euler(0, 180, -(armAngle + 90));
+            else
+                arm.rotation = Quaternion.Euler(0, 0, armAngle + 90);
+        }
         if(Input.GetKeyDown(KeyCode.R)){
             Hp = Random.Range(0, MaxHp);
         }
@@ -125,7 +133,6 @@ public class PlayableCharacter : Character
             RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation :
             RigidbodyConstraints2D.FreezeRotation;
     }
-
     public void OnJump(InputAction.CallbackContext context){
         if ((jumpCnt > 0 || isGround) && context.performed){
             rigid.gravityScale = 1.5f;
