@@ -15,7 +15,7 @@ public class PlayableCharacter : Character
     private RectTransform messageBox;
     private InputSystem_Actions inputAction;
     private const float hpBarSpd = 5.0f;
-
+    private Camera cam;
     [SerializeField]
     private SlicedFilledImage hpBar;
     [SerializeField]
@@ -28,6 +28,7 @@ public class PlayableCharacter : Character
     protected Transform arm;
     private SpriteRenderer weaponSprite;
     private Weapon weaponScript;
+    private bool isDropdown;
     private bool isHealing;
     private Coroutine hpSmooth;
     private float hp;
@@ -73,6 +74,7 @@ public class PlayableCharacter : Character
         weaponSprite = arm.GetChild(0).GetComponent<SpriteRenderer>();
         weaponScript = weaponSprite.GetComponent<Weapon>();
         SetupMessageBox();
+        cam = Camera.main;
     }
     void OnEnable()
     {
@@ -81,8 +83,15 @@ public class PlayableCharacter : Character
         inputAction.Player.Move.canceled += OnMovement;
         inputAction.Player.Jump.performed += OnJump;
         inputAction.Player.Attack.performed += OnAttack;
+        inputAction.Player.Dropdown.performed += OnDropdown;
     }
-
+    private void OnDropdown(InputAction.CallbackContext context)
+    {
+        if(landingLayer == LAYER.PLATFORM){
+            col.isTrigger = true;
+            isDropdown = true;
+        }
+    }
     private void OnAttack(InputAction.CallbackContext context)
     {
         Attack();
@@ -116,6 +125,8 @@ public class PlayableCharacter : Character
     }
     protected override void FixedUpdate(){
         base.FixedUpdate();
+        Vector3 pos = transform.position;
+        cam.transform.position = Vector3.Lerp(cam.transform.position, new(Mathf.Clamp(pos.x, 0, 31), Mathf.Clamp(pos.y, 0, 18), -10), Time.fixedDeltaTime);
     }
     public void OnMovement(InputAction.CallbackContext context)
     {
@@ -172,5 +183,17 @@ public class PlayableCharacter : Character
     }
     public void ShowMessage(){
         messageObj.SetActive(false);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(!isDropdown && rigid.linearVelocityY <= 0.0f){
+            Landing((LAYER)collision.gameObject.layer);
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.gameObject.layer == (int)LAYER.PLATFORM && isDropdown){
+            isDropdown = false;
+        }
     }
 }

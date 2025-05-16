@@ -2,8 +2,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[DisallowMultipleComponent]
 public class Character : ParentObject
 {
+    protected enum LAYER{
+        FLOOR = 7,
+        PLATFORM = 9
+    };
     [SerializeField] protected Transform frontRay;
     [SerializeField] protected Transform foot;
     [SerializeField] protected float movementSpeed = 10.0f;
@@ -26,12 +31,13 @@ public class Character : ParentObject
     RaycastHit2D hit, fronthit;
     private Vector2 slopeTop;
     protected float maxAngle = 60.0f;
+    protected LAYER landingLayer = LAYER.FLOOR; //7 is Floor, 9 is Platform
     protected virtual void Update(){
         isGround = GroundCheck();
 
         Vector2 rayDir = (Vector2.down + new Vector2(moveVec.x, 0) * 0.25f).normalized;
-        hit = Physics2D.Raycast(foot.position, rayDir, rayDistance, LayerMask.GetMask("Floor"));
-        fronthit = Physics2D.Raycast(frontRay.position, sprite.flipX ? Vector2.right : Vector2.left, 0.2f, LayerMask.GetMask("Floor"));
+        hit = Physics2D.Raycast(foot.position, rayDir, rayDistance, LayerMask.GetMask("Floor", "Platform"));
+        fronthit = Physics2D.Raycast(frontRay.position, sprite.flipX ? Vector2.right : Vector2.left, 0.2f, LayerMask.GetMask("Floor", "Platform"));
 
         Debug.DrawLine(foot.position, (Vector2)foot.position + rayDir * rayDistance, Color.red);
         Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (sprite.flipX ? Vector2.right : Vector2.left) * 0.2f, Color.red);
@@ -74,9 +80,11 @@ public class Character : ParentObject
             rigid.linearVelocity = new Vector2(moveVec.x * movementSpeed, rigid.linearVelocityY);
         }
     }
-    protected virtual void Landing(){
+    protected virtual void Landing(LAYER layer){
         jumpCnt = 2;
         isJump = false;
+        col.isTrigger = false;
+        landingLayer = layer;
     }
     private bool SlopeCheck(RaycastHit2D hit)
     {
@@ -94,16 +102,20 @@ public class Character : ParentObject
     }
     private bool GroundCheck()
     {
-        return Physics2D.OverlapCircle(foot.position, chkGroundRad, LayerMask.GetMask("Floor"));
+        return Physics2D.OverlapCircle(foot.position, chkGroundRad, LayerMask.GetMask("Floor", "Platform"));
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
         foreach (ContactPoint2D c in col.contacts)
         {
-            if (c.collider.gameObject.layer.Equals(7))
+            if (c.collider.gameObject.layer.Equals((int)LAYER.FLOOR))
             {
-                if(rigid.linearVelocityY <= 0.0f) Landing();
+                if(rigid.linearVelocityY <= 0.0f) Landing(LAYER.FLOOR);
+            }
+            else if(c.collider.gameObject.layer.Equals((int)LAYER.PLATFORM))
+            {
+                if(rigid.linearVelocityY <= 0.0f) Landing(LAYER.PLATFORM);
             }
         }
     }
