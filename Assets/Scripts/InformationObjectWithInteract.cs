@@ -11,7 +11,8 @@ public class InformationObjectWithInteract : InformationObject
         base.Awake();
         inputAction = new();
     }
-    private void OnEnable() {
+    private void OnEnable()
+    {
         inputAction.Enable();
         inputAction.Player.Interact.performed += OnInteract;
     }
@@ -20,9 +21,13 @@ public class InformationObjectWithInteract : InformationObject
     {
         if (isOn) PlayableCharacter.Inst.ShowMessage(info);
     }
-
     public override void TriggerEnter(Collider2D col)
     {
         isOn = true;
+    }
+    public override void TriggerExit(Collider2D col)
+    {
+        base.TriggerExit(col);
+        isOn = false;
     }
 }

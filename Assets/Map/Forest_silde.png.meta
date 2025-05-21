@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ff84834deba394281b7d16807540c11f
+guid: a6de2177b06292b43ab1f3ec6eab3c81
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1713583201110182569
-    second: TestSword_0
+      213: -3908353382642861431
+    second: Forest_silde_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TestSword_0
+      name: Forest_silde_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 4
-        width: 32
-        height: 124
-      alignment: 9
-      pivot: {x: 0.5, y: 0.11}
+        x: 133
+        y: 158
+        width: 790
+        height: 804
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 75530c458212838e0800000000000000
-      internalID: -1713583201110182569
+      spriteID: 98a30ea4e4db2c9c0800000000000000
+      internalID: -3908353382642861431
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 12bdccb97528b41c189e7de33a112fc7
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      TestSword_0: -1713583201110182569
+      Forest_silde_0: -3908353382642861431
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -131,14 +131,6 @@ public class PlayableCharacter : Character
     public void OnMovement(InputAction.CallbackContext context)
     {
         moveVec = context.ReadValue<Vector2>();
-        if (moveVec.x > 0){
-          sprite.flipX = true;
-          frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x), frontRay.localPosition.y);
-        } 
-        else if (moveVec.x < 0){
-            sprite.flipX = false;
-            frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x) * -1, frontRay.localPosition.y);
-        } 
 
         rigid.constraints = moveVec.x == 0.0f ?
             RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation :
