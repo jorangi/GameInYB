@@ -41,40 +41,53 @@ public class Character : ParentObject
         Debug.DrawLine(foot.position, (Vector2)foot.position + Vector2.down * rayDistance, Color.blue);
         Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (sprite.flipX ? Vector2.right : Vector2.left) * 0.5f, Color.red);
 
-        if(fronthit) {
-                isSlope = SlopeCheck(fronthit);
-                slopeTop = fronthit.point;
+        if (fronthit)
+        {
+            isSlope = SlopeCheck(fronthit);
+            slopeTop = fronthit.point;
         }
-        else{
-            if(hit){
+        else
+        {
+            if (hit)
+            {
                 isSlope = SlopeCheck(hit);
-            }else{
+            }
+            else
+            {
+                rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
                 isSlope = false;
             }
 
-            if(!isJump && Mathf.Abs(slopeTop.y - foot.position.y) < 0.1f && cAngle > 15 && cAngle < 60){
+            if (!isJump && Mathf.Abs(slopeTop.y - foot.position.y) < 0.1f && cAngle > 15 && cAngle < 60)
+            {
                 rigid.gravityScale = gravityScale;
-            }else{
+            }
+            else
+            {
                 rigid.gravityScale = 1.5f;
             }
-        }
-        if(slopechk){
-            Debug.Log($"cAngle : {cAngle}, point.normal{contactPoint2D.relativeVelocity}");
+            if(moveVec.x != 0.0f) 
+                rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
     }
 
     protected virtual void FixedUpdate()
     {  
         Movement();
-        if(Input.GetKey(KeyCode.LeftShift)){
-            Debug.DrawLine(fronthit.point, fronthit.point+fronthit.normal, Color.yellow);
-        }
     }
     protected virtual void Attack(){
         
     }
     protected void Movement()
     {
+        if (moveVec.x > 0){
+          sprite.flipX = true;
+          frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x), frontRay.localPosition.y);
+        } 
+        else if (moveVec.x < 0){
+            sprite.flipX = false;
+            frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x) * -1, frontRay.localPosition.y);
+        } 
         if (isGround && isSlope && !isJump)
         {
             rigid.linearVelocity = Mathf.Abs(moveVec.x) * movementSpeed * perp;
@@ -84,11 +97,14 @@ public class Character : ParentObject
             rigid.linearVelocity = new Vector2(moveVec.x * movementSpeed, rigid.linearVelocityY);
         }
     }
-    protected virtual void Landing(LAYER layer){
+    protected virtual void Landing(LAYER layer)
+    {
         jumpCnt = 2;
         isJump = false;
         col.isTrigger = false;
         landingLayer = layer;
+        if (isSlope)
+            rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
     }
     private bool SlopeCheck(RaycastHit2D hit)
     {
@@ -101,7 +117,7 @@ public class Character : ParentObject
             if (Vector2.Dot(perp, new Vector2(moveVec.x, 0)) < 0)
                 perp = -perp;
         }
-        bool slopeTemp = !Mathf.Approximately(cAngle, 0.0f);
+        bool slopeTemp = cAngle != 0.0f;
         return slopeTemp;
     }
     private bool SlopeCheck(RaycastHit2D hit, int i)
@@ -116,7 +132,7 @@ public class Character : ParentObject
             if (Vector2.Dot(perp, new Vector2(moveVec.x, 0)) < 0)
                 perp = -perp;
         }
-        bool slopeTemp = !Mathf.Approximately(cAngle, 0.0f);
+        bool slopeTemp = cAngle != 0.0f;
         return slopeTemp;
     }
     private bool GroundCheck()
