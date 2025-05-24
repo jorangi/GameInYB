@@ -25,7 +25,7 @@ public class Character : ParentObject
     protected bool isGround;
     protected bool isJump;
     protected float rayDistance = 1.2f;
-    [SerializeField] protected float chkGroundRad = 0.1f;
+    [SerializeField] protected float chkGroundRad = 0.3f;
     [SerializeField]protected int jumpCnt;
     [SerializeField]protected int jumpPower;
     RaycastHit2D hit, fronthit;
@@ -35,12 +35,11 @@ public class Character : ParentObject
     protected virtual void Update(){
         isGround = GroundCheck();
 
-        Vector2 rayDir = (Vector2.down + new Vector2(moveVec.x, 0) * 0.25f).normalized;
-        hit = Physics2D.Raycast(foot.position, rayDir, rayDistance, LayerMask.GetMask("Floor", "Platform"));
-        fronthit = Physics2D.Raycast(frontRay.position, sprite.flipX ? Vector2.right : Vector2.left, 0.2f, LayerMask.GetMask("Floor", "Platform"));
+        hit = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));
+        fronthit = Physics2D.Raycast(frontRay.position, sprite.flipX ? Vector2.right : Vector2.left, 0.5f, LayerMask.GetMask("Floor", "Platform"));
 
-        Debug.DrawLine(foot.position, (Vector2)foot.position + rayDir * rayDistance, Color.red);
-        Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (sprite.flipX ? Vector2.right : Vector2.left) * 0.2f, Color.red);
+        Debug.DrawLine(foot.position, (Vector2)foot.position + Vector2.down * rayDistance, Color.blue);
+        Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (sprite.flipX ? Vector2.right : Vector2.left) * 0.5f, Color.red);
 
         if(fronthit) {
                 isSlope = SlopeCheck(fronthit);
@@ -50,7 +49,6 @@ public class Character : ParentObject
             if(hit){
                 isSlope = SlopeCheck(hit);
             }else{
-                rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
                 isSlope = false;
             }
 
@@ -60,11 +58,17 @@ public class Character : ParentObject
                 rigid.gravityScale = 1.5f;
             }
         }
+        if(slopechk){
+            Debug.Log($"cAngle : {cAngle}, point.normal{contactPoint2D.relativeVelocity}");
+        }
     }
 
     protected virtual void FixedUpdate()
     {  
         Movement();
+        if(Input.GetKey(KeyCode.LeftShift)){
+            Debug.DrawLine(fronthit.point, fronthit.point+fronthit.normal, Color.yellow);
+        }
     }
     protected virtual void Attack(){
         
@@ -100,15 +104,52 @@ public class Character : ParentObject
         bool slopeTemp = !Mathf.Approximately(cAngle, 0.0f);
         return slopeTemp;
     }
+    private bool SlopeCheck(RaycastHit2D hit, int i)
+    {
+        if (hit)
+        {
+            cAngle = Vector2.Angle(hit.normal, Vector2.up);
+            Debug.Log($"{cAngle}, {rigid.linearVelocityY}");  
+            if(cAngle > maxAngle) return false;
+            perp = Vector2.Perpendicular(hit.normal).normalized;
+
+            if (Vector2.Dot(perp, new Vector2(moveVec.x, 0)) < 0)
+                perp = -perp;
+        }
+        bool slopeTemp = !Mathf.Approximately(cAngle, 0.0f);
+        return slopeTemp;
+    }
     private bool GroundCheck()
     {
         return Physics2D.OverlapCircle(foot.position, chkGroundRad, LayerMask.GetMask("Floor", "Platform"));
     }
-
-    void OnCollisionEnter2D(Collision2D col)
+    private bool slopechk;
+    private void OnCollisionEnter2D(Collision2D collision)
     {
+        slopechk = true;
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        slopechk = false;
+    }
+    private ContactPoint2D contactPoint2D;
+    private void OnCollisionStay2D(Collision2D col) {
+        //Debug.Log("스테이");
+        if(!isGround) return;
+        //Debug.Log("땅임");
         foreach (ContactPoint2D c in col.contacts)
         {
+            //Debug.Log($"{Vector2.Distance(foot.position, c.point) > 0.05f} / {!slopechk} / {c.otherCollider.name}");
+
+            if(Vector2.Distance(foot.position, c.point) > 0.05f){
+                contactPoint2D = c;
+                return;
+            }
+            Debug.Log("여기서 스탑");
+            rigid.constraints = moveVec.x == 0.0f ?
+            RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation :
+            RigidbodyConstraints2D.FreezeRotation;
+
             if (c.collider.gameObject.layer.Equals((int)LAYER.FLOOR))
             {
                 if(rigid.linearVelocityY <= 0.0f) Landing(LAYER.FLOOR);
@@ -118,5 +159,8 @@ public class Character : ParentObject
                 if(rigid.linearVelocityY <= 0.0f) Landing(LAYER.PLATFORM);
             }
         }
+    }
+    private void SlopeJump(ContactPoint2D c){
+
     }
 }

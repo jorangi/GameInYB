@@ -126,7 +126,10 @@ public class PlayableCharacter : Character
     protected override void FixedUpdate(){
         base.FixedUpdate();
         Vector3 pos = transform.position;
-        cam.transform.position = Vector3.Lerp(cam.transform.position, new(Mathf.Clamp(pos.x, 0, 31), Mathf.Clamp(pos.y, 0, 18), -10), Time.fixedDeltaTime);
+        cam.transform.position = 
+        Vector2.Distance((Vector2)cam.transform.position, (Vector2)transform.position) > 0.01f ? 
+        new(Mathf.Clamp(pos.x, 0, 31), Mathf.Clamp(pos.y, 0, 18), -10) :
+        Vector3.Lerp(cam.transform.position, new(Mathf.Clamp(pos.x, 0, 31), Mathf.Clamp(pos.y, 0, 18), -10), Time.fixedDeltaTime);
     }
     public void OnMovement(InputAction.CallbackContext context)
     {
@@ -145,11 +148,12 @@ public class PlayableCharacter : Character
             RigidbodyConstraints2D.FreezeRotation;
     }
     public void OnJump(InputAction.CallbackContext context){
-        if ((jumpCnt > 0 || isGround) && context.performed){
+        if (jumpCnt > 0){
             rigid.gravityScale = 1.5f;
             isJump = true;
             rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, jumpPower);
             jumpCnt--;
+            rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
     }
     private void SetupMessageBox(){
