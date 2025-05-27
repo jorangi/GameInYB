@@ -5,10 +5,78 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+public class PlayableCharacterData : CharacterData
+{
+    public PlayableCharacterData(float spd, int maxHP, int hp, float atk, float ats, float def, float jmp, int jCnt, float cri, float crid)
+        : base(spd, maxHP, hp, atk, ats, def)
+    {
+        Jmp = jmp;
+        JCnt = jCnt;
+        Cri = cri;
+        Crid = crid;
+    }
+    protected float jmp; // jumpPower
+    protected int jCnt; // jumpCount;
+    protected float cri; // critical chance
+    protected float crid; // critical damage multiply
+    public float Jmp
+    {
+        get => jmp;
+        set
+        {
+            if (value < 0.0f)
+                jmp = 0.0f;
+            else
+                jmp = value;
+        }
+    }
+    public int JCnt
+    {
+        get => jCnt;
+        set
+        {
+            if (value < 0)
+                jCnt = 0;
+            else
+                jCnt = value;
+        }
+    }
+    public float Cri
+    {
+        get => cri;
+        set
+        {
+            if (value < 0.0f)
+                cri = 0.0f;
+            else if (value > 1.0f)
+                cri = 1.0f;
+            else
+                cri = value;
+        }
+    }
+    public float Crid
+    {
+        get => crid;
+        set
+        {
+            if (value < 0.0f)
+                crid = 0.0f;
+            else
+                crid = value;
+        }
+    }
+
+    //now item(inventory?)
+    //now equipments
+    //start skill
+    //now stage id
+    //located map id
+}
 public class PlayableCharacter : Character
-{   
+{
+    private PlayableCharacterData data;
     public int d;
-    public static PlayableCharacter Inst{get; set;}
+    public static PlayableCharacter Inst { get; set; }
     private Image messagePortrait, imageOnMessage;
     private TextMeshProUGUI unitName, message;
     public GameObject messageObj;
@@ -23,7 +91,7 @@ public class PlayableCharacter : Character
 
     [SerializeField]
     private TextMeshProUGUI hpVal;
-    
+
     [SerializeField]
     protected Transform arm;
     private SpriteRenderer weaponSprite;
@@ -32,41 +100,49 @@ public class PlayableCharacter : Character
     private bool isHealing;
     private Coroutine hpSmooth;
     private float hp;
-    public float Hp{
-        get=>hp;
-        set{
+    public float Hp
+    {
+        get => hp;
+        set
+        {
             isHealing = Mathf.FloorToInt(value) > Mathf.FloorToInt(hp);
 
             hp = value;
             hpVal.text = $"{Mathf.FloorToInt(value)} / {Mathf.FloorToInt(maxHp)}";
             //HpBar fills out smoothly
-            if(hpSmooth != null) 
+            if (hpSmooth != null)
                 StopCoroutine(hpSmooth);
-            if(isHealing){
+            if (isHealing)
+            {
                 hpBar.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(maxHp);
                 hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBarSec));
             }
-            else{
+            else
+            {
                 hpBarSec.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(maxHp);
                 hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBar));
             }
         }
     }
     private float maxHp;
-    public float MaxHp{
+    public float MaxHp
+    {
         get => maxHp;
-        set{
+        set
+        {
             maxHp = value;
         }
     }
-    void Awake(){
-        if(PlayableCharacter.Inst != null && PlayableCharacter.Inst != this){
+    void Awake()
+    {
+        if (PlayableCharacter.Inst != null && PlayableCharacter.Inst != this)
+        {
             Destroy(PlayableCharacter.Inst);
             return;
         }
         PlayableCharacter.Inst = this;
         DontDestroyOnLoad(gameObject);
-        
+
         inputAction = new();
         jumpCnt = 2;
         MaxHp = 100.0f;
@@ -87,7 +163,8 @@ public class PlayableCharacter : Character
     }
     private void OnDropdown(InputAction.CallbackContext context)
     {
-        if(landingLayer == LAYER.PLATFORM){
+        if (landingLayer == LAYER.PLATFORM)
+        {
             col.isTrigger = true;
             isDropdown = true;
         }
@@ -96,7 +173,8 @@ public class PlayableCharacter : Character
     {
         Attack();
     }
-    protected override void Attack(){
+    protected override void Attack()
+    {
         base.Attack();
         weaponScript.StartSwing();
     }
@@ -105,25 +183,30 @@ public class PlayableCharacter : Character
         base.Update();
         Vector3 dir = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float armAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        if(!weaponScript.isSwing){
-            if(armAngle + 90 <= 180 && armAngle + 90 >= 0)
+        if (!weaponScript.isSwing)
+        {
+            if (armAngle + 90 <= 180 && armAngle + 90 >= 0)
                 arm.rotation = Quaternion.Euler(0, 180, -(armAngle + 90));
             else
                 arm.rotation = Quaternion.Euler(0, 0, armAngle + 90);
         }
-        if(Input.GetKeyDown(KeyCode.R)){
+        if (Input.GetKeyDown(KeyCode.R))
+        {
             Hp = Random.Range(0, MaxHp);
         }
     }
-    IEnumerator HpBarFillsSmooth(SlicedFilledImage bar){
+    IEnumerator HpBarFillsSmooth(SlicedFilledImage bar)
+    {
         yield return new WaitForSeconds(0.3f);
-        while(Mathf.Abs(bar.fillAmount - (float)Mathf.FloorToInt(Hp) / Mathf.FloorToInt(maxHp)) > 0.01f){
+        while (Mathf.Abs(bar.fillAmount - (float)Mathf.FloorToInt(Hp) / Mathf.FloorToInt(maxHp)) > 0.01f)
+        {
             bar.fillAmount = Mathf.Lerp(bar.fillAmount, (float)Mathf.FloorToInt(Hp) / Mathf.FloorToInt(maxHp), Time.deltaTime * hpBarSpd);
             yield return null;
         }
         bar.fillAmount = (float)Mathf.FloorToInt(Hp) / Mathf.FloorToInt(maxHp);
     }
-    protected override void FixedUpdate(){
+    protected override void FixedUpdate()
+    {
         base.FixedUpdate();
         Vector3 pos = transform.position;
         cam.transform.position = Vector3.Lerp(cam.transform.position, new(Mathf.Clamp(pos.x, 0, 31), Mathf.Clamp(pos.y, 0, 18), -10), Time.fixedDeltaTime);
@@ -131,20 +214,19 @@ public class PlayableCharacter : Character
     public void OnMovement(InputAction.CallbackContext context)
     {
         moveVec = context.ReadValue<Vector2>();
-
-        rigid.constraints = moveVec.x == 0.0f ?
-            RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation :
-            RigidbodyConstraints2D.FreezeRotation;
     }
-    public void OnJump(InputAction.CallbackContext context){
-        if ((jumpCnt > 0 || isGround) && context.performed){
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if ((jumpCnt > 0 || isGround) && context.performed)
+        {
             rigid.gravityScale = 1.5f;
             isJump = true;
             rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, jumpPower);
             jumpCnt--;
         }
     }
-    private void SetupMessageBox(){
+    private void SetupMessageBox()
+    {
         messagePortrait = messageObj.transform.Find("portraitBox").Find("portrait").GetComponent<Image>();
         unitName = messageObj.transform.Find("portraitBox").Find("unitNameBox").Find("unitName").GetComponent<TextMeshProUGUI>();
         message = messageObj.transform.Find("messageBox").Find("message").GetComponent<TextMeshProUGUI>();
@@ -154,37 +236,44 @@ public class PlayableCharacter : Character
     public void ShowMessage(string[] info)
     {
         messageObj.SetActive(true);
-        if(string.IsNullOrEmpty(info[0])){
+        if (string.IsNullOrEmpty(info[0]))
+        {
             messagePortrait.transform.parent.gameObject.SetActive(false);
             messageBox.offsetMin = new(50.0f, messageBox.offsetMin.y);
         }
-        else{
+        else
+        {
             messageBox.offsetMin = new(318f, messageBox.offsetMin.y);
             messagePortrait.transform.parent.gameObject.SetActive(true);
             messagePortrait.sprite = null;
             unitName.text = info[1];
             message.text = info[2];
         }
-        if(string.IsNullOrEmpty(info[3])){
+        if (string.IsNullOrEmpty(info[3]))
+        {
             imageOnMessage.transform.parent.gameObject.SetActive(false);
         }
-        else{
+        else
+        {
             imageOnMessage.transform.parent.gameObject.SetActive(true);
             imageOnMessage.sprite = null;
         }
     }
-    public void ShowMessage(){
+    public void ShowMessage()
+    {
         messageObj.SetActive(false);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(!isDropdown && rigid.linearVelocityY <= 0.0f){
+        if (!isDropdown && rigid.linearVelocityY <= 0.0f)
+        {
             Landing((LAYER)collision.gameObject.layer);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.gameObject.layer == (int)LAYER.PLATFORM && isDropdown){
+        if (collision.gameObject.layer == (int)LAYER.PLATFORM && isDropdown)
+        {
             isDropdown = false;
         }
     }

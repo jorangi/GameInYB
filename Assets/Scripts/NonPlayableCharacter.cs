@@ -37,7 +37,7 @@ public class NonPlayableCharacter : Character
                 moveVec = new(moveDir ? 1.0f : -1.0f, 0f);
                 state = State.Patrol;
             }
-        } 
+        }
         if (moveTimer > 0.0f)
         {
             moveTimer -= Time.deltaTime;

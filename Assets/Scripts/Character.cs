@@ -2,6 +2,92 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public class CharacterData
+{
+    public CharacterData(float spd, int maxHP, int hp, float atk, float ats, float def)
+    {
+        Spd = spd;
+        MaxHP = maxHP;
+        HP = hp;
+        Atk = atk;
+        Ats = ats;
+        Def = def;
+    }
+    protected float spd; // movementSpeed
+    public float Spd
+    {
+        get => spd;
+        set
+        {
+            if (value < 0.0f)
+                spd = 0.0f;
+            else
+                spd = value;
+        }
+    }
+    protected int maxHP; // max Health
+    public int MaxHP
+    {
+        get => maxHP;
+        set
+        {
+            if (value < 0)
+                maxHP = 0;
+            else
+                maxHP = value;
+        }
+    }
+    protected int _HP; // now Health
+    public int HP
+    {
+        get => _HP;
+        set
+        {
+            if (value < 0)
+                _HP = 0;
+            else if (value > maxHP)
+                _HP = maxHP;
+            else
+                _HP = value;
+        }
+    }
+    protected float atk; // attack power
+    public float Atk
+    {
+        get => atk;
+        set
+        {
+            if (value < 0.0f)
+                atk = 0.0f;
+            else
+                atk = value;
+        }
+    }
+    protected float ats; // attack speed
+    public float Ats
+    {
+        get => ats;
+        set
+        {
+            if (value < 0.0f)
+                ats = 0.0f;
+            else
+                ats = value;
+        }
+    }
+    protected float def; // defence
+    public float Def
+    {
+        get => def;
+        set
+        {
+            if (value < 0.0f)
+                def = 0.0f;
+            else
+                def = value;
+        }
+    }
+}
 [DisallowMultipleComponent]
 public class Character : ParentObject
 {
@@ -21,7 +107,7 @@ public class Character : ParentObject
     protected Vector2 moveVec = Vector2.zero;
     protected Vector2 perp;
     protected float cAngle;
-    protected bool isSlope;
+    public bool isSlope;
     protected bool isGround;
     protected bool isJump;
     protected float rayDistance = 1.2f;
@@ -40,8 +126,13 @@ public class Character : ParentObject
         fronthit = Physics2D.Raycast(frontRay.position, sprite.flipX ? Vector2.right : Vector2.left, 0.2f, LayerMask.GetMask("Floor", "Platform"));
 
         Debug.DrawLine(foot.position, (Vector2)foot.position + rayDir * rayDistance, Color.red);
+        Debug.DrawLine(hit.point, hit.point + Vector2.Perpendicular(hit.normal) * -moveVec.x, Color.yellow);
         Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (sprite.flipX ? Vector2.right : Vector2.left) * 0.2f, Color.red);
 
+        if (moveVec.x != 0.0f)
+            rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+        else
+            rigid.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
         if (fronthit)
         {
             isSlope = SlopeCheck(fronthit);
@@ -54,10 +145,7 @@ public class Character : ParentObject
                 isSlope = SlopeCheck(hit);
             }
             else
-            {
-                rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
                 isSlope = false;
-            }
 
             if (!isJump && Mathf.Abs(slopeTop.y - foot.position.y) < 0.1f && cAngle > 15 && cAngle < 60)
             {
@@ -67,8 +155,6 @@ public class Character : ParentObject
             {
                 rigid.gravityScale = 1.5f;
             }
-            if(moveVec.x != 0.0f) 
-                rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
     }
 
@@ -104,8 +190,6 @@ public class Character : ParentObject
         isJump = false;
         col.isTrigger = false;
         landingLayer = layer;
-        if (isSlope)
-            rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
     }
     private bool SlopeCheck(RaycastHit2D hit)
     {
