@@ -4,14 +4,11 @@ using UnityEngine.InputSystem;
 
 public class CharacterData
 {
-    public CharacterData(float spd, int maxHP, int hp, float atk, float ats, float def)
+    private CharacterData() { }
+    protected string unitName;
+    public CharacterData(string name)
     {
-        Spd = spd;
-        MaxHP = maxHP;
-        HP = hp;
-        Atk = atk;
-        Ats = ats;
-        Def = def;
+        unitName = name;
     }
     protected float spd; // movementSpeed
     public float Spd
@@ -25,6 +22,11 @@ public class CharacterData
                 spd = value;
         }
     }
+    public virtual CharacterData SPD(float spd)
+    {
+        this.Spd = spd;
+        return this;
+    }
     protected int maxHP; // max Health
     public int MaxHP
     {
@@ -36,6 +38,11 @@ public class CharacterData
             else
                 maxHP = value;
         }
+    }
+    public virtual CharacterData MAXHP(int maxHP)
+    {
+        this.MaxHP = maxHP;
+        return this;
     }
     protected int _HP; // now Health
     public int HP
@@ -51,6 +58,11 @@ public class CharacterData
                 _HP = value;
         }
     }
+    public virtual CharacterData H_P(int hp)
+    {
+        this.HP = hp;
+        return this;
+    }
     protected float atk; // attack power
     public float Atk
     {
@@ -62,6 +74,11 @@ public class CharacterData
             else
                 atk = value;
         }
+    }
+    public virtual CharacterData ATK(float atk)
+    {
+        this.Atk = atk;
+        return this;
     }
     protected float ats; // attack speed
     public float Ats
@@ -75,6 +92,11 @@ public class CharacterData
                 ats = value;
         }
     }
+    public virtual CharacterData ATS(float ats)
+    {
+        this.Ats = ats;
+        return this;
+    }
     protected float def; // defence
     public float Def
     {
@@ -87,17 +109,28 @@ public class CharacterData
                 def = value;
         }
     }
+    public virtual CharacterData DEF(float def)
+    {
+        this.Def = def;
+        return this;
+    }
+
+    public override string ToString()
+    {
+        return $"Name: {unitName}, Speed: {spd}, MaxHP: {maxHP}, HP: {_HP}, Atk: {atk}, Ats: {ats}, Def: {def}";
+    }
 }
 [DisallowMultipleComponent]
 public class Character : ParentObject
 {
-    protected enum LAYER{
+    protected CharacterData data;
+    protected enum LAYER
+    {
         FLOOR = 7,
         PLATFORM = 9
     };
     [SerializeField] protected Transform frontRay;
     [SerializeField] protected Transform foot;
-    [SerializeField] protected float movementSpeed = 10.0f;
     [SerializeField] protected float gravityScale = 3.5f; // 중력 적용 세기
 
     [SerializeField] protected Collider2D col;
@@ -112,13 +145,14 @@ public class Character : ParentObject
     protected bool isJump;
     protected float rayDistance = 1.2f;
     [SerializeField] protected float chkGroundRad = 0.1f;
-    [SerializeField]protected int jumpCnt;
-    [SerializeField]protected int jumpPower;
+    [SerializeField] protected int jumpCnt;
     RaycastHit2D hit, fronthit;
     private Vector2 slopeTop;
     protected float maxAngle = 60.0f;
     protected LAYER landingLayer = LAYER.FLOOR; //7 is Floor, 9 is Platform
-    protected virtual void Update(){
+    protected virtual void Update()
+    {
+        Debug.Log(data.ToString());
         isGround = GroundCheck();
 
         Vector2 rayDir = (Vector2.down + new Vector2(moveVec.x, 0) * 0.25f).normalized;
@@ -128,7 +162,6 @@ public class Character : ParentObject
         Debug.DrawLine(foot.position, (Vector2)foot.position + rayDir * rayDistance, Color.red);
         Debug.DrawLine(hit.point, hit.point + Vector2.Perpendicular(hit.normal) * -moveVec.x, Color.yellow);
         Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (sprite.flipX ? Vector2.right : Vector2.left) * 0.2f, Color.red);
-
         if (moveVec.x != 0.0f)
             rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         else
@@ -157,31 +190,42 @@ public class Character : ParentObject
             }
         }
     }
-
+    protected virtual void Awake()
+    {
+        data = new CharacterData("Default")
+            .ATK(10)
+            .SPD(2.0f)
+            .MAXHP(100)
+            .H_P(100)
+            .ATS(1.0f)
+            .DEF(0.0f);
+    }
     protected virtual void FixedUpdate()
-    {  
+    {
         Movement();
     }
-    protected virtual void Attack(){
-        
+    protected virtual void Attack()
+    {
     }
     protected void Movement()
     {
-        if (moveVec.x > 0){
-          sprite.flipX = true;
-          frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x), frontRay.localPosition.y);
-        } 
-        else if (moveVec.x < 0){
+        if (moveVec.x > 0)
+        {
+            sprite.flipX = true;
+            frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x), frontRay.localPosition.y);
+        }
+        else if (moveVec.x < 0)
+        {
             sprite.flipX = false;
             frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x) * -1, frontRay.localPosition.y);
-        } 
+        }
         if (isGround && isSlope && !isJump)
         {
-            rigid.linearVelocity = Mathf.Abs(moveVec.x) * movementSpeed * perp;
+            rigid.linearVelocity = Mathf.Abs(moveVec.x) * data.Spd * perp;
         }
         else if (!isSlope)
         {
-            rigid.linearVelocity = new Vector2(moveVec.x * movementSpeed, rigid.linearVelocityY);
+            rigid.linearVelocity = new Vector2(moveVec.x * data.Spd, rigid.linearVelocityY);
         }
     }
     protected virtual void Landing(LAYER layer)
@@ -196,7 +240,7 @@ public class Character : ParentObject
         if (hit)
         {
             cAngle = Vector2.Angle(hit.normal, Vector2.up);
-            if(cAngle > maxAngle) return false;
+            if (cAngle > maxAngle) return false;
             perp = Vector2.Perpendicular(hit.normal).normalized;
 
             if (Vector2.Dot(perp, new Vector2(moveVec.x, 0)) < 0)
@@ -216,11 +260,11 @@ public class Character : ParentObject
         {
             if (c.collider.gameObject.layer.Equals((int)LAYER.FLOOR))
             {
-                if(rigid.linearVelocityY <= 0.0f) Landing(LAYER.FLOOR);
+                if (rigid.linearVelocityY <= 0.0f) Landing(LAYER.FLOOR);
             }
-            else if(c.collider.gameObject.layer.Equals((int)LAYER.PLATFORM))
+            else if (c.collider.gameObject.layer.Equals((int)LAYER.PLATFORM))
             {
-                if(rigid.linearVelocityY <= 0.0f) Landing(LAYER.PLATFORM);
+                if (rigid.linearVelocityY <= 0.0f) Landing(LAYER.PLATFORM);
             }
         }
     }

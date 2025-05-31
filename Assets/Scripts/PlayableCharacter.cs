@@ -7,30 +7,9 @@ using UnityEngine.UI;
 
 public class PlayableCharacterData : CharacterData
 {
-    public PlayableCharacterData(float spd, int maxHP, int hp, float atk, float ats, float def, float jmp, int jCnt, float cri, float crid)
-        : base(spd, maxHP, hp, atk, ats, def)
-    {
-        Jmp = jmp;
-        JCnt = jCnt;
-        Cri = cri;
-        Crid = crid;
-    }
-    protected float jmp; // jumpPower
-    protected int jCnt; // jumpCount;
-    protected float cri; // critical chance
-    protected float crid; // critical damage multiply
-    public float Jmp
-    {
-        get => jmp;
-        set
-        {
-            if (value < 0.0f)
-                jmp = 0.0f;
-            else
-                jmp = value;
-        }
-    }
-    public int JCnt
+    public PlayableCharacterData(string name) : base(name) { }
+    protected int jCnt; // jump count
+    public int JumpCnt
     {
         get => jCnt;
         set
@@ -41,6 +20,19 @@ public class PlayableCharacterData : CharacterData
                 jCnt = value;
         }
     }
+    protected float jumpPower; // jump power
+    public float JumpPower
+    {
+        get => jumpPower;
+        set
+        {
+            if (value < 0)
+                jumpPower = 0;
+            else
+                jumpPower = value;
+        }
+    }
+    protected float cri;// critical chance
     public float Cri
     {
         get => cri;
@@ -54,27 +46,51 @@ public class PlayableCharacterData : CharacterData
                 cri = value;
         }
     }
-    public float Crid
+    protected float criDmg; // critical damage
+    public float CriDmg
     {
-        get => crid;
+        get => criDmg;
         set
         {
-            if (value < 0.0f)
-                crid = 0.0f;
+            if (value < 1.0f)
+                criDmg = 1.0f;
             else
-                crid = value;
+                criDmg = value;
         }
     }
-
-    //now item(inventory?)
-    //now equipments
-    //start skill
-    //now stage id
-    //located map id
+    public override CharacterData SPD(float spd) => base.SPD(spd);
+    public override CharacterData MAXHP(int maxhp) => base.MAXHP(maxhp);
+    public override CharacterData H_P(int hp) => base.H_P(hp);
+    public override CharacterData ATK(float atk) => base.ATK(atk);
+    public override PlayableCharacterData ATS(float ats) => base.ATK(ats);
+    public PlayableCharacterData JCNT(int jCnt)
+    {
+        this.JumpCnt = jCnt;
+        return this;
+    }
+    public PlayableCharacterData JPOW(float jumpPower)
+    {
+        this.JumpPower = jumpPower;
+        return this;
+    }
+    public PlayableCharacterData CRI(float cri)
+    {
+        this.Cri = cri;
+        return this;
+    }
+    public PlayableCharacterData CRIDMG(float criDmg)
+    {
+        this.CriDmg = criDmg;
+        return this;
+    }
+    public override string ToString()
+    {
+        return $"{base.ToString()}\nJump Count : {JumpCnt}\nJump Power : {JumpPower}\nCritical Chance : {Cri}\nCritical Damage : {CriDmg}";
+    }
 }
 public class PlayableCharacter : Character
 {
-    private PlayableCharacterData data;
+    protected new PlayableCharacterData data;
     public int d;
     public static PlayableCharacter Inst { get; set; }
     private Image messagePortrait, imageOnMessage;
@@ -99,41 +115,7 @@ public class PlayableCharacter : Character
     private bool isDropdown;
     private bool isHealing;
     private Coroutine hpSmooth;
-    private float hp;
-    public float Hp
-    {
-        get => hp;
-        set
-        {
-            isHealing = Mathf.FloorToInt(value) > Mathf.FloorToInt(hp);
-
-            hp = value;
-            hpVal.text = $"{Mathf.FloorToInt(value)} / {Mathf.FloorToInt(maxHp)}";
-            //HpBar fills out smoothly
-            if (hpSmooth != null)
-                StopCoroutine(hpSmooth);
-            if (isHealing)
-            {
-                hpBar.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(maxHp);
-                hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBarSec));
-            }
-            else
-            {
-                hpBarSec.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(maxHp);
-                hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBar));
-            }
-        }
-    }
-    private float maxHp;
-    public float MaxHp
-    {
-        get => maxHp;
-        set
-        {
-            maxHp = value;
-        }
-    }
-    void Awake()
+    protected override void Awake()
     {
         if (PlayableCharacter.Inst != null && PlayableCharacter.Inst != this)
         {
@@ -143,10 +125,15 @@ public class PlayableCharacter : Character
         PlayableCharacter.Inst = this;
         DontDestroyOnLoad(gameObject);
 
+        data = new PlayableCharacterData("Player")
+            .JCNT(2)
+            .JPOW(10.0f)
+            .CRI(0.1f)
+            .CRIDMG(1.5f)
+            .SPD(10.0f);
+
         inputAction = new();
         jumpCnt = 2;
-        MaxHp = 100.0f;
-        Hp = 100.0f;
         weaponSprite = arm.GetChild(0).GetComponent<SpriteRenderer>();
         weaponScript = weaponSprite.GetComponent<Weapon>();
         SetupMessageBox();
@@ -192,18 +179,18 @@ public class PlayableCharacter : Character
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Hp = Random.Range(0, MaxHp);
+            data.HP = Random.Range(0, data.MaxHP);
         }
     }
     IEnumerator HpBarFillsSmooth(SlicedFilledImage bar)
     {
         yield return new WaitForSeconds(0.3f);
-        while (Mathf.Abs(bar.fillAmount - (float)Mathf.FloorToInt(Hp) / Mathf.FloorToInt(maxHp)) > 0.01f)
+        while (Mathf.Abs(bar.fillAmount - (float)Mathf.FloorToInt(data.HP) / Mathf.FloorToInt(data.MaxHP)) > 0.01f)
         {
-            bar.fillAmount = Mathf.Lerp(bar.fillAmount, (float)Mathf.FloorToInt(Hp) / Mathf.FloorToInt(maxHp), Time.deltaTime * hpBarSpd);
+            bar.fillAmount = Mathf.Lerp(bar.fillAmount, (float)Mathf.FloorToInt(data.HP) / Mathf.FloorToInt(data.MaxHP), Time.deltaTime * hpBarSpd);
             yield return null;
         }
-        bar.fillAmount = (float)Mathf.FloorToInt(Hp) / Mathf.FloorToInt(maxHp);
+        bar.fillAmount = (float)Mathf.FloorToInt(data.HP) / Mathf.FloorToInt(data.MaxHP);
     }
     protected override void FixedUpdate()
     {
@@ -221,7 +208,7 @@ public class PlayableCharacter : Character
         {
             rigid.gravityScale = 1.5f;
             isJump = true;
-            rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, jumpPower);
+            rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, data.JumpPower);
             jumpCnt--;
         }
     }
@@ -275,6 +262,26 @@ public class PlayableCharacter : Character
         if (collision.gameObject.layer == (int)LAYER.PLATFORM && isDropdown)
         {
             isDropdown = false;
+        }
+    }
+    public void SetHP(int value)
+    {
+        isHealing = Mathf.FloorToInt(value) > Mathf.FloorToInt(data.HP);
+
+        data.HP = value;
+        hpVal.text = $"{Mathf.FloorToInt(value)} / {Mathf.FloorToInt(data.MaxHP)}";
+        //HpBar fills out smoothly
+        if (hpSmooth != null)
+            StopCoroutine(hpSmooth);
+        if (isHealing)
+        {
+            hpBar.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(data.MaxHP);
+            hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBarSec));
+        }
+        else
+        {
+            hpBarSec.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(data.MaxHP);
+            hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBar));
         }
     }
 }

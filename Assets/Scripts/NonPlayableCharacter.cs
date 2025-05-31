@@ -1,6 +1,10 @@
 using TMPro;
 using UnityEngine;
 
+public class NonPlayableCharacterData : CharacterData
+{
+    public NonPlayableCharacterData(string name) : base(name) { }
+}
 public class NonPlayableCharacter : Character
 {
     protected enum State
@@ -17,8 +21,9 @@ public class NonPlayableCharacter : Character
     public float moveTimer = 0.0f;
     private bool moveDir; //f : left, t : right
     private TextMeshPro behaviourPointer;
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         behaviourPointer = GetComponentInChildren<TextMeshPro>();
         idleTimer = Random.Range(0.0f, 1.0f);
     }
