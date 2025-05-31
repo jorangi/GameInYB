@@ -6,9 +6,20 @@ public class CharacterData
 {
     private CharacterData() { }
     protected string unitName;
+    public string UnitName
+    {
+        get => unitName;
+        set => unitName = value;
+    }
     public CharacterData(string name)
     {
         unitName = name;
+        SetSpd();
+        SetMaxHP();
+        SetHP();
+        SetAtk();
+        SetAts();
+        SetDef();
     }
     protected float spd; // movementSpeed
     public float Spd
@@ -22,7 +33,7 @@ public class CharacterData
                 spd = value;
         }
     }
-    public virtual CharacterData SPD(float spd)
+    public virtual CharacterData SetSpd(float spd = 5.0f)
     {
         this.Spd = spd;
         return this;
@@ -39,7 +50,7 @@ public class CharacterData
                 maxHP = value;
         }
     }
-    public virtual CharacterData MAXHP(int maxHP)
+    public virtual CharacterData SetMaxHP(int maxHP = 100)
     {
         this.MaxHP = maxHP;
         return this;
@@ -58,7 +69,7 @@ public class CharacterData
                 _HP = value;
         }
     }
-    public virtual CharacterData H_P(int hp)
+    public virtual CharacterData SetHP(int hp = 100)
     {
         this.HP = hp;
         return this;
@@ -75,7 +86,7 @@ public class CharacterData
                 atk = value;
         }
     }
-    public virtual CharacterData ATK(float atk)
+    public virtual CharacterData SetAtk(float atk = 10)
     {
         this.Atk = atk;
         return this;
@@ -92,7 +103,7 @@ public class CharacterData
                 ats = value;
         }
     }
-    public virtual CharacterData ATS(float ats)
+    public virtual CharacterData SetAts(float ats = 0.8f)
     {
         this.Ats = ats;
         return this;
@@ -109,7 +120,7 @@ public class CharacterData
                 def = value;
         }
     }
-    public virtual CharacterData DEF(float def)
+    public virtual CharacterData SetDef(float def = 0.0f)
     {
         this.Def = def;
         return this;
@@ -121,7 +132,7 @@ public class CharacterData
     }
 }
 [DisallowMultipleComponent]
-public class Character : ParentObject
+public class Character : ParentObject 
 {
     protected CharacterData data;
     protected enum LAYER
@@ -143,7 +154,7 @@ public class Character : ParentObject
     public bool isSlope;
     protected bool isGround;
     protected bool isJump;
-    protected float rayDistance = 1.2f;
+    protected float rayDistance = 0.5f;
     [SerializeField] protected float chkGroundRad = 0.1f;
     [SerializeField] protected int jumpCnt;
     RaycastHit2D hit, fronthit;
@@ -152,22 +163,18 @@ public class Character : ParentObject
     protected LAYER landingLayer = LAYER.FLOOR; //7 is Floor, 9 is Platform
     protected virtual void Update()
     {
-        Debug.Log(data.ToString());
         isGround = GroundCheck();
 
         Vector2 rayDir = (Vector2.down + new Vector2(moveVec.x, 0) * 0.25f).normalized;
         hit = Physics2D.Raycast(foot.position, rayDir, rayDistance, LayerMask.GetMask("Floor", "Platform"));
         fronthit = Physics2D.Raycast(frontRay.position, sprite.flipX ? Vector2.right : Vector2.left, 0.2f, LayerMask.GetMask("Floor", "Platform"));
-
-        Debug.DrawLine(foot.position, (Vector2)foot.position + rayDir * rayDistance, Color.red);
-        Debug.DrawLine(hit.point, hit.point + Vector2.Perpendicular(hit.normal) * -moveVec.x, Color.yellow);
-        Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (sprite.flipX ? Vector2.right : Vector2.left) * 0.2f, Color.red);
         if (moveVec.x != 0.0f)
             rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         else
             rigid.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
         if (fronthit)
         {
+
             isSlope = SlopeCheck(fronthit);
             slopeTop = fronthit.point;
         }
@@ -192,13 +199,7 @@ public class Character : ParentObject
     }
     protected virtual void Awake()
     {
-        data = new CharacterData("Default")
-            .ATK(10)
-            .SPD(2.0f)
-            .MAXHP(100)
-            .H_P(100)
-            .ATS(1.0f)
-            .DEF(0.0f);
+        data = new CharacterData("Default");
     }
     protected virtual void FixedUpdate()
     {
@@ -209,6 +210,7 @@ public class Character : ParentObject
     }
     protected void Movement()
     {
+        if (moveVec.x == 0.0f) return;
         if (moveVec.x > 0)
         {
             sprite.flipX = true;
@@ -254,8 +256,11 @@ public class Character : ParentObject
         return Physics2D.OverlapCircle(foot.position, chkGroundRad, LayerMask.GetMask("Floor", "Platform"));
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    void OnCollisionStay2D(Collision2D col)
     {
+        if (!this.CompareTag("Player")) return;
+        RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));
+        if (!h) return;
         foreach (ContactPoint2D c in col.contacts)
         {
             if (c.collider.gameObject.layer.Equals((int)LAYER.FLOOR))

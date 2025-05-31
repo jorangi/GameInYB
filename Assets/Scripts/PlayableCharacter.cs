@@ -7,7 +7,15 @@ using UnityEngine.UI;
 
 public class PlayableCharacterData : CharacterData
 {
-    public PlayableCharacterData(string name) : base(name) { }
+    public PlayableCharacterData(CharacterData data) : base(data.UnitName)
+    {
+        Spd = data.Spd;
+        HP = data.HP;
+        MaxHP = data.MaxHP;
+        Atk = data.Atk;
+        Ats = data.Ats;
+        Def = data.Def;
+    }
     protected int jCnt; // jump count
     public int JumpCnt
     {
@@ -58,27 +66,22 @@ public class PlayableCharacterData : CharacterData
                 criDmg = value;
         }
     }
-    public override CharacterData SPD(float spd) => base.SPD(spd);
-    public override CharacterData MAXHP(int maxhp) => base.MAXHP(maxhp);
-    public override CharacterData H_P(int hp) => base.H_P(hp);
-    public override CharacterData ATK(float atk) => base.ATK(atk);
-    public override PlayableCharacterData ATS(float ats) => base.ATK(ats);
-    public PlayableCharacterData JCNT(int jCnt)
+    public PlayableCharacterData SetJCnt(int jCnt = 2)
     {
         this.JumpCnt = jCnt;
         return this;
     }
-    public PlayableCharacterData JPOW(float jumpPower)
+    public PlayableCharacterData SetJPow(float jumpPower = 10.0f)
     {
         this.JumpPower = jumpPower;
         return this;
     }
-    public PlayableCharacterData CRI(float cri)
+    public PlayableCharacterData SetCri(float cri = 0.0f)
     {
         this.Cri = cri;
         return this;
     }
-    public PlayableCharacterData CRIDMG(float criDmg)
+    public PlayableCharacterData SetCriDmg(float criDmg = 1.5f)
     {
         this.CriDmg = criDmg;
         return this;
@@ -90,7 +93,7 @@ public class PlayableCharacterData : CharacterData
 }
 public class PlayableCharacter : Character
 {
-    protected new PlayableCharacterData data;
+    protected PlayableCharacterData Data => (PlayableCharacterData)data;
     public int d;
     public static PlayableCharacter Inst { get; set; }
     private Image messagePortrait, imageOnMessage;
@@ -124,13 +127,11 @@ public class PlayableCharacter : Character
         }
         PlayableCharacter.Inst = this;
         DontDestroyOnLoad(gameObject);
-
-        data = new PlayableCharacterData("Player")
-            .JCNT(2)
-            .JPOW(10.0f)
-            .CRI(0.1f)
-            .CRIDMG(1.5f)
-            .SPD(10.0f);
+        data = new PlayableCharacterData(new CharacterData("Player"))
+            .SetJCnt(2)
+            .SetJPow(12.0f)
+            .SetCri(0.1f)
+            .SetCriDmg(1.5f);
 
         inputAction = new();
         jumpCnt = 2;
@@ -179,24 +180,24 @@ public class PlayableCharacter : Character
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            data.HP = Random.Range(0, data.MaxHP);
+            SetHP(Random.Range(0, Data.MaxHP));
         }
     }
     IEnumerator HpBarFillsSmooth(SlicedFilledImage bar)
     {
         yield return new WaitForSeconds(0.3f);
-        while (Mathf.Abs(bar.fillAmount - (float)Mathf.FloorToInt(data.HP) / Mathf.FloorToInt(data.MaxHP)) > 0.01f)
+        while (Mathf.Abs(bar.fillAmount - (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP)) > 0.01f)
         {
-            bar.fillAmount = Mathf.Lerp(bar.fillAmount, (float)Mathf.FloorToInt(data.HP) / Mathf.FloorToInt(data.MaxHP), Time.deltaTime * hpBarSpd);
+            bar.fillAmount = Mathf.Lerp(bar.fillAmount, (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP), Time.deltaTime * hpBarSpd);
             yield return null;
         }
-        bar.fillAmount = (float)Mathf.FloorToInt(data.HP) / Mathf.FloorToInt(data.MaxHP);
+        bar.fillAmount = (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP);
     }
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
         Vector3 pos = transform.position;
-        cam.transform.position = Vector3.Lerp(cam.transform.position, new(Mathf.Clamp(pos.x, 0, 31), Mathf.Clamp(pos.y, 0, 18), -10), Time.fixedDeltaTime);
+        cam.transform.position = Vector3.Lerp(cam.transform.position, new(Mathf.Clamp(pos.x, 0, 31), Mathf.Clamp(pos.y, 0, 18), -10), Time.fixedDeltaTime * 2);
     }
     public void OnMovement(InputAction.CallbackContext context)
     {
@@ -204,11 +205,11 @@ public class PlayableCharacter : Character
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        if ((jumpCnt > 0 || isGround) && context.performed)
+        if (jumpCnt > 0 && context.performed)
         {
             rigid.gravityScale = 1.5f;
             isJump = true;
-            rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, data.JumpPower);
+            rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, Data.JumpPower);
             jumpCnt--;
         }
     }
@@ -252,7 +253,8 @@ public class PlayableCharacter : Character
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!isDropdown && rigid.linearVelocityY <= 0.0f)
+        RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));
+        if (h && !isDropdown && rigid.linearVelocityY <= 0.0f)
         {
             Landing((LAYER)collision.gameObject.layer);
         }
@@ -266,21 +268,21 @@ public class PlayableCharacter : Character
     }
     public void SetHP(int value)
     {
-        isHealing = Mathf.FloorToInt(value) > Mathf.FloorToInt(data.HP);
+        isHealing = Mathf.FloorToInt(value) > Mathf.FloorToInt(Data.HP);
 
-        data.HP = value;
-        hpVal.text = $"{Mathf.FloorToInt(value)} / {Mathf.FloorToInt(data.MaxHP)}";
+        Data.HP = value;
+        hpVal.text = $"{Mathf.FloorToInt(value)} / {Mathf.FloorToInt(Data.MaxHP)}";
         //HpBar fills out smoothly
         if (hpSmooth != null)
             StopCoroutine(hpSmooth);
         if (isHealing)
         {
-            hpBar.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(data.MaxHP);
+            hpBar.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(Data.MaxHP);
             hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBarSec));
         }
         else
         {
-            hpBarSec.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(data.MaxHP);
+            hpBarSec.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(Data.MaxHP);
             hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBar));
         }
     }
