@@ -125,14 +125,13 @@ public class CharacterData
         this.Def = def;
         return this;
     }
-
     public override string ToString()
     {
         return $"Name: {unitName}, Speed: {spd}, MaxHP: {maxHP}, HP: {_HP}, Atk: {atk}, Ats: {ats}, Def: {def}";
     }
 }
 [DisallowMultipleComponent]
-public class Character : ParentObject 
+public class Character : ParentObject
 {
     protected CharacterData data;
     protected enum LAYER
@@ -255,7 +254,9 @@ public class Character : ParentObject
     {
         return Physics2D.OverlapCircle(foot.position, chkGroundRad, LayerMask.GetMask("Floor", "Platform"));
     }
-
+    public virtual void TakeDamage(float damage)
+    {
+    }
     void OnCollisionStay2D(Collision2D col)
     {
         if (!this.CompareTag("Player")) return;

@@ -93,7 +93,7 @@ public class PlayableCharacterData : CharacterData
 }
 public class PlayableCharacter : Character
 {
-    protected PlayableCharacterData Data => (PlayableCharacterData)data;
+    public PlayableCharacterData Data => (PlayableCharacterData)data;
     public int d;
     public static PlayableCharacter Inst { get; set; }
     private Image messagePortrait, imageOnMessage;
@@ -137,6 +137,7 @@ public class PlayableCharacter : Character
         jumpCnt = 2;
         weaponSprite = arm.GetChild(0).GetComponent<SpriteRenderer>();
         weaponScript = weaponSprite.GetComponent<Weapon>();
+        weaponScript.SetPlayer(this);
         SetupMessageBox();
         cam = Camera.main;
     }
@@ -171,7 +172,14 @@ public class PlayableCharacter : Character
         base.Update();
         Vector3 dir = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float armAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        if (!weaponScript.isSwing)
+        if (!weaponScript.anim.GetBool("IsSwing"))
+        {
+            if (armAngle + 90 <= 180 && armAngle + 90 >= 0)
+                arm.rotation = Quaternion.Euler(0, 180, -(armAngle + 90));
+            else
+                arm.rotation = Quaternion.Euler(0, 0, armAngle + 90);
+        }
+        else
         {
             if (armAngle + 90 <= 180 && armAngle + 90 >= 0)
                 arm.rotation = Quaternion.Euler(0, 180, -(armAngle + 90));
@@ -284,6 +292,18 @@ public class PlayableCharacter : Character
         {
             hpBarSec.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(Data.MaxHP);
             hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBar));
+        }
+    }
+    public override void TakeDamage(float damage)
+    {
+        if (damage < 0.0f) return;
+        int dmg = Mathf.RoundToInt(damage - data.Def);
+        if (dmg < 0) dmg = 0;
+        SetHP(data.HP - dmg);
+        if (data.HP <= 0)
+        {
+            // Handle death logic here
+            Debug.Log($"{data.UnitName} has died.");
         }
     }
 }

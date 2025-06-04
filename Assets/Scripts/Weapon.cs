@@ -2,26 +2,43 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    private Animator anim;
-    public int swingCount = 0;
-    public bool isSwing;
+    private PlayableCharacter player;
+    private NonPlayableCharacter target;
+    private const int MAX_SWING_COUNT = 2; // Maximum number of swings allowed
+    public Animator anim;
+    public void SetPlayer(PlayableCharacter player)
+    {
+        this.player = player;
+    }
     private void Awake()
     {
         anim = GetComponent<Animator>();
     }
-    public void StartSwing(){
+    public void StartSwing()
+    {
         if (anim.GetBool("IsSwing")) return;
-        anim.SetInteger("SwingCount", (anim.GetInteger("SwingCount") + 1) % 2);
+        anim.SetInteger("SwingCount", (anim.GetInteger("SwingCount") + 1) % MAX_SWING_COUNT);
         anim.SetBool("IsSwing", true);
-        isSwing = true;
     }
     public void SwingEnd()
     {
         anim.SetBool("IsSwing", false);
-        isSwing = false;
     }
     public void StopSwing()
     {
         anim.SetInteger("SwingCount", 0);
+        SwingEnd();
+    }
+    public void Hit()
+    {
+        if (target == null) return;
+        target.TakeDamage(player.Data.Atk);
+    }
+    protected void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            target = collision.transform.parent.GetComponent<NonPlayableCharacter>();
+        }
     }
 }

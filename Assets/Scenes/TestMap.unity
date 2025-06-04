@@ -736,7 +736,7 @@ GameObject:
   - component: {fileID: 131608372}
   m_Layer: 10
   m_Name: HitBox
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2022,7 +2022,7 @@ GameObject:
   - component: {fileID: 754555424}
   m_Layer: 10
   m_Name: Hitbox
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2102,7 +2102,7 @@ GameObject:
   - component: {fileID: 860438938}
   m_Layer: 6
   m_Name: TestMonster
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2738,7 +2738,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07a3819b7f4694712a6be3750b68394a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSwing: 0
+  anim: {fileID: 0}
 --- !u!114 &1162136883
 MonoBehaviour:
   m_ObjectHideFlags: 0

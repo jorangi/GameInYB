@@ -110,9 +110,9 @@ public class NonPlayableCharacter : Character
     IEnumerator HpBarFillsSmooth(SpriteRenderer bar)
     {
         yield return new WaitForSeconds(0.3f);
-        
+
         float r = (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP);
-        while (Mathf.Abs(bar.size.x/BAR_SIZE - r) > 0.01f)
+        while (Mathf.Abs(bar.size.x / BAR_SIZE - r) > 0.01f)
         {
             bar.size = new(
                             Mathf.Lerp(bar.size.x, r * BAR_SIZE, Time.deltaTime * hpBarSpd)
@@ -143,6 +143,18 @@ public class NonPlayableCharacter : Character
             hpBarSec.transform.localPosition = new(-1.75f + 1.75f * r, 0f);
             hpBarSec.size = new(r * BAR_SIZE, 0.5f);
             hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBar));
+        }
+    }
+    public override void TakeDamage(float damage)
+    {
+        if (damage < 0.0f) return;
+        int dmg = Mathf.RoundToInt(damage - data.Def);
+        if (dmg < 0) dmg = 0;
+        SetHP(data.HP - dmg);
+        if (data.HP <= 0)
+        {
+            // Handle death logic here
+            Debug.Log($"{data.UnitName} has died.");
         }
     }
 }
