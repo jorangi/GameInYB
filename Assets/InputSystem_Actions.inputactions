@@ -459,6 +459,17 @@
                     "action": "Dropdown",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "54467c00-a70f-44b4-b706-dc8667c94e0e",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dropdown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

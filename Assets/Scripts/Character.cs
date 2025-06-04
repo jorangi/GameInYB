@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,6 +21,7 @@ public class CharacterData
         SetAtk();
         SetAts();
         SetDef();
+        SetInvicibleTime();
     }
     protected float spd; // movementSpeed
     public float Spd
@@ -125,6 +127,23 @@ public class CharacterData
         this.Def = def;
         return this;
     }
+    protected float invincibleTime; // defence
+    public float InvincibleTime
+    {
+        get => invincibleTime;
+        set
+        {
+            if (value < 0.0f)
+                invincibleTime = 0.0f;
+            else
+                invincibleTime = value;
+        }
+    }
+    public virtual CharacterData SetInvicibleTime(float invicibleTime = 0.0f)
+    {
+        this.InvincibleTime = invicibleTime;
+        return this;
+    }
     public override string ToString()
     {
         return $"Name: {unitName}, Speed: {spd}, MaxHP: {maxHP}, HP: {_HP}, Atk: {atk}, Ats: {ats}, Def: {def}";
@@ -139,13 +158,13 @@ public class Character : ParentObject
         FLOOR = 7,
         PLATFORM = 9
     };
-    [SerializeField] protected Transform frontRay;
-    [SerializeField] protected Transform foot;
-    [SerializeField] protected float gravityScale = 3.5f; // 중력 적용 세기
+    public Transform frontRay;
+    public Transform foot;
+    public float gravityScale = 3.5f; // 중력 적용 세기
 
-    [SerializeField] protected Collider2D col;
-    [SerializeField] protected Rigidbody2D rigid;
-    [SerializeField] protected SpriteRenderer sprite;
+    public Collider2D col;
+    public Rigidbody2D rigid;
+    public SpriteRenderer sprite;
 
     protected Vector2 moveVec = Vector2.zero;
     protected Vector2 perp;
@@ -154,14 +173,39 @@ public class Character : ParentObject
     protected bool isGround;
     protected bool isJump;
     protected float rayDistance = 0.5f;
-    [SerializeField] protected float chkGroundRad = 0.1f;
-    [SerializeField] protected int jumpCnt;
+    protected float chkGroundRad = 0.1f;
+    protected int jumpCnt;
     RaycastHit2D hit, fronthit;
     private Vector2 slopeTop;
     protected float maxAngle = 60.0f;
     protected LAYER landingLayer = LAYER.FLOOR; //7 is Floor, 9 is Platform
+    private float invincibleTimer = 0.0f;
+    protected float InvincibleTimer
+    {
+        get => invincibleTimer;
+        set
+        {
+            if (value < 0.0f)
+            {
+                invincibleTimer = 0.0f;
+                hitBox.enabled = true;
+            }
+            else
+            {
+                invincibleTimer = value;
+                hitBox.enabled = false;
+            }
+        }
+    }
+    protected Coroutine hitCoroutine;
+    public Collider2D hitBox;
     protected virtual void Update()
     {
+        if (invincibleTimer > 0.0f)
+            invincibleTimer -= Time.deltaTime;
+        else
+            hitBox.enabled = true;
+
         isGround = GroundCheck();
 
         Vector2 rayDir = (Vector2.down + new Vector2(moveVec.x, 0) * 0.25f).normalized;
@@ -256,6 +300,7 @@ public class Character : ParentObject
     }
     public virtual void TakeDamage(float damage)
     {
+        hitCoroutine ??= StartCoroutine(Hit());
     }
     void OnCollisionStay2D(Collision2D col)
     {
@@ -273,5 +318,27 @@ public class Character : ParentObject
                 if (rigid.linearVelocityY <= 0.0f) Landing(LAYER.PLATFORM);
             }
         }
+    }
+    public float timeMul = 10.0f;
+    private IEnumerator Hit()
+    {
+        InvincibleTimer = data.InvincibleTime;
+        hitBox.enabled = false;
+
+        float colorVal = 0.6f;
+        float elapsedTime = 0f;
+        sprite.color = new Color(colorVal, colorVal, colorVal, 1);
+        while (InvincibleTimer > 0.0f)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / data.InvincibleTime;
+            colorVal = Mathf.Lerp(colorVal, 1f, t);
+            sprite.color = new Color(colorVal, colorVal, colorVal, 1);
+            InvincibleTimer -= Time.deltaTime;
+
+            yield return null;
+        }
+        sprite.color = new Color(1, 1, 1, 1);
+        hitCoroutine = null;
     }
 }

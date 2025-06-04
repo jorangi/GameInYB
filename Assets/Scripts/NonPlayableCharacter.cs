@@ -13,6 +13,7 @@ public class NonPlayableCharacterData : CharacterData
         Atk = data.Atk;
         Ats = data.Ats;
         Def = data.Def;
+        InvincibleTime = data.InvincibleTime;
     }
     public override string ToString()
     {
@@ -147,6 +148,7 @@ public class NonPlayableCharacter : Character
     }
     public override void TakeDamage(float damage)
     {
+        base.TakeDamage(damage);
         if (damage < 0.0f) return;
         int dmg = Mathf.RoundToInt(damage - data.Def);
         if (dmg < 0) dmg = 0;

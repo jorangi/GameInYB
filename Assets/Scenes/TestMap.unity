@@ -2126,8 +2126,7 @@ MonoBehaviour:
   rigid: {fileID: 860438940}
   sprite: {fileID: 2138860482}
   isSlope: 0
-  chkGroundRad: 0.1
-  jumpCnt: 0
+  hitBox: {fileID: 131608372}
   idleTimer: 0
   moveTimer: 0
 --- !u!95 &860438939
@@ -15340,9 +15339,7 @@ MonoBehaviour:
   rigid: {fileID: 2055166689}
   sprite: {fileID: 2028621032}
   isSlope: 0
-  chkGroundRad: 0.1
-  jumpCnt: 2
-  d: 0
+  hitBox: {fileID: 754555424}
   messageObj: {fileID: 22274115}
   hpBar: {fileID: 226905337}
   hpBarSec: {fileID: 1808596253}
