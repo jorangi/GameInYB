@@ -164,7 +164,7 @@ public class Character : ParentObject
 
     public Collider2D col;
     public Rigidbody2D rigid;
-    public SpriteRenderer sprite;
+
 
     protected Vector2 moveVec = Vector2.zero;
     protected Vector2 perp;
@@ -210,7 +210,7 @@ public class Character : ParentObject
 
         Vector2 rayDir = (Vector2.down + new Vector2(moveVec.x, 0) * 0.25f).normalized;
         hit = Physics2D.Raycast(foot.position, rayDir, rayDistance, LayerMask.GetMask("Floor", "Platform"));
-        fronthit = Physics2D.Raycast(frontRay.position, sprite.flipX ? Vector2.right : Vector2.left, 0.2f, LayerMask.GetMask("Floor", "Platform"));
+        fronthit = Physics2D.Raycast(frontRay.position, moveVec.x > 0 ? Vector2.right : Vector2.left, 0.2f, LayerMask.GetMask("Floor", "Platform"));
         if (moveVec.x != 0.0f)
             rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         else
@@ -251,19 +251,10 @@ public class Character : ParentObject
     protected virtual void Attack()
     {
     }
-    protected void Movement()
+    protected virtual void Movement()
     {
         if (moveVec.x == 0.0f) return;
-        if (moveVec.x > 0)
-        {
-            sprite.flipX = true;
-            frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x), frontRay.localPosition.y);
-        }
-        else if (moveVec.x < 0)
-        {
-            sprite.flipX = false;
-            frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x) * -1, frontRay.localPosition.y);
-        }
+        frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x) * (moveVec.x > 0 ? 1 : -1), frontRay.localPosition.y);
         if (isGround && isSlope && !isJump)
         {
             rigid.linearVelocity = Mathf.Abs(moveVec.x) * data.Spd * perp;
@@ -320,25 +311,8 @@ public class Character : ParentObject
         }
     }
     public float timeMul = 10.0f;
-    private IEnumerator Hit()
+    protected virtual IEnumerator Hit()
     {
-        InvincibleTimer = data.InvincibleTime;
-        hitBox.enabled = false;
-
-        float colorVal = 0.6f;
-        float elapsedTime = 0f;
-        sprite.color = new Color(colorVal, colorVal, colorVal, 1);
-        while (InvincibleTimer > 0.0f)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / data.InvincibleTime;
-            colorVal = Mathf.Lerp(colorVal, 1f, t);
-            sprite.color = new Color(colorVal, colorVal, colorVal, 1);
-            InvincibleTimer -= Time.deltaTime;
-
-            yield return null;
-        }
-        sprite.color = new Color(1, 1, 1, 1);
-        hitCoroutine = null;
+        yield return null;
     }
 }

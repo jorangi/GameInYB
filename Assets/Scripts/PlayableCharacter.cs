@@ -97,6 +97,8 @@ public class PlayableCharacterData : CharacterData
 }
 public class PlayableCharacter : Character
 {
+    public Animator anim; // 플레이어 캐릭터 애니메이터
+    public Material material;
     public PlayableCharacterData Data => (PlayableCharacterData)data; // 플레이어 캐릭터 데이터
     public static PlayableCharacter Inst { get; set; } // 싱글톤 인스턴스
     private Image messagePortrait, imageOnMessage; // 메시지 박스에 표시되는 이미지
@@ -321,5 +323,33 @@ public class PlayableCharacter : Character
         {
             Debug.Log($"{data.UnitName} has died.");
         }
+    }
+    protected override void Movement()
+    {
+        base.Movement();
+        anim.SetBool("1_Move", moveVec.x != 0.0f);
+        if (moveVec.x == 0.0f) return;
+        transform.GetChild(0).localScale = new Vector3(moveVec.x > 0 ? -2.0f : 2.0f, 2.0f, 1.0f);
+    }
+    protected override IEnumerator Hit()
+    {
+        InvincibleTimer = data.InvincibleTime;
+        hitBox.enabled = false;
+
+        float colorVal = 0.6f;
+        float elapsedTime = 0f;
+        material.color = new Color(colorVal, colorVal, colorVal, 1);
+        while (InvincibleTimer > 0.0f)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / data.InvincibleTime;
+            colorVal = Mathf.Lerp(colorVal, 1f, t);
+            material.color = new Color(colorVal, colorVal, colorVal, 1);
+            InvincibleTimer -= Time.deltaTime;
+
+            yield return null;
+        }
+        material.color = new Color(1, 1, 1, 1);
+        hitCoroutine = null;
     }
 }

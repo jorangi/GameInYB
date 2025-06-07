@@ -22,6 +22,7 @@ public class NonPlayableCharacterData : CharacterData
 }
 public class NonPlayableCharacter : Character
 {
+    public SpriteRenderer sprite;
     protected NonPlayableCharacterData Data => (NonPlayableCharacterData)data;
     protected enum State
     {
@@ -108,6 +109,11 @@ public class NonPlayableCharacter : Character
             }
         }
     }
+    protected override void Movement()
+    {
+        base.Movement();
+        sprite.flipX = moveVec.x > 0;
+    }
     IEnumerator HpBarFillsSmooth(SpriteRenderer bar)
     {
         yield return new WaitForSeconds(0.3f);
@@ -158,5 +164,29 @@ public class NonPlayableCharacter : Character
             // Handle death logic here
             Debug.Log($"{data.UnitName} has died.");
         }
+    }
+    protected override IEnumerator Hit()
+    {
+        State tempState = state;
+        state = State.Hit;
+        InvincibleTimer = data.InvincibleTime;
+        hitBox.enabled = false;
+
+        float colorVal = 0.6f;
+        float elapsedTime = 0f;
+        sprite.color = new Color(colorVal, colorVal, colorVal, 1);
+        while (InvincibleTimer > 0.0f)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / data.InvincibleTime;
+            colorVal = Mathf.Lerp(colorVal, 1f, t);
+            sprite.color = new Color(colorVal, colorVal, colorVal, 1);
+            InvincibleTimer -= Time.deltaTime;
+
+            yield return null;
+        }
+        sprite.color = new Color(1, 1, 1, 1);
+        hitCoroutine = null;
+        state = tempState;
     }
 }
