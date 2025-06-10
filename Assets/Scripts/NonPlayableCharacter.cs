@@ -27,13 +27,14 @@ public class NonPlayableCharacter : Character
     protected enum State
     {
         Idle,
-        Patrol,
+        Move,
         Chase,
         Attack,
         Hit,
         Dead
     }
     private Transform wallChecker;
+    [SerializeField]
     private State state;
     public float idleTimer = 0.0f;
     public float moveTimer = 0.0f;
@@ -65,7 +66,7 @@ public class NonPlayableCharacter : Character
         wallChecker.localPosition = new(moveDir ? 0.25f : -0.25f, 0.0f);
         RaycastHit2D hitWall = Physics2D.Raycast(wallChecker.position, moveDir ? Vector2.right : Vector2.left, 0.1f, LayerMask.GetMask("Floor", "Platform"));
 
-        if (idleTimer > 0.0f)
+        if (state == State.Idle && idleTimer > 0.0f)
         {
             idleTimer -= Time.deltaTime;
             behaviourPointer.SetText($"Idle : {Mathf.Round(idleTimer * 10) * 0.1f}");
@@ -75,10 +76,10 @@ public class NonPlayableCharacter : Character
                 moveTimer = Random.Range(1.0f, 5.0f);
                 moveDir = Random.Range(0, 2) != 0;
                 moveVec = new(moveDir ? 1.0f : -1.0f, 0f);
-                state = State.Patrol;
+                state = State.Move;
             }
         }
-        if (moveTimer > 0.0f)
+        if (state == State.Move && moveTimer > 0.0f)
         {
             moveTimer -= Time.deltaTime;
             behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
@@ -105,12 +106,13 @@ public class NonPlayableCharacter : Character
                 moveDir = !moveDir;
                 moveVec = new(moveDir ? 1.0f : -1.0f, 0f);
                 behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
-                state = State.Patrol;
+                state = State.Move;
             }
         }
     }
     protected override void Movement()
     {
+        if(state == State.Move)
         base.Movement();
         sprite.flipX = moveVec.x > 0;
     }
@@ -165,26 +167,31 @@ public class NonPlayableCharacter : Character
             Debug.Log($"{data.UnitName} has died.");
         }
     }
+    private State tempState;
     protected override IEnumerator Hit()
     {
-        State tempState = state;
+        if(state!=State.Hit) tempState = state;
         state = State.Hit;
         InvincibleTimer = data.InvincibleTime;
+        HitStunTimer = data.HitStunTime;
         hitBox.enabled = false;
 
-        float colorVal = 0.6f;
+        float colorVal = 0f;
         float elapsedTime = 0f;
-        sprite.color = new Color(colorVal, colorVal, colorVal, 1);
-        while (InvincibleTimer > 0.0f)
+        sprite.color = Color.red;
+
+        while (state == State.Hit && HitStunTimer > 0.0f)
         {
+            behaviourPointer.SetText($"Hit : {Mathf.Round(HitStunTimer * 10) * 0.1f}");
             elapsedTime += Time.deltaTime;
-            float t = elapsedTime / data.InvincibleTime;
+            float t = elapsedTime / data.HitStunTime;
             colorVal = Mathf.Lerp(colorVal, 1f, t);
-            sprite.color = new Color(colorVal, colorVal, colorVal, 1);
-            InvincibleTimer -= Time.deltaTime;
+            sprite.color = new Color(1, colorVal, colorVal, 1);
+            HitStunTimer -= Time.deltaTime;
 
             yield return null;
         }
+        state = tempState;
         sprite.color = new Color(1, 1, 1, 1);
         hitCoroutine = null;
         state = tempState;

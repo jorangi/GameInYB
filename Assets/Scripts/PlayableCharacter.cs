@@ -90,13 +90,33 @@ public class PlayableCharacterData : CharacterData
         this.CriDmg = criDmg;
         return this;
     }
+    public void SetInfoObj(GameObject obj)
+    {
+        this.CharacterInformationObj = obj;
+    }
     public override string ToString() // 플레이어 캐릭터 데이터 출력
     {
         return $"{base.ToString()}\nJump Count : {JumpCnt}\nJump Power : {JumpPower}\nCritical Chance : {Cri}\nCritical Damage : {CriDmg}";
     }
+    public GameObject CharacterInformationObj;
+    public void RefreshUIData()
+    {
+        Transform status = CharacterInformationObj.transform.Find("Status");
+        Transform statusData = status.Find("Data");
+
+        statusData.Find("HP").Find("val").GetComponent<TextMeshProUGUI>().text = $"{MaxHP}";
+        statusData.Find("ATK").Find("val").GetComponent<TextMeshProUGUI>().text = $"{Atk}";
+        statusData.Find("ATS").Find("val").GetComponent<TextMeshProUGUI>().text = $"{Ats}";
+        statusData.Find("DEF").Find("val").GetComponent<TextMeshProUGUI>().text = $"{Def}";
+        statusData.Find("CRI").Find("val").GetComponent<TextMeshProUGUI>().text = $"{Cri}";
+        statusData.Find("CRID").Find("val").GetComponent<TextMeshProUGUI>().text = $"{CriDmg}";
+        statusData.Find("SPD").Find("val").GetComponent<TextMeshProUGUI>().text = $"{Spd}";
+        statusData.Find("JMP").Find("val").GetComponent<TextMeshProUGUI>().text = $"{JumpPower}";
+    }
 }
 public class PlayableCharacter : Character
 {
+    public GameObject CharacterInformationObj;
     public Animator anim; // 플레이어 캐릭터 애니메이터
     public Material material;
     public PlayableCharacterData Data => (PlayableCharacterData)data; // 플레이어 캐릭터 데이터
@@ -133,6 +153,8 @@ public class PlayableCharacter : Character
             .SetJPow(12.0f)
             .SetCri(0.1f)
             .SetCriDmg(1.5f);
+        ((PlayableCharacterData)data).SetInfoObj(CharacterInformationObj);
+        ((PlayableCharacterData)data).RefreshUIData();
 
         // 인풋 액션 초기화
         inputAction = new();
@@ -216,6 +238,10 @@ public class PlayableCharacter : Character
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+
+        //공중 판정 체크
+        
+        anim.SetBool("JUMP", !isGround);
 
         //카메라 이동 로직
         Vector3 pos = transform.position;
@@ -328,7 +354,7 @@ public class PlayableCharacter : Character
     protected override void Movement()
     {
         base.Movement();
-        anim.SetBool("1_Move", moveVec.x != 0.0f);
+        if(isGround) anim.SetBool("1_Move", moveVec.x != 0.0f);
         if (moveVec.x == 0.0f) return;
         transform.GetChild(0).localScale = new Vector3(moveVec.x > 0 ? -2.0f : 2.0f, 2.0f, 1.0f);
     }

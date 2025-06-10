@@ -39,5 +39,6 @@ public class Weapon : MonoBehaviour
         target = collision.CompareTag("Enemy") ?
             collision.transform.parent.GetComponent<NonPlayableCharacter>() :
             null;
+        Debug.Log(target);
     }
 }

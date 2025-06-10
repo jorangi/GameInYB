@@ -22,6 +22,7 @@ public class CharacterData
         SetAts();
         SetDef();
         SetInvicibleTime();
+        SetHitStunTime();
     }
     protected float spd; // movementSpeed
     public float Spd
@@ -127,7 +128,7 @@ public class CharacterData
         this.Def = def;
         return this;
     }
-    protected float invincibleTime; // defence
+    protected float invincibleTime; // invincibleTime
     public float InvincibleTime
     {
         get => invincibleTime;
@@ -142,6 +143,24 @@ public class CharacterData
     public virtual CharacterData SetInvicibleTime(float invicibleTime = 0.0f)
     {
         this.InvincibleTime = invicibleTime;
+        return this;
+    }
+    protected float hitStunTime; // hitStunTime
+    public float HitStunTime
+    {
+        get => hitStunTime;
+        set
+        {
+            if (value < 0.0f)
+                hitStunTime = 0.0f;
+            else
+                hitStunTime = value;
+        }
+    }
+
+    public virtual CharacterData SetHitStunTime(float hitStunTime = 0.5f)
+    {
+        this.HitStunTime = hitStunTime;
         return this;
     }
     public override string ToString()
@@ -197,6 +216,7 @@ public class Character : ParentObject
             }
         }
     }
+    protected float HitStunTimer;
     protected Coroutine hitCoroutine;
     public Collider2D hitBox;
     protected virtual void Update()
