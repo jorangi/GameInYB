@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class PlayableCharacterData : CharacterData
@@ -222,7 +225,7 @@ public class PlayableCharacter : Character
         // 테스트용 체력 변경
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SetHP(Random.Range(0, Data.MaxHP));
+            SetHP(UnityEngine.Random.Range(0, Data.MaxHP));
         }
     }
     IEnumerator HpBarFillsSmooth(SlicedFilledImage bar) // 부드러운 체력바 채우기 코루틴
@@ -242,10 +245,6 @@ public class PlayableCharacter : Character
         //공중 판정 체크
         
         anim.SetBool("JUMP", !isGround);
-
-        //카메라 이동 로직
-        Vector3 pos = transform.position;
-        cam.transform.position = Vector3.Lerp(cam.transform.position, new(Mathf.Clamp(pos.x, 0, 31), Mathf.Clamp(pos.y, 0, 18), -10), Time.fixedDeltaTime * 2);
     }
     public void OnMovement(InputAction.CallbackContext context) // 이동 액션 등록
     {
