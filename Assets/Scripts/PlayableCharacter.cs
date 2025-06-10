@@ -159,7 +159,7 @@ public class PlayableCharacter : Character
     }
     private void OnDropdown(InputAction.CallbackContext context) //하강(드롭다웃) 액션 등록
     {
-        if (landingLayer == LAYER.PLATFORM)
+        if (isGround && landingLayer == LAYER.PLATFORM)
         {
             col.isTrigger = true;
             isDropdown = true;
@@ -281,6 +281,7 @@ public class PlayableCharacter : Character
         if (h && !isDropdown && rigid.linearVelocityY <= 0.0f) // 바닥 착지 조건 분기
         {
             Landing((LAYER)collision.gameObject.layer); //착지 메소드 호출
+
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
