@@ -36,9 +36,8 @@ public class Weapon : MonoBehaviour
     }
     protected void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
-        {
-            target = collision.transform.parent.GetComponent<NonPlayableCharacter>();
-        }
+        target = collision.CompareTag("Enemy") ?
+            collision.transform.parent.GetComponent<NonPlayableCharacter>() :
+            null;
     }
 }

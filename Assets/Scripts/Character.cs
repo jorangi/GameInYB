@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,6 +21,7 @@ public class CharacterData
         SetAtk();
         SetAts();
         SetDef();
+        SetInvicibleTime();
     }
     protected float spd; // movementSpeed
     public float Spd
@@ -125,6 +127,23 @@ public class CharacterData
         this.Def = def;
         return this;
     }
+    protected float invincibleTime; // defence
+    public float InvincibleTime
+    {
+        get => invincibleTime;
+        set
+        {
+            if (value < 0.0f)
+                invincibleTime = 0.0f;
+            else
+                invincibleTime = value;
+        }
+    }
+    public virtual CharacterData SetInvicibleTime(float invicibleTime = 0.0f)
+    {
+        this.InvincibleTime = invicibleTime;
+        return this;
+    }
     public override string ToString()
     {
         return $"Name: {unitName}, Speed: {spd}, MaxHP: {maxHP}, HP: {_HP}, Atk: {atk}, Ats: {ats}, Def: {def}";
@@ -139,13 +158,13 @@ public class Character : ParentObject
         FLOOR = 7,
         PLATFORM = 9
     };
-    [SerializeField] protected Transform frontRay;
-    [SerializeField] protected Transform foot;
-    [SerializeField] protected float gravityScale = 3.5f; // 중력 적용 세기
+    public Transform frontRay;
+    public Transform foot;
+    public float gravityScale = 3.5f; // 중력 적용 세기
 
-    [SerializeField] protected Collider2D col;
-    [SerializeField] protected Rigidbody2D rigid;
-    [SerializeField] protected SpriteRenderer sprite;
+    public Collider2D col;
+    public Rigidbody2D rigid;
+
 
     protected Vector2 moveVec = Vector2.zero;
     protected Vector2 perp;
@@ -154,19 +173,44 @@ public class Character : ParentObject
     protected bool isGround;
     protected bool isJump;
     protected float rayDistance = 0.5f;
-    [SerializeField] protected float chkGroundRad = 0.1f;
-    [SerializeField] protected int jumpCnt;
+    protected float chkGroundRad = 0.1f;
+    protected int jumpCnt;
     RaycastHit2D hit, fronthit;
     private Vector2 slopeTop;
     protected float maxAngle = 60.0f;
     protected LAYER landingLayer = LAYER.FLOOR; //7 is Floor, 9 is Platform
+    private float invincibleTimer = 0.0f;
+    protected float InvincibleTimer
+    {
+        get => invincibleTimer;
+        set
+        {
+            if (value < 0.0f)
+            {
+                invincibleTimer = 0.0f;
+                hitBox.enabled = true;
+            }
+            else
+            {
+                invincibleTimer = value;
+                hitBox.enabled = false;
+            }
+        }
+    }
+    protected Coroutine hitCoroutine;
+    public Collider2D hitBox;
     protected virtual void Update()
     {
+        if (invincibleTimer > 0.0f)
+            invincibleTimer -= Time.deltaTime;
+        else
+            hitBox.enabled = true;
+
         isGround = GroundCheck();
 
         Vector2 rayDir = (Vector2.down + new Vector2(moveVec.x, 0) * 0.25f).normalized;
         hit = Physics2D.Raycast(foot.position, rayDir, rayDistance, LayerMask.GetMask("Floor", "Platform"));
-        fronthit = Physics2D.Raycast(frontRay.position, sprite.flipX ? Vector2.right : Vector2.left, 0.2f, LayerMask.GetMask("Floor", "Platform"));
+        fronthit = Physics2D.Raycast(frontRay.position, moveVec.x > 0 ? Vector2.right : Vector2.left, 0.2f, LayerMask.GetMask("Floor", "Platform"));
         if (moveVec.x != 0.0f)
             rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         else
@@ -207,19 +251,10 @@ public class Character : ParentObject
     protected virtual void Attack()
     {
     }
-    protected void Movement()
+    protected virtual void Movement()
     {
         if (moveVec.x == 0.0f) return;
-        if (moveVec.x > 0)
-        {
-            sprite.flipX = true;
-            frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x), frontRay.localPosition.y);
-        }
-        else if (moveVec.x < 0)
-        {
-            sprite.flipX = false;
-            frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x) * -1, frontRay.localPosition.y);
-        }
+        frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x) * (moveVec.x > 0 ? 1 : -1), frontRay.localPosition.y);
         if (isGround && isSlope && !isJump)
         {
             rigid.linearVelocity = Mathf.Abs(moveVec.x) * data.Spd * perp;
@@ -256,6 +291,7 @@ public class Character : ParentObject
     }
     public virtual void TakeDamage(float damage)
     {
+        hitCoroutine ??= StartCoroutine(Hit());
     }
     void OnCollisionStay2D(Collision2D col)
     {
@@ -273,5 +309,10 @@ public class Character : ParentObject
                 if (rigid.linearVelocityY <= 0.0f) Landing(LAYER.PLATFORM);
             }
         }
+    }
+    public float timeMul = 10.0f;
+    protected virtual IEnumerator Hit()
+    {
+        yield return null;
     }
 }
