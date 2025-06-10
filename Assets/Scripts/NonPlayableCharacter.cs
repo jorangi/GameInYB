@@ -35,10 +35,9 @@ public class NonPlayableCharacter : Character
     }
     private Transform wallChecker;
     [SerializeField]
-    private State state;
+    private State state = State.Idle;
     public float idleTimer = 0.0f;
     public float moveTimer = 0.0f;
-    private bool moveDir; //f : left, t : right
     private const float hpBarSpd = 5.0f;
     private TextMeshPro behaviourPointer;
     private SpriteRenderer hpBar, hpBarSec;
@@ -69,9 +68,9 @@ public class NonPlayableCharacter : Character
         if (state == State.Idle && idleTimer > 0.0f)
         {
             idleTimer -= Time.deltaTime;
+            moveVec = new(0f, moveVec.y);
             behaviourPointer.SetText($"Idle : {Mathf.Round(idleTimer * 10) * 0.1f}");
-            state = State.Idle;
-            if (idleTimer <= 0.0f && moveTimer <= 0.0f)
+            if (idleTimer <= 0.0f)
             {
                 moveTimer = Random.Range(1.0f, 5.0f);
                 moveDir = Random.Range(0, 2) != 0;
@@ -83,30 +82,28 @@ public class NonPlayableCharacter : Character
         {
             moveTimer -= Time.deltaTime;
             behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
-            if (moveTimer <= 0.0f && idleTimer <= 0.0f)
+            if (moveTimer <= 0.0f)
             {
                 moveVec = Vector2.zero;
                 rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
                 idleTimer = Random.Range(0.0f, 5.0f);
                 state = State.Idle;
             }
-        }
-
-        if (hitWall)
-        {
-            if (Random.Range(0.0f, 1.0f) > 0.7f)
+            if (hitWall || !isPrecipice)
             {
-                moveDir = !moveDir;
-                moveVec = Vector2.zero;
-                rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-                idleTimer = Random.Range(0.0f, 5.0f);
-            }
-            else
-            {
-                moveDir = !moveDir;
-                moveVec = new(moveDir ? 1.0f : -1.0f, 0f);
-                behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
-                state = State.Move;
+                if (Random.Range(0.0f, 1.0f) > 0.7f)
+                {
+                    rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+                    idleTimer = Random.Range(0.0f, 5.0f);
+                    state = State.Idle;
+                }
+                else
+                {
+                    moveDir = !moveDir;
+                    moveVec = new(moveVec.x * -1, moveVec.y);
+                    behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
+                    state = State.Move;
+                }
             }
         }
     }
@@ -168,9 +165,14 @@ public class NonPlayableCharacter : Character
         }
     }
     private State tempState;
+    Vector2 oriMove;
     protected override IEnumerator Hit()
     {
-        if(state!=State.Hit) tempState = state;
+        if (state != State.Hit)
+        {
+            tempState = state;
+            oriMove = moveVec;
+        }
         state = State.Hit;
         InvincibleTimer = data.InvincibleTime;
         HitStunTimer = data.HitStunTime;
@@ -182,6 +184,7 @@ public class NonPlayableCharacter : Character
 
         while (state == State.Hit && HitStunTimer > 0.0f)
         {
+            moveVec = Vector2.zero;
             behaviourPointer.SetText($"Hit : {Mathf.Round(HitStunTimer * 10) * 0.1f}");
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / data.HitStunTime;
@@ -195,5 +198,6 @@ public class NonPlayableCharacter : Character
         sprite.color = new Color(1, 1, 1, 1);
         hitCoroutine = null;
         state = tempState;
+        moveVec = oriMove;
     }
 }

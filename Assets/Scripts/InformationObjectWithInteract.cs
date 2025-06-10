@@ -23,11 +23,15 @@ public class InformationObjectWithInteract : InformationObject
     }
     public override void TriggerEnter(Collider2D col)
     {
-        isOn = true;
+        if(col.gameObject.CompareTag("Player"))
+            isOn = true;
     }
     public override void TriggerExit(Collider2D col)
     {
-        base.TriggerExit(col);
-        isOn = false;
+        if (col.gameObject.CompareTag("Player"))
+        {
+            base.TriggerExit(col);
+            isOn = false;
+        }
     }
 }

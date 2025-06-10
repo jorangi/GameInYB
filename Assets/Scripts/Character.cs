@@ -1,4 +1,5 @@
 using System.Collections;
+using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -219,6 +220,9 @@ public class Character : ParentObject
     protected float HitStunTimer;
     protected Coroutine hitCoroutine;
     public Collider2D hitBox;
+    [ShowInInspector]protected Vector3 savedPos;
+    protected bool moveDir; //f : left, t : right
+    protected RaycastHit2D isPrecipice;
     protected virtual void Update()
     {
         if (invincibleTimer > 0.0f)
@@ -227,6 +231,36 @@ public class Character : ParentObject
             hitBox.enabled = true;
 
         isGround = GroundCheck();
+        if (this is PlayableCharacter)
+        {
+            isPrecipice = Physics2D.Raycast(frontRay.position,
+            frontRay.localPosition.x > 0 ?
+                (moveDir ?
+                    new Vector2(-1, -1).normalized :
+                    new Vector2(1, -1).normalized) :
+                (moveDir ?
+                    new Vector2(-1, -1).normalized :
+                    new Vector2(1, -1).normalized),
+            1, LayerMask.GetMask("Floor", "Platform"));
+        // Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (
+        //     frontRay.localPosition.x > 0 ?
+        //         (moveDir ?
+        //             new Vector2(-1, -1).normalized :
+        //             new Vector2(1, -1).normalized) :
+        //         (moveDir ?
+        //             new Vector2(-1, -1).normalized :
+        //             new Vector2(1, -1).normalized)),
+        // Color.red);
+        }
+        else
+        {
+            isPrecipice = Physics2D.Raycast(frontRay.position, moveDir ? new Vector2(1, -1).normalized : new Vector2(-1, -1).normalized, 1, LayerMask.GetMask("Floor", "Platform"));
+            // Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (moveDir ? new Vector2(1, -1).normalized : new Vector2(-1, -1).normalized), Color.red);
+        }
+
+        
+
+        if (isPrecipice && isGround) savedPos = transform.position;
 
         Vector2 rayDir = (Vector2.down + new Vector2(moveVec.x, 0) * 0.25f).normalized;
         hit = Physics2D.Raycast(foot.position, rayDir, rayDistance, LayerMask.GetMask("Floor", "Platform"));

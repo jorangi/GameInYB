@@ -140,6 +140,7 @@ public class PlayableCharacter : Character
     private bool isDropdown; // 드롭다운 여부
     private bool isHealing; // 힐링 여부
     private Coroutine hpSmooth; // HP 바 부드럽게 채우기 코루틴
+    public GameObject statusObj;
     protected override void Awake()
     {
         //싱글턴 인스턴스 설정
@@ -161,7 +162,7 @@ public class PlayableCharacter : Character
 
         // 인풋 액션 초기화
         inputAction = new();
-
+        Application.targetFrameRate = 120;
         //실질 점프 카운트 초기화
         jumpCnt = 2;
 
@@ -181,6 +182,12 @@ public class PlayableCharacter : Character
         inputAction.Player.Jump.performed += OnJump;
         inputAction.Player.Attack.performed += OnAttack;
         inputAction.Player.Dropdown.performed += OnDropdown;
+        inputAction.Player.Status.performed += OnStatus;
+    }
+    private void OnStatus(InputAction.CallbackContext context)
+    {
+        statusObj.SetActive(!statusObj.activeSelf);
+        Application.targetFrameRate = statusObj.activeSelf ? 0 : 120;
     }
     private void OnDropdown(InputAction.CallbackContext context) //하강(드롭다웃) 액션 등록
     {
@@ -207,6 +214,8 @@ public class PlayableCharacter : Character
         //팔 관련 로직
         Vector3 dir = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float armAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+
         if (!weaponScript.anim.GetBool("IsSwing"))
         {
             if (armAngle + 90 <= 180 && armAngle + 90 >= 0)
@@ -241,9 +250,7 @@ public class PlayableCharacter : Character
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-
         //공중 판정 체크
-        
         anim.SetBool("JUMP", !isGround);
     }
     public void OnMovement(InputAction.CallbackContext context) // 이동 액션 등록
@@ -301,6 +308,11 @@ public class PlayableCharacter : Character
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.CompareTag("FallingZone"))
+        {
+            transform.position = savedPos;
+            TakeDamage(data.MaxHP * 0.2f);
+        }
         RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));         // 바닥 충돌 처리 전용 레이캐스트 히트
 
         if (h && !isDropdown && rigid.linearVelocityY <= 0.0f) // 바닥 착지 조건 분기
@@ -353,8 +365,9 @@ public class PlayableCharacter : Character
     protected override void Movement()
     {
         base.Movement();
-        if(isGround) anim.SetBool("1_Move", moveVec.x != 0.0f);
+        if (isGround) anim.SetBool("1_Move", moveVec.x != 0.0f);
         if (moveVec.x == 0.0f) return;
+        moveDir = moveVec.x > 0 ? false : moveVec.x < 0 ? true : moveDir;
         transform.GetChild(0).localScale = new Vector3(moveVec.x > 0 ? -2.0f : 2.0f, 2.0f, 1.0f);
     }
     protected override IEnumerator Hit()
@@ -362,20 +375,29 @@ public class PlayableCharacter : Character
         InvincibleTimer = data.InvincibleTime;
         hitBox.enabled = false;
 
-        float colorVal = 0.6f;
+        float colorVal = 0f;
         float elapsedTime = 0f;
-        material.color = new Color(colorVal, colorVal, colorVal, 1);
+        material.color = Color.red;
         while (InvincibleTimer > 0.0f)
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / data.InvincibleTime;
             colorVal = Mathf.Lerp(colorVal, 1f, t);
-            material.color = new Color(colorVal, colorVal, colorVal, 1);
+            material.color = new Color(1, colorVal, colorVal, 1);
             InvincibleTimer -= Time.deltaTime;
 
             yield return null;
         }
         material.color = new Color(1, 1, 1, 1);
         hitCoroutine = null;
+    }
+    public void SetWeapon(WeaponData weaponData)
+    {
+        weaponSprite.sprite = weaponData.Sprite;
+        weaponScript.SetAts(weaponData.Ats);
+        data.Atk = weaponData.Atk;
+        data.Ats = weaponData.Ats;
+        ((PlayableCharacterData)data).Cri = weaponData.Cri;
+        ((PlayableCharacterData)data).CriDmg = weaponData.Crid;
     }
 }

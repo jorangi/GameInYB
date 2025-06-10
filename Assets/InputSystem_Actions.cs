@@ -180,6 +180,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Status"",
+                    ""type"": ""Button"",
+                    ""id"": ""37f63931-7b35-417b-9d79-7750d4df4841"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -554,6 +563,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Dropdown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d71d63b4-8b5b-487c-a7b1-88e12e281ede"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Status"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1151,6 +1171,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Dropdown = m_Player.FindAction("Dropdown", throwIfNotFound: true);
+        m_Player_Status = m_Player.FindAction("Status", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1254,6 +1275,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Next;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Dropdown;
+    private readonly InputAction m_Player_Status;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1305,6 +1327,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Dropdown".
         /// </summary>
         public InputAction @Dropdown => m_Wrapper.m_Player_Dropdown;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Status".
+        /// </summary>
+        public InputAction @Status => m_Wrapper.m_Player_Status;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1361,6 +1387,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Dropdown.started += instance.OnDropdown;
             @Dropdown.performed += instance.OnDropdown;
             @Dropdown.canceled += instance.OnDropdown;
+            @Status.started += instance.OnStatus;
+            @Status.performed += instance.OnStatus;
+            @Status.canceled += instance.OnStatus;
         }
 
         /// <summary>
@@ -1402,6 +1431,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Dropdown.started -= instance.OnDropdown;
             @Dropdown.performed -= instance.OnDropdown;
             @Dropdown.canceled -= instance.OnDropdown;
+            @Status.started -= instance.OnStatus;
+            @Status.performed -= instance.OnStatus;
+            @Status.canceled -= instance.OnStatus;
         }
 
         /// <summary>
@@ -1772,6 +1804,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDropdown(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Status" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnStatus(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
