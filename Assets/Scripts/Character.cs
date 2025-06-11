@@ -220,7 +220,7 @@ public class Character : ParentObject
     protected float HitStunTimer;
     protected Coroutine hitCoroutine;
     public Collider2D hitBox;
-    [ShowInInspector]protected Vector3 savedPos;
+    [ShowInInspector] protected Vector3 savedPos;
     protected bool moveDir; //f : left, t : right
     protected RaycastHit2D isPrecipice;
     protected virtual void Update()
@@ -242,15 +242,15 @@ public class Character : ParentObject
                     new Vector2(-1, -1).normalized :
                     new Vector2(1, -1).normalized),
             1, LayerMask.GetMask("Floor", "Platform"));
-        // Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (
-        //     frontRay.localPosition.x > 0 ?
-        //         (moveDir ?
-        //             new Vector2(-1, -1).normalized :
-        //             new Vector2(1, -1).normalized) :
-        //         (moveDir ?
-        //             new Vector2(-1, -1).normalized :
-        //             new Vector2(1, -1).normalized)),
-        // Color.red);
+            // Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (
+            //     frontRay.localPosition.x > 0 ?
+            //         (moveDir ?
+            //             new Vector2(-1, -1).normalized :
+            //             new Vector2(1, -1).normalized) :
+            //         (moveDir ?
+            //             new Vector2(-1, -1).normalized :
+            //             new Vector2(1, -1).normalized)),
+            // Color.red);
         }
         else
         {
@@ -258,7 +258,7 @@ public class Character : ParentObject
             // Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (moveDir ? new Vector2(1, -1).normalized : new Vector2(-1, -1).normalized), Color.red);
         }
 
-        
+
 
         if (isPrecipice && isGround) savedPos = transform.position;
 

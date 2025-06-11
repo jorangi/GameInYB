@@ -1,30 +1,32 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 [System.Serializable]
 public class ItemData
 {
-    [SerializeField]private string id;
+    [SerializeField] private string id;
     [HideInInspector] public string Id => id;
     [SerializeField] private string name;
     [HideInInspector] public string Name => name;
-    [SerializeField]private string description;
+    [SerializeField] private string description;
     [HideInInspector] public string Description => description;
-    [SerializeField]private Sprite icon;
+    [SerializeField] private Sprite icon;
     [HideInInspector] public Sprite Icon => icon;
 }
 [System.Serializable]
 public class WeaponData : ItemData
 {
-    [SerializeField]private Sprite sprite;
+    [SerializeField] private Sprite sprite;
     [HideInInspector] public Sprite Sprite => sprite;
     [SerializeField] private float atk;
-    [HideInInspector] public float Atk => atk;    
+    [HideInInspector] public float Atk => atk;
     [SerializeField] private float ats;
-    [HideInInspector] public float Ats => ats;    
+    [HideInInspector] public float Ats => ats;
     [SerializeField] private float cri;
-    [HideInInspector] public float Cri => cri;    
+    [HideInInspector] public float Cri => cri;
     [SerializeField] private float crid;
-    [HideInInspector] public float Crid => crid;    
+    [HideInInspector] public float Crid => crid;
 }
 
 [RequireComponent(typeof(BoxCollider2D))]
@@ -34,7 +36,6 @@ public class Weapon : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public BoxCollider2D boxCollider;
     private PlayableCharacter player;
-    private NonPlayableCharacter target;
     private const int MAX_SWING_COUNT = 2; // Maximum number of swings allowed
     public Animator anim;
     public void SetAts(float ats)
@@ -51,8 +52,29 @@ public class Weapon : MonoBehaviour
         anim = GetComponent<Animator>();
         UpdateColliderToSprite();
     }
+    private void Update()
+    {
+        if (anim.GetBool("IsSwing"))
+        {
+            Vector2 center = (Vector2)transform.position;
+            Vector2 size = boxCollider.size;
+            Collider2D[] hits = Physics2D.OverlapBoxAll(center, size, 0f, LayerMask.GetMask("HitBox")); // LayerMask 생략
+            foreach (var hit in hits)
+            {
+                if (hit.CompareTag("Enemy") && hit.transform.parent.TryGetComponent(out NonPlayableCharacter enemy) && !targets.Contains(enemy))
+                {
+                    targets.Add(enemy);
+                }
+            }
+        }
+        else
+        {
+            targets.Clear();
+        }
+    }
     public void StartSwing()
     {
+        UpdateColliderToSprite();
         if (anim.GetBool("IsSwing")) return;
         anim.SetInteger("SwingCount", (anim.GetInteger("SwingCount") + 1) % MAX_SWING_COUNT);
         anim.SetBool("IsSwing", true);
@@ -66,24 +88,20 @@ public class Weapon : MonoBehaviour
         anim.SetInteger("SwingCount", 0);
         SwingEnd();
     }
-    void OnDrawGizmosSelected()
+    public List<NonPlayableCharacter> targets = new();
+    void OnDrawGizmos()
     {
-        //Gizmos.color = Color.red;
-        //Gizmos.DrawWireCube(transform.position + offset, size);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(boxCollider.bounds.center, boxCollider.bounds.size);
     }
-    public void Hit()
+    public void CheckHit()
     {
-        Debug.Log("Hit!!");
-        Collider2D[] hits = Physics2D.OverlapBoxAll(transform.position, boxCollider.size, 0f, LayerMask.GetMask("HitBox"));
-        foreach (var hit in hits)
+        foreach (NonPlayableCharacter n in targets)
         {
-            if (hit.CompareTag("Enemy") && hit.transform.parent.TryGetComponent<NonPlayableCharacter>(out var enemy))
-            {
-                Debug.Log(hit.tag);
-                enemy.TakeDamage(player.Data.Atk);
-            }
+            n.TakeDamage(player.Data.Atk);
         }
     }
+
     public void UpdateColliderToSprite()
     {
         Sprite sprite = spriteRenderer.sprite;
