@@ -44,6 +44,7 @@ public class NonPlayableCharacter : Character
     private bool isHealing;
     private Coroutine hpSmooth;
     private const float BAR_SIZE = 3.5f;
+    public GameObject DamageTextPrefab;
     protected override void Awake()
     {
         base.Awake();
@@ -109,8 +110,8 @@ public class NonPlayableCharacter : Character
     }
     protected override void Movement()
     {
-        if(state == State.Move)
-        base.Movement();
+        if (state == State.Move)
+            base.Movement();
         sprite.flipX = moveVec.x > 0;
     }
     IEnumerator HpBarFillsSmooth(SpriteRenderer bar)
@@ -158,6 +159,10 @@ public class NonPlayableCharacter : Character
         int dmg = Mathf.RoundToInt(damage - data.Def);
         if (dmg < 0) dmg = 0;
         SetHP(data.HP - dmg);
+
+        GameObject dObj = Instantiate(DamageTextPrefab);
+        dObj.transform.position = transform.position + new Vector3(0, 2f, 0);
+        dObj.GetComponent<TextMeshPro>().text = Mathf.RoundToInt(dmg).ToString();
         if (data.HP <= 0)
         {
             // Handle death logic here
@@ -177,7 +182,6 @@ public class NonPlayableCharacter : Character
         InvincibleTimer = data.InvincibleTime;
         HitStunTimer = data.HitStunTime;
         hitBox.enabled = false;
-
         float colorVal = 0f;
         float elapsedTime = 0f;
         sprite.color = Color.red;

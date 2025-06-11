@@ -54,7 +54,7 @@ public class FloatingDamage : MonoBehaviour
     {
         tmp.color = new(1, 1, 1, tmp.color.a - Time.deltaTime);
         transform.Translate(new(0, Time.deltaTime * 0.5f, 0));
-        if (tmp.color.a == 0.0f)
+        if (tmp.color.a < 0.1f)
             Destroy(this.gameObject);
     }
 }

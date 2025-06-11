@@ -45,7 +45,7 @@ AnimationClip:
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 0.33333334
+        time: 0.35
         value: {x: 0, y: 0, z: 0.94}
         inSlope: {x: 0, y: 0, z: -4099.999}
         outSlope: {x: 0, y: 0, z: -4099.999}
@@ -56,8 +56,8 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.36666667
         value: {x: 0, y: 0, z: -95}
-        inSlope: {x: 0, y: 0, z: -1056.0002}
-        outSlope: {x: 0, y: 0, z: -1056.0002}
+        inSlope: {x: 0, y: 0, z: -1320}
+        outSlope: {x: 0, y: 0, z: -1320}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
@@ -116,7 +116,7 @@ AnimationClip:
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 0.33333334
+        time: 0.35
         value: {x: 0.02, y: 0.83, z: 0}
         inSlope: {x: 19.559996, y: 0, z: 0}
         outSlope: {x: 19.559996, y: 0, z: 0}
@@ -127,8 +127,8 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.36666667
         value: {x: 0.613, y: 0.145, z: 0}
-        inSlope: {x: 0.26400018, y: -1.7159997, z: 0}
-        outSlope: {x: 0.26400018, y: -1.7159997, z: 0}
+        inSlope: {x: 0.2778949, y: -1.8063154, z: 0}
+        outSlope: {x: 0.2778949, y: -1.8063154, z: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
@@ -228,7 +228,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.33333334
+        time: 0.35
         value: 0.02
         inSlope: 19.559996
         outSlope: 19.559996
@@ -239,8 +239,8 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.36666667
         value: 0.613
-        inSlope: 0.26400018
-        outSlope: 0.26400018
+        inSlope: 0.2778949
+        outSlope: 0.2778949
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
@@ -294,7 +294,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.33333334
+        time: 0.35
         value: 0.83
         inSlope: 0
         outSlope: 0
@@ -305,8 +305,8 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.36666667
         value: 0.145
-        inSlope: -1.7159997
-        outSlope: -1.7159997
+        inSlope: -1.8063154
+        outSlope: -1.8063154
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
@@ -360,7 +360,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.33333334
+        time: 0.35
         value: 0
         inSlope: 0
         outSlope: 0
@@ -426,7 +426,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.33333334
+        time: 0.35
         value: 0
         inSlope: 0
         outSlope: 0
@@ -501,7 +501,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.33333334
+        time: 0.35
         value: 0
         inSlope: 0
         outSlope: 0
@@ -576,7 +576,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.33333334
+        time: 0.35
         value: 0.94
         inSlope: -4099.999
         outSlope: -4099.999
@@ -587,8 +587,8 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.36666667
         value: -95
-        inSlope: -1056.0002
-        outSlope: -1056.0002
+        inSlope: -1320
+        outSlope: -1320
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
@@ -659,7 +659,7 @@ AnimationClip:
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.33333334
+  - time: 0.31666666
     functionName: CheckHit
     data: 
     objectReferenceParameter: {fileID: 0}

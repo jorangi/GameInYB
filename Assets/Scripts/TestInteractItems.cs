@@ -8,11 +8,12 @@ public class TestInteractItems : MonoBehaviour
     {
         Item,
         Weapon,
+        Object
     }
     [SerializeField]
     protected ItemType itemType;
-    
-    InputSystem_Actions inputAction;
+
+    protected InputSystem_Actions inputAction;
     protected bool isOn = false;
     protected virtual void Awake()
     {
@@ -29,13 +30,15 @@ public class TestInteractItems : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Player")) {
+        if (other.gameObject.CompareTag("Player"))
+        {
             isOn = true;
         }
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Player")) {
+        if (other.gameObject.CompareTag("Player"))
+        {
             isOn = false;
         }
     }

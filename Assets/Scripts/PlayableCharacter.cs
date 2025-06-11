@@ -153,7 +153,7 @@ public class PlayableCharacter : Character
         DontDestroyOnLoad(gameObject);
         // 데이터 초기화
         data = new PlayableCharacterData(new CharacterData("Player").SetInvicibleTime(0.2f))
-            .SetJCnt(2)
+            .SetJCnt(4)
             .SetJPow(12.0f)
             .SetCri(0.1f)
             .SetCriDmg(1.5f);
@@ -164,7 +164,7 @@ public class PlayableCharacter : Character
         inputAction = new();
         Application.targetFrameRate = 120;
         //실질 점프 카운트 초기화
-        jumpCnt = 2;
+        jumpCnt = Data.JumpCnt;
 
         // 무기 스프라이트, 스크립트, 메시지 박스, 카메라 초기화
         weaponSprite = arm.GetChild(0).GetComponent<SpriteRenderer>();
@@ -279,6 +279,7 @@ public class PlayableCharacter : Character
     {
         //info 배열은 [0] = 이미지 경로, [1] = 유닛 이름, [2] = 메시지 내용, [3] = 이미지 경로
         messageObj.SetActive(true);
+        message.text = info[2];
         if (string.IsNullOrEmpty(info[0]))
         {
             messagePortrait.transform.parent.gameObject.SetActive(false);
@@ -290,7 +291,6 @@ public class PlayableCharacter : Character
             messagePortrait.transform.parent.gameObject.SetActive(true);
             messagePortrait.sprite = null;
             unitName.text = info[1];
-            message.text = info[2];
         }
         if (string.IsNullOrEmpty(info[3]))
         {
@@ -399,5 +399,8 @@ public class PlayableCharacter : Character
         data.Ats = weaponData.Ats;
         ((PlayableCharacterData)data).Cri = weaponData.Cri;
         ((PlayableCharacterData)data).CriDmg = weaponData.Crid;
+        ((PlayableCharacterData)data).RefreshUIData();
+        statusObj.transform.Find("Inventory").Find("Equipment").Find("MainWeapon").Find("slot").Find("Image").GetComponent<Image>().sprite = weaponData.Icon;
+        statusObj.transform.Find("Inventory").Find("Equipment").Find("SubWeapon").Find("slot").Find("Image").GetComponent<Image>().sprite = weaponData.Icon;
     }
 }
