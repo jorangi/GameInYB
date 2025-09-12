@@ -367,6 +367,13 @@ public class Character : ParentObject
     public float timeMul = 10.0f;
     protected virtual IEnumerator Hit()
     {
-        yield return null;
+        if (hitBox.transform.childCount > 0 && hitBox.GetComponentInChildren<SpriteRenderer>() is SpriteRenderer hBSprite)
+        {
+            hBSprite.color = Color.red;
+            while (InvincibleTimer > 0)
+            {
+                yield return null;
+            }
+        }
     }
 }

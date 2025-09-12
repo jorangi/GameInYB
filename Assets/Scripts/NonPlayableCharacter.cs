@@ -20,6 +20,7 @@ public class NonPlayableCharacterData : CharacterData
         return $"{base.ToString()}";
     }
 }
+
 public class NonPlayableCharacter : Character
 {
     public SpriteRenderer sprite;

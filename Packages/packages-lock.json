@@ -131,6 +131,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.editorcoroutines": {
+      "version": "https://github.com/needle-mirror/com.unity.editorcoroutines.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "154f4e8db923ec59a6d1c0dfb7cb2e7aa847d560"
+    },
     "com.unity.ext.nunit": {
       "version": "2.0.5",
       "depth": 1,

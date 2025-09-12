@@ -172,6 +172,11 @@ public class PlayableCharacter : Character
         weaponScript.SetPlayer(this);
         SetupMessageBox();
         cam = Camera.main;
+        GameObject obj = Instantiate(new GameObject(), null);
+        obj.transform.position = weaponSprite.transform.position;
+        obj.name = "HitBox";
+        BoxCollider2D bC = obj.AddComponent<BoxCollider2D>();
+        bC.size = new Vector2(0.5f, 0.5f);
     }
     void OnEnable()
     {
