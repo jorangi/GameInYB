@@ -1,5 +1,4 @@
 using UnityEngine;
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 [System.Serializable]
@@ -31,27 +30,29 @@ public class WeaponData : ItemData
 
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Animator))]
 public class Weapon : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
     public BoxCollider2D boxCollider;
     private PlayableCharacter player;
+    public GameObject attackHitBox;
     private const int MAX_SWING_COUNT = 2; // Maximum number of swings allowed
     public Animator anim;
+    private float Atk;
+    private Transform hitPoint;
+    private void Awake()
+    {
+        hitPoint = transform.GetChild(0);
+        anim = GetComponent<Animator>();
+        UpdateColliderToSprite();
+    }
     public void SetAts(float ats)
     {
         anim.SetFloat("attackSpd", ats);
         UpdateColliderToSprite();
     }
-    public void SetPlayer(PlayableCharacter player)
-    {
-        this.player = player;
-    }
-    private void Awake()
-    {
-        anim = GetComponent<Animator>();
-        UpdateColliderToSprite();
-    }
+    public void SetPlayerAtk(float atk) => this.Atk = atk;
     private void Update()
     {
         if (anim.GetBool("IsSwing"))
@@ -94,14 +95,17 @@ public class Weapon : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(boxCollider.bounds.center, boxCollider.bounds.size);
     }
+    /// <summary>
+    /// 공격 순간 히트박스 생성
+    /// </summary>
     public void CheckHit()
     {
-        foreach (NonPlayableCharacter n in targets)
-        {
-            n.TakeDamage(player.Data.Atk);
-        }
+        GameObject hitbox = Instantiate(attackHitBox);
+        hitbox.GetComponent<BoxCollider2D>().size = new Vector2(1f, 1f);
+        hitbox.GetComponent<AttackHitBox>().atk = Atk;
+        hitbox.transform.position = hitPoint.position;
+        hitbox.transform.localScale = new(2f, 2f);
     }
-
     public void UpdateColliderToSprite()
     {
         Sprite sprite = spriteRenderer.sprite;

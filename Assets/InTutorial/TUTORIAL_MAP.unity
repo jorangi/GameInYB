@@ -5510,14 +5510,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5052450154792496824, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5052450154792496824, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5446498137963392094, guid: 72212066372a74551a5024743f1dabd5, type: 3}
       propertyPath: m_Name
       value: Player
@@ -5546,10 +5538,6 @@ PrefabInstance:
       propertyPath: CharacterInformationObj
       value: 
       objectReference: {fileID: 1646578327}
-    - target: {fileID: 6394229451876132354, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -96243,7 +96231,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.21909475, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.89800864, g: 0.65689903, b: 0.65689903, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -96268,7 +96256,11 @@ MonoBehaviour:
   target: {fileID: 1379463387}
   colorTimers:
   - color: {r: 1, g: 1, b: 1, a: 1}
-    timer: 0
+    timer: 1
+  - color: {r: 1, g: 0, b: 0, a: 1}
+    timer: 2
+  - color: {r: 0, g: 0, b: 0, a: 1}
+    timer: 3
 --- !u!1 &1399396736
 GameObject:
   m_ObjectHideFlags: 0
@@ -103022,6 +103014,6 @@ SceneRoots:
   - {fileID: 1828037788}
   - {fileID: 2074082096}
   - {fileID: 2045845519}
-  - {fileID: 607738718}
   - {fileID: 1307671873}
   - {fileID: 960945216}
+  - {fileID: 607738718}

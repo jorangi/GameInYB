@@ -169,7 +169,6 @@ public class PlayableCharacter : Character
         // 무기 스프라이트, 스크립트, 메시지 박스, 카메라 초기화
         weaponSprite = arm.GetChild(0).GetComponent<SpriteRenderer>();
         weaponScript = weaponSprite.GetComponent<Weapon>();
-        weaponScript.SetPlayer(this);
         SetupMessageBox();
         cam = Camera.main;
         GameObject obj = Instantiate(new GameObject(), null);
@@ -219,14 +218,21 @@ public class PlayableCharacter : Character
         //팔 관련 로직
         Vector3 dir = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float armAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-
+        
+        moveDir = moveVec.x <= 0 && (moveVec.x < 0 || moveDir);
         if (!weaponScript.anim.GetBool("IsSwing"))
         {
+            //마우스가 캐릭터 오른쪽
             if (armAngle + 90 <= 180 && armAngle + 90 >= 0)
+            {
+                transform.GetChild(0).localScale = new Vector3(2.0f, 2.0f , 1.0f);
                 arm.rotation = Quaternion.Euler(0, 180, -(armAngle + 90));
-            else
+            }
+            else //마우스가 캐릭터 오른쪽
+            {
+                transform.GetChild(0).localScale = new Vector3(-2.0f, 2.0f , 1.0f);
                 arm.rotation = Quaternion.Euler(0, 0, armAngle + 90);
+            }
         }
         else
         {
@@ -371,9 +377,6 @@ public class PlayableCharacter : Character
     {
         base.Movement();
         if (isGround) anim.SetBool("1_Move", moveVec.x != 0.0f);
-        if (moveVec.x == 0.0f) return;
-        moveDir = moveVec.x > 0 ? false : moveVec.x < 0 ? true : moveDir;
-        transform.GetChild(0).localScale = new Vector3(moveVec.x > 0 ? -2.0f : 2.0f, 2.0f, 1.0f);
     }
     protected override IEnumerator Hit()
     {
@@ -400,8 +403,10 @@ public class PlayableCharacter : Character
     {
         weaponSprite.sprite = weaponData.Sprite;
         weaponScript.SetAts(weaponData.Ats);
+        //일단은 캐릭터 공격력 업싱 무기공격력만 적용
         data.Atk = weaponData.Atk;
         data.Ats = weaponData.Ats;
+        weaponScript.SetPlayerAtk(data.Atk);
         ((PlayableCharacterData)data).Cri = weaponData.Cri;
         ((PlayableCharacterData)data).CriDmg = weaponData.Crid;
         ((PlayableCharacterData)data).RefreshUIData();

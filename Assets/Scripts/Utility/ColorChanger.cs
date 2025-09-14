@@ -19,13 +19,11 @@ public class ColorChanger : MonoBehaviour
     }
     public IEnumerator ColorChange(ColorTimer colorTimer)
     {
-        Debug.Log($"코루틴 시작{target.color} -> {colorTimer.color} : {colorTimer.timer}");
         float timer = colorTimer.timer;
         while (timer > .0f)
         {
-            Debug.Log($"{colorTimer.color} 타이머 진행중 {Mathf.Round(timer * 10) * 0.1}");
             timer -= Time.deltaTime;
-            target.color = Color.Lerp(target.color, colorTimer.color, colorTimer.timer - timer);
+            target.color = Color.Lerp(target.color, colorTimer.color, Time.deltaTime);
             yield return null;
         }
     }

@@ -318,6 +318,13 @@ public class Character : ParentObject
             rigid.linearVelocity = new Vector2(moveVec.x * data.Spd, rigid.linearVelocityY);
         }
     }
+    /// <summary>
+    /// 유닛 착지 메소드, 점프 횟수, 점프 여부, Collision의 Trigger, 착지 레이어를 설정
+    /// </summary>
+    /// <param name="layer"></param> <summary>
+    /// 
+    /// </summary>
+    /// <param name="layer"></param>
     protected virtual void Landing(LAYER layer)
     {
         jumpCnt = 2;
