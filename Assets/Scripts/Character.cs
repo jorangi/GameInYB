@@ -1,5 +1,4 @@
 using System.Collections;
-using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -220,7 +219,7 @@ public class Character : ParentObject
     protected float HitStunTimer;
     protected Coroutine hitCoroutine;
     public Collider2D hitBox;
-    [ShowInInspector] protected Vector3 savedPos;
+    [SerializeField] protected Vector3 savedPos;
     protected bool moveDir; //f : left, t : right
     protected RaycastHit2D isPrecipice;
     protected virtual void Update()
