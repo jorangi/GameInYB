@@ -92183,7 +92183,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC544\uC774\uD15C \uC124\uBA85\uC744 \uC801\uB294 \uACF3. <link=\"asd\"><u><color=\"red\">\uB9C1\uD06C\uB791
     \uC5B8\uB354\uBC14\uB85C \uC774\uB7F0\uAC83\uB3C4 \uAC00\uB2A5\uD568</color></u></link><i>\uBCFC\uB4DC\uB294
-    \uC548\uC4F0\uB294\uAC8C \uC88B\uC744\uB4EF</i>"
+    \uC548\uC4F0\uB294\uAC8C \uC88B\uC744\uB4EF</i><link=\"asd\"><color=\"green\">\uC774\uAC70\uB294
+    \uB450\uBC88\uC9F8 \uB9C1\uD06C\uC784</color></link>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3eb8814ef47fb8a4085f89f87a73873e, type: 2}
   m_sharedMaterial: {fileID: 6173337107237856897, guid: 3eb8814ef47fb8a4085f89f87a73873e, type: 2}
