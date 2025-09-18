@@ -49,7 +49,6 @@ public class ColorChangerEditor : Editor
                         {
                             co = null;
                             co = EditorCoroutineUtility.StartCoroutineOwnerless(colorChanger.ColorChange(colorTimer));
-                            Debug.Log("조건분기 입장");
                         }
                     }
                 }

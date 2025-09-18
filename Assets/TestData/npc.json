@@ -1,0 +1,13 @@
+{
+    "npc":[
+        {
+            "id":"02001",
+            "name":["Test Landing Monster", "테스트용 지상 몬스터"],
+            "attribute":[
+
+            ],
+            "hp":0,
+            "atk":0
+        }
+    ]
+}

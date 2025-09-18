@@ -1,0 +1,105 @@
+
+{
+    "items": [
+        {
+            "id": "01001",
+            "name": ["Wooden Sword", "나무 검"],
+            "rarity": "common",
+            "description":["An wooden sword.","나무로 만든 검"],
+            "attributes": {
+                "atk": 10,
+                "ats": 1.5,
+                "cri": 0.5,
+                "crid": 0
+            },
+            "effects": [],
+            "stackable": false
+        },
+        {
+            "id": "01002",
+            "name": ["Iron Sword", "철 검"],
+            "rarity": "common",
+            "description":["An iron sword.","철로 만든 검"],
+            "attributes": {
+                "atk": 10,
+                "ats": 1,
+                "cri": 0,
+                "crid": 0.5
+            },
+            "effects": [],
+            "stackable": false
+        },
+
+        {
+            "id": "01003",
+            "name": ["Iron Axe", "철 도끼"],
+            "rarity": "common",
+            "description":["An iron axe.","철로 만든 도끼"],
+            "attributes": {
+                "atk": 13,
+                "ats": 0.8,
+                "cri": 0,
+                "crid": 0.3
+            },
+            "effects": [],
+            "stackable": false
+        },
+
+        {
+            "id": "01004",
+            "name": ["Iron Battle Axe", "철 전투 도끼"],
+            "rarity": "common",
+            "description":["An iron battle axe.","철로 만든 전투 도끼"],
+            "attributes": {
+                "atk": 22,
+                "ats": 0.5,
+                "cri": 0.5,
+                "crid": 0
+            },
+            "effects": [],
+            "stackable": false
+        },
+        {
+            "id": "01005",
+            "name": ["Iron Hammer", "철 해머"],
+            "rarity": "common",
+            "description":["An iron hammer.","철로 만든 망치"],
+            "attributes": {
+                "atk": 8,
+                "ats": 1.3,
+                "cri": 0.2,
+                "crid": 0.3
+            },
+            "effects": [],
+            "stackable": false
+        },
+        {
+            "id": "01006",
+            "name": ["Iron GreatSword", "철 대검"],
+            "rarity": "common",
+            "description":["An iron great sword.","철로 만든 대검"],
+            "attributes": {
+                "atk": 10,
+                "ats": 1.5,
+                "cri": 0.5,
+                "crid": 0
+            },
+            "effects": [],
+            "stackable": false
+        },
+        {
+            "id": "01007",
+            "name": ["Iron GreatSword", "철 대검"],
+            "rarity": "common",
+            "description":["An iron great sword.","철로 만든 대검"],
+            "attributes": {
+                "atk": 10,
+                "ats": 1.5,
+                "cri": 0.5,
+                "crid": 0
+            },
+            "effects": [],
+            "stackable": false
+        }
+    ]
+}
