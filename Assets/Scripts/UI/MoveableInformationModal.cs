@@ -1,14 +1,29 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class MoveableInformationModal : MonoBehaviour
+public class MoveableInformationModal : MonoBehaviour, IUI
 {
-    public virtual void Show()
+    private UIContext uiContext;
+    private void Start()
+    {
+        uiContext = FindAnyObjectByType<UIContext>();
+        uiContext.uiRegistry.Register(this, UIType.KEYWORD_MODAL);
+    }
+    public void Show()
     {
         gameObject.SetActive(true);
     }
-    public virtual void Hide()
+    public void Hide()
     {
         gameObject.SetActive(false);
+    }
+    public void PositiveInteract(InputAction.CallbackContext context)
+    {
+        
+    }
+    public void NegativeInteract(InputAction.CallbackContext context)
+    {
+        Hide();
     }
     public virtual void Move(Vector2 screenPos, Camera cam)
     {

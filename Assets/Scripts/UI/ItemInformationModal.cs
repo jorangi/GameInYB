@@ -13,13 +13,13 @@ public class ItemInformationModal : MoveableInformationModal, IPointerClickHandl
     public void OnPointerClick(PointerEventData eventData)
     {
         int index = TMP_TextUtilities.FindIntersectingLink(source, eventData.position, eventData.pressEventCamera);
+        if(index == -1) return;
         TMP_LinkInfo info = source.textInfo.linkInfo[index];
         Debug.Log(info.GetLinkID());
     }
     #endregion
     public void Show(string content, Vector2 screenPos, Camera cam)
     {
-        base.Show();
     }
     public void SetText(string content)
     {

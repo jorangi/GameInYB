@@ -1,11 +1,29 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
-public class UIManager : MonoBehaviour
+public enum UIType
+{
+    CHARACTER_INFORMATION,
+    COMMAND_PANEL,
+    INVENTORY,
+    KEYWORD_MODAL,
+    NONE
+}
+public interface IUIRegistry
+{
+    public void Register(IUI ui, UIType type = UIType.NONE);
+    public void Unregister(IUI ui);
+    public void Focus(IUI ui);
+    public void CloseUI(IUI ui);
+}
+public class UIManager : MonoBehaviour, IUIRegistry
 {
     #region field
     #region LinkEvent & Scope
@@ -36,12 +54,18 @@ public class UIManager : MonoBehaviour
     private readonly Dictionary<string, KeywordInformationModalController> keywordModalByTerm = new();
     private readonly Queue<KeywordInformationModalController> keywordModalPooling = new();
     private bool shown;
-    //private  
-    InputSystem_Actions inputAction;
+    public static InputSystem_Actions inputAction;
+    public List<IUI> uiList = new();
+    private Dictionary<UIType, IUI> uiDic = new();
     #endregion
 
     private void Awake()
     {
+        if (inputAction == null)
+        {
+            inputAction = new();
+            inputAction.UserInterface.Enable();
+        }
         if (canvas == null) canvas = GetComponentInParent<Canvas>();
         if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay && cam == null)
         {
@@ -49,18 +73,69 @@ public class UIManager : MonoBehaviour
             if (itemModal != null) itemModal.Hide();
             if (backdrop != null) backdrop.SetActive(false);
             KeywordModalPooling(keywordModalPoolingMax);
-
         }
     }
     private void OnEnable()
     {
         inputAction.Enable();
         if (linkEvent != null) linkEvent.OnRaised += OnLinkEvent;
+        inputAction.UserInterface.ClickAction.performed += OnClickAction;
+        inputAction.UserInterface.Command.performed += OnCommand;
+        inputAction.UserInterface.CharacterInformation.performed += OnCharacterInformation;
+        inputAction.UserInterface.Positive.performed += OnPositive;
+        inputAction.UserInterface.Negative.performed += OnNegative;
+    }
+    
+    private List<RaycastResult> raycastResults = new();
+    private void OnClickAction(InputAction.CallbackContext context)
+    {
+        if (uiList.Count == 0) return;
+        PointerEventData pointer = new(EventSystem.current)
+        {
+            position = Mouse.current.position.ReadValue()
+        };
+        EventSystem.current.RaycastAll(pointer, raycastResults);
+        if (raycastResults.Count == 0) return;
+        MoveableInformationModal modal = null;
+        foreach (var r in raycastResults)
+        {
+            if (r.gameObject.TryGetComponent<MoveableInformationModal>(out modal))
+                break;
+        }
+        if (modal == null && uiList[^1] is MoveableInformationModal) uiList[^1].NegativeInteract(context);
+    }
+    private void OnCommand(InputAction.CallbackContext context)
+    {
+        if (uiDic.TryGetValue(UIType.COMMAND_PANEL, out IUI ui))
+        {
+            ui.Show();
+            uiList.Add(ui);
+        }
+    }
+    private void OnCharacterInformation(InputAction.CallbackContext context)
+    {
+        if (uiDic.TryGetValue(UIType.CHARACTER_INFORMATION, out IUI ui))
+        {
+            ui.Show();
+            uiList.Add(ui);
+        }
     }
     private void OnDisable()
     {
         inputAction.Disable();
         if (linkEvent != null) linkEvent.OnRaised -= OnLinkEvent;
+
+        inputAction.UserInterface.Positive.performed += OnPositive;
+        inputAction.UserInterface.Negative.performed += OnNegative;
+    }
+    private void OnPositive(InputAction.CallbackContext context)
+    {
+    }
+    private void OnNegative(InputAction.CallbackContext context)
+    {
+        if (uiList.Count == 0) return;
+        IUI ui = uiList[^1];
+        ui.NegativeInteract(context);
     }
     private void OnLinkEvent(TMPLinkEvent.TMPLinkEventPayload payload)
     {
@@ -98,7 +173,8 @@ public class UIManager : MonoBehaviour
             itemModal.Move(screenPos, eventCam != null ? eventCam : cam);
         }
     }
-    private void MoveItemInfo(Vector2 screenPos, Camera eventCam) {
+    private void MoveItemInfo(Vector2 screenPos, Camera eventCam)
+    {
         if (itemModal == null || shown) return;
         itemModal.Move(screenPos, eventCam != null ? eventCam : cam);
     }
@@ -128,7 +204,8 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning("keywordModalPrefab(KeywordInformationModalController)이 없음");
             return null;
         }
-        if (keywordContainer == null) {
+        if (keywordContainer == null)
+        {
             Debug.LogWarning("keywordContainer(RectTransform)이 없음");
             return null;
         }
@@ -229,7 +306,22 @@ public class UIManager : MonoBehaviour
         if (top == null) return;
         top.Hide();
 
-        if(top.transform.parent != keywordContainer) top.transform.SetParent(keywordContainer, false);
+        if (top.transform.parent != keywordContainer) top.transform.SetParent(keywordContainer, false);
         keywordModalPooling.Enqueue(top);
+    }
+    public void Register(IUI ui, UIType type = UIType.NONE)
+    {
+        if (ui == null) return;
+        if (type != UIType.NONE && !uiDic.ContainsKey(type)) uiDic[type] = ui;
+        Debug.Log($"{type}이 등록됐음");
+    }
+    public void Unregister(IUI ui)
+    {
+    }
+    public void Focus(IUI ui)
+    {
+    }
+    public void CloseUI(IUI ui) {
+        uiList.Remove(ui);
     }
 }

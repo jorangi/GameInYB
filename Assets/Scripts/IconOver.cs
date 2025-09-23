@@ -8,11 +8,16 @@ using TMPro;
 
 public class IconOver : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    private Item item;
     private SpriteRenderer sprite;
     private String desciption;
-
-    private void Start()
+    private void SetItem(string itemId)
     {
+        
+    }
+    private void Awake()
+    {
+
         //TMP_TextUtilities.FindIntersectingLink();
     }
     public void OnPointerEnter(PointerEventData eventData)

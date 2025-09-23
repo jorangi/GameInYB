@@ -186,14 +186,20 @@ public class PlayableCharacter : Character
         inputAction.Player.Jump.performed += OnJump;
         inputAction.Player.Attack.performed += OnAttack;
         inputAction.Player.Dropdown.performed += OnDropdown;
-        inputAction.Player.Status.performed += OnStatus;
     }
+    /// <summary>
+    /// 스탯창 띄우기
+    /// </summary>
+    /// <param name="context"></param>
     private void OnStatus(InputAction.CallbackContext context)
     {
         statusObj.SetActive(!statusObj.activeSelf);
-        Application.targetFrameRate = statusObj.activeSelf ? 0 : 120;
     }
-    private void OnDropdown(InputAction.CallbackContext context) //하강(드롭다웃) 액션 등록
+    /// <summary>
+    ///하강(드롭다웃) 액션 등록
+    /// </summary>
+    /// <param name="context"></param>
+    private void OnDropdown(InputAction.CallbackContext context)
     {
         if (isGround && landingLayer == LAYER.PLATFORM)
         {
@@ -201,11 +207,18 @@ public class PlayableCharacter : Character
             isDropdown = true;
         }
     }
-    private void OnAttack(InputAction.CallbackContext context) // 공격 액션 등록
+    /// <summary>
+    /// 공격 액션 등록
+    /// </summary>
+    /// <param name="context"></param>
+    private void OnAttack(InputAction.CallbackContext context)
     {
         Attack();
     }
-    protected override void Attack() // 공격 메소드 오버라이드
+    /// <summary>
+    /// 공격 메소드 오버라이드
+    /// </summary>
+    protected override void Attack()
     {
         base.Attack();
         weaponScript.StartSwing();
@@ -217,19 +230,19 @@ public class PlayableCharacter : Character
         //팔 관련 로직
         Vector3 dir = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float armAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        
+
         moveDir = moveVec.x <= 0 && (moveVec.x < 0 || moveDir);
         if (!weaponScript.anim.GetBool("IsSwing"))
         {
             //마우스가 캐릭터 오른쪽
             if (armAngle + 90 <= 180 && armAngle + 90 >= 0)
             {
-                transform.GetChild(0).localScale = new Vector3(2.0f, 2.0f , 1.0f);
+                transform.GetChild(0).localScale = new Vector3(2.0f, 2.0f, 1.0f);
                 arm.rotation = Quaternion.Euler(0, 180, -(armAngle + 90));
             }
             else //마우스가 캐릭터 오른쪽
             {
-                transform.GetChild(0).localScale = new Vector3(-2.0f, 2.0f , 1.0f);
+                transform.GetChild(0).localScale = new Vector3(-2.0f, 2.0f, 1.0f);
                 arm.rotation = Quaternion.Euler(0, 0, armAngle + 90);
             }
         }
@@ -247,7 +260,12 @@ public class PlayableCharacter : Character
             SetHP(UnityEngine.Random.Range(0, Data.MaxHP));
         }
     }
-    IEnumerator HpBarFillsSmooth(SlicedFilledImage bar) // 부드러운 체력바 채우기 코루틴
+    /// <summary>
+    /// 부드러운 체력바 채우기 코루틴
+    /// </summary>
+    /// <param name="bar"></param>
+    /// <returns></returns>
+    IEnumerator HpBarFillsSmooth(SlicedFilledImage bar)
     {
         yield return new WaitForSeconds(0.3f);
         while (Mathf.Abs(bar.fillAmount - (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP)) > 0.01f)

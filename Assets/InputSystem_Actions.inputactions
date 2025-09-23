@@ -94,15 +94,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Status",
-                    "type": "Button",
-                    "id": "37f63931-7b35-417b-9d79-7750d4df4841",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -417,7 +408,7 @@
                 {
                     "name": "",
                     "id": "1c04ea5f-b012-41d1-a6f7-02e963b52893",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -479,22 +470,11 @@
                     "action": "Dropdown",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d71d63b4-8b5b-487c-a7b1-88e12e281ede",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Status",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "UI",
+            "name": "UserInterface",
             "id": "272f6d14-89ba-496f-b7ff-215263d3219f",
             "actions": [
                 {
@@ -510,6 +490,33 @@
                     "name": "Negative",
                     "type": "Button",
                     "id": "c7e84bbd-c5d6-4e4a-9d01-7821d669ee1e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Command",
+                    "type": "Button",
+                    "id": "fbb768c4-17d3-4820-8b25-3818969b5418",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CharacterInformation",
+                    "type": "Button",
+                    "id": "d8ae18c7-df30-4d90-a541-bae2a59e3297",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ClickAction",
+                    "type": "Button",
+                    "id": "3ddc04a0-1ecc-4dd9-9512-297aaf0b3ea5",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -558,6 +565,61 @@
                     "processors": "",
                     "groups": "",
                     "action": "Negative",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Button With One Modifier",
+                    "id": "c1d66c31-d783-452b-8baf-37bb703397dc",
+                    "path": "ButtonWithOneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Command",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Modifier",
+                    "id": "e62256fe-fac1-438c-86e8-889e21b450d4",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Command",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Button",
+                    "id": "4fcff78e-8e04-40d6-bd94-c6e12957f754",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Command",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "cdab4682-881b-4e52-a0cc-be35c07aee2d",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CharacterInformation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7399ba63-d6ae-4665-b267-56c626c9a856",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ClickAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
