@@ -607,6 +607,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PausedMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""6f11d7d7-3c99-413b-9dca-6f6e7de975f0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -708,6 +717,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""ClickAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""34a8fa68-0a08-4096-a485-5aba0a331acd"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PausedMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -794,6 +814,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UserInterface_Command = m_UserInterface.FindAction("Command", throwIfNotFound: true);
         m_UserInterface_CharacterInformation = m_UserInterface.FindAction("CharacterInformation", throwIfNotFound: true);
         m_UserInterface_ClickAction = m_UserInterface.FindAction("ClickAction", throwIfNotFound: true);
+        m_UserInterface_PausedMenu = m_UserInterface.FindAction("PausedMenu", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1075,6 +1096,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UserInterface_Command;
     private readonly InputAction m_UserInterface_CharacterInformation;
     private readonly InputAction m_UserInterface_ClickAction;
+    private readonly InputAction m_UserInterface_PausedMenu;
     /// <summary>
     /// Provides access to input actions defined in input action map "UserInterface".
     /// </summary>
@@ -1106,6 +1128,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UserInterface/ClickAction".
         /// </summary>
         public InputAction @ClickAction => m_Wrapper.m_UserInterface_ClickAction;
+        /// <summary>
+        /// Provides access to the underlying input action "UserInterface/PausedMenu".
+        /// </summary>
+        public InputAction @PausedMenu => m_Wrapper.m_UserInterface_PausedMenu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1147,6 +1173,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ClickAction.started += instance.OnClickAction;
             @ClickAction.performed += instance.OnClickAction;
             @ClickAction.canceled += instance.OnClickAction;
+            @PausedMenu.started += instance.OnPausedMenu;
+            @PausedMenu.performed += instance.OnPausedMenu;
+            @PausedMenu.canceled += instance.OnPausedMenu;
         }
 
         /// <summary>
@@ -1173,6 +1202,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ClickAction.started -= instance.OnClickAction;
             @ClickAction.performed -= instance.OnClickAction;
             @ClickAction.canceled -= instance.OnClickAction;
+            @PausedMenu.started -= instance.OnPausedMenu;
+            @PausedMenu.performed -= instance.OnPausedMenu;
+            @PausedMenu.canceled -= instance.OnPausedMenu;
         }
 
         /// <summary>
@@ -1391,5 +1423,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnClickAction(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PausedMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPausedMenu(InputAction.CallbackContext context);
     }
 }

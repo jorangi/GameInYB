@@ -1,7 +1,7 @@
 {
     "items": [
         {
-            "id": "01000",
+            "id": "00000",
             "name": ["null item", "존재하지 않음"],
             "rarity": "null",
             "description":["It is null","null 데이터입니다."]
@@ -79,10 +79,10 @@
             "rarity": "common",
             "description":["An iron great sword.","철로 만든 대검"],
             "attributes": {
-                "atk": 10,
-                "ats": 1.5,
-                "cri": 0.5,
-                "crid": 0,
+                "atk": 18,
+                "ats": 0.7,
+                "cri": 0,
+                "crid": 0.7,
                 "two-hander":true
             }
         },

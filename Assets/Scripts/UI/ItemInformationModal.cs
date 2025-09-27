@@ -29,5 +29,4 @@ public class ItemInformationModal : MoveableInformationModal, IPointerClickHandl
     {
 
     }
-
 }

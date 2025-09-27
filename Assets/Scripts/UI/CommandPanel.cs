@@ -146,7 +146,7 @@ namespace Looper.Console.UI
         private void Awake()
         {
             uiContext = uiContext != null ? uiContext : GetComponentInParent<UIContext>();
-            uiContext.uiRegistry.Register(this, UIType.COMMAND_PANEL);
+            uiContext.UIRegistry.Register(this, UIType.COMMAND_PANEL);
             inputActions = UIManager.inputAction;
             inputSource = GetComponentInChildren<TMP_InputField>();
             outputSource.text = string.Empty;
@@ -240,7 +240,7 @@ namespace Looper.Console.UI
         public void Show() => gameObject.SetActive(true);
         public void Hide()
         {
-            uiContext.uiRegistry.CloseUI(this);
+            uiContext.UIRegistry.CloseUI(this);
             gameObject.SetActive(false);
         }
     }

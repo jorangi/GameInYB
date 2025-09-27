@@ -20,6 +20,9 @@ public class DataLoader : MonoBehaviour
     private static DataLoader instance;
     private string getResult;
     private readonly Uri baseURI = new("https://developer-looper.duckdns.org/api/");
+#if UNITY_EDITOR
+    [SerializeField] private TextAsset itemData;
+#endif
 
     private async void Awake()
     {
@@ -31,6 +34,11 @@ public class DataLoader : MonoBehaviour
         }
         DataLoader.instance = this;
         DontDestroyOnLoad(this);
+#if UNITY_EDITOR
+        ItemDataManager.Init(itemData.text);
+        Debug.Log("Editor 모드로 아이템 데이터를 초기화합니다.");
+        return;
+#endif
         try
         {
             await ItemDataLoad();

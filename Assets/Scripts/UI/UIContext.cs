@@ -7,11 +7,13 @@ using UnityEngine;
 /// </summary>
 public class UIContext : MonoBehaviour
 {
-    public IUIRegistry uiRegistry;
-
-    private void Awake()
+    private IUIRegistry uiRegistry;
+    public IUIRegistry UIRegistry
     {
-        uiRegistry = GetComponent<UIManager>();
-        Debug.Log(uiRegistry);
+        get
+        {
+            uiRegistry ??= GetComponent<UIManager>();
+            return uiRegistry;
+        }
     }
 }

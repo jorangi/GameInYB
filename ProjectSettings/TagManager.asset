@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Enemy
   - FallingZone
+  - MinimapCamera
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Light
   - Water
   - UI
   - Character
@@ -19,8 +20,8 @@ TagManager:
   - Platform
   - HitBox
   - WeaponHitBox
-  - 
-  - 
+  - ObjectMarker
+  - Landscape
   - 
   - 
   - 

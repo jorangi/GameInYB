@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using JetBrains.Annotations;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,8 +13,8 @@ public enum UIType
 {
     CHARACTER_INFORMATION,
     COMMAND_PANEL,
-    INVENTORY,
     KEYWORD_MODAL,
+    PAUSED_MENU,
     NONE
 }
 public interface IUIRegistry
@@ -84,9 +85,13 @@ public class UIManager : MonoBehaviour, IUIRegistry
         inputAction.UserInterface.CharacterInformation.performed += OnCharacterInformation;
         inputAction.UserInterface.Positive.performed += OnPositive;
         inputAction.UserInterface.Negative.performed += OnNegative;
+        inputAction.UserInterface.PausedMenu.performed += OnPausedMenu;
     }
-    
     private List<RaycastResult> raycastResults = new();
+    /// <summary>
+    /// 클릭 상호작용(UI 외부 마우스 클릭 감지)
+    /// </summary>
+    /// <param name="context"></param>
     private void OnClickAction(InputAction.CallbackContext context)
     {
         if (uiList.Count == 0) return;
@@ -95,26 +100,64 @@ public class UIManager : MonoBehaviour, IUIRegistry
             position = Mouse.current.position.ReadValue()
         };
         EventSystem.current.RaycastAll(pointer, raycastResults);
-        if (raycastResults.Count == 0) return;
-        MoveableInformationModal modal = null;
-        foreach (var r in raycastResults)
+        // 일시정지 메뉴가 열려있을 때
+        if (uiList.Contains(uiDic[UIType.PAUSED_MENU]))
         {
-            if (r.gameObject.TryGetComponent<MoveableInformationModal>(out modal))
-                break;
+            PausedMenu menu = null;
+            foreach (var r in raycastResults)
+            {
+                if (r.gameObject.transform.IsChildOf((uiDic[UIType.PAUSED_MENU] as MonoBehaviour).transform))
+                {
+                    menu = uiDic[UIType.PAUSED_MENU] as PausedMenu;
+                    break;
+                }
+            }
+            if (menu == null && uiList[^1] is PausedMenu) uiList[^1].NegativeInteract(context);
+            return;
         }
-        if (modal == null && uiList[^1] is MoveableInformationModal) uiList[^1].NegativeInteract(context);
+        // 키워드 모달이 열려있을 때
+        else if (uiList.Contains(uiDic[UIType.KEYWORD_MODAL]))
+        {
+            MoveableInformationModal modal = null;
+            foreach (var r in raycastResults)
+            {
+                if (r.gameObject.TryGetComponent<MoveableInformationModal>(out modal))
+                    break;
+            }
+            if (modal == null && uiList[^1] is MoveableInformationModal) uiList[^1].NegativeInteract(context);
+        }
     }
+    /// <summary>
+    /// 명령어 창을 여는 함수
+    /// </summary>
+    /// <param name="context"></param>
     private void OnCommand(InputAction.CallbackContext context)
     {
-        if (uiDic.TryGetValue(UIType.COMMAND_PANEL, out IUI ui))
+        if (!uiList.Contains(uiDic[UIType.PAUSED_MENU]) && uiDic.TryGetValue(UIType.COMMAND_PANEL, out IUI ui))
         {
             ui.Show();
             uiList.Add(ui);
         }
     }
+    /// <summary>
+    /// 일시정지 메뉴를 여는 함수
+    /// </summary>
+    /// <param name="context"></param>
+    private void OnPausedMenu(InputAction.CallbackContext context)
+    {
+        if (Time.deltaTime > 0f && uiList.Count == 0 && uiDic.TryGetValue(UIType.PAUSED_MENU, out IUI ui))
+        {
+            ui.Show();
+            uiList.Add(ui);
+        }
+    }
+    /// <summary>
+    /// 캐릭터 정보 창을 여는 함수
+    /// </summary>
+    /// <param name="context"></param>
     private void OnCharacterInformation(InputAction.CallbackContext context)
     {
-        if (uiDic.TryGetValue(UIType.CHARACTER_INFORMATION, out IUI ui))
+        if (!uiList.Contains(uiDic[UIType.PAUSED_MENU]) && uiDic.TryGetValue(UIType.CHARACTER_INFORMATION, out IUI ui))
         {
             ui.Show();
             uiList.Add(ui);
@@ -128,9 +171,17 @@ public class UIManager : MonoBehaviour, IUIRegistry
         inputAction.UserInterface.Positive.performed += OnPositive;
         inputAction.UserInterface.Negative.performed += OnNegative;
     }
+    /// <summary>
+    /// UI 긍정 상호작용
+    /// </summary>
+    /// <param name="context"></param>
     private void OnPositive(InputAction.CallbackContext context)
     {
     }
+    /// <summary>
+    /// UI 부정 상호작용
+    /// </summary>
+    /// <param name="context"></param>
     private void OnNegative(InputAction.CallbackContext context)
     {
         if (uiList.Count == 0) return;
@@ -309,19 +360,44 @@ public class UIManager : MonoBehaviour, IUIRegistry
         if (top.transform.parent != keywordContainer) top.transform.SetParent(keywordContainer, false);
         keywordModalPooling.Enqueue(top);
     }
+    /// <summary>
+    /// UI를 등록하는 함수
+    /// </summary>
+    /// <param name="ui"></param>
+    /// <param name="type"></param>
     public void Register(IUI ui, UIType type = UIType.NONE)
     {
         if (ui == null) return;
         if (type != UIType.NONE && !uiDic.ContainsKey(type)) uiDic[type] = ui;
-        Debug.Log($"{type}이 등록됐음");
+        //Debug.Log($"{type}이 등록됐음");
+        ui.Hide();
     }
+    /// <summary>
+    /// UI 등록을 해제하는 함수
+    /// </summary>
+    /// <param name="ui"></param> <summary>
+    /// 
+    /// </summary>
+    /// <param name="ui"></param>
     public void Unregister(IUI ui)
     {
     }
+    /// <summary>
+    /// UI에 포커스를 주는 함수
+    /// </summary>
+    /// <param name="ui"></param> <summary>
+    /// 
+    /// </summary>
+    /// <param name="ui"></param>
     public void Focus(IUI ui)
     {
     }
-    public void CloseUI(IUI ui) {
+    /// <summary>
+    /// UI를 닫는 함수(uiList에서 제거)
+    /// </summary>
+    /// <param name="ui"></param>
+    public void CloseUI(IUI ui)
+    {
         uiList.Remove(ui);
     }
 }

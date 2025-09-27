@@ -1,13 +1,56 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.Tilemaps;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 
+public struct ItemSlot
+{
+    public Item item;
+    public int ea;
+
+    public override bool Equals(object obj)
+    {
+        return base.Equals(obj);
+    }
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+    public static ItemSlot operator +(ItemSlot a, int ea)
+    {
+        a.ea += ea;
+        return a;
+    }
+    public static ItemSlot operator -(ItemSlot a, int ea)
+    {
+        a.ea -= ea;
+        return a;
+    }
+    public static bool operator ==(ItemSlot a, ItemSlot b)
+    {
+        return a.item.id == b.item.id && a.ea == b.ea;
+    }
+    public static bool operator !=(ItemSlot a, ItemSlot b)
+    {
+        return a.item.id == b.item.id && a.ea == b.ea;
+    }
+}
+public enum EquipmentType {
+    ARMOR,
+    PANTS,
+    HELMET,
+    MAINWEAPON,
+    SUBWEAPON
+}
 public class PlayableCharacterData : CharacterData
 {
     public PlayableCharacterData(CharacterData data) : base(data.UnitName)
@@ -20,7 +63,6 @@ public class PlayableCharacterData : CharacterData
         Ats = data.Ats;
         Def = data.Def;
         InvincibleTime = data.InvincibleTime;
-
         //점프 횟수, 점프력, 크리티컬 확률, 크리티컬 데미지는 플레이어에게만 존재하는 스탯.
     }
     protected int jCnt; // 최대 점프 횟수
@@ -104,7 +146,7 @@ public class PlayableCharacterData : CharacterData
     public GameObject CharacterInformationObj;
     public void RefreshUIData()
     {
-        Transform status = CharacterInformationObj.transform.Find("Status");
+        Transform status = CharacterInformationObj.transform.Find("CharacterDataUI").Find("Status");
         Transform statusData = status.Find("Data");
 
         statusData.Find("HP").Find("val").GetComponent<TextMeshProUGUI>().text = $"{MaxHP}";
@@ -119,6 +161,44 @@ public class PlayableCharacterData : CharacterData
 }
 public class PlayableCharacter : Character
 {
+    public class PlayerEquipments {
+        private Item mainWeapon;
+        private Item subWeapon;
+        private Item helmet;
+        private Item armor;
+        private Item pants;
+
+        public Item MainWeapon
+        {
+            get => mainWeapon;
+            set => mainWeapon = value;
+        }
+        public Item SubWeapon
+        {
+            get => subWeapon;
+            set => subWeapon = value;
+        }
+        public Item Helmet
+        {
+            get => helmet;
+            set => helmet = value;
+        }
+        public Item Armor
+        {
+            get => armor;
+            set => armor = value;
+        }
+        public Item Pants
+        {
+            get => pants;
+            set => pants = value;
+        }
+    }
+    public class Inventory {
+        public PlayerEquipments equipments = new();
+        public ItemSlot[] backpack = new ItemSlot[15]; //아이템, 개수를 담은 리스트
+    }
+    public Inventory inventory = new();
     public GameObject CharacterInformationObj;
     public Animator anim; // 플레이어 캐릭터 애니메이터
     public Material material;
@@ -136,11 +216,15 @@ public class PlayableCharacter : Character
     public TextMeshProUGUI hpVal; // HP 값 텍스트
     public Transform arm; // 플레이어의 팔 트랜스폼
     private SpriteRenderer weaponSprite; // 플레이어의 무기 스프라이트 렌더러
+    private SpriteRenderer subWeaponSprite; // 플레이어의 무기 스프라이트 렌더러
     private Weapon weaponScript; // 플레이어의 무기 스크립트
     private bool isDropdown; // 드롭다운 여부
     private bool isHealing; // 힐링 여부
     private Coroutine hpSmooth; // HP 바 부드럽게 채우기 코루틴
     public GameObject statusObj;
+    private SpriteAtlas weaponAtlas; // 무기 스프라이트 아틀라스
+    public event Action<EquipmentType, Item> OnEquipmentChanged; //옵저버 패턴을 이용해 장비변경시 알림
+    public event Action<int, ItemSlot> OnInventoryChanged;//옵저버 패턴을 이용해 인벤토리 변경시 알림
     protected override void Awake()
     {
         //싱글턴 인스턴스 설정
@@ -151,6 +235,7 @@ public class PlayableCharacter : Character
         }
         PlayableCharacter.Inst = this;
         DontDestroyOnLoad(gameObject);
+        InitAtlas();
         // 데이터 초기화
         data = new PlayableCharacterData(new CharacterData("Player").SetInvicibleTime(0.2f))
             .SetJCnt(4)
@@ -168,6 +253,7 @@ public class PlayableCharacter : Character
 
         // 무기 스프라이트, 스크립트, 메시지 박스, 카메라 초기화
         weaponSprite = arm.GetChild(0).GetComponent<SpriteRenderer>();
+        subWeaponSprite = arm.GetChild(1).GetComponent<SpriteRenderer>();
         weaponScript = weaponSprite.GetComponent<Weapon>();
         SetupMessageBox();
         cam = Camera.main;
@@ -176,6 +262,23 @@ public class PlayableCharacter : Character
         obj.name = "HitBox";
         BoxCollider2D bC = obj.AddComponent<BoxCollider2D>();
         bC.size = new Vector2(0.5f, 0.5f);
+    }
+    /// <summary>
+    /// 무기 아틀라스 로드
+    /// </summary>
+    /// <returns></returns>
+    private async void InitAtlas()
+    {
+        AsyncOperationHandle<SpriteAtlas> loadSprite = Addressables.LoadAssetAsync<SpriteAtlas>($"Characters/Weapons");
+        var ct = this.GetCancellationTokenOnDestroy();
+        weaponAtlas = await loadSprite.ToUniTask(cancellationToken: ct);
+
+        
+        SetMainWeapon(ItemDataManager.GetItem("01001"));
+        SetSubWeapon(ItemDataManager.GetItem("02001"));
+        SetHelmet(ItemDataManager.GetItem("03001"));
+        SetArmor(ItemDataManager.GetItem("04001"));
+        SetPants(ItemDataManager.GetItem("05001"));
     }
     void OnEnable()
     {
@@ -227,7 +330,30 @@ public class PlayableCharacter : Character
     {
         // Character(부모 클래스)의 Update 메소드 호출
         base.Update();
+    }
+    /// <summary>
+    /// 부드러운 체력바 채우기 코루틴
+    /// </summary>
+    /// <param name="bar"></param>
+    /// <returns></returns>
+    IEnumerator HpBarFillsSmooth(SlicedFilledImage bar)
+    {
+        yield return new WaitForSeconds(0.3f);
+        while (Mathf.Abs(bar.fillAmount - (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP)) > 0.01f)
+        {
+            bar.fillAmount = Mathf.Lerp(bar.fillAmount, (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP), Time.deltaTime * hpBarSpd);
+            yield return null;
+        }
+        bar.fillAmount = (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP);
+    }
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        //공중 판정 체크
+        anim.SetBool("JUMP", !isGround);
+
         //팔 관련 로직
+        if (weaponScript.anim.GetBool("IsSwing")) return;
         Vector3 dir = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float armAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
@@ -259,27 +385,6 @@ public class PlayableCharacter : Character
         {
             SetHP(UnityEngine.Random.Range(0, Data.MaxHP));
         }
-    }
-    /// <summary>
-    /// 부드러운 체력바 채우기 코루틴
-    /// </summary>
-    /// <param name="bar"></param>
-    /// <returns></returns>
-    IEnumerator HpBarFillsSmooth(SlicedFilledImage bar)
-    {
-        yield return new WaitForSeconds(0.3f);
-        while (Mathf.Abs(bar.fillAmount - (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP)) > 0.01f)
-        {
-            bar.fillAmount = Mathf.Lerp(bar.fillAmount, (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP), Time.deltaTime * hpBarSpd);
-            yield return null;
-        }
-        bar.fillAmount = (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP);
-    }
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-        //공중 판정 체크
-        anim.SetBool("JUMP", !isGround);
     }
     public void OnMovement(InputAction.CallbackContext context) // 이동 액션 등록
     {
@@ -429,5 +534,72 @@ public class PlayableCharacter : Character
         ((PlayableCharacterData)data).RefreshUIData();
         statusObj.transform.Find("Inventory").Find("Equipment").Find("MainWeapon").Find("slot").Find("Image").GetComponent<Image>().sprite = weaponData.Icon;
         statusObj.transform.Find("Inventory").Find("Equipment").Find("SubWeapon").Find("slot").Find("Image").GetComponent<Image>().sprite = weaponData.Icon;
+    }
+    public void SetMainWeapon(Item mainWeapon)
+    {
+        Item ori = inventory.equipments.MainWeapon;
+        weaponSprite.sprite = weaponAtlas.GetSprite(mainWeapon.id);
+        weaponScript.SetAts(mainWeapon.attributes.ats);
+        data.SetHP(data.MaxHP + Mathf.RoundToInt(mainWeapon.attributes.hp));
+        //일단은 캐릭터 공격력을 배제하고 무기 공격력만 적용
+        data.SetAtk(inventory.equipments.SubWeapon.attributes.atk + mainWeapon.attributes.atk);
+        data.SetDef(data.Def +mainWeapon.attributes.def);
+        data.SetAts(data.Ats + mainWeapon.attributes.ats);
+        weaponScript.SetPlayerAtk(data.Atk);
+        ((PlayableCharacterData)data).SetCri(((PlayableCharacterData)data).Cri + mainWeapon.attributes.cri);
+        ((PlayableCharacterData)data).SetCriDmg(((PlayableCharacterData)data).CriDmg + mainWeapon.attributes.crid);
+        data.SetSpd(data.Spd + mainWeapon.attributes.spd);
+        ((PlayableCharacterData)data).SetJCnt(((PlayableCharacterData)data).JumpCnt + mainWeapon.attributes.jCnt);
+        ((PlayableCharacterData)data).SetJPow(((PlayableCharacterData)data).JumpPower + mainWeapon.attributes.jmp);
+        ((PlayableCharacterData)data).RefreshUIData();
+        OnEquipmentChanged?.Invoke(EquipmentType.MAINWEAPON, mainWeapon);
+        if (mainWeapon.attributes.two_hander)
+            SetSubWeapon(mainWeapon, true);
+        else if(ori.attributes.two_hander)
+            SetSubWeapon(ItemDataManager.GetItem("00000"), false);
+    }
+    public void SetSubWeapon(Item subWeapon, bool isTwoHander = false)
+    {
+        Item ori = inventory.equipments.SubWeapon;
+        subWeaponSprite.sprite = isTwoHander ? null : weaponAtlas.GetSprite(subWeapon.id);
+        //일단은 캐릭터 공격력을 배제하고 무기 공격력만 적용
+        data.SetAtk(inventory.equipments.MainWeapon.attributes.atk + subWeapon.attributes.atk);
+        data.SetDef(data.Def + subWeapon.attributes.def);
+        data.SetAts(data.Ats + subWeapon.attributes.ats);
+        weaponScript.SetPlayerAtk(data.Atk);
+        ((PlayableCharacterData)data).SetCri(((PlayableCharacterData)data).Cri + subWeapon.attributes.cri);
+        ((PlayableCharacterData)data).SetCriDmg(((PlayableCharacterData)data).CriDmg + subWeapon.attributes.crid);
+        data.SetSpd(data.Spd + subWeapon.attributes.spd);
+        ((PlayableCharacterData)data).SetJCnt(((PlayableCharacterData)data).JumpCnt + subWeapon.attributes.jCnt);
+        ((PlayableCharacterData)data).SetJPow(((PlayableCharacterData)data).JumpPower + subWeapon.attributes.jmp);
+        ((PlayableCharacterData)data).RefreshUIData();
+        OnEquipmentChanged?.Invoke(EquipmentType.SUBWEAPON, subWeapon);
+    }
+    public void SetHelmet(Item helmet)
+    {
+        OnEquipmentChanged?.Invoke(EquipmentType.HELMET, helmet);
+    }
+    public void SetArmor(Item armor)
+    {
+        
+        OnEquipmentChanged?.Invoke(EquipmentType.ARMOR, armor);
+    }
+    public void SetPants(Item pants)
+    {
+        
+        OnEquipmentChanged?.Invoke(EquipmentType.PANTS, pants);
+    }
+    private const int maxStack = 99;
+    public void GetItem(Item item, int ea = 1)
+    {
+        for (int i = 0; i < inventory.backpack.Length; i++)
+        {
+            if (inventory.backpack[i] != null && inventory.backpack[i].item.id == item.id && item.attributes.stackable)
+            {
+                inventory.backpack[i].ea = Math.Min(inventory.backpack[i].ea + ea, maxStack);
+                OnInventoryChanged?.Invoke(i, inventory.backpack[i]);
+                return;
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ public class MoveableInformationModal : MonoBehaviour, IUI
     private void Start()
     {
         uiContext = FindAnyObjectByType<UIContext>();
-        uiContext.uiRegistry.Register(this, UIType.KEYWORD_MODAL);
+        uiContext.UIRegistry.Register(this, UIType.KEYWORD_MODAL);
     }
     public void Show()
     {
@@ -16,6 +16,7 @@ public class MoveableInformationModal : MonoBehaviour, IUI
     public void Hide()
     {
         gameObject.SetActive(false);
+        uiContext.UIRegistry.CloseUI(this);
     }
     public void PositiveInteract(InputAction.CallbackContext context)
     {
