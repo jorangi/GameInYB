@@ -1,113 +1,25 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
 public struct ItemAttribute
 {
-    public float hp;
-    public float atk;
-    public float ats;
-    public float def;
-    public float cri;
-    public float crid;
-    public float spd;
-    public float jmp;
-    public int jCnt;
-    public bool two_hander;
-    public bool stackable;
+    public ItemAttribute(string stat = "", string op = "", float value = 0f)
+    {
+        this.stat = stat;
+        this.op = op;
+        this.value = value;
+    }
+    public string stat;
+    public string op;
+    public float value;
     public override readonly string ToString()
     {
-        return $"hp:{hp}, atk:{atk}, ats:{ats}, def:{def}, cri:{cri}, crid:{crid}, spd:{spd}, jmp:{jmp}, jCnt:{jCnt}, two_hander:{two_hander}, stackable:{stackable}";
+        return $"stat:{stat}, op:{op}, value:{value}";
     }
 }
-
-public class ItemAttributeBuilder
-{
-    private float hp = 0f;
-    private float atk = 0f;
-    private float ats = 0f;
-    private float def = 0f;
-    private float cri = 0f;
-    private float crid = 0f;
-    private float spd = 0f;
-    private float jmp = 0f;
-    private int jCnt = 0;
-    private bool two_hander = false;
-    private bool stackable = false;
-    public ItemAttributeBuilder SetHP(float hp)
-    {
-        this.hp = hp;
-        return this;
-    }
-    public ItemAttributeBuilder SetAtk(float atk)
-    {
-        this.atk = atk;
-        return this;
-    }
-    public ItemAttributeBuilder SetAts(float ats)
-    {
-        this.ats = ats;
-        return this;
-    }
-    public ItemAttributeBuilder SetDef(float def)
-    {
-        this.def = def;
-        return this;
-    }
-    public ItemAttributeBuilder SetCri(float cri)
-    {
-        this.cri = cri;
-        return this;
-    }
-    public ItemAttributeBuilder SetCrid(float crid)
-    {
-        this.crid = crid;
-        return this;
-    }
-    public ItemAttributeBuilder SetSpd(float spd)
-    {
-        this.spd = spd;
-        return this;
-    }
-    public ItemAttributeBuilder SetJmp(float jmp)
-    {
-        this.jmp = jmp;
-        return this;
-    }
-    public ItemAttributeBuilder SetJCnt(int jCnt)
-    {
-        this.jCnt = jCnt;
-        return this;
-    }
-    public ItemAttributeBuilder SetTwoHander(bool two_hander)
-    {
-        this.two_hander = two_hander;
-        return this;
-    }
-    public ItemAttributeBuilder SetStackable(bool stackable)
-    {
-        this.stackable = stackable;
-        return this;
-    }
-    public ItemAttribute Build()
-    {
-        return new()
-        {
-            hp = this.hp,
-            atk = this.atk,
-            ats = this.ats,
-            def = this.def,
-            cri = this.cri,
-            crid = this.crid,
-            spd = this.spd,
-            jmp = this.jmp,
-            jCnt = this.jCnt,
-            two_hander = this.two_hander,
-            stackable = this.stackable
-        };
-    }
-}
-
 [Serializable]
 public struct Item
 {
@@ -115,11 +27,34 @@ public struct Item
     public string[] name;
     public string rarity;
     public string[] description;
-    public ItemAttribute attributes;
+    public ItemAttribute[] attributes;
     public string[] skills;
+    public bool two_hander;
+    public bool stackable;
+    public readonly ItemProvide GetProvider() => new(this);
     public override readonly string ToString()
     {
-        return $"id:{id}, name:[{name.EnToString(", ")}], rarity:{rarity}, description:[{description.EnToString(", ")}], attributes:[{attributes}], skills:[{skills.EnToString(", ")}]";
+        var attrStr = string.Join(", ", (attributes ?? Array.Empty<ItemAttribute>())
+                                        .Select(a => a.ToString()));
+
+        var nameStr = string.Join(", ", name ?? Array.Empty<string>());
+        var descStr = string.Join(", ", description ?? Array.Empty<string>());
+        var skillStr = string.Join(", ", skills ?? Array.Empty<string>());
+
+        return $"id:{id}, name:[{nameStr}], rarity:{rarity}, description:[{descStr}], attributes:[{attrStr}], two_hander:{two_hander}, stackable:{stackable}, skills:[{skillStr}]";
+    }
+}
+public sealed class ItemProvide : IStatModifierProvider
+{
+    private readonly Item item;
+    public ItemProvide(in Item item){this.item = item;}
+    public IEnumerable<StatModifier> GetStatModifiers()
+    {
+        var a = item.attributes;
+        foreach (var attr in a)
+        {
+            yield return new(Enum.Parse<StatType>(attr.stat.ToUpper()), attr.value, Enum.Parse<StatOp>(attr.op.ToUpper()), this);
+        }
     }
 }
 public class ItemBuilder
@@ -128,8 +63,10 @@ public class ItemBuilder
     private string[] name = new string[2];
     private string rarity = "common";
     private string[] description = new string[2];
-    private ItemAttribute attributes = new ItemAttributeBuilder().Build();
+    private ItemAttribute[] attributes;
     private string[] skills;
+    private bool two_hander = false;
+    private bool stackable = false;
     public ItemBuilder SetId(string id)
     {
         this.id = id;
@@ -150,7 +87,7 @@ public class ItemBuilder
         this.description = description;
         return this;
     }
-    public ItemBuilder SetAttributes(ItemAttribute attributes)
+    public ItemBuilder SetAttributes(ItemAttribute[] attributes)
     {
         this.attributes = attributes;
         return this;
@@ -158,6 +95,16 @@ public class ItemBuilder
     public ItemBuilder SetSkills(string[] skills)
     {
         this.skills = skills;
+        return this;
+    }
+    public ItemBuilder SetTwoHander(bool two_hander)
+    {
+        this.two_hander = two_hander;
+        return this;
+    }
+    public ItemBuilder SetStackable(bool stackable)
+    {
+        this.stackable = stackable;
         return this;
     }
     public Item Build()

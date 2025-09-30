@@ -1,11 +1,116 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterData
+public enum StatType
+{
+    HP,
+    ATK,
+    ATS,
+    DEF,
+    CRI,
+    CRID,
+    SPD,
+    JCNT,
+    JMP
+}
+public enum StatOp
+{
+    ADD, // 합연산 ex) hp + 10%
+    MUL // 곱연산 ex)hp
+}
+public readonly struct StatModifier
+{
+    public readonly StatType Stat;
+    public readonly float Value;
+    public readonly StatOp Op;
+    public readonly int Priority;
+    public readonly object Source;
+    public StatModifier(StatType stat, float value, StatOp op, object source, int priority = 0)
+    {
+        Stat = stat; Value = value; Op = op; Source = source; Priority = priority;
+    }
+}
+public interface IStatModifierProvider
+{
+    IEnumerable<StatModifier> GetStatModifiers();
+}
+public class CharacterStats
+{
+    //기본 스탯
+    private readonly Dictionary<StatType, float> baseStats = new();
+    //추가 스탯(출처)
+    private readonly HashSet<IStatModifierProvider> providers = new();
+    //캐시된 최종 스탯, 변경사항이 있을 때만 갱신(더티 플래그)
+    private readonly Dictionary<StatType, float> finalCache = new();
+    private bool dirty = true;
+    //UI갱신 등 필요시 호출하는 이벤트
+    public event Action OnRecalculated;
+    public void SetBase(StatType stat, float value)
+    {
+        baseStats[stat] = value;
+        dirty = true;
+    }
+    public float GetBase(StatType stat) => baseStats.TryGetValue(stat, out var value) ? value : 0f;
+    public float GetFinal(StatType stat)
+    {
+        if (dirty) Recalculate();
+        return finalCache.TryGetValue(stat, out var value) ? value : 0f;
+    }
+    public void AddProvider(IStatModifierProvider provider)
+    {
+        if (providers.Add(provider)) dirty = true;
+    }
+    public void RemoveProvider(IStatModifierProvider provider)
+    {
+        if (providers.Remove(provider)) dirty = true;
+    }
+    public IReadOnlyDictionary<StatType, float> GetAllFinal()
+    {
+        if (dirty) Recalculate();
+        return finalCache;
+    }
+    private void Recalculate()
+    {
+        finalCache.Clear();
+        foreach (var kv in baseStats)
+        {
+            finalCache[kv.Key] = kv.Value;
+        }
+        var modifiers = new List<StatModifier>();
+        foreach (var provider in providers)
+        {
+            modifiers.AddRange(provider.GetStatModifiers());
+        }
+        foreach (StatType stat in Enum.GetValues(typeof(StatType)))
+        {
+            float baseVal = finalCache.TryGetValue(stat, out var bv) ? bv : 0f;
+            var add = modifiers.Where(m => m.Stat == stat && m.Op == StatOp.ADD);
+            var mul = modifiers.Where(m => m.Stat == stat && m.Op == StatOp.MUL).OrderBy(m => m.Priority);
+            float sumAdd = add.Sum(m => m.Value);
+            float mulFactor = 1f;
+            foreach (var m in mul) mulFactor *= (1 + m.Value);
+            float finalVal = (baseVal + sumAdd) * mulFactor;
+            finalCache[stat] = finalVal;
+        }
+        dirty = false;
+        OnRecalculated?.Invoke();
+    }
+}
+public interface IStatProvider
+{
+    //스탯 반환
+    CharacterStats GetStats();
+    //스탯 변경시 호출되는 이벤트
+}
+public class CharacterData : IStatProvider
 {
     private CharacterData() { }
+    protected readonly CharacterStats stats = new();
     protected string unitName;
     public string UnitName
     {
@@ -15,49 +120,16 @@ public class CharacterData
     public CharacterData(string name)
     {
         unitName = name;
-        SetSpd();
-        SetMaxHP();
-        SetHP();
-        SetAtk();
-        SetAts();
-        SetDef();
+        stats.SetBase(StatType.HP, 100.0f);
+        stats.SetBase(StatType.ATK, 10.0f);
+        stats.SetBase(StatType.ATS, 0.8f);
+        stats.SetBase(StatType.DEF, 0.0f);
+        stats.SetBase(StatType.SPD, 5.0f);
         SetInvicibleTime();
         SetHitStunTime();
     }
-    protected float spd; // movementSpeed
-    public float Spd
-    {
-        get => spd;
-        set
-        {
-            if (value < 0.0f)
-                spd = 0.0f;
-            else
-                spd = value;
-        }
-    }
-    public virtual CharacterData SetSpd(float spd = 5.0f)
-    {
-        this.Spd = spd;
-        return this;
-    }
-    protected int maxHP; // max Health
-    public int MaxHP
-    {
-        get => maxHP;
-        set
-        {
-            if (value < 0)
-                maxHP = 0;
-            else
-                maxHP = value;
-        }
-    }
-    public virtual CharacterData SetMaxHP(int maxHP = 100)
-    {
-        this.MaxHP = maxHP;
-        return this;
-    }
+    public float Spd => stats.GetFinal(StatType.SPD); // movement speed
+    public int MaxHP => stats.GetFinal(StatType.HP) is float f ? (int)f : 0;
     protected int _HP; // now Health
     public int HP
     {
@@ -66,68 +138,15 @@ public class CharacterData
         {
             if (value < 0)
                 _HP = 0;
-            else if (value > maxHP)
-                _HP = maxHP;
+            else if (value > stats.GetFinal(StatType.HP))
+                _HP = stats.GetFinal(StatType.HP) is float f ? (int)f : 0;
             else
                 _HP = value;
         }
     }
-    public virtual CharacterData SetHP(int hp = 100)
-    {
-        this.HP = hp;
-        return this;
-    }
-    protected float atk; // attack power
-    public float Atk
-    {
-        get => atk;
-        set
-        {
-            if (value < 0.0f)
-                atk = 0.0f;
-            else
-                atk = value;
-        }
-    }
-    public virtual CharacterData SetAtk(float atk = 10)
-    {
-        this.Atk = atk;
-        return this;
-    }
-    protected float ats; // attack speed
-    public float Ats
-    {
-        get => ats;
-        set
-        {
-            if (value < 0.0f)
-                ats = 0.0f;
-            else
-                ats = value;
-        }
-    }
-    public virtual CharacterData SetAts(float ats = 0.8f)
-    {
-        this.Ats = ats;
-        return this;
-    }
-    protected float def; // defence
-    public float Def
-    {
-        get => def;
-        set
-        {
-            if (value < 0.0f)
-                def = 0.0f;
-            else
-                def = value;
-        }
-    }
-    public virtual CharacterData SetDef(float def = 0.0f)
-    {
-        this.Def = def;
-        return this;
-    }
+    public float Atk => stats.GetFinal(StatType.ATK); // attack power
+    public float Ats => stats.GetFinal(StatType.ATS); // attack speed
+    public float Def => stats.GetFinal(StatType.DEF); // defense power
     protected float invincibleTime; // invincibleTime
     public float InvincibleTime
     {
@@ -157,16 +176,13 @@ public class CharacterData
                 hitStunTime = value;
         }
     }
-
     public virtual CharacterData SetHitStunTime(float hitStunTime = 0.5f)
     {
         this.HitStunTime = hitStunTime;
         return this;
     }
-    public override string ToString()
-    {
-        return $"Name: {unitName}, Speed: {spd}, MaxHP: {maxHP}, HP: {_HP}, Atk: {atk}, Ats: {ats}, Def: {def}";
-    }
+    public override string ToString() => $"Name: {unitName}, Speed: {Spd}, MaxHP: {MaxHP}, HP: {_HP}, Atk: {Atk}, Ats: {Ats}, Def: {Def}";
+    public virtual CharacterStats GetStats() => stats;
 }
 [DisallowMultipleComponent]
 public class Character : ParentObject
@@ -297,7 +313,7 @@ public class Character : ParentObject
     }
     protected virtual void Awake()
     {
-        data = new CharacterData("Default");
+        data = new("Default");
     }
     protected virtual void FixedUpdate()
     {

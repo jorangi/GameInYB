@@ -21,7 +21,7 @@ public class CharacterInformation : MonoBehaviour, IUI
     [SerializeField] private TextMeshProUGUI spd;
     [SerializeField] private TextMeshProUGUI jmp;
     private SpriteAtlas iconAtlas;
-    private Image[] slotIcons = new Image[20];
+    private readonly Image[] slotIcons = new Image[20];
     private void Awake()
     {
         InitAltas();
@@ -42,13 +42,26 @@ public class CharacterInformation : MonoBehaviour, IUI
         PlayableCharacter.Inst.OnInventoryChanged += RefreshItemIcons;
         gameObject.SetActive(false);
     }
-
+    /// <summary>
+    /// 인벤토리 아이템 변경시 아이콘 갱신
+    /// </summary>
+    /// <param name="arg1"></param>
+    /// <param name="item"></param> <summary>
+    /// 
+    /// </summary>
+    /// <param name="arg1"></param>
+    /// <param name="item"></param>
     private void RefreshItemIcons(int arg1, ItemSlot item)
     {
         slotIcons[arg1 + 5].color = Color.white;
         slotIcons[arg1 + 5].sprite = iconAtlas.GetSprite(item.item.id);
-        slotIcons[arg1 + 5].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.attributes.stackable ? "" : item.ea.ToString();
+        slotIcons[arg1 + 5].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
     }
+    /// <summary>
+    /// 장비 아이템 변경시 아이콘 갱신
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="item"></param>
     private void RefreshEquipment(EquipmentType type, Item item)
     {
         if (item.Equals(null)) return;
@@ -83,6 +96,12 @@ public class CharacterInformation : MonoBehaviour, IUI
                 break;
         }
     }
+    /// <summary>
+    /// 아이콘 아틀라스 초기화
+    /// </summary> <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     private async void InitAltas()
     {
         var ct = this.GetCancellationTokenOnDestroy();
@@ -106,10 +125,9 @@ public class CharacterInformation : MonoBehaviour, IUI
         gameObject.SetActive(false);
         uiContext.UIRegistry.CloseUI(this);
     }
-    public void RefreshItemIcons(int i)
-    {
-        
-    }
+    /// <summary>
+    /// 스탯 갱신
+    /// </summary>
     public void Refresh()
     {
         #region status

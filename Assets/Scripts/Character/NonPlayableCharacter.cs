@@ -5,16 +5,7 @@ using UnityEngine.UIElements;
 
 public class NonPlayableCharacterData : CharacterData
 {
-    public NonPlayableCharacterData(CharacterData data) : base(data.UnitName)
-    {
-        Spd = data.Spd;
-        HP = data.HP;
-        MaxHP = data.MaxHP;
-        Atk = data.Atk;
-        Ats = data.Ats;
-        Def = data.Def;
-        InvincibleTime = data.InvincibleTime;
-    }
+    public NonPlayableCharacterData(CharacterData data) : base(data.UnitName){}
     public override string ToString()
     {
         return $"{base.ToString()}";

@@ -89,7 +89,6 @@ namespace Looper.Console.Core
             if (sb.Length > 0) list.Add(sb.ToString());
             return list.ToArray();
         }
-
         public static (string cmd, string[] args) Split(string input)
         {
             var tokens = Tokenize(input);
