@@ -1,0 +1,18 @@
+{
+    "id":0,
+    "name":"unnamed",
+    "hp":0,
+    "atk":0,
+    "ats":0,
+    "def":0,
+    "cri":0,
+    "crid":0,
+    "spd":0,
+    "jmp":0,
+    "clear":0,
+    "chapter":1,
+    "stage":1,
+    "mapId":0,
+    "equiped":["03001", "04001", "05001", "01001", ""],
+    "inventory":[["05001", 1]]
+}

@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: TestJSONs
+  m_EditorClassIdentifier: 
+  m_GroupName: TestJSONs
+  m_GUID: 13ba5cc74592a304c96615b98b51044a
+  m_SerializeEntries:
+  - m_GUID: 06b95d1dc634cca42b6db491fe0df7d4
+    m_Address: TestData/skills
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3f3e0e800e61045b6a4700e381aa6c0a
+    m_Address: TestData/playerstat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 42c117f6252d1488c8f04087cb80e952
+    m_Address: TestData/items
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 789e1181625a540d1aa906ae9480ed2e
+    m_Address: TestData/npc
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e41a72eaccf49cb43a4c6cba35bb66cc
+    m_Address: TestData/skills_refined_will
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 34a7f3955eb1b6c4cad861ae9a5fb6aa, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9b590828d7977ee4282bd148d3a75a53, type: 2}
+    - {fileID: 11400000, guid: 5578b5d9b5911a24fb7dc7a9c8f2c7c9, type: 2}

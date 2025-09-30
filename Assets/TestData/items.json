@@ -1,0 +1,157 @@
+{
+    "items": [
+        {
+            "id": "00000",
+            "name": ["null item", "존재하지 않음"],
+            "rarity": "null",
+            "description":["It is null","null 데이터입니다."]
+        },
+        {
+            "id": "01001",
+            "name": ["Wooden Sword", "나무 검"],
+            "rarity": "common",
+            "description":["An wooden sword.","나무로 만든 검"],
+            "attributes": {
+                "atk": 10,
+                "ats": 1.5,
+                "cri": 0.5,
+                "crid": 0,
+                "two-hander":false
+            },
+            "skills": ["21001"]
+        },
+        {
+            "id": "01002",
+            "name": ["Iron Sword", "철 검"],
+            "rarity": "common",
+            "description":["An iron sword.","철로 만든 검"],
+            "attributes": {
+                "atk": 10,
+                "ats": 1,
+                "cri": 0,
+                "crid": 0.5,
+                "two-hander":false
+            }
+        },
+
+        {
+            "id": "01003",
+            "name": ["Iron Axe", "철 도끼"],
+            "rarity": "common",
+            "description":["An iron axe.","철로 만든 도끼"],
+            "attributes": {
+                "atk": 13,
+                "ats": 0.8,
+                "cri": 0,
+                "crid": 0.3,
+                "two-hander":false
+            }
+        },
+        {
+            "id": "01004",
+            "name": ["Iron Battle Axe", "철 전투 도끼"],
+            "rarity": "common",
+            "description":["An iron battle axe.","철로 만든 전투 도끼"],
+            "attributes": {
+                "atk": 22,
+                "ats": 0.5,
+                "cri": 0.5,
+                "crid": 0,
+                "two-hander":true
+            }
+        },
+        {
+            "id": "01005",
+            "name": ["Iron Hammer", "철 해머"],
+            "rarity": "common",
+            "description":["An iron hammer.","철로 만든 망치"],
+            "attributes": {
+                "atk": 8,
+                "ats": 1.3,
+                "cri": 0.2,
+                "crid": 0.3,
+                "two-hander":false
+            }
+        },
+        {
+            "id": "01006",
+            "name": ["Iron GreatSword", "철 대검"],
+            "rarity": "common",
+            "description":["An iron great sword.","철로 만든 대검"],
+            "attributes": {
+                "atk": 18,
+                "ats": 0.7,
+                "cri": 0,
+                "crid": 0.7,
+                "two-hander":true
+            }
+        },
+        {
+            "id": "02001",
+            "name": ["Wooden Shield", "나무 방패"],
+            "rarity": "common",
+            "description":["An wooden shield.","나무로 만든 방패. 적의 공격을 방어할 수 있습니다."],
+            "attributes": {
+                "def": 5
+            },
+            "skills":["21002"]
+        },
+        {
+            "id": "02002",
+            "name": ["Iron Shield", "철 방패"],
+            "rarity": "common",
+            "description":["An iron shield.","철로 만든 방패. 적의 공격을 방어할 수 있습니다."],
+            "attributes": {
+                "def": 10
+            },
+            "skills":["21002"]
+        },
+        {
+            "id": "02003",
+            "name": ["pistol", "권총"],
+            "rarity": "common",
+            "description":["common pistol.","평범한 피스톨. 조준점의 대상에게 보조공격이 가능합니다."],
+            "attributes": {
+                "ats":0.1
+            },
+            "skills":["21003"]
+        },
+        {
+            "id": "03001",
+            "name": ["Leather Helmet", "가죽 모자"],
+            "rarity": "common",
+            "description":["A leather helmet.","가죽으로 만든 모자"],
+            "attributes": {
+                "def": 3
+            }
+        },
+        {
+            "id": "04001",
+            "name": ["Leather Armor", "가죽 갑옷"],
+            "rarity": "common",
+            "description":["A leather armor.","가죽으로 만든 갑옷"],
+            "attributes": {
+                "def": 5
+            }
+        },
+        {
+            "id": "05001",
+            "name": ["Leather pants", "가죽 바지"],
+            "rarity": "common",
+            "description":["A leather pants.","가죽으로 만든 바지"],
+            "attributes": {
+                "def": 4
+            }
+        },
+        {
+            "id": "06001",
+            "name": ["yellow mushroom", "노랑 버섯"],
+            "rarity": "common",
+            "description":["A yellow mushroom.","노란색 버섯"],
+            "attributes": {
+                "ats":4,
+                "hp":10
+            }
+        }
+    ]
+}

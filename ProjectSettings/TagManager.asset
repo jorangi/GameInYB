@@ -5,11 +5,13 @@ TagManager:
   serializedVersion: 3
   tags:
   - Enemy
+  - FallingZone
+  - MinimapCamera
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Light
   - Water
   - UI
   - Character
@@ -17,9 +19,9 @@ TagManager:
   - Player
   - Platform
   - HitBox
-  - 
-  - 
-  - 
+  - WeaponHitBox
+  - ObjectMarker
+  - Landscape
   - 
   - 
   - 
@@ -39,6 +41,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2838283687
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

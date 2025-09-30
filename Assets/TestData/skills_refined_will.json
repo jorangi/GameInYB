@@ -1,0 +1,49 @@
+{"skills":[
+    {
+        "id":"20001",
+        "name":["Test passive skill", "테스트 패시브 스킬"],
+        "description":["This is a test passive skill.","이것은 테스트 패시브 스킬입니다. hp가 <1:<cond_val>>보다 <1:<cond_op>>할 경우, <1:<type>>이 <1:<val>>만큼 <1:<op>>합니다."],
+        "hp":10,
+        "def":3,
+        "effect":{
+            "1":{
+                "cond_type":"hp",
+                "cond_op":">",
+                "cond_val":"10%",
+                "type":"atk",
+                "op":"+",
+                "val":"10"
+            },
+            "2":{
+                "t":"위의 1번은 예시일 뿐이며 effect 안에는 아예 비워두시면 될 것 같습니다."
+            }
+        }
+    },
+    {
+        "id":"21002",
+        "name":["Test active skill", "테스트 액티브 스킬"],
+        "description":["This is a test active skill.","이것은 테스트 액티브 스킬입니다. <1:<self>>에게 <1:<val>>만큼의 피해를 입히며 <2:<val>>만큼 감속시킵니다."],
+        "effect":{
+            "1":{
+                "self":false,
+                "type":"hp",
+                "op":"-",
+                "val":"10"
+            },
+            "2":{
+                "self":false,
+                "type":"spd",
+                "op":"-",
+                "val":"20%"
+            }
+        }
+    },
+    {
+        "id":"21002",
+        "name":["Test active skill", "테스트 액티브 스킬"],
+        "description":["This is a test active skill.","이것은 테스트 액티브 스킬입니다."],
+        "effect":{
+            "val1":1
+        }
+    }
+]}

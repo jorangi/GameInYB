@@ -22,6 +22,6 @@ public class InformationObject : ParentObject, IInformation
 
     public virtual void TriggerExit(Collider2D col)
     {
-        PlayableCharacter.Inst.ShowMessage();
+        if(col.gameObject.CompareTag("Player")) PlayableCharacter.Inst.ShowMessage();
     }
 }
