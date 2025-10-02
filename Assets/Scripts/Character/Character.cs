@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -44,7 +45,7 @@ public class CharacterStats
     //기본 스탯
     private readonly Dictionary<StatType, float> baseStats = new();
     //추가 스탯(출처)
-    private readonly HashSet<IStatModifierProvider> providers = new();
+    private readonly Dictionary<IStatModifierProvider, int> providers = new();
     //캐시된 최종 스탯, 변경사항이 있을 때만 갱신(더티 플래그)
     private readonly Dictionary<StatType, float> finalCache = new();
     private bool dirty = true;
@@ -61,13 +62,33 @@ public class CharacterStats
         if (dirty) Recalculate();
         return finalCache.TryGetValue(stat, out var value) ? value : 0f;
     }
-    public void AddProvider(IStatModifierProvider provider)
+    public void ShowListHash()
     {
-        if (providers.Add(provider)) dirty = true;
+        StringBuilder sb = new("Hash-List : ");
+        foreach (var p in providers) sb.Append(((object)p.Key).GetHashCode() + " / ");
+        Debug.Log(sb);
     }
-    public void RemoveProvider(IStatModifierProvider provider)
+    public void AddProvider(IStatModifierProvider provider, int count = 1)
     {
-        if (providers.Remove(provider)) dirty = true;
+        if (count <= 0) return;
+        ShowListHash();
+        Debug.Log("AddProvider : " + providers.ContainsKey(provider) + " / " + provider.GetHashCode());
+        providers.TryGetValue(provider, out var cur);
+        if (!providers.ContainsKey(provider)) providers.Add(provider, cur + count);
+        else providers[provider] = cur + count;
+        Debug.Log(provider.GetHashCode());
+        dirty = true;
+    }
+    public void RemoveProvider(IStatModifierProvider provider, int count = 1)
+    {
+        ShowListHash();
+        bool t = providers.TryGetValue(provider, out var cur);
+        Debug.Log("RemoveProvider : " + t + " / " +  provider.GetHashCode());
+        if (!t) return;
+        int next = cur - count;
+        if(next > 0)providers[provider] = next;
+        else providers.Remove(provider);
+        dirty = true;
     }
     public IReadOnlyDictionary<StatType, float> GetAllFinal()
     {
@@ -77,26 +98,37 @@ public class CharacterStats
     private void Recalculate()
     {
         finalCache.Clear();
-        foreach (var kv in baseStats)
+        foreach (var kv in baseStats) finalCache[kv.Key] = kv.Value;
+
+        var addBuckets = new Dictionary<StatType, float>();
+        var mulBuckets = new Dictionary<(StatType stat, int priority), float>();
+
+        foreach (var kv in providers)
         {
-            finalCache[kv.Key] = kv.Value;
-        }
-        var modifiers = new List<StatModifier>();
-        foreach (var provider in providers)
-        {
-            modifiers.AddRange(provider.GetStatModifiers());
+            var prov = kv.Key;
+            int count = kv.Value;
+            foreach (var m in prov.GetStatModifiers())
+            {
+                if (m.Op == StatOp.ADD) addBuckets[m.Stat] = addBuckets.TryGetValue(m.Stat, out var a) ? a + (m.Value * count) : (m.Value * count);
+                else
+                {
+                    var key = (m.Stat, m.Priority);
+                    mulBuckets[key] = mulBuckets.TryGetValue(key, out var a) ? a * a : a;
+                }
+            }
         }
         foreach (StatType stat in Enum.GetValues(typeof(StatType)))
         {
             float baseVal = finalCache.TryGetValue(stat, out var bv) ? bv : 0f;
-            var add = modifiers.Where(m => m.Stat == stat && m.Op == StatOp.ADD);
-            var mul = modifiers.Where(m => m.Stat == stat && m.Op == StatOp.MUL).OrderBy(m => m.Priority);
-            float sumAdd = add.Sum(m => m.Value);
+            float sumAdd = addBuckets.TryGetValue(stat, out var a) ? a : 0f;
+
             float mulFactor = 1f;
-            foreach (var m in mul) mulFactor *= (1 + m.Value);
-            float finalVal = (baseVal + sumAdd) * mulFactor;
-            finalCache[stat] = finalVal;
+            foreach (var kv in mulBuckets.Where(kv => kv.Key.stat == stat).OrderBy(kv => kv.Key.priority))
+                mulFactor *= kv.Value;
+
+            finalCache[stat] = (baseVal + sumAdd) * mulFactor;
         }
+
         dirty = false;
         OnRecalculated?.Invoke();
     }
@@ -105,7 +137,6 @@ public interface IStatProvider
 {
     //스탯 반환
     CharacterStats GetStats();
-    //스탯 변경시 호출되는 이벤트
 }
 public class CharacterData : IStatProvider
 {
@@ -139,7 +170,7 @@ public class CharacterData : IStatProvider
             if (value < 0)
                 _HP = 0;
             else if (value > stats.GetFinal(StatType.HP))
-                _HP = stats.GetFinal(StatType.HP) is float f ? (int)f : 0;
+                _HP = (int)stats.GetFinal(StatType.HP);
             else
                 _HP = value;
         }
@@ -344,8 +375,6 @@ public class Character : ParentObject
     /// <param name="layer"></param>
     protected virtual void Landing(LAYER layer)
     {
-        jumpCnt = 2;
-        isJump = false;
         col.isTrigger = false;
         landingLayer = layer;
     }

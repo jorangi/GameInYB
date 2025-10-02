@@ -29,7 +29,6 @@ public class WeaponData : ItemData
     [HideInInspector] public float Crid => crid;
 }
 
-[RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Animator))]
 public class Weapon : MonoBehaviour
 {
@@ -43,12 +42,9 @@ public class Weapon : MonoBehaviour
     private IStatProvider provider;
     private void Awake()
     {
-        Debug.Log(PlayableCharacter.Inst);
-        Debug.Log(PlayableCharacter.Inst.Data);
-        Debug.Log(PlayableCharacter.Inst.Data.GetStats());
-        stats ??= PlayableCharacter.Inst.Data.GetStats();
-        provider = stats as IStatProvider;
-        provider.GetStats().OnRecalculated += OnStatChanged;
+        provider = PlayableCharacter.Inst.Data;
+        stats ??= provider.GetStats();
+        stats.OnRecalculated += OnStatChanged;
         if (provider == null) Debug.LogError("[WeaponScript] provider에 stats할당 실패");
         hitPoint = transform.GetChild(0);
         anim = GetComponent<Animator>();
@@ -89,7 +85,11 @@ public class Weapon : MonoBehaviour
         GameObject hitbox = Instantiate(attackHitBox);
         hitbox.GetComponent<BoxCollider2D>().size = new Vector2(1f, 1f);
         hitbox.GetComponent<AttackHitBox>().provider = provider;
-        hitbox.transform.position = hitPoint.position;
+        var start = (Vector2)PlayableCharacter.Inst.transform.position;
+        var dir = (Vector2)PlayableCharacter.Inst.arm.up;
+        var reach = 2.0f;
+        var end = start + dir * reach;
+        hitbox.transform.position = end;
         hitbox.transform.localScale = new(2f, 2f);
     }
 }

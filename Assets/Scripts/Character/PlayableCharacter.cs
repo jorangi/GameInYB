@@ -213,7 +213,8 @@ public class PlayableCharacter : Character
             .SetJPow(12.0f)
             .SetCri(0.1f)
             .SetCriDmg(1.5f);
-        Debug.Log(data.ToString());
+        data.GetStats().SetBase(StatType.ATS, 0.0f);
+        data.HP = data.MaxHP;
 
         ((PlayableCharacterData)data).SetInfoObj(CharacterInformationObj);
         //((PlayableCharacterData)data).RefreshUIData();
@@ -225,9 +226,9 @@ public class PlayableCharacter : Character
         jumpCnt = Data.JumpCnt;
 
         // 무기 스프라이트, 스크립트, 메시지 박스, 카메라 초기화
-        weaponSprite = arm.GetChild(0).GetComponent<SpriteRenderer>();
+        weaponScript = arm.GetComponentInChildren<Weapon>();
+        weaponSprite = weaponScript.GetComponent<SpriteRenderer>();
         subWeaponSprite = arm.GetChild(1).GetComponent<SpriteRenderer>();
-        weaponScript = weaponSprite.GetComponent<Weapon>();
         SetupMessageBox();
         cam = Camera.main;
         GameObject obj = Instantiate(new GameObject(), null);
@@ -311,44 +312,47 @@ public class PlayableCharacter : Character
         }
         bar.fillAmount = (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP);
     }
+    protected override void Landing(LAYER layer)
+    {
+        jumpCnt = Data.JumpCnt;
+        isJump = false;
+        base.Landing(layer);
+    }
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
         //공중 판정 체크
         anim.SetBool("JUMP", !isGround);
-
-        //팔 관련 로직
         if (weaponScript.anim.GetBool("IsSwing")) return;
-        Vector3 dir = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        float armAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        moveDir = moveVec.x <= 0 && (moveVec.x < 0 || moveDir);
-        if (!weaponScript.anim.GetBool("IsSwing"))
-        {
-            //마우스가 캐릭터 오른쪽
-            if (armAngle + 90 <= 180 && armAngle + 90 >= 0)
-            {
-                transform.GetChild(0).localScale = new Vector3(2.0f, 2.0f, 1.0f);
-                arm.rotation = Quaternion.Euler(0, 180, -(armAngle + 90));
-            }
-            else //마우스가 캐릭터 오른쪽
-            {
-                transform.GetChild(0).localScale = new Vector3(-2.0f, 2.0f, 1.0f);
-                arm.rotation = Quaternion.Euler(0, 0, armAngle + 90);
-            }
-        }
-        else
-        {
-            if (armAngle + 90 <= 180 && armAngle + 90 >= 0)
-                arm.rotation = Quaternion.Euler(0, 180, -(armAngle + 90));
-            else
-                arm.rotation = Quaternion.Euler(0, 0, armAngle + 90);
-        }
+        const float offsetDeg = -90f; // 무기 이미지가 세로로 되어 있어 보정 각도 필요
 
-        // 테스트용 체력 변경
-        if (Input.GetKeyDown(KeyCode.R))
+        Vector3 mouseW = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseW.z = arm.position.z;
+
+        Vector2 delta = (Vector2)(mouseW - arm.position); // 마우스 위치와 팔 위치의 차이 벡터
+        float angleDeg = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg; // 각도 계산
+        float finalZ = angleDeg + offsetDeg; // 오프셋 보정
+
+        arm.rotation = Quaternion.Euler(0f, 0f, finalZ);
         {
-            SetHP(UnityEngine.Random.Range(0, Data.MaxHP));
+            Transform body = transform.GetChild(0);
+            Vector3 s = body.localScale;
+            s.x = (delta.x >= 0f) ? -2f : 2f;
+            s.y = 2f;
+            s.z = 1f;
+            body.localScale = s;
+        }
+        {
+            Transform mainWeapon = weaponScript.transform;
+            if (mainWeapon != null)
+            {
+                float d = Vector3.Dot(arm.up, Vector3.right);
+                Vector3 ls = mainWeapon.transform.parent.localScale;
+                float absX = Mathf.Abs(ls.x);
+                ls.x = (d >= 0f) ? -absX : absX;
+                mainWeapon.transform.parent.localScale = ls;
+            }
         }
     }
     public void OnMovement(InputAction.CallbackContext context) // 이동 액션 등록
@@ -501,8 +505,12 @@ public class PlayableCharacter : Character
             SetSubWeapon(ItemDataManager.GetItem("00000"), false);
 
         weaponSprite.sprite = weaponAtlas.GetSprite(item.id);
-        if (inventory.equipments.Helmet is Item i)
-            Data.GetStats().RemoveProvider(i.GetProvider());
+
+        if(inventory.equipments.MainWeapon is Item i)
+            Debug.Log($"끼고있던 템 : {i.GetProvider().GetHashCode()}");
+        Data.GetStats().RemoveProvider(inventory.equipments.MainWeapon.GetProvider());
+        inventory.equipments.MainWeapon = item;
+        Debug.Log($"새 템 : {item.GetProvider().GetHashCode()}");
         Data.GetStats().AddProvider(item.GetProvider());
         OnEquipmentChanged?.Invoke(EquipmentType.MAINWEAPON, item);
     }
@@ -517,26 +525,30 @@ public class PlayableCharacter : Character
     /// <param name="isTwoHander"></param>
         public void SetSubWeapon(Item item, bool isTwoHander = false)
     {
-        subWeaponSprite.sprite = isTwoHander ? null : weaponAtlas.GetSprite(item.id);
+        subWeaponSprite.sprite = isTwoHander ? weaponAtlas.GetSprite(inventory.equipments.MainWeapon.id) : weaponAtlas.GetSprite(item.id);
 
-        if (inventory.equipments.Helmet is Item i)
+        if (inventory.equipments.SubWeapon is Item i)
             Data.GetStats().RemoveProvider(i.GetProvider());
+        if (isTwoHander) return;
+        inventory.equipments.SubWeapon = item;
         Data.GetStats().AddProvider(item.GetProvider());
         OnEquipmentChanged?.Invoke(EquipmentType.SUBWEAPON, item);
     }
     /// <summary>
     /// 헬멧 설정
     /// </summary>
-    /// <param name="helmet"></param> <summary>
+    /// <param name="item"></param> <summary>
     /// 
     /// </summary>
-    /// <param name="helmet"></param>
-    public void SetHelmet(Item helmet)
+    /// <param name="item"></param>
+    public void SetHelmet(Item item)
     {
         if (inventory.equipments.Helmet is Item i)
             Data.GetStats().RemoveProvider(i.GetProvider());
-        Data.GetStats().AddProvider(helmet.GetProvider());
-        OnEquipmentChanged?.Invoke(EquipmentType.HELMET, helmet);
+            
+        inventory.equipments.Helmet = item;
+        Data.GetStats().AddProvider(item.GetProvider());
+        OnEquipmentChanged?.Invoke(EquipmentType.HELMET, item);
     }
     /// <summary>
     /// 갑옷 설정
@@ -547,7 +559,11 @@ public class PlayableCharacter : Character
     /// <param name="item"></param>
     public void SetArmor(Item item)
     {
-
+        if (inventory.equipments.Armor is Item i)
+            Data.GetStats().RemoveProvider(i.GetProvider());
+            
+        inventory.equipments.Armor = item;
+        Data.GetStats().AddProvider(item.GetProvider());
         OnEquipmentChanged?.Invoke(EquipmentType.ARMOR, item);
     }
     /// <summary>
@@ -559,7 +575,11 @@ public class PlayableCharacter : Character
     /// <param name="item"></param>
     public void SetPants(Item item)
     {
-        // data.SetAtk(pants.attributes.atk);
+        if (inventory.equipments.Pants is Item i)
+            Data.GetStats().RemoveProvider(i.GetProvider());
+            
+        inventory.equipments.Pants = item;
+        Data.GetStats().AddProvider(item.GetProvider());
         OnEquipmentChanged?.Invoke(EquipmentType.PANTS, item);
     }
     private const int maxStack = 99; //기본 아이템 최대 쌓기 개수

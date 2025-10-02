@@ -11,8 +11,11 @@ public class AttackHitBox : MonoBehaviour
     void Awake()
     {
         name = "AttackHitBox";
-        stats = provider.GetStats();
         Destroy(gameObject, timer);
+    }
+    void Start()
+    {
+        stats = provider.GetStats();
     }
     void OnTriggerEnter2D(Collider2D collision)
     {

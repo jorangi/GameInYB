@@ -31,7 +31,8 @@ public struct Item
     public string[] skills;
     public bool two_hander;
     public bool stackable;
-    public readonly ItemProvide GetProvider() => new(this);
+    private readonly ItemProvide provider;
+    public readonly ItemProvide GetProvider() => provider ?? new ItemProvide(this);
     public override readonly string ToString()
     {
         var attrStr = string.Join(", ", (attributes ?? Array.Empty<ItemAttribute>())
@@ -47,15 +48,50 @@ public struct Item
 public sealed class ItemProvide : IStatModifierProvider
 {
     private readonly Item item;
-    public ItemProvide(in Item item){this.item = item;}
+    private readonly string id;
+    private readonly int attrsHash;
+    public ItemProvide(in Item item)
+    {
+        this.item = item;
+        this.id = item.id ?? "00000";
+
+        int h = 17;
+        h = h * 31 + id.GetHashCode();
+        if (item.attributes != null)
+        {
+            for (int i = 0; i < item.attributes.Length; i++)
+            {
+                var a = item.attributes[i];
+                h = h * 31 + (a.stat?.ToUpperInvariant().GetHashCode() ?? 0);
+                h = h * 31 + (a.op?.ToUpperInvariant().GetHashCode() ?? 0);
+                h = h * 31 + a.value.GetHashCode();
+            }
+        }
+        attrsHash = h;
+    }
     public IEnumerable<StatModifier> GetStatModifiers()
     {
         var a = item.attributes;
-        foreach (var attr in a)
+        if (a == null) yield break;
+        for (int i = 0; i < a.Length; i++)
         {
-            yield return new(Enum.Parse<StatType>(attr.stat.ToUpper()), attr.value, Enum.Parse<StatOp>(attr.op.ToUpper()), this);
+            var attr = a[i];
+            yield return
+            new(
+                Enum.Parse<StatType>(attr.stat.ToUpperInvariant()),
+                attr.value,
+                Enum.Parse<StatOp>(attr.op.ToUpperInvariant()),
+                this
+            );
         }
     }
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj is not ItemProvide other) return false;
+        return id == other.id && attrsHash == other.attrsHash;
+    }
+    public override int GetHashCode() => HashCode.Combine(id, attrsHash);
 }
 public class ItemBuilder
 {

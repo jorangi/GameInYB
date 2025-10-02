@@ -58,6 +58,7 @@ public class UIManager : MonoBehaviour, IUIRegistry
     public static InputSystem_Actions inputAction;
     public List<IUI> uiList = new();
     private Dictionary<UIType, IUI> uiDic = new();
+    private bool keyInput = false;
     #endregion
 
     private void Awake()
@@ -84,9 +85,11 @@ public class UIManager : MonoBehaviour, IUIRegistry
         inputAction.UserInterface.Command.performed += OnCommand;
         inputAction.UserInterface.CharacterInformation.performed += OnCharacterInformation;
         inputAction.UserInterface.Positive.performed += OnPositive;
+        inputAction.UserInterface.Negative.performed += KeyInput;
         inputAction.UserInterface.Negative.performed += OnNegative;
         inputAction.UserInterface.PausedMenu.performed += OnPausedMenu;
     }
+    private void KeyInput(InputAction.CallbackContext context) => keyInput = true;
     private List<RaycastResult> raycastResults = new();
     /// <summary>
     /// 클릭 상호작용(UI 외부 마우스 클릭 감지)
@@ -135,6 +138,11 @@ public class UIManager : MonoBehaviour, IUIRegistry
     {
         if (!uiList.Contains(uiDic[UIType.PAUSED_MENU]) && uiDic.TryGetValue(UIType.COMMAND_PANEL, out IUI ui))
         {
+            if (uiList.Contains(ui))
+            {
+                ui.Hide();
+                return;
+            }
             ui.Show();
             uiList.Add(ui);
         }
@@ -145,8 +153,12 @@ public class UIManager : MonoBehaviour, IUIRegistry
     /// <param name="context"></param>
     private void OnPausedMenu(InputAction.CallbackContext context)
     {
+        if (!keyInput) return;
+        keyInput = false;
+        Debug.Log("OnPausedMenu");
         if (Time.deltaTime > 0f && uiList.Count == 0 && uiDic.TryGetValue(UIType.PAUSED_MENU, out IUI ui))
         {
+            Debug.Log("Show PausedMenu");
             ui.Show();
             uiList.Add(ui);
         }
@@ -165,7 +177,7 @@ public class UIManager : MonoBehaviour, IUIRegistry
     }
     private void OnDisable()
     {
-        inputAction.Disable();
+        inputAction?.Disable();
         if (linkEvent != null) linkEvent.OnRaised -= OnLinkEvent;
 
         inputAction.UserInterface.Positive.performed += OnPositive;
@@ -184,9 +196,10 @@ public class UIManager : MonoBehaviour, IUIRegistry
     /// <param name="context"></param>
     private void OnNegative(InputAction.CallbackContext context)
     {
-        if (uiList.Count == 0) return;
+        if (uiList.Count == 0 || !keyInput) return;
         IUI ui = uiList[^1];
         ui.NegativeInteract(context);
+        keyInput = false;
     }
     private void OnLinkEvent(TMPLinkEvent.TMPLinkEventPayload payload)
     {

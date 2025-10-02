@@ -127,7 +127,6 @@ namespace Looper.Console.Core
         }
         public IEnumerable<ICommand> All() => _byName.Values.OrderBy(c => c.Name, StringComparer.OrdinalIgnoreCase);
     }
-
 }
 namespace Looper.Console.UI
 {

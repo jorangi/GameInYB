@@ -56,6 +56,8 @@ public class CharacterInformation : MonoBehaviour, IUI
         slotIcons[arg1 + 5].color = Color.white;
         slotIcons[arg1 + 5].sprite = iconAtlas.GetSprite(item.item.id);
         slotIcons[arg1 + 5].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
+        
+        Refresh();
     }
     /// <summary>
     /// 장비 아이템 변경시 아이콘 갱신
@@ -95,6 +97,7 @@ public class CharacterInformation : MonoBehaviour, IUI
             default:
                 break;
         }
+        Refresh();
     }
     /// <summary>
     /// 아이콘 아틀라스 초기화
@@ -131,7 +134,7 @@ public class CharacterInformation : MonoBehaviour, IUI
     public void Refresh()
     {
         #region status
-        hp.text = $"{PlayableCharacter.Inst.Data.HP} / {PlayableCharacter.Inst.Data.MaxHP}";
+        hp.text = $"{PlayableCharacter.Inst.Data.HP}/{PlayableCharacter.Inst.Data.MaxHP}";
         atk.text = $"{PlayableCharacter.Inst.Data.Atk}";
         ats.text = $"{PlayableCharacter.Inst.Data.Ats}";
         def.text = $"{PlayableCharacter.Inst.Data.Def}";
