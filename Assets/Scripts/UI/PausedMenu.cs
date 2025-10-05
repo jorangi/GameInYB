@@ -13,7 +13,7 @@ public class PausedMenu : MonoBehaviour, IUI
     public void Hide()
     {
         gameObject.SetActive(false);
-        Time.timeScale = 1.0f;
+        Time.timeScale = PlayableCharacter.Inst.gameTimeScale;
         uiContext.UIRegistry.CloseUI(this);
     }
     public void NegativeInteract(InputAction.CallbackContext context)

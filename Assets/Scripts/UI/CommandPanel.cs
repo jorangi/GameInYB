@@ -9,6 +9,7 @@ using Looper.Console.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 namespace Looper.Console.Core
@@ -28,7 +29,7 @@ namespace Looper.Console.Core
         /// <param name="args"></param>
         void Execute(CommandContext ctx, string[] args);
         /// <summary>
-        /// 비동기 명령어 실해
+        /// 비동기 명령어 실행
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="args"></param>
@@ -44,17 +45,13 @@ namespace Looper.Console.Core
         public readonly IServiceProvider Service;
 
         public CommandContext(
-            GameObject actor,
             Action<string> print,
             Func<string, UniTask> printAsync,
-            Transform world,
             IServiceProvider service
         )
         {
-            Actor = actor;
             Print = print ?? Debug.Log;
             PrintAsync = printAsync ?? (s => { Debug.Log(s); return UniTask.CompletedTask; });
-            World = world;
             Service = service;
         }
         public void Info(string msg) => Print(msg);
@@ -136,8 +133,6 @@ namespace Looper.Console.UI
         [SerializeField] private TextMeshProUGUI outputSource;
         private TMP_InputField inputSource;
         private InputSystem_Actions inputActions;
-        [SerializeField] private GameObject actor;
-        [SerializeField] private Transform worldRoot;
         private CommandRegistry _reg;
         [SerializeField] private LogMessageParent logMessageParent;
 
@@ -162,7 +157,16 @@ namespace Looper.Console.UI
             _reg.Register(new EchoCommand());
             _reg.Register(new LogMessageCommand());
             _reg.Register(new ClearCommand(outputSource));
-            _reg.Register(new ExitCommand(new Action(()=>{ NegativeInteract(new()); })));
+            _reg.Register(new ExitCommand(new Action(() => { NegativeInteract(new()); })));
+            _reg.Register(new TimeScaleCommand());
+            _reg.Register(new GetItemCommand());
+            _reg.Register(new SetBaseStatCommand());
+            _reg.Register(new EquipItemCommand());
+            _reg.Register(new TeleportCommand());
+            _reg.Register(new OriginCommand());
+            _reg.Register(new SetHPCommand());
+            _reg.Register(new ClearBackpackCommand());
+            _reg.Register(new RemoveItemCommand());
         }
         void OnEnable()
         {
@@ -170,7 +174,7 @@ namespace Looper.Console.UI
         }
         void OnDisable()
         {
-            Time.timeScale = 1.0f;
+            Time.timeScale = PlayableCharacter.Inst.gameTimeScale;
         }
         public void PositiveInteract(InputAction.CallbackContext context) => Show();
         public void NegativeInteract(InputAction.CallbackContext context) => Hide();
@@ -193,11 +197,9 @@ namespace Looper.Console.UI
                 return;
             }
             var ctx = new CommandContext(
-                actor: actor,
                 print: PrintLine,
                 printAsync: async s => { PrintLine(s); await UniTask.Yield(); },
-                world: worldRoot,
-                service: null);
+                service: GameBootstrapper.ServiceProvider);
 
             if (cmd.IsAsync) RunAsync(cmd, ctx, args).Forget();
             else
@@ -224,6 +226,11 @@ namespace Looper.Console.UI
             catch (Exception e)
             {
                 PrintLine($"<color=orange>에러 : </color> {e.Message}");
+            }
+            finally
+            {
+                inputSource.text = string.Empty;
+                inputSource.ActivateInputField();
             }
         }
         private void PrintLine(string s)

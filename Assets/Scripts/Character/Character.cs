@@ -62,28 +62,17 @@ public class CharacterStats
         if (dirty) Recalculate();
         return finalCache.TryGetValue(stat, out var value) ? value : 0f;
     }
-    public void ShowListHash()
-    {
-        StringBuilder sb = new("Hash-List : ");
-        foreach (var p in providers) sb.Append(((object)p.Key).GetHashCode() + " / ");
-        Debug.Log(sb);
-    }
     public void AddProvider(IStatModifierProvider provider, int count = 1)
     {
         if (count <= 0) return;
-        ShowListHash();
-        Debug.Log("AddProvider : " + providers.ContainsKey(provider) + " / " + provider.GetHashCode());
         providers.TryGetValue(provider, out var cur);
         if (!providers.ContainsKey(provider)) providers.Add(provider, cur + count);
         else providers[provider] = cur + count;
-        Debug.Log(provider.GetHashCode());
         dirty = true;
     }
     public void RemoveProvider(IStatModifierProvider provider, int count = 1)
     {
-        ShowListHash();
         bool t = providers.TryGetValue(provider, out var cur);
-        Debug.Log("RemoveProvider : " + t + " / " +  provider.GetHashCode());
         if (!t) return;
         int next = cur - count;
         if(next > 0)providers[provider] = next;

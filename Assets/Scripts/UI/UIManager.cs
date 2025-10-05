@@ -8,6 +8,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+
 
 public enum UIType
 {
@@ -24,7 +26,11 @@ public interface IUIRegistry
     public void Focus(IUI ui);
     public void CloseUI(IUI ui);
 }
-public class UIManager : MonoBehaviour, IUIRegistry
+public interface INegativeSignal
+{
+    public event Action Negative;
+}
+public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
 {
     #region field
     #region LinkEvent & Scope
@@ -59,6 +65,7 @@ public class UIManager : MonoBehaviour, IUIRegistry
     public List<IUI> uiList = new();
     private Dictionary<UIType, IUI> uiDic = new();
     private bool keyInput = false;
+    public event Action Negative;
     #endregion
 
     private void Awake()
@@ -194,8 +201,9 @@ public class UIManager : MonoBehaviour, IUIRegistry
     /// UI 부정 상호작용
     /// </summary>
     /// <param name="context"></param>
-    private void OnNegative(InputAction.CallbackContext context)
+    public void OnNegative(InputAction.CallbackContext context)
     {
+        Negative?.Invoke();
         if (uiList.Count == 0 || !keyInput) return;
         IUI ui = uiList[^1];
         ui.NegativeInteract(context);

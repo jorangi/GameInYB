@@ -1,16 +1,36 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 
-public class CharacterInformation : MonoBehaviour, IUI
+public interface IInventoryUI
 {
+    GameObject CommandPanel { get; }
+    GameObject CharacterInformationPanel { get; }
+    GraphicRaycaster Raycaster { get; }
+    EventSystem EventSystem { get; }
+    GameObject FirstInventorySelectable { get; }
+}
+public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
+{
+    [SerializeField] private GameObject commandPanel;
+    [SerializeField] private GameObject characterInformationPanel;
+    [SerializeField] private GraphicRaycaster raycaster;
+    [SerializeField] private GameObject firstInventorySelectable;
+    public GameObject CommandPanel => commandPanel;
+    public GameObject CharacterInformationPanel => gameObject;
+    public GraphicRaycaster Raycaster => raycaster;
+    public EventSystem EventSystem => EventSystem.current;
+    public GameObject FirstInventorySelectable => firstInventorySelectable;
+
     [SerializeField] private UIContext uiContext;
     [SerializeField] private TextMeshProUGUI hp;
     [SerializeField] private TextMeshProUGUI atk;
@@ -55,8 +75,9 @@ public class CharacterInformation : MonoBehaviour, IUI
     {
         slotIcons[arg1 + 5].color = Color.white;
         slotIcons[arg1 + 5].sprite = iconAtlas.GetSprite(item.item.id);
+        Debug.Log(arg1 + " / " + iconAtlas.GetSprite(item.item.id).name);
         slotIcons[arg1 + 5].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
-        
+
         Refresh();
     }
     /// <summary>

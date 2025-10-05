@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
@@ -13,19 +14,20 @@ using UnityEngine.Tilemaps;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 
+public sealed class UnityServiceProvider : IServiceProvider
+{
+    private readonly Dictionary<Type, object> map = new();
+    public void Add<T>(T imple) where T : class => map[typeof(T)] = imple;
+    public object GetService(Type serviceType) => map.TryGetValue(serviceType, out var o) ? o : null;
+    public T Get<T>() where T : class => (T)GetService(typeof(T));
+}
 public struct ItemSlot
 {
+    public int index;
     public Item item;
     public int ea;
-
-    public override bool Equals(object obj)
-    {
-        return base.Equals(obj);
-    }
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
+    public override readonly bool Equals(object obj) => base.Equals(obj);
+    public override readonly int GetHashCode() => base.GetHashCode();
     public static ItemSlot operator +(ItemSlot a, int ea)
     {
         a.ea += ea;
@@ -36,14 +38,22 @@ public struct ItemSlot
         a.ea -= ea;
         return a;
     }
-    public static bool operator ==(ItemSlot a, ItemSlot b)
-    {
-        return a.item.id == b.item.id && a.ea == b.ea;
-    }
-    public static bool operator !=(ItemSlot a, ItemSlot b)
-    {
-        return a.item.id == b.item.id && a.ea == b.ea;
-    }
+    public static bool operator ==(ItemSlot a, ItemSlot b) => a.item.id == b.item.id && a.ea == b.ea;
+    public static bool operator !=(ItemSlot a, ItemSlot b) => a.item.id == b.item.id && a.ea == b.ea;
+    /// <summary>
+    /// Item을 ItemSlot으로 암시적 변환 (기본 개수 1)
+    /// </summary>
+    /// <param name="i"></param> <summary>
+    /// 
+    /// </summary>
+    /// <param name="i"></param>
+    public static implicit operator ItemSlot(Item i) => new() { item = i, ea = 1 };
+    /// <summary>
+    /// (Item, int)을 ItemSlot으로 암시적 변환(튜플)
+    /// </summary>
+    /// <param name="i"></param>
+    /// <param name="t"></param>
+    public static implicit operator ItemSlot((Item i, int ea) t) => new() { item = t.i, ea = t.ea };
 }
 public enum EquipmentType {
     ARMOR,
@@ -104,48 +114,250 @@ public class PlayableCharacterData : CharacterData
     }
     public override CharacterStats GetStats() => stats;
 }
-public class PlayableCharacter : Character
-{
-    public class PlayerEquipments
+public class Backpack : IEnumerable<ItemSlot>
     {
-        private Item mainWeapon;
-        private Item subWeapon;
-        private Item helmet;
-        private Item armor;
-        private Item pants;
+        public Backpack()
+        {
+            Array.Clear(items, 0, items.Length);
+            for (int i = 0; i < items.Length; i++) items[i].index = i;
+        }
+        [SerializeField] private ItemSlot[] items = new ItemSlot[15]; //아이템, 개수를 담은 리스트
+        /// <summary>
+        /// Backpack().items[index]가 너무 길어서 인덱서를 구현해서 대체
+        /// </summary>
+        /// <value></value>
+        public ItemSlot this[int index]
+        {
+            get
+            {
+#if UNITY_EDITOR
+                if ((uint)index >= (uint)items.Length)
+                    throw new IndexOutOfRangeException("조회하는 인덱스가 백팩의 크기보다 큽니다.");
+#endif
+                return items[index];
+            }
+            set
+            {
 
-        public Item MainWeapon
-        {
-            get => mainWeapon;
-            set => mainWeapon = value;
+#if UNITY_EDITOR
+                if ((uint)index >= (uint)items.Length)
+                    throw new IndexOutOfRangeException("조회하는 인덱스가 백팩의 크기보다 큽니다.");
+#endif
+                items[index] = value;
+            }
         }
-        public Item SubWeapon
+        /// <summary>
+        /// 백팩에 담긴 아이템 종류의 수
+        /// </summary> <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
+        public int Count
         {
-            get => subWeapon;
-            set => subWeapon = value;
+            get
+            {
+                int cnt = 0;
+                foreach (var item in items)
+                {
+                    if (item.item.id != null) cnt++;
+                }
+                return cnt;
+            }
         }
-        public Item Helmet
+        public bool IsFull => FindEmptySlot() == -1;
+        /// <summary>
+        /// 빈 슬롯 인덱스 조회
+        /// </summary>
+        /// <returns></returns> <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public int FindEmptySlot()
         {
-            get => helmet;
-            set => helmet = value;
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i].item.id == null) return i;
+            }
+            return -1;
         }
-        public Item Armor
+        public ref ItemSlot EmptySlot()
         {
-            get => armor;
-            set => armor = value;
+            if (FindEmptySlot() == -1) throw new InvalidOperationException("빈 슬롯이 없습니다.");
+            return ref items[FindEmptySlot()];
         }
-        public Item Pants
+        /// <summary>
+        /// 열거형 인터페이스 구현
+        /// </summary>
+        /// <returns></returns> <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<ItemSlot> GetEnumerator()
         {
-            get => pants;
-            set => pants = value;
+            foreach (var item in items)
+                yield return item;
         }
-    }
-    public class Inventory
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+        /// <summary>
+        /// 아이템 ID를 통해 아이템 슬롯 검색
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        public ItemSlot GetItem(string itemId)
+        {
+            foreach (var itemSlot in items)
+            {
+                if (itemSlot.item.id == itemId) return itemSlot;
+            }
+            return default;
+        }
+        /// <summary>
+        /// 아이템 ID를 통해 가방 내의 아이템 개수 검색
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns> <summary>
+        /// 
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        public int GetItemCount(string itemId)
+        {
+            ItemSlot slot = GetItem(itemId);
+            if (slot == default) return -1;
+            return slot.ea;
+        }
+    public void Clear()
     {
-        public PlayerEquipments equipments = new();
-        public ItemSlot[] backpack = new ItemSlot[15]; //아이템, 개수를 담은 리스트
+        Array.Clear(items, 0, items.Length);
+        
     }
-    public Inventory inventory = new();
+    public void RemoveSlot(int index)
+    {
+        items[index] = default;
+    }
+}
+
+public interface IInventoryData
+{
+    Backpack Backpack { get; }
+    Inventory Inventory { get; }
+}
+public class Inventory
+{
+    public Inventory()
+    {
+        equipments.Helmet = default;
+        equipments.Armor = default;
+        equipments.Pants = default;
+        equipments.MainWeapon = default;
+        equipments.SubWeapon = default;
+        backpack.Clear();
+    }
+    public PlayerEquipments equipments = new();
+    public Backpack backpack = new(); //아이템, 개수를 담은 리스트
+    public event Action<int> OnSlotPicked;
+    public event Action OnPickCanceled;
+    private bool picking;
+    public bool BeginPickSlot()
+    {
+        if (picking) return false;
+        picking = true;
+        return true;
+    }
+    public void CancelPick()
+    {
+        if (!picking) return;
+        picking = false;
+        OnPickCanceled?.Invoke();
+    }
+    public void NotifySlotClicked(int index)
+    {
+        if (!picking) return;
+        picking = false;
+        OnSlotPicked?.Invoke(index);
+    }
+    public UniTask<int> PickSlotAsync(CancellationToken token)
+    {
+        if (!BeginPickSlot())
+            return UniTask.FromException<int>(new InvalidOperationException("Pick작업이 이미 진행중입니다."));
+        var tcs = new UniTaskCompletionSource<int>();
+        bool completed = false;
+        void HandlePicked(int i)
+        {
+            Debug.Log(i);
+            if (completed) return;
+            completed = true;
+            UnSubscribe();
+            tcs.TrySetResult(i);
+        }
+        void HandleCanceled()
+        {
+            if (completed) return;
+            completed = true;
+            UnSubscribe();
+            tcs.TrySetCanceled();
+        }
+        void UnSubscribe()
+        {
+            OnSlotPicked -= HandlePicked;
+            OnPickCanceled -= HandleCanceled;
+        }
+        OnSlotPicked += HandlePicked;
+        OnPickCanceled += HandleCanceled;
+        var reg = token.Register(() =>
+        {
+            CancelPick();
+        });
+        return tcs.Task.ContinueWith(result =>
+        {
+            reg.Dispose();
+            return result;
+        });
+    }
+}
+public class PlayerEquipments
+{
+    private ItemSlot mainWeapon;
+    private ItemSlot subWeapon;
+    private ItemSlot helmet;
+    private ItemSlot armor;
+    private ItemSlot pants;
+    public ItemSlot MainWeapon
+    {
+        get => mainWeapon;
+        set => mainWeapon = value;
+    }
+    public ItemSlot SubWeapon
+    {
+        get => subWeapon;
+        set => subWeapon = value;
+    }
+    public ItemSlot Helmet
+    {
+        get => helmet;
+        set => helmet = value;
+    }
+    public ItemSlot Armor
+    {
+        get => armor;
+        set => armor = value;
+    }
+    public ItemSlot Pants
+    {
+        get => pants;
+        set => pants = value;
+    }
+}
+    
+public class PlayableCharacter : Character, IInventoryData
+{
+    public float gameTimeScale = 1.0f;
+    private readonly Inventory inventory = new();
+    public Inventory Inventory => inventory;
+    public Backpack Backpack => inventory.backpack;
     public GameObject CharacterInformationObj;
     public Animator anim; // 플레이어 캐릭터 애니메이터
     public Material material;
@@ -196,6 +408,7 @@ public class PlayableCharacter : Character
     private SpriteAtlas weaponAtlas; // 무기 스프라이트 아틀라스
     public event Action<EquipmentType, Item> OnEquipmentChanged; //옵저버 패턴을 이용해 장비변경시 알림
     public event Action<int, ItemSlot> OnInventoryChanged;//옵저버 패턴을 이용해 인벤토리 변경시 알림
+    [SerializeField] private LogMessageParent logMessageParent;
     protected override void Awake()
     {
         //싱글턴 인스턴스 설정
@@ -501,16 +714,13 @@ public class PlayableCharacter : Character
     {
         if (item.two_hander)
             SetSubWeapon(item, true);
-        else if (inventory.equipments.MainWeapon.two_hander)
+        else if (inventory.equipments.MainWeapon.item.two_hander)
             SetSubWeapon(ItemDataManager.GetItem("00000"), false);
 
         weaponSprite.sprite = weaponAtlas.GetSprite(item.id);
 
-        if(inventory.equipments.MainWeapon is Item i)
-            Debug.Log($"끼고있던 템 : {i.GetProvider().GetHashCode()}");
-        Data.GetStats().RemoveProvider(inventory.equipments.MainWeapon.GetProvider());
+        Data.GetStats().RemoveProvider(inventory.equipments.MainWeapon.item.GetProvider());
         inventory.equipments.MainWeapon = item;
-        Debug.Log($"새 템 : {item.GetProvider().GetHashCode()}");
         Data.GetStats().AddProvider(item.GetProvider());
         OnEquipmentChanged?.Invoke(EquipmentType.MAINWEAPON, item);
     }
@@ -523,12 +733,12 @@ public class PlayableCharacter : Character
     /// </summary>
     /// <param name="item"></param>
     /// <param name="isTwoHander"></param>
-        public void SetSubWeapon(Item item, bool isTwoHander = false)
+    public void SetSubWeapon(Item item, bool isTwoHander = false)
     {
-        subWeaponSprite.sprite = isTwoHander ? weaponAtlas.GetSprite(inventory.equipments.MainWeapon.id) : weaponAtlas.GetSprite(item.id);
+        subWeaponSprite.sprite = isTwoHander ? weaponAtlas.GetSprite(inventory.equipments.MainWeapon.item.id) : weaponAtlas.GetSprite(item.id);
 
-        if (inventory.equipments.SubWeapon is Item i)
-            Data.GetStats().RemoveProvider(i.GetProvider());
+        if (inventory.equipments.SubWeapon is ItemSlot i)
+            Data.GetStats().RemoveProvider(i.item.GetProvider());
         if (isTwoHander) return;
         inventory.equipments.SubWeapon = item;
         Data.GetStats().AddProvider(item.GetProvider());
@@ -543,9 +753,9 @@ public class PlayableCharacter : Character
     /// <param name="item"></param>
     public void SetHelmet(Item item)
     {
-        if (inventory.equipments.Helmet is Item i)
-            Data.GetStats().RemoveProvider(i.GetProvider());
-            
+        if (inventory.equipments.Helmet is ItemSlot i)
+            Data.GetStats().RemoveProvider(i.item.GetProvider());
+
         inventory.equipments.Helmet = item;
         Data.GetStats().AddProvider(item.GetProvider());
         OnEquipmentChanged?.Invoke(EquipmentType.HELMET, item);
@@ -559,9 +769,9 @@ public class PlayableCharacter : Character
     /// <param name="item"></param>
     public void SetArmor(Item item)
     {
-        if (inventory.equipments.Armor is Item i)
-            Data.GetStats().RemoveProvider(i.GetProvider());
-            
+        if (inventory.equipments.Armor is ItemSlot i)
+            Data.GetStats().RemoveProvider(i.item.GetProvider());
+
         inventory.equipments.Armor = item;
         Data.GetStats().AddProvider(item.GetProvider());
         OnEquipmentChanged?.Invoke(EquipmentType.ARMOR, item);
@@ -575,9 +785,9 @@ public class PlayableCharacter : Character
     /// <param name="item"></param>
     public void SetPants(Item item)
     {
-        if (inventory.equipments.Pants is Item i)
-            Data.GetStats().RemoveProvider(i.GetProvider());
-            
+        if (inventory.equipments.Pants is ItemSlot i)
+            Data.GetStats().RemoveProvider(i.item.GetProvider());
+
         inventory.equipments.Pants = item;
         Data.GetStats().AddProvider(item.GetProvider());
         OnEquipmentChanged?.Invoke(EquipmentType.PANTS, item);
@@ -590,14 +800,29 @@ public class PlayableCharacter : Character
     /// <param name="ea"></param>
     public void GetItem(Item item, int ea = 1)
     {
-        for (int i = 0; i < inventory.backpack.Length; i++)
+        if (inventory.backpack.IsFull)
         {
-            if (inventory.backpack[i] != null && inventory.backpack[i].item.id == item.id && item.stackable)
-            {
-                inventory.backpack[i].ea = Math.Min(inventory.backpack[i].ea + ea, maxStack);
-                OnInventoryChanged?.Invoke(i, inventory.backpack[i]);
-                return;
-            }
+            Debug.Log("인벤토리가 가득 찼습니다.");
+            logMessageParent.Spawn("인벤토리가 가득 찼습니다.");
+            return;
         }
+        if (inventory.backpack.GetItem(item.id) is ItemSlot slot && slot.ea >= maxStack && item.stackable)
+        {
+            slot.ea += ea;
+            OnInventoryChanged?.Invoke(slot.index, slot);
+            return;
+        }
+        ref ItemSlot emptySlot = ref inventory.backpack.EmptySlot();
+        emptySlot = (item, ea);
+        OnInventoryChanged?.Invoke(emptySlot.index, emptySlot);
+    }
+    public void RemoveItem(ItemSlot itemslot)
+    {
+        Backpack[itemslot.index] = default;
+        OnInventoryChanged?.Invoke(itemslot.index, itemslot);
+    }
+    public void InitPos()
+    {
+        transform.position = new(-3.93f, 0.08f, transform.position.z);
     }
 }
