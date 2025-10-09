@@ -1,22 +1,137 @@
 {"skills":[
     {
         "id":"20001",
-        "name":["health up", "체력증진"],
-        "description":["eng_desc","체력이 10증가합니다."]
+        "name":["Health up", "체력증진"],
+        "description":["Your physical strength will increase by 20","체력이 20증가합니다."]
+    },
+        {
+        "id":"20002",
+        "name":["Speed up", "신속"],
+        "description":["The speed of movement increases by 10","이동속도가 10 증가합니다."]
+    },
+        {
+        "id":"20003",
+        "name":["Power up", "힘 증가"],
+        "description":["It increases the attack power by 10","공격력이 10증가합니다."]
+    },
+        {
+        "id":"20004",
+        "name":["Health up+", "체력증진+"],
+        "description":["Your physical strength will increase by 40","체력이 40증가합니다."]
+    },
+        {
+        "id":"20005",
+        "name":["Speed up+", "신속+"],
+        "description":["The speed of movement increases by 20","이동속도가 20 증가합니다."]
+    },
+        {
+        "id":"20006",
+        "name":["Power up+", "힘 증가+"],
+        "description":["It increases the attack power by 10","공격력이 20증가합니다"]
+    },
+        {
+        "id":"20007",
+        "name":["Gold Stakes Increase", "골드 획등량 증가"],
+        "description":["Gold increases by 10%","골드(재화)의 획등량이 10% 증가합니다."]
+    },
+        {
+        "id":"20008",
+        "name":["Critical", "치명타"],
+        "description":["Every attack is a 10% chance of doing 200% damage","모든공격이 10%확률로 200%의 데미지를 입히는 치명타공격을 가합니다."]
+    },
+        {
+        "id":"20009",
+        "name":["Jumping power increase", "점프력 증가"],
+        "description":["The jump power increases by 0.5 space","점프력이 0.5칸 늘어납니다"]
+    },
+    {
+        "id":"20010",
+        "name":["Magnet", "자석"],
+        "description":["When items and goods come within a certain range, they automatically go into the character","아이템과 재화가 일정범위안에 들어오면 자동으로 캐릭터한테 들어간다."]
+    },
+    {
+        "id":"20011",
+        "name":["Becoming Firm", "단단해지기"],
+        "description":["It increases your defense by 10","방어력이 5증가합니다."]
+    },
+    {
+        "id":"20012",
+        "name":["Reflection ", "반사"],
+        "description":["It reflects 20% of the damage received and causes damage","받은 데미지의 20%만큼 반사하여 피해를 입힌다."]
     },
     {
         "id":"21001",
         "name":["great swing", "크게 휘두르기"],
-        "description":["eng_desc","크게 휘둘러 적에게 atk의 100%만큼의 피해를 입히고 20%만큼 감속시킵니다."]
+        "description":["Swing hard, doing 150% damage to your enemies atk and decelerating by 20%","크게 휘둘러 적에게 atk의 150%만큼의 피해를 입히고 20%만큼 감속시킵니다."]
     },
     {
         "id":"21002",
         "name":["defense", "방어"],
-        "description":["eng_desc","적의 공격을 방어하여 1초간 피해를 막습니다."]
+        "description":["Defend the enemy's attacks and reduce damage to 70 percent per second","적의 공격을 방어하여 1초간 피해량을 70퍼센트로 감소시킵니다."]
     },
     {
         "id":"21003",
         "name":["shooting", "권총사격"],
-        "description":["eng_desc","조준점이 생기며 보조무기를 사용시 발사하여 atk의 20%의 피해를 입힙니다. 발사는 0.5초마다 가능합니다."]
+        "description":["Aim points are created and fire when using auxiliary weapons, causing 20% damage to the atk. We can fire every half second","조준점이 생기며 보조무기를 사용시 발사하여 atk의 피해를 입힙니다. 발사는 0.5초마다 가능합니다."]
+    },
+    {
+        "id":"21004",
+        "name":["Continuous cutting", "연속 베기"],
+        "description":["3 times in a row, it causes 50% damage and bleeding","연속 3번 atk의 50%만큼의 피해를 입히고 출혈을 일으킨다."]
+    },
+    {
+        "id":"21005",
+        "name":["Continuous Stabbing", "연속 찌르기"],
+        "description":["It does as much as 70% of the atk twice in a row and causes bleeding","연속 2번 atk의 70%만큼의 피해를 입히고 출혈을 일으킨다."]
+    },
+    {
+        "id":"21006",
+        "name":["fire blindly", "난사"],
+        "description":["It has a aim point and fires when using auxiliary weapons, quickly shooting 3 times, causing damage to atk. We can fire every half second","조준점이 생기며 보조무기를 사용시 발사하여 빠르게 3번 쏘며 atk의 피해를 입힙니다. 발사는 0.5초마다 가능합니다."]
+    },
+    {
+        "id":"21007",
+        "name":["dash", "대쉬"],
+        "description":["Fast forward","빠르게 앞으로 돌진합니다."]
+    },
+    {
+        "id":"21008",
+        "name":["Take it down", "내려찍기"],
+        "description":["Hit the axe big from top to bottom and do as much damage as 200% of the atk","도끼를 위에서 아래로 크게 찍어내리며 atk의 200%만큼 피해를 입힌다."]
+    },
+    {
+        "id":"21009",
+        "name":["Smash", "스매쉬"],
+        "description":["Lift the hammer for two seconds and then hit it hard to do as much damage as 300% of the atk","2초동안 망치를 들어올린다음 힘껏 내려찍어 atk의 300%만큼 피해를 입힌다."]
+    },
+    {
+        "id":"21010",
+        "name":["Revolving attack", "회전공격"],
+        "description":["Swing around the axe and doing as much as 150% of the atk to the enemy in range","도끼를 회전시키며 휘둘러 범위안에 있는 적에게 atk의 150%만큼 피해를 입힌다."]
+    },
+    {
+        "id":"21011",
+        "name":["Beating", "난타"],
+        "description":["Quickly punch forward 6 times in a row and do as much damage as 130% of the atk 6 times","빠르게 주먹을 앞으로 연속으로 6번 질러 atk의 130%만큼 피해를 6번 입힌다."]
+    },
+    {
+        "id":"21012",
+        "name":["Stabbing", "찌르기"],
+        "description":["Throw the window long in the direction the character is looking at, causing 150% penetration damage to the atk","창을 길게 캐릭터가 바라보는 방향으로 내질러 atk의 150%의 관통피해를 줍니다."]
+    },
+    {
+        "id":"21013",
+        "name":["Explosion", "폭발"],
+        "description":["Grenades explode and damage nearby enemies","수류탄이 터지며 근처에 있는 적에게 피해를 입힌다."]
+    },
+    {
+        "id":"21014",
+        "name":["Throw ", "투척"],
+        "description":["Throw the weapon you're holding","들고있는 무기를 던진다."]
+    },
+    {
+        "id":"21015",
+        "name":["Aim ", "조준"],
+        "description":["Load an arrow, charge it, and fire it","화살을 장전하여 차징을 한 후 발사한다."]
     }
 ]}

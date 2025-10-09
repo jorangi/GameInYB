@@ -1,0 +1,22 @@
+{"skills":[
+    {
+        "id":"20001",
+        "name":["health up", "체력증진"],
+        "description":["eng_desc","체력이 10증가합니다."]
+    },
+    {
+        "id":"21001",
+        "name":["great swing", "크게 휘두르기"],
+        "description":["eng_desc","크게 휘둘러 적에게 atk의 100%만큼의 피해를 입히고 20%만큼 감속시킵니다."]
+    },
+    {
+        "id":"21002",
+        "name":["defense", "방어"],
+        "description":["eng_desc","적의 공격을 방어하여 1초간 피해를 막습니다."]
+    },
+    {
+        "id":"21003",
+        "name":["shooting", "권총사격"],
+        "description":["eng_desc","조준점이 생기며 보조무기를 사용시 발사하여 atk의 20%의 피해를 입힙니다. 발사는 0.5초마다 가능합니다."]
+    }
+]}

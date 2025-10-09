@@ -1,11 +1,136 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterData
+public enum StatType
+{
+    HP,
+    ATK,
+    ATS,
+    DEF,
+    CRI,
+    CRID,
+    SPD,
+    JCNT,
+    JMP
+}
+public enum StatOp
+{
+    ADD, // 합연산 ex) hp + 10%
+    MUL // 곱연산 ex)hp
+}
+public readonly struct StatModifier
+{
+    public readonly StatType Stat;
+    public readonly float Value;
+    public readonly StatOp Op;
+    public readonly int Priority;
+    public readonly object Source;
+    public StatModifier(StatType stat, float value, StatOp op, object source, int priority = 0)
+    {
+        Stat = stat; Value = value; Op = op; Source = source; Priority = priority;
+    }
+}
+public interface IStatModifierProvider
+{
+    IEnumerable<StatModifier> GetStatModifiers();
+}
+public class CharacterStats
+{
+    //기본 스탯
+    private readonly Dictionary<StatType, float> baseStats = new();
+    //추가 스탯(출처)
+    private readonly Dictionary<IStatModifierProvider, int> providers = new();
+    //캐시된 최종 스탯, 변경사항이 있을 때만 갱신(더티 플래그)
+    private readonly Dictionary<StatType, float> finalCache = new();
+    private bool dirty = true;
+    //UI갱신 등 필요시 호출하는 이벤트
+    public event Action OnRecalculated;
+    public void SetBase(StatType stat, float value)
+    {
+        baseStats[stat] = value;
+        dirty = true;
+    }
+    public float GetBase(StatType stat) => baseStats.TryGetValue(stat, out var value) ? value : 0f;
+    public float GetFinal(StatType stat)
+    {
+        if (dirty) Recalculate();
+        return finalCache.TryGetValue(stat, out var value) ? value : 0f;
+    }
+    public void AddProvider(IStatModifierProvider provider, int count = 1)
+    {
+        if (count <= 0) return;
+        providers.TryGetValue(provider, out var cur);
+        if (!providers.ContainsKey(provider)) providers.Add(provider, cur + count);
+        else providers[provider] = cur + count;
+        dirty = true;
+    }
+    public void RemoveProvider(IStatModifierProvider provider, int count = 1)
+    {
+        bool t = providers.TryGetValue(provider, out var cur);
+        if (!t) return;
+        int next = cur - count;
+        if(next > 0)providers[provider] = next;
+        else providers.Remove(provider);
+        dirty = true;
+    }
+    public IReadOnlyDictionary<StatType, float> GetAllFinal()
+    {
+        if (dirty) Recalculate();
+        return finalCache;
+    }
+    private void Recalculate()
+    {
+        finalCache.Clear();
+        foreach (var kv in baseStats) finalCache[kv.Key] = kv.Value;
+
+        var addBuckets = new Dictionary<StatType, float>();
+        var mulBuckets = new Dictionary<(StatType stat, int priority), float>();
+
+        foreach (var kv in providers)
+        {
+            var prov = kv.Key;
+            int count = kv.Value;
+            foreach (var m in prov.GetStatModifiers())
+            {
+                if (m.Op == StatOp.ADD) addBuckets[m.Stat] = addBuckets.TryGetValue(m.Stat, out var a) ? a + (m.Value * count) : (m.Value * count);
+                else
+                {
+                    var key = (m.Stat, m.Priority);
+                    mulBuckets[key] = mulBuckets.TryGetValue(key, out var a) ? a * a : a;
+                }
+            }
+        }
+        foreach (StatType stat in Enum.GetValues(typeof(StatType)))
+        {
+            float baseVal = finalCache.TryGetValue(stat, out var bv) ? bv : 0f;
+            float sumAdd = addBuckets.TryGetValue(stat, out var a) ? a : 0f;
+
+            float mulFactor = 1f;
+            foreach (var kv in mulBuckets.Where(kv => kv.Key.stat == stat).OrderBy(kv => kv.Key.priority))
+                mulFactor *= kv.Value;
+
+            finalCache[stat] = (baseVal + sumAdd) * mulFactor;
+        }
+
+        dirty = false;
+        OnRecalculated?.Invoke();
+    }
+}
+public interface IStatProvider
+{
+    //스탯 반환
+    CharacterStats GetStats();
+}
+public class CharacterData : IStatProvider
 {
     private CharacterData() { }
+    protected readonly CharacterStats stats = new();
     protected string unitName;
     public string UnitName
     {
@@ -15,49 +140,16 @@ public class CharacterData
     public CharacterData(string name)
     {
         unitName = name;
-        SetSpd();
-        SetMaxHP();
-        SetHP();
-        SetAtk();
-        SetAts();
-        SetDef();
+        stats.SetBase(StatType.HP, 100.0f);
+        stats.SetBase(StatType.ATK, 10.0f);
+        stats.SetBase(StatType.ATS, 0.8f);
+        stats.SetBase(StatType.DEF, 0.0f);
+        stats.SetBase(StatType.SPD, 5.0f);
         SetInvicibleTime();
         SetHitStunTime();
     }
-    protected float spd; // movementSpeed
-    public float Spd
-    {
-        get => spd;
-        set
-        {
-            if (value < 0.0f)
-                spd = 0.0f;
-            else
-                spd = value;
-        }
-    }
-    public virtual CharacterData SetSpd(float spd = 5.0f)
-    {
-        this.Spd = spd;
-        return this;
-    }
-    protected int maxHP; // max Health
-    public int MaxHP
-    {
-        get => maxHP;
-        set
-        {
-            if (value < 0)
-                maxHP = 0;
-            else
-                maxHP = value;
-        }
-    }
-    public virtual CharacterData SetMaxHP(int maxHP = 100)
-    {
-        this.MaxHP = maxHP;
-        return this;
-    }
+    public float Spd => stats.GetFinal(StatType.SPD); // movement speed
+    public int MaxHP => stats.GetFinal(StatType.HP) is float f ? (int)f : 0;
     protected int _HP; // now Health
     public int HP
     {
@@ -66,68 +158,15 @@ public class CharacterData
         {
             if (value < 0)
                 _HP = 0;
-            else if (value > maxHP)
-                _HP = maxHP;
+            else if (value > stats.GetFinal(StatType.HP))
+                _HP = (int)stats.GetFinal(StatType.HP);
             else
                 _HP = value;
         }
     }
-    public virtual CharacterData SetHP(int hp = 100)
-    {
-        this.HP = hp;
-        return this;
-    }
-    protected float atk; // attack power
-    public float Atk
-    {
-        get => atk;
-        set
-        {
-            if (value < 0.0f)
-                atk = 0.0f;
-            else
-                atk = value;
-        }
-    }
-    public virtual CharacterData SetAtk(float atk = 10)
-    {
-        this.Atk = atk;
-        return this;
-    }
-    protected float ats; // attack speed
-    public float Ats
-    {
-        get => ats;
-        set
-        {
-            if (value < 0.0f)
-                ats = 0.0f;
-            else
-                ats = value;
-        }
-    }
-    public virtual CharacterData SetAts(float ats = 0.8f)
-    {
-        this.Ats = ats;
-        return this;
-    }
-    protected float def; // defence
-    public float Def
-    {
-        get => def;
-        set
-        {
-            if (value < 0.0f)
-                def = 0.0f;
-            else
-                def = value;
-        }
-    }
-    public virtual CharacterData SetDef(float def = 0.0f)
-    {
-        this.Def = def;
-        return this;
-    }
+    public float Atk => stats.GetFinal(StatType.ATK); // attack power
+    public float Ats => stats.GetFinal(StatType.ATS); // attack speed
+    public float Def => stats.GetFinal(StatType.DEF); // defense power
     protected float invincibleTime; // invincibleTime
     public float InvincibleTime
     {
@@ -157,16 +196,13 @@ public class CharacterData
                 hitStunTime = value;
         }
     }
-
     public virtual CharacterData SetHitStunTime(float hitStunTime = 0.5f)
     {
         this.HitStunTime = hitStunTime;
         return this;
     }
-    public override string ToString()
-    {
-        return $"Name: {unitName}, Speed: {spd}, MaxHP: {maxHP}, HP: {_HP}, Atk: {atk}, Ats: {ats}, Def: {def}";
-    }
+    public override string ToString() => $"Name: {unitName}, Speed: {Spd}, MaxHP: {MaxHP}, HP: {_HP}, Atk: {Atk}, Ats: {Ats}, Def: {Def}";
+    public virtual CharacterStats GetStats() => stats;
 }
 [DisallowMultipleComponent]
 public class Character : ParentObject
@@ -223,6 +259,8 @@ public class Character : ParentObject
     [SerializeField] protected Vector3 savedPos;
     protected bool moveDir; //f : left, t : right
     protected RaycastHit2D isPrecipice;
+    protected float desiredMoveX;
+    protected bool isRooted;
     #endregion
     protected virtual void Update()
     {
@@ -263,10 +301,14 @@ public class Character : ParentObject
 
         if (isPrecipice && isGround) savedPos = transform.position;
 
-        Vector2 rayDir = (Vector2.down + new Vector2(moveVec.x, 0) * 0.25f).normalized;
+        Vector2 rayDir = (Vector2.down + new Vector2(desiredMoveX, 0) * 0.25f).normalized;
         hit = Physics2D.Raycast(foot.position, rayDir, rayDistance, LayerMask.GetMask("Floor", "Platform"));
-        fronthit = Physics2D.Raycast(frontRay.position, moveVec.x > 0 ? Vector2.right : Vector2.left, 0.2f, LayerMask.GetMask("Floor", "Platform"));
-        if (moveVec.x != 0.0f)
+        fronthit = Physics2D.Raycast(
+            frontRay.position,
+            desiredMoveX > 0 ? Vector2.right : Vector2.left, 0.2f,
+            LayerMask.GetMask("Floor", "Platform")
+        );
+        if (!Mathf.Approximately(desiredMoveX, 0f))
             rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         else
             rigid.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
@@ -297,7 +339,7 @@ public class Character : ParentObject
     }
     protected virtual void Awake()
     {
-        data = new CharacterData("Default");
+        data = new("Default");
     }
     protected virtual void FixedUpdate()
     {
@@ -308,15 +350,22 @@ public class Character : ParentObject
     }
     protected virtual void Movement()
     {
-        if (moveVec.x == 0.0f) return;
-        frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x) * (moveVec.x > 0 ? 1 : -1), frontRay.localPosition.y);
+        if (isRooted || Mathf.Approximately(desiredMoveX, 0f))
+        {
+            rigid.linearVelocity = new(0, rigid.linearVelocityY);
+            return;
+        }
+        frontRay.localPosition = new(
+            Mathf.Abs(frontRay.localPosition.x) * (desiredMoveX > 0 ? 1 : -1),
+            frontRay.localPosition.y
+        );
         if (isGround && isSlope && !isJump)
         {
-            rigid.linearVelocity = Mathf.Abs(moveVec.x) * data.Spd * perp;
+            rigid.linearVelocity = Mathf.Abs(desiredMoveX) * data.Spd * perp;
         }
         else if (!isSlope)
         {
-            rigid.linearVelocity = new Vector2(moveVec.x * data.Spd, rigid.linearVelocityY);
+            rigid.linearVelocity = new Vector2(desiredMoveX * data.Spd, rigid.linearVelocityY);
         }
     }
     /// <summary>
@@ -328,8 +377,6 @@ public class Character : ParentObject
     /// <param name="layer"></param>
     protected virtual void Landing(LAYER layer)
     {
-        jumpCnt = 2;
-        isJump = false;
         col.isTrigger = false;
         landingLayer = layer;
     }
@@ -346,7 +393,7 @@ public class Character : ParentObject
             if (cAngle > maxAngle) return false;
             perp = Vector2.Perpendicular(hit.normal).normalized;
 
-            if (Vector2.Dot(perp, new Vector2(moveVec.x, 0)) < 0)
+            if (Vector2.Dot(perp, new Vector2(desiredMoveX, 0)) < 0)
                 perp = -perp;
         }
         bool slopeTemp = cAngle != 0.0f;
@@ -389,4 +436,7 @@ public class Character : ParentObject
             }
         }
     }
+    public void SetDesiredMove(float x) => desiredMoveX = x;
+    public void SetRooted(bool rooted) => isRooted = rooted;
+    
 }

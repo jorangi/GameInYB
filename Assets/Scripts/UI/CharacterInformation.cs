@@ -1,16 +1,36 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 
-public class CharacterInformation : MonoBehaviour, IUI
+public interface IInventoryUI
 {
+    GameObject CommandPanel { get; }
+    GameObject CharacterInformationPanel { get; }
+    GraphicRaycaster Raycaster { get; }
+    EventSystem EventSystem { get; }
+    GameObject FirstInventorySelectable { get; }
+}
+public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
+{
+    [SerializeField] private GameObject commandPanel;
+    [SerializeField] private GameObject characterInformationPanel;
+    [SerializeField] private GraphicRaycaster raycaster;
+    [SerializeField] private GameObject firstInventorySelectable;
+    public GameObject CommandPanel => commandPanel;
+    public GameObject CharacterInformationPanel => gameObject;
+    public GraphicRaycaster Raycaster => raycaster;
+    public EventSystem EventSystem => EventSystem.current;
+    public GameObject FirstInventorySelectable => firstInventorySelectable;
+
     [SerializeField] private UIContext uiContext;
     [SerializeField] private TextMeshProUGUI hp;
     [SerializeField] private TextMeshProUGUI atk;
@@ -21,7 +41,8 @@ public class CharacterInformation : MonoBehaviour, IUI
     [SerializeField] private TextMeshProUGUI spd;
     [SerializeField] private TextMeshProUGUI jmp;
     private SpriteAtlas iconAtlas;
-    private Image[] slotIcons = new Image[20];
+    private readonly Image[] slotIcons = new Image[20];
+    private bool awakeFlag = false;
     private void Awake()
     {
         InitAltas();
@@ -39,16 +60,68 @@ public class CharacterInformation : MonoBehaviour, IUI
             slotIcons[i + 5] = backpack.GetChild(i).GetChild(1).GetComponent<Image>();
         }
         PlayableCharacter.Inst.OnEquipmentChanged += RefreshEquipment;
-        PlayableCharacter.Inst.OnInventoryChanged += RefreshItemIcons;
+        PlayableCharacter.Inst.OnBackpackChanged += RefreshBackpack;
         gameObject.SetActive(false);
     }
-
-    private void RefreshItemIcons(int arg1, ItemSlot item)
+    IInventoryData inventory;
+    private void Start()
     {
-        slotIcons[arg1 + 5].color = Color.white;
-        slotIcons[arg1 + 5].sprite = iconAtlas.GetSprite(item.item.id);
-        slotIcons[arg1 + 5].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.attributes.stackable ? "" : item.ea.ToString();
+        inventory = (IInventoryData)GameBootstrapper.ServiceProvider.GetService(typeof(IInventoryData));
     }
+    private void OnEnable()
+    {
+        if (name == "CharacterInformation")
+            inventory.Inventory.OnSlotPicked += ShowItemInformation;
+    }
+    private void OnDisable()
+    {
+        if (name == "CharacterInformation")
+        {
+            if (!awakeFlag)
+            {
+                awakeFlag = true;
+                return;
+            }
+            else
+            {
+                inventory.Inventory.OnSlotPicked -= ShowItemInformation;
+            }
+        }
+    }
+    /// <summary>
+    /// 인벤토리 아이템 변경시 아이콘 갱신
+    /// </summary>
+    /// <param name="arg1"></param>
+    /// <param name="item"></param> <summary>
+    /// 
+    /// </summary>
+    /// <param name="arg1"></param>
+    /// <param name="item"></param>
+    private void RefreshBackpack(int arg1, ItemSlot item)
+    {
+        if (arg1 == -1)
+        {
+            for (int i = 5; i < 20; i++)
+            {
+                slotIcons[i].color = item == default ? new(1, 1, 1, 0) : Color.white;
+                slotIcons[i].sprite = iconAtlas.GetSprite(item.item.id);
+                slotIcons[i].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
+                Refresh();
+            }
+        }
+        else
+        {
+            slotIcons[arg1 + 5].color = item == default ? new(1, 1, 1, 0) : Color.white;
+            slotIcons[arg1 + 5].sprite = iconAtlas.GetSprite(item.item.id);
+            slotIcons[arg1 + 5].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
+            Refresh();
+        }
+    }
+    /// <summary>
+    /// 장비 아이템 변경시 아이콘 갱신
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="item"></param>
     private void RefreshEquipment(EquipmentType type, Item item)
     {
         if (item.Equals(null)) return;
@@ -82,7 +155,14 @@ public class CharacterInformation : MonoBehaviour, IUI
             default:
                 break;
         }
+        Refresh();
     }
+    /// <summary>
+    /// 아이콘 아틀라스 초기화
+    /// </summary> <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     private async void InitAltas()
     {
         var ct = this.GetCancellationTokenOnDestroy();
@@ -106,14 +186,13 @@ public class CharacterInformation : MonoBehaviour, IUI
         gameObject.SetActive(false);
         uiContext.UIRegistry.CloseUI(this);
     }
-    public void RefreshItemIcons(int i)
-    {
-        
-    }
+    /// <summary>
+    /// 스탯 갱신
+    /// </summary>
     public void Refresh()
     {
         #region status
-        hp.text = $"{PlayableCharacter.Inst.Data.HP} / {PlayableCharacter.Inst.Data.MaxHP}";
+        hp.text = $"{PlayableCharacter.Inst.Data.HP}/{PlayableCharacter.Inst.Data.MaxHP}";
         atk.text = $"{PlayableCharacter.Inst.Data.Atk}";
         ats.text = $"{PlayableCharacter.Inst.Data.Ats}";
         def.text = $"{PlayableCharacter.Inst.Data.Def}";
@@ -122,5 +201,9 @@ public class CharacterInformation : MonoBehaviour, IUI
         spd.text = $"{PlayableCharacter.Inst.Data.Spd}";
         jmp.text = $"{PlayableCharacter.Inst.Data.JumpPower}({PlayableCharacter.Inst.Data.JumpCnt})";
         #endregion
+    }
+    public void ShowItemInformation(int i)
+    {
+        Debug.Log(inventory.Backpack[i].item.name);
     }
 }
