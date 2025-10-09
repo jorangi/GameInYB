@@ -257,10 +257,10 @@ public class Character : ParentObject
     protected Coroutine hitCoroutine;
     public Collider2D hitBox;
     [SerializeField] protected Vector3 savedPos;
-    protected bool moveDir; //f : left, t : right
     protected RaycastHit2D isPrecipice;
     protected float desiredMoveX;
     protected bool isRooted;
+    public float FacingSign;
     #endregion
     protected virtual void Update()
     {
@@ -271,30 +271,21 @@ public class Character : ParentObject
 
         isGround = GroundCheck();
         if (this is PlayableCharacter)
-        {
-            isPrecipice = Physics2D.Raycast(frontRay.position,
-            frontRay.localPosition.x > 0 ?
-                (moveDir ?
-                    new Vector2(-1, -1).normalized :
-                    new Vector2(1, -1).normalized) :
-                (moveDir ?
-                    new Vector2(-1, -1).normalized :
-                    new Vector2(1, -1).normalized),
+        { 
+            isPrecipice = Physics2D.Raycast(frontRay.position, new Vector2(1, -1).normalized,
+            // frontRay.localPosition.x > 0 ?
+            //     (FacingSign > 0 ?
+            //         new Vector2(-1, -1).normalized :
+            //         new Vector2(1, -1).normalized) 
+            //     :
+            //     (FacingSign > 0 ?
+            //         new Vector2(-1, -1).normalized :
+            //         new Vector2(1, -1).normalized),
             1, LayerMask.GetMask("Floor", "Platform"));
-            // Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (
-            //     frontRay.localPosition.x > 0 ?
-            //         (moveDir ?
-            //             new Vector2(-1, -1).normalized :
-            //             new Vector2(1, -1).normalized) :
-            //         (moveDir ?
-            //             new Vector2(-1, -1).normalized :
-            //             new Vector2(1, -1).normalized)),
-            // Color.red);
         }
         else
         {
-            isPrecipice = Physics2D.Raycast(frontRay.position, moveDir ? new Vector2(1, -1).normalized : new Vector2(-1, -1).normalized, 1, LayerMask.GetMask("Floor", "Platform"));
-            // Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + (moveDir ? new Vector2(1, -1).normalized : new Vector2(-1, -1).normalized), Color.red);
+            isPrecipice = Physics2D.Raycast(frontRay.position, FacingSign < 0 ? new Vector2(-1, -2.5f).normalized : new Vector2(1, -2.5f).normalized, 1, LayerMask.GetMask("Floor", "Platform"));
         }
 
 
@@ -350,6 +341,7 @@ public class Character : ParentObject
     }
     protected virtual void Movement()
     {
+        Debug.Log($"isRooted: {isRooted}, desiredMoveX: {desiredMoveX}");
         if (isRooted || Mathf.Approximately(desiredMoveX, 0f))
         {
             rigid.linearVelocity = new(0, rigid.linearVelocityY);

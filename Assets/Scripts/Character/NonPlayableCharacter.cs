@@ -37,7 +37,7 @@ public class NonPlayableCharacter : Character
     public float idleTimer = 0.0f;
     public float moveTimer = 0.0f;
     private const float hpBarSpd = 5.0f;
-    private TextMeshPro behaviourPointer;
+    public TextMeshPro behaviourPointer;
     private SpriteRenderer hpBar, hpBarSec;
     private bool isHealing;
     private Coroutine hpSmooth;
@@ -54,13 +54,17 @@ public class NonPlayableCharacter : Character
         wallChecker = transform.Find("wallChecker").transform;
         behaviourPointer = GetComponentInChildren<TextMeshPro>();
         idleTimer = Random.Range(0.0f, 1.0f);
-        animator ??= GetComponent<Animator>();
+        animator = animator != null ? animator : GetComponent<Animator>();
         animator.applyRootMotion = false;
     }
     public void FSMInit()
     {
         _fsm = new();
         _registry.Register(new IdleState(this, blackboard));
+        _registry.Register(new WanderState(this, blackboard));
+        _registry.Register(new AttackState(this, blackboard));
+        _registry.Register(new HitState(this, blackboard));
+        _registry.Register(new DieState(this, blackboard));
     }
     public void OnEnable()
     {
@@ -69,63 +73,66 @@ public class NonPlayableCharacter : Character
     protected override void Update()
     {
         base.Update();
+        behaviourPointer.text = $"{FacingSign < 0}";
         blackboard.TimeNow = Time.time;
-
+        blackboard.DistToTarget = Vector2.Distance(blackboard.self.position, blackboard.target.position);
         //if(data.HP <= 0f && _fsm.Current != _registry.Get<State>)
 
         if (Input.GetKeyDown(KeyCode.U))
         {
             SetHP(Random.Range(0, Data.MaxHP));
         }
-        wallChecker.localPosition = new(moveDir ? 0.25f : -0.25f, 0.0f);
-        RaycastHit2D hitWall = Physics2D.Raycast(wallChecker.position, moveDir ? Vector2.right : Vector2.left, 0.1f, LayerMask.GetMask("Floor", "Platform"));
+        wallChecker.localPosition = new(FacingSign > 0 ? 0.25f : -0.25f, 0.0f);
+        RaycastHit2D hitWall = Physics2D.Raycast(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, 0.1f, LayerMask.GetMask("Floor", "Platform"));
+        blackboard.IsWallAhead = hitWall;
+        blackboard.IsPrecipiceAhead = isPrecipice;
 
-        if (state == State.Idle && idleTimer > 0.0f)
-        {
-            idleTimer -= Time.deltaTime;
-            SetDesiredMove(0f);
-            behaviourPointer.SetText($"Idle : {Mathf.Round(idleTimer * 10) * 0.1f}");
-            if (idleTimer <= 0.0f)
-            {
-                moveTimer = Random.Range(1.0f, 5.0f);
-                moveDir = Random.Range(0, 2) != 0;
-                SetDesiredMove(moveDir ? 1.0f : -1.0f);
-                state = State.Move;
-            }
-        }
-        if (state == State.Move && moveTimer > 0.0f)
-        {
-            moveTimer -= Time.deltaTime;
-            behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
-            if (moveTimer <= 0.0f)
-            {
-                SetDesiredMove(0f);
-                rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-                idleTimer = Random.Range(0.0f, 5.0f);
-                state = State.Idle;
-            }
-            if (hitWall || !isPrecipice)
-            {
-                if (Random.Range(0.0f, 1.0f) > 0.7f)
-                {
-                    rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-                    idleTimer = Random.Range(0.0f, 5.0f);
-                    state = State.Idle;
-                }
-                else
-                {
-                    moveDir = !moveDir;
-                    SetDesiredMove(-Mathf.Sign(desiredMoveX));
-                    behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
-                    state = State.Move;
-                }
-            }
-        }
+        // if (state == State.Idle && idleTimer > 0.0f)
+        // {
+        //     idleTimer -= Time.deltaTime;
+        //     SetDesiredMove(0f);
+        //     behaviourPointer.SetText($"Idle : {Mathf.Round(idleTimer * 10) * 0.1f}");
+        //     if (idleTimer <= 0.0f)
+        //     {
+        //         moveTimer = Random.Range(1.0f, 5.0f);
+        //         moveDir = Random.Range(0, 2) != 0;
+        //         SetDesiredMove(moveDir ? 1.0f : -1.0f);
+        //         state = State.Move;
+        //     }
+        // }
+        // if (state == State.Move && moveTimer > 0.0f)
+        // {
+        //     moveTimer -= Time.deltaTime;
+        //     behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
+        //     if (moveTimer <= 0.0f)
+        //     {
+        //         SetDesiredMove(0f);
+        //         rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        //         idleTimer = Random.Range(0.0f, 5.0f);
+        //         state = State.Idle;
+        //     }
+        //     if (hitWall || !isPrecipice)
+        //     {
+        //         if (Random.Range(0.0f, 1.0f) > 0.7f)
+        //         {
+        //             rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        //             idleTimer = Random.Range(0.0f, 5.0f);
+        //             state = State.Idle;
+        //         }
+        //         else
+        //         {
+        //             moveDir = !moveDir;
+        //             SetDesiredMove(-Mathf.Sign(desiredMoveX));
+        //             behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
+        //             state = State.Move;
+        //         }
+        //     }
+        // }
+        _fsm.Update();
     }
     protected override void Movement()
     {
-        if (state == State.Move)
-            base.Movement();
+        base.Movement();
         sprite.flipX = desiredMoveX > 0;
     }
     IEnumerator HpBarFillsSmooth(SpriteRenderer bar)
@@ -191,6 +198,7 @@ public class NonPlayableCharacter : Character
             tempState = state;
         }
         state = State.Hit;
+        RequestState<HitState>();
         InvincibleTimer = data.InvincibleTime;
         HitStunTimer = data.HitStunTime;
         hitBox.enabled = false;

@@ -18,7 +18,10 @@ public class Blackboard
     public float TimeNow;
     public bool CanSeeTarget;
     public float DistToTarget;
-    public float FacingSign;
+
+    // 센싱
+    public bool IsWallAhead;
+    public bool IsPrecipiceAhead;
 
     //Idle/Wander용 타이머
     public float IdleEndTime;
@@ -40,8 +43,11 @@ public class Blackboard
     [Header("Idle / Wander")]
     public Vector2 IdleDurationRange = new(0.8f, 1.6f);
     public Vector2 WanderDurationRange = new(1.0f, 2.0f);
-    [Range(0f, 1f)]
-    public float WanderProbabilityAfterIdle = 0.6f;
+    [Range(0f, 1f)] public float WanderProbabilityAfterIdle = 0.6f;
+    [Range(0f, 1f)] public float StopAtObstacleChance = 0.3f;
+    [Range(0f, 1f)] public float FlipAtObstacleChance = 0.7f;
+    public float ObstacleDecisionCooldown = 0.2f;
+    public float NextObstacleDecisionTime;
 
     [Header("최소 상태 유지")]
     public float MinStateDuration = 0.2f;
@@ -49,6 +55,7 @@ public class Blackboard
     [Header("공격 거리")]
     public float AttackEnter = 1.2f;
     public float AttackExit = 1.6f;
+    
 }
 public abstract class StateBase : IStateBase
 {

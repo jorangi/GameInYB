@@ -182,6 +182,15 @@
     - Idle, Wander, Die, Attack, Hit State 등록
       - Idle 및 Wander 구현중
   - 기존의 moveVec.x를 통해 이동을 직접 구현하는 부분에서 desiredMoveX로 간접 구현
-
+  # 251010
+  ## v.1(신종혁)
+  - 아이템 슬롯이 비어있거나 아이템 1개일 경우 개수 표시하지 않음
+  - NonPlayableCharacter의 이동로직 변경
+    - moveDir을 제거
+  - 낭떠러지(Precipice)판정을 더 가파르게(1->2.5) 변경
+  - NonPlayableCharacter의 Blackboard 확장
+  - 테스트용 기즈모 표기
+    - Blackboard를 통해 데이터를 받아와 기즈모 표시
+  - 테스트 몬스터의 스프라이트를 좌우 반전(일관성)
 
 </details>

@@ -91593,7 +91593,7 @@ Transform:
   m_GameObject: {fileID: 1419140760}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: -0.213, y: -0.357, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -92725,6 +92725,7 @@ GameObject:
   - component: {fileID: 1624038541}
   - component: {fileID: 1624038540}
   - component: {fileID: 1624038539}
+  - component: {fileID: 1624038543}
   m_Layer: 6
   m_Name: TestMonster
   m_TagString: Enemy
@@ -92752,18 +92753,40 @@ MonoBehaviour:
   isSlope: 0
   hitBox: {fileID: 619407457}
   savedPos: {x: 0, y: 0, z: 0}
+  FacingSign: 0
   timeMul: 10
   blackboard:
-    transform: {fileID: 0}
-    DistToTarget: 0
-    CanSeeTarget: 0
+    self: {fileID: 1624038542}
+    target: {fileID: 942473542}
     TimeNow: 0
+    CanSeeTarget: 0
+    DistToTarget: 0
+    IsWallAhead: 0
+    IsPrecipiceAhead: 0
     IdleEndTime: 0
+    WanderEndTime: 0
+    MinStateEndTime: 0
+    AttackCooldownEnd: 0
+    DetectEnter: 6
+    DetectExit: 7.5
+    LostMemoryTime: 1
+    IdleDurationRange: {x: 0.8, y: 1.6}
+    WanderDurationRange: {x: 1, y: 2}
+    WanderProbabilityAfterIdle: 0.6
+    StopAtObstacleChance: 0.3
+    FlipAtObstacleChance: 0.7
+    ObstacleDecisionCooldown: 0.2
+    NextObstacleDecisionTime: 0
+    MinStateDuration: 0.2
+    AttackEnter: 1.2
+    AttackExit: 1.6
   sprite: {fileID: 713855818}
   state: 0
   idleTimer: 0
   moveTimer: 0
+  behaviourPointer: {fileID: 0}
   DamageTextPrefab: {fileID: 4877856022466048201, guid: d50ac9544877097439b39700a1e0b892, type: 3}
+  animator: {fileID: 0}
 --- !u!95 &1624038540
 Animator:
   serializedVersion: 7
@@ -92822,7 +92845,7 @@ Transform:
   m_GameObject: {fileID: 1624038538}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.77, y: -0.85, z: 0}
+  m_LocalPosition: {x: 12.4, y: -1.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -92836,6 +92859,23 @@ Transform:
   - {fileID: 1536485195}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1624038543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624038538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c548feab36d82643b5b1c4fdac609ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 1624038539}
+  frontRay: {fileID: 449743257}
+  foot: {fileID: 1419140761}
+  attackBoxSize: {x: 1, y: 0.8}
+  attackBoxOffset: {x: 0.7, y: 0.3}
 --- !u!1 &1627806673
 GameObject:
   m_ObjectHideFlags: 0
