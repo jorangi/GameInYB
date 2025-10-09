@@ -39,12 +39,11 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
-        inventory.NotifySlotClicked(equiped ? index : index - 5);        
+        inventory.NotifySlotClicked(equiped ? index : index - 5);
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
     }
-
     public void OnPointerExit(PointerEventData eventData)
     {
     }

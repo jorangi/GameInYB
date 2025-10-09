@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
@@ -176,14 +177,21 @@ public class Backpack : IEnumerable<ItemSlot>
         {
             for (int i = 0; i < items.Length; i++)
             {
-                if (items[i].item.id == null) return i;
+                if (items[i] == default)
+                {
+                    Debug.Log($"{items[i].index}번 슬롯이 비어있음.");
+                    return i;
+                }                     
             }
             return -1;
         }
         public ref ItemSlot EmptySlot()
         {
-            if (FindEmptySlot() == -1) throw new InvalidOperationException("빈 슬롯이 없습니다.");
-            return ref items[FindEmptySlot()];
+        int emptySlotIndex = FindEmptySlot();
+            if (emptySlotIndex == -1) throw new InvalidOperationException("빈 슬롯이 없습니다.");
+
+            Debug.Log(emptySlotIndex);
+            return ref items[emptySlotIndex];
         }
         /// <summary>
         /// 열거형 인터페이스 구현
@@ -232,7 +240,7 @@ public class Backpack : IEnumerable<ItemSlot>
     public void Clear()
     {
         Array.Clear(items, 0, items.Length);
-        
+        for (int i = 0; i < items.Length; i++) items[i].index = i;
     }
     public void RemoveSlot(int index)
     {
@@ -287,7 +295,6 @@ public class Inventory
         bool completed = false;
         void HandlePicked(int i)
         {
-            Debug.Log(i);
             if (completed) return;
             completed = true;
             UnSubscribe();
@@ -351,7 +358,6 @@ public class PlayerEquipments
         set => pants = value;
     }
 }
-    
 public class PlayableCharacter : Character, IInventoryData
 {
     public float gameTimeScale = 1.0f;
@@ -407,7 +413,7 @@ public class PlayableCharacter : Character, IInventoryData
     public GameObject statusObj;
     private SpriteAtlas weaponAtlas; // 무기 스프라이트 아틀라스
     public event Action<EquipmentType, Item> OnEquipmentChanged; //옵저버 패턴을 이용해 장비변경시 알림
-    public event Action<int, ItemSlot> OnInventoryChanged;//옵저버 패턴을 이용해 인벤토리 변경시 알림
+    public event Action<int, ItemSlot> OnBackpackChanged;//옵저버 패턴을 이용해 인벤토리 변경시 알림
     [SerializeField] private LogMessageParent logMessageParent;
     protected override void Awake()
     {
@@ -419,7 +425,6 @@ public class PlayableCharacter : Character, IInventoryData
         }
         PlayableCharacter.Inst = this;
         DontDestroyOnLoad(gameObject);
-        InitAtlas();
         // 데이터 초기화(우선적으로 getter에서 처리하지만, 명시적으로 초기화도 해둠)
         data ??= new PlayableCharacterData(new CharacterData("Player").SetInvicibleTime(0.2f))
             .SetJCnt(4)
@@ -430,7 +435,6 @@ public class PlayableCharacter : Character, IInventoryData
         data.HP = data.MaxHP;
 
         ((PlayableCharacterData)data).SetInfoObj(CharacterInformationObj);
-        //((PlayableCharacterData)data).RefreshUIData();
 
         // 인풋 액션 초기화
         inputAction = new();
@@ -450,22 +454,29 @@ public class PlayableCharacter : Character, IInventoryData
         BoxCollider2D bC = obj.AddComponent<BoxCollider2D>();
         bC.size = new Vector2(0.5f, 0.5f);
     }
-    /// <summary>
-    /// 무기 아틀라스 로드
-    /// </summary>
-    /// <returns></returns>
-    private async void InitAtlas()
+    private async void Start()
     {
-        AsyncOperationHandle<SpriteAtlas> loadSprite = Addressables.LoadAssetAsync<SpriteAtlas>($"Characters/Weapons");
-        var ct = this.GetCancellationTokenOnDestroy();
-        weaponAtlas = await loadSprite.ToUniTask(cancellationToken: ct);
-
-
+        await InitAtlas();
+        BackpackClearWithEquiped();
         SetMainWeapon(ItemDataManager.GetItem("01001"));
         SetSubWeapon(ItemDataManager.GetItem("02001"));
         SetHelmet(ItemDataManager.GetItem("03001"));
         SetArmor(ItemDataManager.GetItem("04001"));
         SetPants(ItemDataManager.GetItem("05001"));
+
+        InitPos();
+    }
+    /// <summary>
+    /// 무기 아틀라스 로드
+    /// </summary>
+    /// <returns></returns>
+    private async Task<int> InitAtlas()
+    {
+        AsyncOperationHandle<SpriteAtlas> loadSprite = Addressables.LoadAssetAsync<SpriteAtlas>($"Characters/Weapons");
+        var ct = this.GetCancellationTokenOnDestroy();
+        weaponAtlas = await loadSprite.ToUniTask(cancellationToken: ct);
+
+        return 1;
     }
     void OnEnable()
     {
@@ -476,6 +487,15 @@ public class PlayableCharacter : Character, IInventoryData
         inputAction.Player.Jump.performed += OnJump;
         inputAction.Player.Attack.performed += OnAttack;
         inputAction.Player.Dropdown.performed += OnDropdown;
+    }
+    void OnDisable()
+    {
+        inputAction.Player.Move.performed -= OnMovement;
+        inputAction.Player.Move.canceled -= OnMovement;
+        inputAction.Player.Jump.performed -= OnJump;
+        inputAction.Player.Attack.performed -= OnAttack;
+        inputAction.Player.Dropdown.performed -= OnDropdown;
+        inputAction.Disable();
     }
     /// <summary>
     ///하강(드롭다웃) 액션 등록
@@ -570,7 +590,7 @@ public class PlayableCharacter : Character, IInventoryData
     }
     public void OnMovement(InputAction.CallbackContext context) // 이동 액션 등록
     {
-        moveVec = context.ReadValue<Vector2>();
+        SetDesiredMove(context.ReadValue<Vector2>().x);
     }
     public void OnJump(InputAction.CallbackContext context) // 점프 액션 등록
     {
@@ -680,7 +700,7 @@ public class PlayableCharacter : Character, IInventoryData
     protected override void Movement()
     {
         base.Movement();
-        if (isGround) anim.SetBool("1_Move", moveVec.x != 0.0f);
+        if (isGround) anim.SetBool("1_Move", !Mathf.Approximately(desiredMoveX, 0f));
     }
     protected override IEnumerator Hit()
     {
@@ -735,7 +755,7 @@ public class PlayableCharacter : Character, IInventoryData
     /// <param name="isTwoHander"></param>
     public void SetSubWeapon(Item item, bool isTwoHander = false)
     {
-        subWeaponSprite.sprite = isTwoHander ? weaponAtlas.GetSprite(inventory.equipments.MainWeapon.item.id) : weaponAtlas.GetSprite(item.id);
+        subWeaponSprite.sprite = isTwoHander ? weaponAtlas.GetSprite("00000") : weaponAtlas.GetSprite(item.id);
 
         if (inventory.equipments.SubWeapon is ItemSlot i)
             Data.GetStats().RemoveProvider(i.item.GetProvider());
@@ -809,18 +829,51 @@ public class PlayableCharacter : Character, IInventoryData
         if (inventory.backpack.GetItem(item.id) is ItemSlot slot && slot.ea >= maxStack && item.stackable)
         {
             slot.ea += ea;
-            OnInventoryChanged?.Invoke(slot.index, slot);
+            OnBackpackChanged?.Invoke(slot.index, slot);
             return;
         }
         ref ItemSlot emptySlot = ref inventory.backpack.EmptySlot();
-        emptySlot = (item, ea);
-        OnInventoryChanged?.Invoke(emptySlot.index, emptySlot);
+        ItemSlot newInstance = (item, ea);
+        newInstance.index = emptySlot.index;
+        emptySlot = newInstance;
+        OnBackpackChanged?.Invoke(emptySlot.index, emptySlot);
+        Debug.Log(emptySlot.index + " / " + emptySlot.item.id + " / " + emptySlot.ea);
     }
+    /// <summary>
+    /// 아이템 제거
+    /// </summary>
+    /// <param name="itemslot"></param> <summary>
+    /// 
+    /// </summary>
+    /// <param name="itemslot"></param>
     public void RemoveItem(ItemSlot itemslot)
     {
         Backpack[itemslot.index] = default;
-        OnInventoryChanged?.Invoke(itemslot.index, itemslot);
+        OnBackpackChanged?.Invoke(itemslot.index, default);
     }
+    /// <summary>
+    /// 백팩 초기화
+    /// </summary>
+    public void BackpackClear()
+    {
+        Backpack.Clear();
+        OnBackpackChanged?.Invoke(-1, default);
+    }
+    /// <summary>
+    /// 인벤토리 전체 초기화
+    /// </summary>
+    public void BackpackClearWithEquiped()
+    {
+        BackpackClear();
+        SetMainWeapon(ItemDataManager.GetItem("00000"));
+        SetSubWeapon(ItemDataManager.GetItem("00000"));
+        SetHelmet(ItemDataManager.GetItem("00000"));
+        SetArmor(ItemDataManager.GetItem("00000"));
+        SetPants(ItemDataManager.GetItem("00000"));
+    }
+    /// <summary>
+    /// 시작 지점으로 이동
+    /// </summary>
     public void InitPos()
     {
         transform.position = new(-3.93f, 0.08f, transform.position.z);

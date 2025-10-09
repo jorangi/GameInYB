@@ -238,7 +238,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -314,15 +314,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Warrior_Blue_0
+      name: BlueWarrior_Idle_00
       rect:
         serializedVersion: 2
-        x: 62
-        y: 1399
-        width: 80
-        height: 93
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 0
+        y: 1344
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -336,15 +336,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_1
+      name: BlueWarrior_Idle_01
       rect:
         serializedVersion: 2
-        x: 254
-        y: 1399
-        width: 80
-        height: 93
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 192
+        y: 1344
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -358,15 +358,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_2
+      name: BlueWarrior_Idle_02
       rect:
         serializedVersion: 2
-        x: 445
-        y: 1399
-        width: 82
-        height: 91
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 384
+        y: 1344
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -380,15 +380,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_3
+      name: BlueWarrior_Idle_03
       rect:
         serializedVersion: 2
-        x: 637
-        y: 1399
-        width: 82
-        height: 89
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 576
+        y: 1344
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -402,15 +402,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_4
+      name: BlueWarrior_Idle_04
       rect:
         serializedVersion: 2
-        x: 830
-        y: 1399
-        width: 80
-        height: 90
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 768
+        y: 1344
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -424,15 +424,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_5
+      name: BlueWarrior_Idle_05
       rect:
         serializedVersion: 2
-        x: 1022
-        y: 1399
-        width: 80
-        height: 93
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 960
+        y: 1344
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -446,15 +446,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_6
+      name: BlueWarrior_Move_00
       rect:
         serializedVersion: 2
-        x: 70
-        y: 1207
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 0
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -468,15 +468,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_7
+      name: BlueWarrior_Move_01
       rect:
         serializedVersion: 2
-        x: 259
-        y: 1207
-        width: 71
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 192
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -490,15 +490,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_8
+      name: BlueWarrior_Move_02
       rect:
         serializedVersion: 2
-        x: 447
-        y: 1207
-        width: 80
-        height: 82
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 384
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -512,15 +512,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_9
+      name: BlueWarrior_Move_03
       rect:
         serializedVersion: 2
-        x: 629
-        y: 1207
-        width: 96
-        height: 95
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 576
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -534,15 +534,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_11
+      name: BlueWarrior_Move_05
       rect:
         serializedVersion: 2
-        x: 824
-        y: 1207
-        width: 90
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 960
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -556,15 +556,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_13
+      name: BlueWarrior_Attack1_01
       rect:
         serializedVersion: 2
-        x: 1022
-        y: 1207
-        width: 81
-        height: 82
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 192
+        y: 960
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -578,15 +578,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_14
+      name: BlueWarrior_Attack1_02
       rect:
         serializedVersion: 2
-        x: 57
-        y: 1015
-        width: 73
-        height: 110
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 384
+        y: 960
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -600,15 +600,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_15
+      name: BlueWarrior_Attack1_03
       rect:
         serializedVersion: 2
-        x: 248
-        y: 1015
-        width: 72
-        height: 113
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 576
+        y: 960
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -622,15 +622,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_17
+      name: BlueWarrior_Attack1_05
       rect:
         serializedVersion: 2
-        x: 440
-        y: 1015
-        width: 72
-        height: 113
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 960
+        y: 960
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -644,15 +644,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_19
+      name: BlueWarrior_Attack2_01
       rect:
         serializedVersion: 2
-        x: 651
-        y: 1015
-        width: 108
-        height: 113
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 192
+        y: 768
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -666,15 +666,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_21
+      name: BlueWarrior_Attack2_03
       rect:
         serializedVersion: 2
-        x: 841
-        y: 1012
-        width: 109
-        height: 94
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 576
+        y: 768
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -688,15 +688,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_22
+      name: BlueWarrior_Attack2_04
       rect:
         serializedVersion: 2
-        x: 1026
-        y: 1015
-        width: 102
-        height: 91
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 768
+        y: 768
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -710,15 +710,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_23
+      name: BlueWarrior_Attack2_05
       rect:
         serializedVersion: 2
-        x: 33
-        y: 823
-        width: 84
-        height: 91
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 960
+        y: 768
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -735,12 +735,12 @@ TextureImporter:
       name: Warrior_Blue_24
       rect:
         serializedVersion: 2
-        x: 223
-        y: 823
-        width: 86
-        height: 91
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 0
+        y: 576
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -757,12 +757,12 @@ TextureImporter:
       name: Warrior_Blue_25
       rect:
         serializedVersion: 2
-        x: 415
-        y: 823
-        width: 86
-        height: 91
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 192
+        y: 576
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -779,12 +779,12 @@ TextureImporter:
       name: Warrior_Blue_26
       rect:
         serializedVersion: 2
-        x: 633
-        y: 813
-        width: 125
-        height: 102
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 384
+        y: 576
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -801,12 +801,12 @@ TextureImporter:
       name: Warrior_Blue_27
       rect:
         serializedVersion: 2
-        x: 827
-        y: 823
-        width: 123
-        height: 95
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 576
+        y: 576
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -823,12 +823,12 @@ TextureImporter:
       name: Warrior_Blue_30
       rect:
         serializedVersion: 2
-        x: 1021
-        y: 823
-        width: 87
-        height: 90
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 0
+        y: 384
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -845,12 +845,12 @@ TextureImporter:
       name: Warrior_Blue_31
       rect:
         serializedVersion: 2
-        x: 57
-        y: 631
-        width: 80
-        height: 103
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 192
+        y: 384
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -867,12 +867,12 @@ TextureImporter:
       name: Warrior_Blue_32
       rect:
         serializedVersion: 2
-        x: 246
-        y: 631
-        width: 84
-        height: 105
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 384
+        y: 384
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -889,12 +889,12 @@ TextureImporter:
       name: Warrior_Blue_34
       rect:
         serializedVersion: 2
-        x: 438
-        y: 631
-        width: 84
-        height: 105
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 768
+        y: 384
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -911,12 +911,12 @@ TextureImporter:
       name: Warrior_Blue_36
       rect:
         serializedVersion: 2
-        x: 621
-        y: 588
-        width: 120
-        height: 139
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 0
+        y: 192
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -933,12 +933,12 @@ TextureImporter:
       name: Warrior_Blue_37
       rect:
         serializedVersion: 2
-        x: 808
-        y: 600
-        width: 91
-        height: 126
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 192
+        y: 192
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -955,12 +955,12 @@ TextureImporter:
       name: Warrior_Blue_38
       rect:
         serializedVersion: 2
-        x: 1013
-        y: 627
-        width: 68
-        height: 101
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 384
+        y: 192
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -977,12 +977,12 @@ TextureImporter:
       name: Warrior_Blue_39
       rect:
         serializedVersion: 2
-        x: 35
-        y: 439
-        width: 82
-        height: 95
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 576
+        y: 192
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -999,12 +999,12 @@ TextureImporter:
       name: Warrior_Blue_40
       rect:
         serializedVersion: 2
-        x: 226
-        y: 439
-        width: 83
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 768
+        y: 192
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1021,12 +1021,12 @@ TextureImporter:
       name: Warrior_Blue_41
       rect:
         serializedVersion: 2
-        x: 418
-        y: 439
-        width: 83
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 960
+        y: 192
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1043,12 +1043,12 @@ TextureImporter:
       name: Warrior_Blue_42
       rect:
         serializedVersion: 2
-        x: 614
-        y: 411
-        width: 148
-        height: 119
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 0
+        y: 0
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1065,12 +1065,12 @@ TextureImporter:
       name: Warrior_Blue_43
       rect:
         serializedVersion: 2
-        x: 835
-        y: 413
-        width: 118
-        height: 118
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 192
+        y: 0
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1087,12 +1087,12 @@ TextureImporter:
       name: Warrior_Blue_44
       rect:
         serializedVersion: 2
-        x: 1021
-        y: 439
-        width: 100
-        height: 96
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 384
+        y: 0
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1109,12 +1109,12 @@ TextureImporter:
       name: Warrior_Blue_47
       rect:
         serializedVersion: 2
-        x: 18
-        y: 247
-        width: 120
-        height: 101
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 960
+        y: 0
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1128,243 +1128,243 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_48
+      name: BlueWarrior_Move_04
       rect:
         serializedVersion: 2
-        x: 212
-        y: 247
-        width: 120
-        height: 103
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 768
+        y: 1152
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7d883c9e811afad40800000000000000
-      internalID: 5597869990218008791
+      spriteID: 0961eb6c98c667645bfe2281bf370a08
+      internalID: -7028422606531620881
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_49
+      name: BlueWarrior_Attack1_00
       rect:
         serializedVersion: 2
-        x: 405
-        y: 247
-        width: 119
-        height: 103
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 0
+        y: 960
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a30049664fbed0890800000000000000
-      internalID: -7490071170321743814
+      spriteID: 24e25118bbb79d846998ced46f27c44b
+      internalID: 4887455543641441687
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_50
+      name: BlueWarrior_Attack1_04
       rect:
         serializedVersion: 2
-        x: 603
-        y: 248
-        width: 137
-        height: 109
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 768
+        y: 960
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7222914aa270fd4d0800000000000000
-      internalID: -3107757338139221465
+      spriteID: e11360fa02c07e048a976de3e2b39007
+      internalID: -2295091820497786881
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_52
+      name: BlueWarrior_Attack2_00
       rect:
         serializedVersion: 2
-        x: 837
-        y: 248
-        width: 100
-        height: 109
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 0
+        y: 768
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9bb7eab92bb6d66c0800000000000000
-      internalID: -4148541266878104647
+      spriteID: 94627683750c3c04bb0b22c9dca56bb2
+      internalID: -6020158371915913484
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_53
+      name: BlueWarrior_Attack2_02
       rect:
         serializedVersion: 2
-        x: 1035
-        y: 247
-        width: 81
-        height: 98
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 384
+        y: 768
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 904c3824bde45f500800000000000000
-      internalID: 429336043104486409
+      spriteID: e1259e8fab626a64e93f03f9b4850094
+      internalID: 8623725918659698721
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_59
+      name: Warrior_Blue_28
       rect:
         serializedVersion: 2
-        x: 75
-        y: 55
-        width: 99
-        height: 94
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 768
+        y: 576
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f83050f24e3476320800000000000000
-      internalID: 2551082361249137551
+      spriteID: e52b93f83ce8a764d8890d46f9d79332
+      internalID: 999363956346284212
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_60
+      name: Warrior_Blue_29
       rect:
         serializedVersion: 2
-        x: 267
-        y: 55
-        width: 101
-        height: 93
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 960
+        y: 576
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3a3ec3b18b72fc480800000000000000
-      internalID: -8876832668839517277
+      spriteID: f6aa4309430aa1945ad04ed318d4a09c
+      internalID: 920778665628228539
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_61
+      name: Warrior_Blue_33
       rect:
         serializedVersion: 2
-        x: 459
-        y: 55
-        width: 101
-        height: 93
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 576
+        y: 384
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b303051fa5d048090800000000000000
-      internalID: -8033281151075340229
+      spriteID: 6ec0c9dd75bd42848b1a2074f279b802
+      internalID: -4121134383873880558
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_62
+      name: Warrior_Blue_35
       rect:
         serializedVersion: 2
-        x: 584
-        y: 56
-        width: 162
-        height: 102
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 960
+        y: 384
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 30dfaea56568bd740800000000000000
-      internalID: 5177879902043176195
+      spriteID: ee0c3ea44566c0f47beeabb3301d0393
+      internalID: -2586977061673965500
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_65
+      name: Warrior_Blue_45
       rect:
         serializedVersion: 2
-        x: 772
-        y: 56
-        width: 128
-        height: 98
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 576
+        y: 0
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d4dff6a18b06a5060800000000000000
-      internalID: 6942968119378836813
+      spriteID: 799c61b836ff1d340b37acb2ef629fb1
+      internalID: 9051283987780761484
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Warrior_Blue_67
+      name: Warrior_Blue_46
       rect:
         serializedVersion: 2
-        x: 1000
-        y: 55
-        width: 94
-        height: 97
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 768
+        y: 0
+        width: 192
+        height: 192
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f877fa6252c35c4d0800000000000000
-      internalID: -3115017436996339825
+      spriteID: 9beaca52fedff2142982e28b7156bbfd
+      internalID: -4985013248184194703
       vertices: []
       indices: 
       edges: []
@@ -1383,30 +1383,36 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Warrior_Blue_0: 1448252480329919801
-      Warrior_Blue_1: -8838482275237848885
-      Warrior_Blue_10: -7028422606531620881
-      Warrior_Blue_11: -8599349895570148482
-      Warrior_Blue_12: 4887455543641441687
-      Warrior_Blue_13: 1617535587422869692
-      Warrior_Blue_14: -6733473425934966021
-      Warrior_Blue_15: 8057981515537251145
-      Warrior_Blue_16: -2295091820497786881
-      Warrior_Blue_17: -4070611951465040981
-      Warrior_Blue_18: -6020158371915913484
-      Warrior_Blue_19: 6852195566242143941
-      Warrior_Blue_2: 5406782203547414040
-      Warrior_Blue_20: 8623725918659698721
-      Warrior_Blue_21: -7630331419334528658
-      Warrior_Blue_22: 8250042118999599827
-      Warrior_Blue_23: 1831561948527194828
+      BlueWarrior_Attack1_00: 4887455543641441687
+      BlueWarrior_Attack1_01: 1617535587422869692
+      BlueWarrior_Attack1_02: -6733473425934966021
+      BlueWarrior_Attack1_03: 8057981515537251145
+      BlueWarrior_Attack1_04: -2295091820497786881
+      BlueWarrior_Attack1_05: -4070611951465040981
+      BlueWarrior_Attack2_00: -6020158371915913484
+      BlueWarrior_Attack2_01: 6852195566242143941
+      BlueWarrior_Attack2_02: 8623725918659698721
+      BlueWarrior_Attack2_03: -7630331419334528658
+      BlueWarrior_Attack2_04: 8250042118999599827
+      BlueWarrior_Attack2_05: 1831561948527194828
+      BlueWarrior_Idle_00: 1448252480329919801
+      BlueWarrior_Idle_01: -8838482275237848885
+      BlueWarrior_Idle_02: 5406782203547414040
+      BlueWarrior_Idle_03: 1463704688382458982
+      BlueWarrior_Idle_04: -9152939422376490735
+      BlueWarrior_Idle_05: 5013799040997709749
+      BlueWarrior_Move_00: -1672519898550114602
+      BlueWarrior_Move_01: -7791425953029368767
+      BlueWarrior_Move_02: 1484279566179589967
+      BlueWarrior_Move_03: -3403234807515756179
+      BlueWarrior_Move_04: -7028422606531620881
+      BlueWarrior_Move_05: -8599349895570148482
       Warrior_Blue_24: 5737398224882651483
       Warrior_Blue_25: 686275002757285879
       Warrior_Blue_26: -6820794401073396575
       Warrior_Blue_27: -8322565654407655767
       Warrior_Blue_28: 999363956346284212
       Warrior_Blue_29: 920778665628228539
-      Warrior_Blue_3: 1463704688382458982
       Warrior_Blue_30: -1862056862079330845
       Warrior_Blue_31: -175862040222990888
       Warrior_Blue_32: 2103004666898697155
@@ -1417,7 +1423,6 @@ TextureImporter:
       Warrior_Blue_37: 4015574649506354893
       Warrior_Blue_38: -232515625000527906
       Warrior_Blue_39: 807218313078530972
-      Warrior_Blue_4: -9152939422376490735
       Warrior_Blue_40: 675785488431832003
       Warrior_Blue_41: 8958472748343319348
       Warrior_Blue_42: 8782361303006435773
@@ -1426,31 +1431,6 @@ TextureImporter:
       Warrior_Blue_45: 9051283987780761484
       Warrior_Blue_46: -4985013248184194703
       Warrior_Blue_47: -2110690741743447410
-      Warrior_Blue_48: 5597869990218008791
-      Warrior_Blue_49: -7490071170321743814
-      Warrior_Blue_5: 5013799040997709749
-      Warrior_Blue_50: -3107757338139221465
-      Warrior_Blue_51: 5047536160546663753
-      Warrior_Blue_52: -4148541266878104647
-      Warrior_Blue_53: 429336043104486409
-      Warrior_Blue_54: -3187246170801061930
-      Warrior_Blue_55: 1547359339963549388
-      Warrior_Blue_56: -6021040159146955871
-      Warrior_Blue_57: 5150042056499323221
-      Warrior_Blue_58: -3150262331105059838
-      Warrior_Blue_59: 2551082361249137551
-      Warrior_Blue_6: -1672519898550114602
-      Warrior_Blue_60: -8876832668839517277
-      Warrior_Blue_61: -8033281151075340229
-      Warrior_Blue_62: 5177879902043176195
-      Warrior_Blue_63: -2496806188035233067
-      Warrior_Blue_64: 6412799187542958021
-      Warrior_Blue_65: 6942968119378836813
-      Warrior_Blue_66: -7023176546439364684
-      Warrior_Blue_67: -3115017436996339825
-      Warrior_Blue_7: -7791425953029368767
-      Warrior_Blue_8: 1484279566179589967
-      Warrior_Blue_9: -3403234807515756179
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

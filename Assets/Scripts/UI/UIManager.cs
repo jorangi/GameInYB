@@ -63,7 +63,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     private bool shown;
     public static InputSystem_Actions inputAction;
     public List<IUI> uiList = new();
-    private Dictionary<UIType, IUI> uiDic = new();
+    private readonly Dictionary<UIType, IUI> uiDic = new();
     private bool keyInput = false;
     public event Action Negative;
     #endregion
@@ -176,7 +176,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     /// <param name="context"></param>
     private void OnCharacterInformation(InputAction.CallbackContext context)
     {
-        if (!uiList.Contains(uiDic[UIType.PAUSED_MENU]) && uiDic.TryGetValue(UIType.CHARACTER_INFORMATION, out IUI ui))
+        if (!uiList.Contains(uiDic[UIType.PAUSED_MENU]) && !uiList.Contains(uiDic[UIType.COMMAND_PANEL])  && uiDic.TryGetValue(UIType.CHARACTER_INFORMATION, out IUI ui))
         {
             ui.Show();
             uiList.Add(ui);

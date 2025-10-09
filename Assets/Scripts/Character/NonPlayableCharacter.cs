@@ -14,6 +14,12 @@ public class NonPlayableCharacterData : CharacterData
 
 public class NonPlayableCharacter : Character
 {
+    [Header("FSM관련")]
+    public Blackboard blackboard = new();
+    private NPCStateMachine _fsm;
+    private StateRegistry _registry = new();
+
+    [Header("기타")]
     public SpriteRenderer sprite;
     protected NonPlayableCharacterData Data => (NonPlayableCharacterData)data;
     protected enum State
@@ -37,20 +43,36 @@ public class NonPlayableCharacter : Character
     private Coroutine hpSmooth;
     private const float BAR_SIZE = 3.5f;
     public GameObject DamageTextPrefab;
+    public Animator animator;
     protected override void Awake()
     {
         base.Awake();
         data = new NonPlayableCharacterData(new CharacterData("TestEnemy"));
+        FSMInit();
         hpBar = transform.Find("HealthBar").Find("back").Find("healthBarMask").Find("health").GetComponent<SpriteRenderer>();
         hpBarSec = transform.Find("HealthBar").Find("back").Find("healthBarMask").Find("healthSec").GetComponent<SpriteRenderer>();
         wallChecker = transform.Find("wallChecker").transform;
         behaviourPointer = GetComponentInChildren<TextMeshPro>();
         idleTimer = Random.Range(0.0f, 1.0f);
-
+        animator ??= GetComponent<Animator>();
+        animator.applyRootMotion = false;
+    }
+    public void FSMInit()
+    {
+        _fsm = new();
+        _registry.Register(new IdleState(this, blackboard));
+    }
+    public void OnEnable()
+    {
+        RequestState<IdleState>();
     }
     protected override void Update()
     {
         base.Update();
+        blackboard.TimeNow = Time.time;
+
+        //if(data.HP <= 0f && _fsm.Current != _registry.Get<State>)
+
         if (Input.GetKeyDown(KeyCode.U))
         {
             SetHP(Random.Range(0, Data.MaxHP));
@@ -61,13 +83,13 @@ public class NonPlayableCharacter : Character
         if (state == State.Idle && idleTimer > 0.0f)
         {
             idleTimer -= Time.deltaTime;
-            moveVec = new(0f, moveVec.y);
+            SetDesiredMove(0f);
             behaviourPointer.SetText($"Idle : {Mathf.Round(idleTimer * 10) * 0.1f}");
             if (idleTimer <= 0.0f)
             {
                 moveTimer = Random.Range(1.0f, 5.0f);
                 moveDir = Random.Range(0, 2) != 0;
-                moveVec = new(moveDir ? 1.0f : -1.0f, 0f);
+                SetDesiredMove(moveDir ? 1.0f : -1.0f);
                 state = State.Move;
             }
         }
@@ -77,7 +99,7 @@ public class NonPlayableCharacter : Character
             behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
             if (moveTimer <= 0.0f)
             {
-                moveVec = Vector2.zero;
+                SetDesiredMove(0f);
                 rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
                 idleTimer = Random.Range(0.0f, 5.0f);
                 state = State.Idle;
@@ -93,7 +115,7 @@ public class NonPlayableCharacter : Character
                 else
                 {
                     moveDir = !moveDir;
-                    moveVec = new(moveVec.x * -1, moveVec.y);
+                    SetDesiredMove(-Mathf.Sign(desiredMoveX));
                     behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
                     state = State.Move;
                 }
@@ -104,7 +126,7 @@ public class NonPlayableCharacter : Character
     {
         if (state == State.Move)
             base.Movement();
-        sprite.flipX = moveVec.x > 0;
+        sprite.flipX = desiredMoveX > 0;
     }
     IEnumerator HpBarFillsSmooth(SpriteRenderer bar)
     {
@@ -162,13 +184,11 @@ public class NonPlayableCharacter : Character
         }
     }
     private State tempState;
-    Vector2 oriMove;
     protected override IEnumerator Hit()
     {
         if (state != State.Hit)
         {
             tempState = state;
-            oriMove = moveVec;
         }
         state = State.Hit;
         InvincibleTimer = data.InvincibleTime;
@@ -178,9 +198,11 @@ public class NonPlayableCharacter : Character
         float elapsedTime = 0f;
         sprite.color = Color.red;
 
+        float oriX = desiredMoveX;
+
         while (state == State.Hit && HitStunTimer > 0.0f)
         {
-            moveVec = Vector2.zero;
+            SetDesiredMove(0f);
             behaviourPointer.SetText($"Hit : {Mathf.Round(HitStunTimer * 10) * 0.1f}");
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / data.HitStunTime;
@@ -194,6 +216,18 @@ public class NonPlayableCharacter : Character
         sprite.color = new Color(1, 1, 1, 1);
         hitCoroutine = null;
         state = tempState;
-        moveVec = oriMove;
+        SetDesiredMove(oriX);
     }
+    public void RequestState<T>() where T : class, IStateBase
+    {
+        var next = _registry.Get<T>();
+        if (next == null) return;
+        _fsm.SetState(next);
+    }
+    public void AnimSetMoving(bool on) => animator.SetBool("IsMoving", on);
+    public void AnimTriggerAttack() => animator.SetTrigger("Attack");
+    public void AnimTriggerHit() => animator.SetTrigger("Hit");
+    public void AnimTriggerDeath() => animator.SetTrigger("Die");
+    public bool InMinStateLock() => blackboard.TimeNow < blackboard.MinStateEndTime;
+    public void SetMinStateLock(float minStateDuration) => blackboard.MinStateEndTime = blackboard.TimeNow + blackboard.MinStateDuration; 
 }

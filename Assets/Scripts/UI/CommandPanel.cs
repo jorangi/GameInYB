@@ -174,7 +174,8 @@ namespace Looper.Console.UI
         }
         void OnDisable()
         {
-            Time.timeScale = PlayableCharacter.Inst.gameTimeScale;
+            if(PlayableCharacter.Inst != null)
+                Time.timeScale = PlayableCharacter.Inst.gameTimeScale;
         }
         public void PositiveInteract(InputAction.CallbackContext context) => Show();
         public void NegativeInteract(InputAction.CallbackContext context) => Hide();

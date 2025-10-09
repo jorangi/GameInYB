@@ -1,146 +1,661 @@
 {
     "items": [
         {
-            "id": "00000",
-            "name": ["null item", "존재하지 않음"],
-            "rarity": "null",
-            "description": ["It is null", "null 데이터입니다."]
-        },
-        {
             "id": "01001",
             "name": ["Wooden Sword", "나무 검"],
             "rarity": "common",
-            "description": ["An wooden sword.", "나무로 만든 검"],
+            "description":["An wooden sword.","나무로 만든 검"],
             "attributes": [
-                { "stat": "atk", "op": "ADD", "value": 10.0 },
-                { "stat": "ats", "op": "ADD", "value": 1.5 },
-                { "stat": "cri", "op": "ADD", "value": 0.5 }
+                { "stat": "atk", "op": "ADD", "value":7.0},
+                { "stat": "ats", "op": "ADD", "value":1.3},
+                { "stat": "cri", "op": "ADD", "value":0.4}
             ],
-            "skills": ["21001"]
+            "two-hander":false,
+            "stackable":false,
+            "skills": ["21004"]
         },
         {
             "id": "01002",
-            "name": ["Iron Sword", "철 검"],
+            "name": ["Wooden Dagger", "나무 단검"],
             "rarity": "common",
-            "description": ["An iron sword.", "철로 만든 검"],
+            "description":["An wooden dagger.","나무로 만든 단검"],
             "attributes": [
-                { "stat": "atk", "op": "ADD", "value": 10 },
-                { "stat": "ats", "op": "ADD", "value": 1 },
-                { "stat": "crid", "op": "ADD", "value": 0.5 }
-            ]
+                { "stat": "atk", "op": "ADD", "value":5.0},
+                { "stat": "ats", "op": "ADD", "value":2.0},
+                { "stat": "cri", "op": "ADD", "value":0.2}
+            ],
+            "two-hander":false,
+            "stackable":false,
+            "skills": ["21005"]
         },
         {
             "id": "01003",
-            "name": ["Iron Axe", "철 도끼"],
+            "name": ["Wooden Club", "나무 몽둥이"],
             "rarity": "common",
-            "description": ["An iron axe.", "철로 만든 도끼"],
+            "description":["An wooden club.","나무로 만든 몽둥이"],
             "attributes": [
-                { "stat": "atk", "op": "ADD", "value": 13 },
-                { "stat": "ats", "op": "ADD", "value": 0.8 },
-                { "stat": "crid", "op": "ADD", "value": 0.3 }
-            ]
+                { "stat": "atk", "op": "ADD", "value":4.0},
+                { "stat": "ats", "op": "ADD", "value":1.7},
+                { "stat": "cri", "op": "ADD", "value":0.1}
+            ],
+            "two-hander":false,
+            "stackable":false
         },
         {
             "id": "01004",
-            "name": ["Iron Battle Axe", "철 전투 도끼"],
+            "name": ["Wooden Baton", "나무 봉"],
             "rarity": "common",
-            "description": ["An iron battle axe.", "철로 만든 전투 도끼"],
+            "description":["An wooden baton.","나무로 만든 봉"],
             "attributes": [
-                { "stat": "atk", "op": "ADD", "value": 22 },
-                { "stat": "ats", "op": "ADD", "value": 0.5 },
-                { "stat": "cri", "op": "ADD", "value": 0.5 }
+                { "stat": "atk", "op": "ADD", "value":6.0},
+                { "stat": "ats", "op": "ADD", "value":1.8}
             ],
-            "two-hander": true
+            "two-hander":false,
+            "stackable":true  
         },
         {
             "id": "01005",
-            "name": ["Iron Hammer", "철 해머"],
+            "name": ["Leather Glove", "가죽 글러브"],
             "rarity": "common",
-            "description": ["An iron hammer.", "철로 만든 망치"],
+            "description":["A Leather Glove.","가죽으로 만든 글러브"],
             "attributes": [
-                { "stat": "atk", "op": "ADD", "value": 8 },
-                { "stat": "ats", "op": "ADD", "value": 1.3 },
-                { "stat": "cri", "op": "ADD", "value": 0.2 },
-                { "stat": "crid", "op": "ADD", "value": 0.3 }
-            ]
+                { "stat": "atk", "op": "ADD", "value":3.0},
+                { "stat": "ats", "op": "ADD", "value":2.5}
+            ],
+            "two-hander":false,
+            "stackable":true,  
+            "skills": ["21011"]
         },
         {
             "id": "01006",
+            "name": ["Iron Dagger", "철 단검"],
+            "rarity": "common",
+            "description":["An iron dagger.","철로 만든 단검"],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":7.0},
+                { "stat": "ats", "op": "ADD", "value":2.0},
+                { "stat": "cri", "op": "ADD", "value":0.3}
+            ],
+            "two-hander":false,
+            "stackable":false,
+            "skills": ["21005"]
+        },
+        {
+            "id": "01007",
+            "name": ["Iron Sword", "철 검"],
+            "rarity": "common",
+            "description":["An iron sword.","철로 만든 검"],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":10.0},
+                { "stat": "ats", "op": "ADD", "value":1.3},
+                { "stat": "cri", "op": "ADD", "value":0.4}
+            ],
+            "two-hander":false,
+            "stackable":false,
+            "skills": ["21004"]
+        },
+        {
+            "id": "01008",
+            "name": ["Iron Axe", "철 도끼"],
+            "rarity": "common",
+            "description":["An iron axe.","철로 만든 도끼"],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":13.0},
+                { "stat": "ats", "op": "ADD", "value":0.9},
+                { "stat": "cri", "op": "ADD", "value":0.5},
+                { "stat": "crid", "op": "ADD", "value":0.3}
+            ],
+            "two-hander":false,
+            "stackable":false,
+            "skills": ["21008"]
+        },
+
+        {
+            "id": "01009",
+            "name": ["Iron Battle Axe", "철 전투 도끼"],
+            "rarity": "common",
+            "description":["An iron battle axe.","철로 만든 전투 도끼"],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":22.0},
+                { "stat": "ats", "op": "ADD", "value":0.5},
+                { "stat": "cri", "op": "ADD", "value":0.5},
+                { "stat": "crid", "op": "ADD", "value":0.7}
+            ],
+            "two-hander":true,
+            "stackable":false,
+            "skills": ["21010"]
+        },
+        {
+            "id": "01010",
+            "name": ["Iron Hammer", "철 해머"],
+            "rarity": "common",
+            "description":["An iron hammer.","철로 만든 망치"],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":12.0},
+                { "stat": "ats", "op": "ADD", "value":1.1},
+                { "stat": "cri", "op": "ADD", "value":0.2},
+                { "stat": "crid", "op": "ADD", "value":0.3}
+            ],
+            "two-hander":false,
+            "stackable":false,
+            "skills": ["21009"]
+        },
+        {
+            "id": "01011",
             "name": ["Iron GreatSword", "철 대검"],
             "rarity": "common",
-            "description": ["An iron great sword.", "철로 만든 대검"],
+            "description":["An iron great sword.","철로 만든 대검"],
             "attributes": [
-                { "stat": "atk", "op": "ADD", "value": 18 },
-                { "stat": "ats", "op": "ADD", "value": 0.7 },
-                { "stat": "crid", "op": "ADD", "value": 0.7 }
+                { "stat": "atk", "op": "ADD", "value":15.0},
+                { "stat": "ats", "op": "ADD", "value":0.8},
+                { "stat": "cri", "op": "ADD", "value":0.5},
+                { "stat": "crid", "op": "ADD", "value":0.5}
             ],
-            "two-hander": true
+            "two-hander":true,
+            "stackable":false,
+            "skills": ["21001"]
+        },
+        {
+            "id": "01012",
+            "name": ["Iron Spear", "철 창"],
+            "rarity": "common",
+            "description":["An iron spear.","철로 만든 창"],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":11.0},
+                { "stat": "ats", "op": "ADD", "value":1.0},
+                { "stat": "cri", "op": "ADD", "value":0.5}
+            ],
+            "two-hander":true,
+            "stackable":false,
+            "skills": ["21012"]
         },
         {
             "id": "02001",
             "name": ["Wooden Shield", "나무 방패"],
             "rarity": "common",
-            "description": ["An wooden shield.", "나무로 만든 방패. 적의 공격을 방어할 수 있습니다."],
+            "description":["An wooden shield.","나무로 만든 방패. 적의 공격을 방어할 수 있습니다."],
             "attributes": [
-                { "stat": "def", "op": "ADD", "value": 5 }
+                { "stat": "def", "op": "ADD", "value":5.0}
             ],
-            "skills": ["21002"]
+            "skills":["21002"]
         },
         {
             "id": "02002",
             "name": ["Iron Shield", "철 방패"],
             "rarity": "common",
-            "description": ["An iron shield.", "철로 만든 방패. 적의 공격을 방어할 수 있습니다."],
+            "description":["An iron shield.","철로 만든 방패. 적의 공격을 방어할 수 있습니다."],
             "attributes": [
-                { "stat": "def", "op": "ADD", "value": 10 }
+                { "stat": "def", "op": "ADD", "value":10.0}
             ],
-            "skills": ["21002"]
+            "skills":["21002"]
         },
         {
             "id": "02003",
             "name": ["pistol", "권총"],
             "rarity": "common",
-            "description": ["common pistol.", "평범한 피스톨. 조준점의 대상에게 보조공격이 가능합니다."],
+            "description":["common pistol.","평범한 피스톨. 조준점의 대상에게 보조공격이 가능합니다."],
             "attributes": [
-                { "stat": "ats", "op": "ADD", "value": 0.1 }
+                { "stat": "atk", "op": "ADD", "value":7.0},
+                { "stat": "ats", "op": "ADD", "value":0.9}
             ],
-            "skills": ["21003"]
+            "stackable":true,
+            "skills":["21003"]
+        },
+        {
+            "id": "02004",
+            "name": ["Machine gun", "기관총"],
+            "rarity": "common",
+            "description":["a charge rifle.","연사가 가능한 돌격소총. 조준점의 대상에게 보조공격이 가능합니다."],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":7.0},
+                { "stat": "ats", "op": "ADD", "value":0.4}
+            ],
+            "stackable":true,
+            "skills":["21006"]
+        },
+        {
+            "id": "02005",
+            "name": ["Grenade", "수류탄"],
+            "rarity": "common",
+            "description":["a throwable bomb.","범위공격을 주는 던질수있는 폭탄."],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":30.0}
+            ],
+            "skills":["21014"]
+        },
+        {
+            "id": "02006",
+            "name": ["Shuriken", "표창"],
+            "rarity": "common",
+            "description":["a small throwable spear.","던질수 있는 작은 창."],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":8.0},
+                { "stat": "ats", "op": "ADD", "value":0.8}
+            ],
+            "stackable":true,
+            "skills":["21015"]
+        },
+        {
+            "id": "02007",
+            "name": ["Dart", "다트"],
+            "rarity": "common",
+            "description":["a pointed dart that can be thrown.","던질수 있는 뾰족한 다트."],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":6.0},
+                { "stat": "ats", "op": "ADD", "value":0.6}
+            ],
+            "stackable":true,
+            "skills":["21015"]
+        },
+        {
+            "id": "02008",
+            "name": ["Bow", "활"],
+            "rarity": "common",
+            "description":["an ordinary bow.","평범한 활,화살을 장전하여 조준점의 대상에게 보조공격이 가능합니다."],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":12.0},
+                { "stat": "ats", "op": "ADD", "value":1.3}
+            ],
+            "stackable":false,
+            "skills":["21016"]
+        },
+        {
+            "id": "02009",
+            "name": ["Crossbow", "석궁"],
+            "rarity": "common",
+            "description":["an ordinary crossbow.","평범한 석궁,화살을 장전하여 조준점의 대상에게 보조공격이 가능합니다."],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":11.0},
+                { "stat": "ats", "op": "ADD", "value":1.0}
+            ],
+            "stackable":true,
+            "skills":["21015"]
+        },
+        {
+            "id": "02010",
+            "name": ["Boomerang", "부메랑"],
+            "rarity": "common",
+            "description":["If you throw it, the boomerang will come back.","던지면 다시 플레이어어게 돌아오는 부메랑."],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":5.0},
+                { "stat": "ats", "op": "ADD", "value":0.9}
+            ],
+            "stackable":false,           
+            "skills":["21015"]
         },
         {
             "id": "03001",
             "name": ["Leather Helmet", "가죽 모자"],
             "rarity": "common",
-            "description": ["A leather helmet.", "가죽으로 만든 모자"],
+            "description":["A leather helmet.","가죽으로 만든 모자"],
             "attributes": [
-                { "stat": "def", "op": "ADD", "value": 3 }
+                { "stat": "def", "op": "ADD", "value":2.0}
+            ]
+        },
+        {
+            "id": "03002",
+            "name": ["Chain Helmet", "사슬 모자"],
+            "rarity": "common",
+            "description":["A chain helmet.","사슬로 만든 모자"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":3.0}
+            ]
+        },
+        {
+            "id": "03003",
+            "name": ["Iron Helmet", "철 모자"],
+            "rarity": "common",
+            "description":["A iron helmet.","철로 만든 모자"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":4.0}
+            ]
+        },
+        {
+            "id": "03004",
+            "name": ["Steel Helmet", "강철 모자"],
+            "rarity": "rare",
+            "description":["A steel helmet.","강철로 만든 모자"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":5.0}
+            ]
+        },
+        {
+            "id": "03005",
+            "name": ["Leaf Helmet", "나뭇잎 모자"],
+            "rarity": "common",
+            "description":["A leaf helmet.","나뭇잎으로 만든 모자"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":1.0}
+            ]
+        },
+        {
+            "id": "03006",
+            "name": ["Copper Helmet", "구리 모자"],
+            "rarity": "common",
+            "description":["A cooper helmet.","구리로 만든 모자"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":2.5}
+            ]
+        },
+        {
+            "id": "03007",
+            "name": ["Diamond Helmet", "다이아 모자"],
+            "rarity": "epic",
+            "description":["A diamond helmet.","다이아로 만든 모자"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":6.0}
+            ]
+        },
+        {
+            "id": "03008",
+            "name": ["Golden Crown", "황금 왕관"],
+            "rarity": "rare",
+            "description":["a golden crown.","황금으로 만든 왕관"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":3.5}
+            ],
+            "skills":["20007"]
+        },
+        {
+            "id": "03009",
+            "name": ["Turtle Shell", "거북이 등딱지"],
+            "rarity": "common",
+            "description":["A turtle shell.","거북이 등딱지로 만든 모자"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":4.5}
+            ],
+            "skills":["20011"]
+        },
+        {
+            "id": "03010",
+            "name": ["Dragon Killer's Helmet", "용살자 모자"],
+            "rarity": "legendary",
+            "description":["A dragon killer's helmet.","용의 가죽으로 만든 모자"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":10.0}
             ]
         },
         {
             "id": "04001",
             "name": ["Leather Armor", "가죽 갑옷"],
             "rarity": "common",
-            "description": ["A leather armor.", "가죽으로 만든 갑옷"],
+            "description":["A leather armor.","가죽으로 만든 갑옷"],
             "attributes": [
-                { "stat": "def", "op": "ADD", "value": 5 }
+                { "stat": "def", "op": "ADD", "value":5.0}
             ]
         },
         {
-            "id": "05001",
-            "name": ["Leather pants", "가죽 바지"],
+            "id": "04002",
+            "name": ["Chain Armor", "사슬 갑옷"],
             "rarity": "common",
-            "description": ["A leather pants.", "가죽으로 만든 바지"],
+            "description":["A chain armor.","사슬로 만든 갑옷"],
             "attributes": [
-                { "stat": "def", "op": "ADD", "value": 4 }
+                { "stat": "def", "op": "ADD", "value":6.0}
+            ]
+        },
+        {
+            "id": "04003",
+            "name": ["Iron Armor", "철 갑옷"],
+            "rarity": "common",
+            "description":["A iron armor.","철로 만든 갑옷"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":7.0}
+            ]
+        },
+        {
+            "id": "04004",
+            "name": ["Steel Armor", "강철 갑옷"],
+            "rarity": "rare",
+            "description":["A steel armor.","강철로 만든 갑옷"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":8.0}
+            ]
+        },
+        {
+            "id": "04005",
+            "name": ["Leaf Armor", "나뭇잎 갑옷"],
+            "rarity": "common",
+            "description":["A leaf armor.","나뭇잎으로 만든 갑옷"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":3.0}
+            ]
+        },
+        {
+            "id": "04006",
+            "name": ["Cooper Armor", "구리 갑옷"],
+            "rarity": "common",
+            "description":["A cooper armor.","구리로 만든 갑옷"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value": 5.5}
+            ]
+        },
+        {
+            "id": "04007",
+            "name": ["Diamond Armor", "다이아 갑옷"],
+            "rarity": "epic",
+            "description":["A diamond armor.","다이아로 만든 갑옷"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":9.0}
+            ]
+        },
+        {
+            "id": "04008",
+            "name": ["Golden Armor", "황금 갑옷"],
+            "rarity": "rare",
+            "description":["A golden armor.","황금으로 만든 갑옷"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":6.5}
+            ],
+            "skills":["20007"]
+        },
+        {
+            "id": "04009",
+            "name": ["Armor of Thorns", "가시 갑옷"],
+            "rarity": "epic",
+            "description":["A armor of thorns.","가시로 만든 갑옷"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":7.5}
+            ],
+            "skills":["21017"]
+        },
+        {
+            "id": "04010",
+            "name": ["Dragon Killer's Armor", "용살자 갑옷"],
+            "rarity": "legendary",
+            "description":["A dragon killer's armor.","용의 가죽으로 만든 갑옷"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":15.0}
+            ]
+        },
+        {      
+            "id": "05001",
+            "name": ["Leather Pants", "가죽 바지"],
+            "rarity": "common",
+            "description":["A leather pants.","가죽으로 만든 바지"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":4.0}
+            ]
+        },
+        {
+            "id": "05002",
+            "name": ["Chain Pants", "사슬 바지"],
+            "rarity": "common",
+            "description":["A Chain pants.","사슬로 만든 바지"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":5.0}
+            ]
+        },
+        {
+            "id": "05003",
+            "name": ["Iron Pants", "철 바지"],
+            "rarity": "common",
+            "description":["A iron pants.","철로 만든 바지"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":6.0}
+            ]
+        },
+        {
+            "id": "05004",
+            "name": ["Steel Pants", "강철 바지"],
+            "rarity": "rare",
+            "description":["A steel pants.","강철로 만든 바지"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":7.0}
+            ]
+        },
+        {
+            "id": "05005",
+            "name": ["Leaf Pants", "나뭇잎 바지"],
+            "rarity": "common",
+            "description":["A leaf pants.","나뭇잎으로 만든 바지"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":2.0}
+            ]
+        },
+        {
+            "id": "05006",
+            "name": ["Cooper Pants", "구리 바지"],
+            "rarity": "common",
+            "description":["A cooper pants.","구리로 만든 바지"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":4.5}
+            ]
+        },
+        {
+            "id": "05007",
+            "name": ["Diamond Pants", "다이아 바지"],
+            "rarity": "epic",
+            "description":["A diamond pants.","다이아로 만든 바지"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":8.0}
+            ]
+        },
+        {
+            "id": "05008",
+            "name": ["Golden Pants", "황금 바지"],
+            "rarity": "rare",
+            "description":["a golden pants.","황금으로 만든 바지"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":5.5}
+            ],
+            "skills":["20007"]
+        },
+        {
+            "id": "05009",
+            "name": ["Elf's pants", "엘프의 바지"],
+            "rarity": "rare",
+            "description":["a elf's pants.","바람마법이 걸린 엘프의 바지"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":5.0}
+            ],
+            "skills":["20002"]
+        },
+        {
+            "id": "05010",
+            "name": ["Dragon Killer's Pants", "용살자 바지"],
+            "rarity": "legendary",
+            "description":["A dragon killer's pants.","용의 가죽으로 만든 갑옷"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":12.0}
             ]
         },
         {
             "id": "06001",
             "name": ["yellow mushroom", "노랑 버섯"],
             "rarity": "common",
-            "description": ["A yellow mushroom.", "노란색 버섯"],
+            "description":["A yellow mushroom.","노란색 버섯"],
             "attributes": [
-                { "stat": "ats", "op": "ADD", "value": 4 },
-                { "stat": "hp", "op": "ADD", "value": 10 }
+                { "stat": "ats", "op": "ADD", "value":4.0},
+                { "stat": "hp", "op": "MUL", "value":1.0}
+            ]
+        },
+        {
+            "id": "06002",
+            "name": ["Blue mushroom", "파랑 버섯"],
+            "rarity": "common",
+            "description":["A blue mushroom.","파란색 버섯"],
+            "attributes": [
+                { "stat": "ats", "op": "ADD", "value":4.0},
+                { "stat": "hp", "op": "MUL", "value":2.0}
+            ]
+        },
+        {
+            "id": "06003",
+            "name": ["Red mushroom", "빨강 버섯"],
+            "rarity": "common",
+            "description":["A red mushroom.","빨간색 버섯"],
+            "attributes": [
+                { "stat": "ats", "op": "ADD", "value":4.0},
+                { "stat": "hp", "op": "MUL", "value":3.0}
+            ]
+        },
+        {
+            "id": "06004",
+            "name": ["Branch", "나뭇가지"],
+            "rarity": "common",
+            "description":["An ordinary branch.","평범한 나뭇가지"],
+            "attributes": [
+                { "stat": "atk", "op": "ADD", "value":2.0},
+                { "stat": "ats", "op": "ADD", "value":3.0}
+            ]
+        },
+        {
+            "id": "06005",
+            "name": ["Golden Ring", "황금 반지"],
+            "rarity": "rare",
+            "description":["A golden ring.","황금으로 만든 반지"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":2.0}
+            ],
+            "skills":["20007"]
+        },
+        {
+            "id": "06006",
+            "name": ["Golden Necklace", "황금 목걸이"],
+            "rarity": "rare",
+            "description":["a golden necklace.","황금으로 만든 목걸이"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":2.0}
+            ],
+            "skills":["20007"]
+        },
+        {
+            "id": "06007",
+            "name": ["Emerald Necklace", "에메랄드 목걸이"],
+            "rarity": "rare",
+            "description":["a emerald necklace.","에메랄드로 만든 목걸이"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":1.5}
+            ],
+            "skills":["20001"]
+        },
+        {
+            "id": "06008",
+            "name": ["Sapphire Necklace", "사파이어 목걸이"],
+            "rarity": "rare",
+            "description":["a sapphire necklace.","사파이어로 만든 목걸이"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":1.5}
+            ],
+            "skills":["20002"]
+        },
+        {
+            "id": "06009",
+            "name": ["Ruby Necklace", "루비 목걸이"],
+            "rarity": "rare",
+            "description":["a ruby necklace.","루비로 만든 목걸이"],
+            "attributes": [
+                { "stat": "def", "op": "ADD", "value":1.5}
+            ],
+            "skills":["20003"]
+        },
+        {
+            "id": "06010",
+            "name": ["Convalescent Potion", "회복물약"],
+            "rarity": "common",
+            "description":["a convalescent potion.","체력을 회복할수있는 물약"],
+            "attributes": [
+                { "stat": "hp", "op": "MUL", "value":6.0}
             ]
         }
     ]

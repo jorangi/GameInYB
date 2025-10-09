@@ -42,6 +42,7 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
     [SerializeField] private TextMeshProUGUI jmp;
     private SpriteAtlas iconAtlas;
     private readonly Image[] slotIcons = new Image[20];
+    private bool awakeFlag = false;
     private void Awake()
     {
         InitAltas();
@@ -59,8 +60,33 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
             slotIcons[i + 5] = backpack.GetChild(i).GetChild(1).GetComponent<Image>();
         }
         PlayableCharacter.Inst.OnEquipmentChanged += RefreshEquipment;
-        PlayableCharacter.Inst.OnInventoryChanged += RefreshItemIcons;
+        PlayableCharacter.Inst.OnBackpackChanged += RefreshBackpack;
         gameObject.SetActive(false);
+    }
+    IInventoryData inventory;
+    private void Start()
+    {
+        inventory = (IInventoryData)GameBootstrapper.ServiceProvider.GetService(typeof(IInventoryData));
+    }
+    private void OnEnable()
+    {
+        if (name == "CharacterInformation")
+            inventory.Inventory.OnSlotPicked += ShowItemInformation;
+    }
+    private void OnDisable()
+    {
+        if (name == "CharacterInformation")
+        {
+            if (!awakeFlag)
+            {
+                awakeFlag = true;
+                return;
+            }
+            else
+            {
+                inventory.Inventory.OnSlotPicked -= ShowItemInformation;
+            }
+        }
     }
     /// <summary>
     /// 인벤토리 아이템 변경시 아이콘 갱신
@@ -71,14 +97,25 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
     /// </summary>
     /// <param name="arg1"></param>
     /// <param name="item"></param>
-    private void RefreshItemIcons(int arg1, ItemSlot item)
+    private void RefreshBackpack(int arg1, ItemSlot item)
     {
-        slotIcons[arg1 + 5].color = Color.white;
-        slotIcons[arg1 + 5].sprite = iconAtlas.GetSprite(item.item.id);
-        Debug.Log(arg1 + " / " + iconAtlas.GetSprite(item.item.id).name);
-        slotIcons[arg1 + 5].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
-
-        Refresh();
+        if (arg1 == -1)
+        {
+            for (int i = 5; i < 20; i++)
+            {
+                slotIcons[i].color = item == default ? new(1, 1, 1, 0) : Color.white;
+                slotIcons[i].sprite = iconAtlas.GetSprite(item.item.id);
+                slotIcons[i].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
+                Refresh();
+            }
+        }
+        else
+        {
+            slotIcons[arg1 + 5].color = item == default ? new(1, 1, 1, 0) : Color.white;
+            slotIcons[arg1 + 5].sprite = iconAtlas.GetSprite(item.item.id);
+            slotIcons[arg1 + 5].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
+            Refresh();
+        }
     }
     /// <summary>
     /// 장비 아이템 변경시 아이콘 갱신
@@ -164,5 +201,9 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
         spd.text = $"{PlayableCharacter.Inst.Data.Spd}";
         jmp.text = $"{PlayableCharacter.Inst.Data.JumpPower}({PlayableCharacter.Inst.Data.JumpCnt})";
         #endregion
+    }
+    public void ShowItemInformation(int i)
+    {
+        Debug.Log(inventory.Backpack[i].item.name);
     }
 }

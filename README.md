@@ -167,8 +167,21 @@
     - 가방 비우기 명령어
     - 아이템 제거 명령어
       - 매개변수를 비울 경우 마우스 클릭을 통해 아이템 삭제
-
-
+  # 251009
+  ## v.1(신종혁)
+  - 아이템 슬롯 관련 버그수정
+    - 아이템 획득을 하여도 0번 슬롯에 등록되는 문제
+      - struct(값 타입)이므로 ref를 통해 받아오고 새로운 new struct객체를 넣은 것이 문제. => index를 지정한 뒤에 등록
+    - 클릭 관련 버그 수정
+      - raycastTarget 문제 => 인스펙터에서 체크 해제
+      - 장비 슬롯과 index문제 => offset으로 5를 적용하여 보정
+  - 무기 이미지의 sort order 변경 => 메인무기가 보조무기보다 위에 오도록
+  - 테스트용 몬스터 애니메이션 스프라이트 조정 => 스프라이트 위치가 바뀌지 않게끔 cell by size로 slice
+  - NonPlayableCharacter의 Animator를 Override Controller로 변경
+  - FSM형식으로 애니메이션 컨트롤
+    - Idle, Wander, Die, Attack, Hit State 등록
+      - Idle 및 Wander 구현중
+  - 기존의 moveVec.x를 통해 이동을 직접 구현하는 부분에서 desiredMoveX로 간접 구현
 
 
 </details>

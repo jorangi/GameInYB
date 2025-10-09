@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: 13ba5cc74592a304c96615b98b51044a
   m_SerializeEntries:
   - m_GUID: 06b95d1dc634cca42b6db491fe0df7d4
-    m_Address: TestData/skills
+    m_Address: TestData/skills_
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -26,12 +26,27 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 42c117f6252d1488c8f04087cb80e952
-    m_Address: TestData/items
+    m_Address: TestData/items_
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 789e1181625a540d1aa906ae9480ed2e
+    m_Address: TestData/npc_
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e504eef7dfc9bf47a8a0f5b63eddb9f
     m_Address: TestData/npc
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b241494f4617eb84e93bd050dedc2624
+    m_Address: TestData/skills
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df13a3ba3c83c72498ca3f0458058fde
+    m_Address: TestData/items
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

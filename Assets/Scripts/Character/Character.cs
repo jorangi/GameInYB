@@ -259,6 +259,8 @@ public class Character : ParentObject
     [SerializeField] protected Vector3 savedPos;
     protected bool moveDir; //f : left, t : right
     protected RaycastHit2D isPrecipice;
+    protected float desiredMoveX;
+    protected bool isRooted;
     #endregion
     protected virtual void Update()
     {
@@ -299,10 +301,14 @@ public class Character : ParentObject
 
         if (isPrecipice && isGround) savedPos = transform.position;
 
-        Vector2 rayDir = (Vector2.down + new Vector2(moveVec.x, 0) * 0.25f).normalized;
+        Vector2 rayDir = (Vector2.down + new Vector2(desiredMoveX, 0) * 0.25f).normalized;
         hit = Physics2D.Raycast(foot.position, rayDir, rayDistance, LayerMask.GetMask("Floor", "Platform"));
-        fronthit = Physics2D.Raycast(frontRay.position, moveVec.x > 0 ? Vector2.right : Vector2.left, 0.2f, LayerMask.GetMask("Floor", "Platform"));
-        if (moveVec.x != 0.0f)
+        fronthit = Physics2D.Raycast(
+            frontRay.position,
+            desiredMoveX > 0 ? Vector2.right : Vector2.left, 0.2f,
+            LayerMask.GetMask("Floor", "Platform")
+        );
+        if (!Mathf.Approximately(desiredMoveX, 0f))
             rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
         else
             rigid.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
@@ -344,15 +350,22 @@ public class Character : ParentObject
     }
     protected virtual void Movement()
     {
-        if (moveVec.x == 0.0f) return;
-        frontRay.localPosition = new(Mathf.Abs(frontRay.localPosition.x) * (moveVec.x > 0 ? 1 : -1), frontRay.localPosition.y);
+        if (isRooted || Mathf.Approximately(desiredMoveX, 0f))
+        {
+            rigid.linearVelocity = new(0, rigid.linearVelocityY);
+            return;
+        }
+        frontRay.localPosition = new(
+            Mathf.Abs(frontRay.localPosition.x) * (desiredMoveX > 0 ? 1 : -1),
+            frontRay.localPosition.y
+        );
         if (isGround && isSlope && !isJump)
         {
-            rigid.linearVelocity = Mathf.Abs(moveVec.x) * data.Spd * perp;
+            rigid.linearVelocity = Mathf.Abs(desiredMoveX) * data.Spd * perp;
         }
         else if (!isSlope)
         {
-            rigid.linearVelocity = new Vector2(moveVec.x * data.Spd, rigid.linearVelocityY);
+            rigid.linearVelocity = new Vector2(desiredMoveX * data.Spd, rigid.linearVelocityY);
         }
     }
     /// <summary>
@@ -380,7 +393,7 @@ public class Character : ParentObject
             if (cAngle > maxAngle) return false;
             perp = Vector2.Perpendicular(hit.normal).normalized;
 
-            if (Vector2.Dot(perp, new Vector2(moveVec.x, 0)) < 0)
+            if (Vector2.Dot(perp, new Vector2(desiredMoveX, 0)) < 0)
                 perp = -perp;
         }
         bool slopeTemp = cAngle != 0.0f;
@@ -423,4 +436,7 @@ public class Character : ParentObject
             }
         }
     }
+    public void SetDesiredMove(float x) => desiredMoveX = x;
+    public void SetRooted(bool rooted) => isRooted = rooted;
+    
 }

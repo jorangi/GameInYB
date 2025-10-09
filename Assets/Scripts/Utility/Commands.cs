@@ -472,7 +472,7 @@ namespace Looper.Console.Commands
                     ctx.Info($"슬롯 {argIndex}는 비어있습니다.");
                     return;
                 }
-                backpack.RemoveSlot(argIndex);
+                PlayableCharacter.Inst.RemoveItem(backpack[argIndex]);
                 ctx.Info($"슬롯 {argIndex}의 아이템을 삭제했습니다.");
                 return;
             }
@@ -493,7 +493,7 @@ namespace Looper.Console.Commands
             try
             {
                 neg.Negative += OnEsc;
-
+                ui.CharacterInformationPanel.name = "through_commands";
                 ui.CommandPanel.SetActive(false);
                 ui.CharacterInformationPanel.SetActive(true);
                 Time.timeScale = 0.0f;
@@ -524,6 +524,7 @@ namespace Looper.Console.Commands
             {
                 neg.Negative -= OnEsc;
                 Time.timeScale = prevTS;
+                ui.CharacterInformationPanel.name = "CharacterInformation";
                 ui.CharacterInformationPanel.SetActive(prevInv);
                 ui.CommandPanel.SetActive(prevCmd);
                 ui.EventSystem.SetSelectedGameObject(prevSel);
