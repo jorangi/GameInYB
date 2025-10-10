@@ -190,7 +190,6 @@ public class Backpack : IEnumerable<ItemSlot>
         int emptySlotIndex = FindEmptySlot();
             if (emptySlotIndex == -1) throw new InvalidOperationException("빈 슬롯이 없습니다.");
 
-            Debug.Log(emptySlotIndex);
             return ref items[emptySlotIndex];
         }
         /// <summary>
@@ -432,6 +431,7 @@ public class PlayableCharacter : Character, IInventoryData
             .SetCri(0.1f)
             .SetCriDmg(1.5f);
         data.GetStats().SetBase(StatType.ATS, 0.0f);
+        data.GetStats().SetBase(StatType.SPD, 5.0f);
         data.HP = data.MaxHP;
 
         ((PlayableCharacterData)data).SetInfoObj(CharacterInformationObj);
@@ -837,7 +837,6 @@ public class PlayableCharacter : Character, IInventoryData
         newInstance.index = emptySlot.index;
         emptySlot = newInstance;
         OnBackpackChanged?.Invoke(emptySlot.index, emptySlot);
-        Debug.Log(emptySlot.index + " / " + emptySlot.item.id + " / " + emptySlot.ea);
     }
     /// <summary>
     /// 아이템 제거

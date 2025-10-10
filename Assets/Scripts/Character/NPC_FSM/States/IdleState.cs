@@ -6,7 +6,6 @@ public class IdleState : StateBase
     public IdleState(NonPlayableCharacter npc, Blackboard blackboard) : base(npc, blackboard) { }
     public override void Enter()
     {
-        Debug.Log("대기 시작");
         npc.AnimSetMoving(false);
         npc.SetDesiredMove(0f);
         float idleDur = Random.Range(blackboard.IdleDurationRange.x, blackboard.IdleDurationRange.y);
@@ -15,17 +14,20 @@ public class IdleState : StateBase
     }
     public override void Exit()
     {
-        Debug.Log("대기 종료");
     }
     public override void Update()
     {
+        if (blackboard.DistToTarget <= blackboard.AttackEnter && !InMinLock())
+        {
+            npc.RequestState<AttackState>();
+            return;
+        }
         // 타깃이 범위 내 + 볼 수 있음
-        if (blackboard.CanSeeTarget && blackboard.DistToTarget <= blackboard.DetectEnter && !InMinLock())
+        if (!(blackboard.IsPrecipiceAhead || blackboard.IsWallAhead) && blackboard.CanSeeTarget && blackboard.DistToTarget <= blackboard.DetectEnter && !InMinLock())
         {
             npc.RequestState<ChaseState>();
             return;
         }
-        Debug.Log($"timenow: {blackboard.TimeNow} >= idletime: {blackboard.IdleEndTime} && !InMinLock: {!InMinLock()}");
         if (blackboard.TimeNow >= blackboard.IdleEndTime && !InMinLock())
         {
             bool goWander = Random.value < blackboard.WanderProbabilityAfterIdle;

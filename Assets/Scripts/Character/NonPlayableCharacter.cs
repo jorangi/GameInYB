@@ -62,6 +62,7 @@ public class NonPlayableCharacter : Character
         _fsm = new();
         _registry.Register(new IdleState(this, blackboard));
         _registry.Register(new WanderState(this, blackboard));
+        _registry.Register(new ChaseState(this, blackboard));
         _registry.Register(new AttackState(this, blackboard));
         _registry.Register(new HitState(this, blackboard));
         _registry.Register(new DieState(this, blackboard));
@@ -73,67 +74,21 @@ public class NonPlayableCharacter : Character
     protected override void Update()
     {
         base.Update();
-        behaviourPointer.text = $"{FacingSign < 0}";
         blackboard.TimeNow = Time.time;
         blackboard.DistToTarget = Vector2.Distance(blackboard.self.position, blackboard.target.position);
-        //if(data.HP <= 0f && _fsm.Current != _registry.Get<State>)
-
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            SetHP(Random.Range(0, Data.MaxHP));
-        }
+        blackboard.CanSeeTarget = Mathf.Sign(blackboard.target.position.x - blackboard.self.position.x) == Mathf.Sign(FacingSign);
         wallChecker.localPosition = new(FacingSign > 0 ? 0.25f : -0.25f, 0.0f);
         RaycastHit2D hitWall = Physics2D.Raycast(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, 0.1f, LayerMask.GetMask("Floor", "Platform"));
         blackboard.IsWallAhead = hitWall;
-        blackboard.IsPrecipiceAhead = isPrecipice;
-
-        // if (state == State.Idle && idleTimer > 0.0f)
-        // {
-        //     idleTimer -= Time.deltaTime;
-        //     SetDesiredMove(0f);
-        //     behaviourPointer.SetText($"Idle : {Mathf.Round(idleTimer * 10) * 0.1f}");
-        //     if (idleTimer <= 0.0f)
-        //     {
-        //         moveTimer = Random.Range(1.0f, 5.0f);
-        //         moveDir = Random.Range(0, 2) != 0;
-        //         SetDesiredMove(moveDir ? 1.0f : -1.0f);
-        //         state = State.Move;
-        //     }
-        // }
-        // if (state == State.Move && moveTimer > 0.0f)
-        // {
-        //     moveTimer -= Time.deltaTime;
-        //     behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
-        //     if (moveTimer <= 0.0f)
-        //     {
-        //         SetDesiredMove(0f);
-        //         rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-        //         idleTimer = Random.Range(0.0f, 5.0f);
-        //         state = State.Idle;
-        //     }
-        //     if (hitWall || !isPrecipice)
-        //     {
-        //         if (Random.Range(0.0f, 1.0f) > 0.7f)
-        //         {
-        //             rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-        //             idleTimer = Random.Range(0.0f, 5.0f);
-        //             state = State.Idle;
-        //         }
-        //         else
-        //         {
-        //             moveDir = !moveDir;
-        //             SetDesiredMove(-Mathf.Sign(desiredMoveX));
-        //             behaviourPointer.SetText($"{(moveDir ? "right" : "left")} : {Mathf.Round(moveTimer * 10) * 0.1f}");
-        //             state = State.Move;
-        //         }
-        //     }
-        // }
+        blackboard.IsPrecipiceAhead = isPrecipice.collider == null;
+        
+        behaviourPointer.text = $"{blackboard.IsPrecipiceAhead}";
         _fsm.Update();
     }
     protected override void Movement()
     {
         base.Movement();
-        sprite.flipX = desiredMoveX > 0;
+        sprite.flipX = desiredMoveX > 0 ? true : desiredMoveX < 0 ? false : sprite.flipX;
     }
     IEnumerator HpBarFillsSmooth(SpriteRenderer bar)
     {

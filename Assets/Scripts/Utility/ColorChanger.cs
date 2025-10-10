@@ -31,7 +31,6 @@ public class ColorChanger : MonoBehaviour
     public void StopColorChange()
     {
         StopCoroutine(co);
-        Debug.Log("코루틴 정지");
         co = null;
     }
     public void Change(ColorTimer colorTimer)

@@ -192,5 +192,12 @@
   - 테스트용 기즈모 표기
     - Blackboard를 통해 데이터를 받아와 기즈모 표시
   - 테스트 몬스터의 스프라이트를 좌우 반전(일관성)
-
+  ## v.2(신종혁)
+  - FSM 일부 완성(Idle, Wander, Attack, Chase)
+    - blackboard의 WanderProbabilityAfterIdle값과 난수 비교를 통해 Idle/Wander 선택
+    - blackboard의 DetectEnter범위내 플레이어가 있을 경우 ChaseState로 변경
+    - blackboard의 AttackEnter범위내 플레이어가 있을 경우 AttackState로 변경
+  - 몬스터의 기본 이동속도 감소(5.0->2.0)
+  - 몬스터의 RigidBody2D를 Interpole로 변경
+  - 불필요한 Debug.Log 제거
 </details>

@@ -144,7 +144,7 @@ public class CharacterData : IStatProvider
         stats.SetBase(StatType.ATK, 10.0f);
         stats.SetBase(StatType.ATS, 0.8f);
         stats.SetBase(StatType.DEF, 0.0f);
-        stats.SetBase(StatType.SPD, 5.0f);
+        stats.SetBase(StatType.SPD, 3.0f);
         SetInvicibleTime();
         SetHitStunTime();
     }
@@ -271,16 +271,8 @@ public class Character : ParentObject
 
         isGround = GroundCheck();
         if (this is PlayableCharacter)
-        { 
+        {
             isPrecipice = Physics2D.Raycast(frontRay.position, new Vector2(1, -1).normalized,
-            // frontRay.localPosition.x > 0 ?
-            //     (FacingSign > 0 ?
-            //         new Vector2(-1, -1).normalized :
-            //         new Vector2(1, -1).normalized) 
-            //     :
-            //     (FacingSign > 0 ?
-            //         new Vector2(-1, -1).normalized :
-            //         new Vector2(1, -1).normalized),
             1, LayerMask.GetMask("Floor", "Platform"));
         }
         else
@@ -341,7 +333,6 @@ public class Character : ParentObject
     }
     protected virtual void Movement()
     {
-        Debug.Log($"isRooted: {isRooted}, desiredMoveX: {desiredMoveX}");
         if (isRooted || Mathf.Approximately(desiredMoveX, 0f))
         {
             rigid.linearVelocity = new(0, rigid.linearVelocityY);

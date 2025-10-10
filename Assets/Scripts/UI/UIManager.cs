@@ -162,10 +162,8 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     {
         if (!keyInput) return;
         keyInput = false;
-        Debug.Log("OnPausedMenu");
         if (Time.deltaTime > 0f && uiList.Count == 0 && uiDic.TryGetValue(UIType.PAUSED_MENU, out IUI ui))
         {
-            Debug.Log("Show PausedMenu");
             ui.Show();
             uiList.Add(ui);
         }
@@ -390,7 +388,6 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     {
         if (ui == null) return;
         if (type != UIType.NONE && !uiDic.ContainsKey(type)) uiDic[type] = ui;
-        //Debug.Log($"{type}이 등록됐음");
         ui.Hide();
     }
     /// <summary>
