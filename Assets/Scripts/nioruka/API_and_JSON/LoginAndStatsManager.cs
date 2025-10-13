@@ -7,7 +7,7 @@ using TMPro;
 
 public class LoginAndStatsManager : MonoBehaviour
 {
-    private const string LOGIN_URL = "https://api-looper.duckdns.org/api/login";
+    private const string LOGIN_URL = "https://api-looper.duckdns.org/api/auth/login";
     private const string STATS_URL = "https://api-looper.duckdns.org/api/mypage/stats";
 
     [Header("Login UI")]
@@ -20,7 +20,7 @@ public class LoginAndStatsManager : MonoBehaviour
         string savedToken = PlayerPrefs.GetString("auth_token", "");
         if (!string.IsNullOrEmpty(savedToken))
         {
-            Debug.Log("저장된 토큰 발견 Stats 호출");
+            Debug.Log("이미 로그인했던 토큰으로 자동연결합니다");
             StartCoroutine(GetStats());
         }
     }
@@ -32,7 +32,7 @@ public class LoginAndStatsManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
         {
-            messageText.text = "ID/PW 입력";
+            messageText.text = "ID/PW를 입력하세요.";
             return;
         }
 
@@ -49,36 +49,36 @@ public class LoginAndStatsManager : MonoBehaviour
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Accept", "application/json");
             request.timeout = 10;
 
             yield return request.SendWebRequest();
 
-            if (request.result == UnityWebRequest.Result.ConnectionError ||
-                request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError("로그인 실패: " + request.error);
-                messageText.text = "로그인 실패";
-            }
-            else
-            {
-                string responseJson = request.downloadHandler.text;
-                Debug.Log("로그인 응답: " + responseJson);
+            Debug.Log($"[LOGIN] url={LOGIN_URL} method=POST");
+            Debug.Log($"[LOGIN] requestBody={jsonBody}");
+            Debug.Log($"[LOGIN] responseCode={request.responseCode}");
+            Debug.Log($"[LOGIN] result={request.result} error={request.error}");
+            Debug.Log($"[LOGIN] responseText={request.downloadHandler.text}");
 
-                TokenResponse tokenRes = JsonUtility.FromJson<TokenResponse>(responseJson);
-                if (!string.IsNullOrEmpty(tokenRes.token))
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                var res = JsonUtility.FromJson<TokenResponse>(request.downloadHandler.text);
+                Debug.Log("토큰: " + res.accessToken);
+
+                if (!string.IsNullOrEmpty(res.accessToken))
                 {
-                    PlayerPrefs.SetString("auth_token", tokenRes.token);
+                    PlayerPrefs.SetString("auth_token", res.accessToken);
                     PlayerPrefs.Save();
-
-                    Debug.Log("JWT 저장 완료");
-                    messageText.text = "로그인 성공";
-
                     StartCoroutine(GetStats());
                 }
                 else
                 {
-                    messageText.text = "로그인실패 (토큰 없음추정)";
+                    Debug.LogError("로그인에 성공했지만 accessToken이 비어있음");
                 }
+            }
+            else
+            {
+                Debug.LogError("로그인 실패");
             }
         }
     }
@@ -88,7 +88,7 @@ public class LoginAndStatsManager : MonoBehaviour
         string token = PlayerPrefs.GetString("auth_token", "");
         if (string.IsNullOrEmpty(token))
         {
-            Debug.LogError("토큰없음. 로그인 이후 시도");
+            Debug.LogError("토큰 없음. 로그인 이후 시도");
             yield break;
         }
 
@@ -115,12 +115,18 @@ public class LoginAndStatsManager : MonoBehaviour
                 try
                 {
                     PlayerStats stats = JsonUtility.FromJson<PlayerStats>(json);
-                    Debug.Log($"레벨: {stats.level}, 경험치: {stats.exp}, 골드: {stats.gold}");
-                    messageText.text = $"Lv.{stats.level} / EXP {stats.exp} / Gold {stats.gold}";
+
+    Debug.Log($"HP: {stats.hp}, ATK: {stats.atk}, DEF: {stats.def}, CRI: {stats.cri}, CRID: {stats.crid}");
+    Debug.Log($"SPD: {stats.spd}, JMP: {stats.jmp}, CLEAR: {stats.clear}, CHAPTER: {stats.chapter}, STAGE: {stats.stage}");
+
+        messageText.text =
+        $"HP {stats.hp} / ATK {stats.atk} / DEF {stats.def}\n" +
+        $"CH {stats.chapter}-{stats.stage} | SPD {stats.spd} | JMP {stats.jmp}";
+
                 }
                 catch (System.Exception e)
                 {
-                    Debug.LogWarning("Stats 파싱실패: " + e.Message);
+                    Debug.LogWarning("Stats 파싱 실패: " + e.Message);
                 }
             }
         }
@@ -128,27 +134,48 @@ public class LoginAndStatsManager : MonoBehaviour
     [System.Serializable]
     public class LoginData
     {
-        public string id;
+        public string username;
         public string password;
-        public LoginData(string id, string pw)
+
+        public LoginData(string username, string password)
         {
-            this.id = id;
-            this.password = pw;
+            this.username = username;
+            this.password = password;
         }
     }
+    public void OnClick_Logout()
+{
+    PlayerPrefs.DeleteKey("auth_token");
+    PlayerPrefs.Save();
+    messageText.text = "로그아웃";
+    Debug.Log("토큰 삭제됨");
+}
 
     [System.Serializable]
     public class TokenResponse
     {
-        public string token;
+        public string accessToken;
+        public string refreshToken;
+        public string nickname;
+        public string[] roles;
     }
 
     [System.Serializable]
     public class PlayerStats
     {
-        public int level;
-        public int exp;
-        public int gold;
-        //임시
+        public float hp;
+        public float atk;
+        public float def;
+        public float cri;
+        public float crid;
+        public float spd;
+        public float jmp;
+        public int clear;
+        public int chapter;
+        public int stage;
+        public string mapid;
+        public string equiped;
+        public string inventory;
     }
+
 }
