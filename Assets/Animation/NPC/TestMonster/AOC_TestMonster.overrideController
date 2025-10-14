@@ -9,9 +9,9 @@ AnimatorOverrideController:
   m_Name: AOC_TestMonster
   m_Controller: {fileID: 9100000, guid: 9836a64a438bed046a473ce9ae62df2e, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: 55d2c2895c5064f8b9d3271f0f0d35c9, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 5e4dff3d466501b4299a7b20aba04d21, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 55d2c2895c5064f8b9d3271f0f0d35c9, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: 92a326f8273c7444dada34e822db2e26, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 4572ec18def142244a72e913cd3b4c7c, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 92a326f8273c7444dada34e822db2e26, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: 8f4b6b61bc56f479eb3f516061300b72, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 5b7a21dc0c9a01b4cb96ebbab7dfced6, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 8f4b6b61bc56f479eb3f516061300b72, type: 2}

@@ -1,0 +1,307 @@
+fileFormatVersion: 2
+guid: 133dbcf0fac34e8438428626e637e740
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6703457977108083702
+    second: Plant1_Hurt_full_0
+  - first:
+      213: 3455090894358464809
+    second: Plant1_Hurt_full_1
+  - first:
+      213: -4841904155289331966
+    second: Plant1_Hurt_full_2
+  - first:
+      213: -8385139116700663461
+    second: Plant1_Hurt_full_3
+  - first:
+      213: 4257657917112359126
+    second: Plant1_Hurt_full_4
+  - first:
+      213: 8395422540738668443
+    second: Plant1_Hurt_full_5
+  - first:
+      213: 6714207773326656905
+    second: Plant1_Hurt_full_6
+  - first:
+      213: -8744881192841645282
+    second: Plant1_Hurt_full_7
+  - first:
+      213: -7010154744557433645
+    second: Plant1_Hurt_full_8
+  - first:
+      213: 6732281210694402495
+    second: Plant1_Hurt_full_9
+  - first:
+      213: 88640921353564919
+    second: Plant1_Hurt_full_10
+  - first:
+      213: -5751651382104100276
+    second: Plant1_Hurt_full_11
+  - first:
+      213: -7575648807258405137
+    second: Plant1_Hurt_full_12
+  - first:
+      213: 643041880820949030
+    second: Plant1_Hurt_full_13
+  - first:
+      213: 6436129389015517205
+    second: Plant1_Hurt_full_14
+  - first:
+      213: -3113845374135557685
+    second: Plant1_Hurt_full_15
+  - first:
+      213: 8071332280123291940
+    second: Plant1_Hurt_full_16
+  - first:
+      213: -8934086193487729397
+    second: Plant1_Hurt_full_17
+  - first:
+      213: -3808317789439571268
+    second: Plant1_Hurt_full_18
+  - first:
+      213: 2334100120496019446
+    second: Plant1_Hurt_full_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 20
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Plant1_Hit_01
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff84cfef66940034db02fabdc9aeb956
+      internalID: 2102256800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Plant1_Hit_02
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26bb68381d1de0d4f97cd288101e5d55
+      internalID: -180224655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Plant1_Hit_03
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 64
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2402fd28ba81795448a6a39d351a7692
+      internalID: -489712586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Plant1_Hit_04
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 64
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9756898983a77304e84ed2582fa01c0c
+      internalID: -92255495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Plant1_Hit_05
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 64
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c7635ddef4d1a34380756cb4f1fd386
+      internalID: 1706701808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: c311d86c95c243b41a4047f298f2440d
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Plant1_Hit_01: 2102256800
+      Plant1_Hit_02: -180224655
+      Plant1_Hit_03: -489712586
+      Plant1_Hit_04: -92255495
+      Plant1_Hit_05: 1706701808
+      Plant1_Hurt_full_0: 1222118655
+      Plant1_Hurt_full_1: -1536128000
+      Plant1_Hurt_full_15: -1009423079
+      Plant1_Hurt_full_16: 1076879335
+      Plant1_Hurt_full_17: 696344819
+      Plant1_Hurt_full_18: 188814389
+      Plant1_Hurt_full_19: 745560468
+      Plant1_Hurt_full_2: -1239818482
+      Plant1_Hurt_full_3: -557822745
+      Plant1_Hurt_full_4: -1979385359
+      Plant1_Hurt_full_5: 758195609
+      Plant1_Hurt_full_6: -1344851944
+      Plant1_Hurt_full_7: 57278496
+      Plant1_Hurt_full_8: -1176131051
+      Plant1_Hurt_full_9: -1499646847
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

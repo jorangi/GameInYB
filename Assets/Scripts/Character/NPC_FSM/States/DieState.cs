@@ -8,16 +8,15 @@ public class DieState : StateBase
 
     public override void Enter()
     {
-        throw new System.NotImplementedException();
+        npc.SetDesiredMove(0f);
+        npc.SetRooted(true);
+        npc.AnimSetMoving(false);
+        npc.AnimTriggerDeath();
     }
-
     public override void Exit()
     {
-        throw new System.NotImplementedException();
     }
-
     public override void Update()
     {
-        throw new System.NotImplementedException();
     }
 }
