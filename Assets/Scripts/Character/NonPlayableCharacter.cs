@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -5,13 +6,14 @@ using UnityEngine.UIElements;
 
 public class NonPlayableCharacterData : CharacterData
 {
-    public NonPlayableCharacterData(CharacterData data) : base(data.UnitName){}
+    public NonPlayableCharacterData(CharacterData data) : base(data.UnitName) { }
     public override string ToString()
     {
         return $"{base.ToString()}";
     }
 }
 
+[RequireComponent(typeof(Animator))]
 public class NonPlayableCharacter : Character
 {
     [Header("FSM관련")]
@@ -19,9 +21,13 @@ public class NonPlayableCharacter : Character
     private NPCStateMachine _fsm;
     private StateRegistry _registry = new();
 
+    [Header("데이터 관련")]
+    public CharacterData Data => data;
+    private NonPlayableCharacterData _npcData;
+    public NonPlayableCharacterData NPCData => _npcData;
+
     [Header("기타")]
     public SpriteRenderer sprite;
-    protected NonPlayableCharacterData Data => (NonPlayableCharacterData)data;
     protected enum State
     {
         Idle,
@@ -32,7 +38,6 @@ public class NonPlayableCharacter : Character
         Dead
     }
     private Transform wallChecker;
-    [SerializeField]
     private State state = State.Idle;
     public float idleTimer = 0.0f;
     public float moveTimer = 0.0f;
@@ -48,12 +53,14 @@ public class NonPlayableCharacter : Character
     {
         base.Awake();
         data = new NonPlayableCharacterData(new CharacterData("TestEnemy"));
+        Data.HP = Data.MaxHP;
+        _npcData = data as NonPlayableCharacterData;
         FSMInit();
         hpBar = transform.Find("HealthBar").Find("back").Find("healthBarMask").Find("health").GetComponent<SpriteRenderer>();
         hpBarSec = transform.Find("HealthBar").Find("back").Find("healthBarMask").Find("healthSec").GetComponent<SpriteRenderer>();
         wallChecker = transform.Find("wallChecker").transform;
         behaviourPointer = GetComponentInChildren<TextMeshPro>();
-        idleTimer = Random.Range(0.0f, 1.0f);
+        idleTimer = UnityEngine.Random.Range(0.0f, 1.0f);
         animator = animator != null ? animator : GetComponent<Animator>();
         animator.applyRootMotion = false;
     }
@@ -83,7 +90,7 @@ public class NonPlayableCharacter : Character
         blackboard.IsWallAhead = hitWall;
         blackboard.IsPrecipiceAhead = isPrecipice.collider == null;
         
-        behaviourPointer.text = $"{blackboard.IsPrecipiceAhead}";
+        behaviourPointer.text = $"{Data.HP}";
         _fsm.Update();
     }
     protected override void Movement()

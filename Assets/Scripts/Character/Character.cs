@@ -47,7 +47,7 @@ public class CharacterStats
     //추가 스탯(출처)
     private readonly Dictionary<IStatModifierProvider, int> providers = new();
     //캐시된 최종 스탯, 변경사항이 있을 때만 갱신(더티 플래그)
-    private readonly Dictionary<StatType, float> finalCache = new();
+    private Dictionary<StatType, float> finalCache = new();
     private bool dirty = true;
     //UI갱신 등 필요시 호출하는 이벤트
     public event Action OnRecalculated;
@@ -129,8 +129,7 @@ public interface IStatProvider
 }
 public class CharacterData : IStatProvider
 {
-    private CharacterData() { }
-    protected readonly CharacterStats stats = new();
+    protected CharacterStats stats = new();
     protected string unitName;
     public string UnitName
     {
@@ -208,7 +207,7 @@ public class CharacterData : IStatProvider
 public class Character : ParentObject
 {
     #region fields
-    protected CharacterData data;
+    [SerializeField]protected CharacterData data;
     protected enum LAYER
     {
         FLOOR = 7,
@@ -331,6 +330,9 @@ public class Character : ParentObject
     protected virtual void Attack()
     {
     }
+    /// <summary>
+    /// 유닛 이동 메소드
+    /// </summary>
     protected virtual void Movement()
     {
         if (isRooted || Mathf.Approximately(desiredMoveX, 0f))
@@ -421,5 +423,5 @@ public class Character : ParentObject
     }
     public void SetDesiredMove(float x) => desiredMoveX = x;
     public void SetRooted(bool rooted) => isRooted = rooted;
-    
+
 }

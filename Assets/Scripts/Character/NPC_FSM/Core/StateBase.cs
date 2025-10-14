@@ -55,6 +55,9 @@ public class Blackboard
     [Header("공격 거리")]
     public float AttackEnter = 1.2f;
     public float AttackExit = 1.6f;
+
+    [Header("피격 관련")]
+    public float InvinsibleEndTime;
 }
 public abstract class StateBase : IStateBase
 {
