@@ -2,11 +2,12 @@ using System.Collections;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 using TMPro;
 
 public class LoginAndStatsManager : MonoBehaviour
 {
+    public static PlayerData currentPlayer; 
+
     private const string LOGIN_URL = "https://api-looper.duckdns.org/api/auth/login";
     private const string STATS_URL = "https://api-looper.duckdns.org/api/mypage/stats";
 
@@ -17,10 +18,10 @@ public class LoginAndStatsManager : MonoBehaviour
 
     void Start()
     {
-        string savedToken = PlayerPrefs.GetString("auth_token", "");
-        if (!string.IsNullOrEmpty(savedToken))
+        // 자동로그인
+        if (currentPlayer != null && !string.IsNullOrEmpty(currentPlayer.accessToken))
         {
-            Debug.Log("이미 로그인했던 토큰으로 자동연결합니다");
+            Debug.Log("저장된 토큰 발견 Stats 호출");
             StartCoroutine(GetStats());
         }
     }
@@ -32,7 +33,7 @@ public class LoginAndStatsManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
         {
-            messageText.text = "ID/PW를 입력하세요.";
+            messageText.text = "ID/PW 입력";
             return;
         }
 
@@ -62,19 +63,17 @@ public class LoginAndStatsManager : MonoBehaviour
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                var res = JsonUtility.FromJson<TokenResponse>(request.downloadHandler.text);
-                Debug.Log("토큰: " + res.accessToken);
+                TokenResponse res = JsonUtility.FromJson<TokenResponse>(request.downloadHandler.text);
+                currentPlayer = new PlayerData
+                {
+                    accessToken = res.accessToken,
+                    refreshToken = res.refreshToken,
+                    nickname = res.nickname,
+                    roles = res.roles
+                };
 
-                if (!string.IsNullOrEmpty(res.accessToken))
-                {
-                    PlayerPrefs.SetString("auth_token", res.accessToken);
-                    PlayerPrefs.Save();
-                    StartCoroutine(GetStats());
-                }
-                else
-                {
-                    Debug.LogError("로그인에 성공했지만 accessToken이 비어있음");
-                }
+                Debug.Log("토큰: " + currentPlayer.accessToken);
+                StartCoroutine(GetStats());
             }
             else
             {
@@ -85,8 +84,7 @@ public class LoginAndStatsManager : MonoBehaviour
 
     IEnumerator GetStats()
     {
-        string token = PlayerPrefs.GetString("auth_token", "");
-        if (string.IsNullOrEmpty(token))
+        if (currentPlayer == null || string.IsNullOrEmpty(currentPlayer.accessToken))
         {
             Debug.LogError("토큰 없음. 로그인 이후 시도");
             yield break;
@@ -96,7 +94,7 @@ public class LoginAndStatsManager : MonoBehaviour
         {
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Accept", "application/json");
-            request.SetRequestHeader("Authorization", "Bearer " + token);
+            request.SetRequestHeader("Authorization", "Bearer " + currentPlayer.accessToken);
             request.timeout = 10;
 
             yield return request.SendWebRequest();
@@ -105,7 +103,6 @@ public class LoginAndStatsManager : MonoBehaviour
                 request.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError("API 호출 실패: " + request.error);
-                Debug.LogError("응답 코드: " + request.responseCode);
             }
             else
             {
@@ -114,15 +111,9 @@ public class LoginAndStatsManager : MonoBehaviour
 
                 try
                 {
-                    PlayerStats stats = JsonUtility.FromJson<PlayerStats>(json);
-
-    Debug.Log($"HP: {stats.hp}, ATK: {stats.atk}, DEF: {stats.def}, CRI: {stats.cri}, CRID: {stats.crid}");
-    Debug.Log($"SPD: {stats.spd}, JMP: {stats.jmp}, CLEAR: {stats.clear}, CHAPTER: {stats.chapter}, STAGE: {stats.stage}");
-
-        messageText.text =
-        $"HP {stats.hp} / ATK {stats.atk} / DEF {stats.def}\n" +
-        $"CH {stats.chapter}-{stats.stage} | SPD {stats.spd} | JMP {stats.jmp}";
-
+                    currentPlayer.stats = JsonUtility.FromJson<PlayerStats>(json);
+                    Debug.Log($"HP: {currentPlayer.stats.hp}, ATK: {currentPlayer.stats.atk}, DEF: {currentPlayer.stats.def}");
+                    messageText.text = $"HP {currentPlayer.stats.hp} / ATK {currentPlayer.stats.atk}";
                 }
                 catch (System.Exception e)
                 {
@@ -130,34 +121,6 @@ public class LoginAndStatsManager : MonoBehaviour
                 }
             }
         }
-    }
-    [System.Serializable]
-    public class LoginData
-    {
-        public string username;
-        public string password;
-
-        public LoginData(string username, string password)
-        {
-            this.username = username;
-            this.password = password;
-        }
-    }
-    public void OnClick_Logout()
-{
-    PlayerPrefs.DeleteKey("auth_token");
-    PlayerPrefs.Save();
-    messageText.text = "로그아웃";
-    Debug.Log("토큰 삭제됨");
-}
-
-    [System.Serializable]
-    public class TokenResponse
-    {
-        public string accessToken;
-        public string refreshToken;
-        public string nickname;
-        public string[] roles;
     }
 
     [System.Serializable]
@@ -178,4 +141,35 @@ public class LoginAndStatsManager : MonoBehaviour
         public string inventory;
     }
 
+    [System.Serializable]
+    public class PlayerData
+    {
+        public string accessToken;
+        public string refreshToken;
+        public string nickname;
+        public string[] roles;
+        public PlayerStats stats;
+    }
+
+    [System.Serializable]
+    public class LoginData
+    {
+        public string username;
+        public string password;
+
+        public LoginData(string username, string password)
+        {
+            this.username = username;
+            this.password = password;
+        }
+    }
+
+    [System.Serializable]
+    public class TokenResponse
+    {
+        public string accessToken;
+        public string refreshToken;
+        public string nickname;
+        public string[] roles;
+    }
 }
