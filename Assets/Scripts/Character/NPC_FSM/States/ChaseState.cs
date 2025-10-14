@@ -32,9 +32,15 @@ public class ChaseState : StateBase
         npc.SetDesiredMove(npc.FacingSign);
 
         //공격 거리 내에 들어온 플레이어
-        if (blackboard.DistToTarget < blackboard.AttackEnter && blackboard.AttackCooldownEnd <= blackboard.TimeNow)
+        if (blackboard.DistToTarget < blackboard.AttackExit && blackboard.DistToTarget > blackboard.AttackEnter)
         {
             npc.RequestState<AttackState>();
+            return;
+        }
+        //공격 거리 보다 가까운 플레이어
+        if (blackboard.DistToTarget < blackboard.AttackEnter)
+        {
+            npc.RequestState<DistancingState>();
             return;
         }
         // 장애물 대응

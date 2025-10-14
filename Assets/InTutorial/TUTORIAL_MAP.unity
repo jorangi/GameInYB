@@ -92778,8 +92778,8 @@ MonoBehaviour:
     ObstacleDecisionCooldown: 0.2
     NextObstacleDecisionTime: 0
     MinStateDuration: 0.2
-    AttackEnter: 1.2
-    AttackExit: 1.6
+    AttackEnter: 0.8
+    AttackExit: 1
   sprite: {fileID: 713855818}
   state: 0
   idleTimer: 0
@@ -92845,7 +92845,7 @@ Transform:
   m_GameObject: {fileID: 1624038538}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.49, y: 3.03, z: 0}
+  m_LocalPosition: {x: 3.58, y: -1.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -93652,7 +93652,7 @@ Transform:
   m_GameObject: {fileID: 1828037784}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.494446, y: 0.08000088, z: -10}
+  m_LocalPosition: {x: 2.3133929, y: 0.08000088, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

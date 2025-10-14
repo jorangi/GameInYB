@@ -22,29 +22,36 @@ public class AttackState : StateBase
     }
     public override void Update()
     {
-        if (blackboard.DistToTarget < blackboard.AttackEnter)
+        if (blackboard.DistToTarget < blackboard.AttackExit && blackboard.DistToTarget > blackboard.AttackEnter)
         {
+            npc.sprite.flipX = npc.FacingSign > 0;
             if (blackboard.AttackCooldownEnd < blackboard.TimeNow)
             {
                 blackboard.AttackCooldownEnd = blackboard.TimeNow + tempCooldown; //임시로 쿨타임 2초
                 npc.AnimTriggerAttack();
+                npc.SetDesiredMove(0f);
+                npc.AnimSetMoving(false);
+                npc.SetRooted(true);
             }
         }
-        else if (blackboard.DistToTarget < blackboard.DetectExit)
+        else if (!npc.AnimGetTriggerAttack())
         {
-            npc.RequestState<ChaseState>();
-            return;
-        }
-        else
-        {
-            float r = Random.value;
-            if (r < blackboard.WanderProbabilityAfterIdle)
+            if (blackboard.DistToTarget < blackboard.DetectExit)
             {
-                npc.RequestState<WanderState>();
+                npc.RequestState<ChaseState>();
                 return;
             }
-            npc.RequestState<IdleState>();
-            return;
+            else
+            {
+                float r = Random.value;
+                if (r < blackboard.WanderProbabilityAfterIdle)
+                {
+                    npc.RequestState<WanderState>();
+                    return;
+                }
+                npc.RequestState<IdleState>();
+                return;
+            }
         }
     }
 }

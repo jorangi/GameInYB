@@ -55,7 +55,6 @@ public class Blackboard
     [Header("공격 거리")]
     public float AttackEnter = 1.2f;
     public float AttackExit = 1.6f;
-    
 }
 public abstract class StateBase : IStateBase
 {

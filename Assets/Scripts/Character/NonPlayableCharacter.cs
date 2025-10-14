@@ -66,6 +66,7 @@ public class NonPlayableCharacter : Character
         _registry.Register(new AttackState(this, blackboard));
         _registry.Register(new HitState(this, blackboard));
         _registry.Register(new DieState(this, blackboard));
+        _registry.Register(new DistancingState(this, blackboard));
     }
     public void OnEnable()
     {
@@ -88,7 +89,7 @@ public class NonPlayableCharacter : Character
     protected override void Movement()
     {
         base.Movement();
-        sprite.flipX = desiredMoveX > 0 ? true : desiredMoveX < 0 ? false : sprite.flipX;
+        sprite.flipX = desiredMoveX > 0 || desiredMoveX >= 0 && sprite.flipX;
     }
     IEnumerator HpBarFillsSmooth(SpriteRenderer bar)
     {
@@ -187,6 +188,7 @@ public class NonPlayableCharacter : Character
         if (next == null) return;
         _fsm.SetState(next);
     }
+    public bool AnimGetTriggerAttack() => animator.GetCurrentAnimatorStateInfo(0).IsName("Attack");
     public void AnimSetMoving(bool on) => animator.SetBool("IsMoving", on);
     public void AnimTriggerAttack() => animator.SetTrigger("Attack");
     public void AnimTriggerHit() => animator.SetTrigger("Hit");
