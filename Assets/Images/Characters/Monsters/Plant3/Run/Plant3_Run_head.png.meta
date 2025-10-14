@@ -165,6 +165,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -709,7 +722,31 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant3_Run_head_0: -4442336637598663298
+      Plant3_Run_head_1: 6391637687096538962
+      Plant3_Run_head_10: 1522775461115705883
+      Plant3_Run_head_11: -2250101812696762848
+      Plant3_Run_head_12: -154519793947457935
+      Plant3_Run_head_13: 7870524996251527488
+      Plant3_Run_head_14: 1348219041859873488
+      Plant3_Run_head_15: 5455731212788070063
+      Plant3_Run_head_16: -4292571140843927873
+      Plant3_Run_head_17: 8458861271030189954
+      Plant3_Run_head_18: 2385495757952527354
+      Plant3_Run_head_19: -4769499279415342048
+      Plant3_Run_head_2: 2444892899246992470
+      Plant3_Run_head_20: -6405326032496209359
+      Plant3_Run_head_21: -1879843155820574284
+      Plant3_Run_head_22: 2791077875420517183
+      Plant3_Run_head_23: 2856085776750007136
+      Plant3_Run_head_3: -1130569376784760411
+      Plant3_Run_head_4: -3660255058618305544
+      Plant3_Run_head_5: 8466561250623816737
+      Plant3_Run_head_6: -8775998688937222662
+      Plant3_Run_head_7: -5256904499447992937
+      Plant3_Run_head_8: -2298869411083214957
+      Plant3_Run_head_9: -6098802318853626627
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

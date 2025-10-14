@@ -201,6 +201,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -1009,7 +1022,43 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant2_Attack_swing_0: -8033954892546930599
+      Plant2_Attack_swing_1: -743638593603515882
+      Plant2_Attack_swing_10: -4461936475959162305
+      Plant2_Attack_swing_11: 423390654306535272
+      Plant2_Attack_swing_12: -3240465480185791090
+      Plant2_Attack_swing_13: -2585792252707346709
+      Plant2_Attack_swing_14: -2511862794196657484
+      Plant2_Attack_swing_15: 647857147935555926
+      Plant2_Attack_swing_16: -7238492091915559362
+      Plant2_Attack_swing_17: 3361351071407079205
+      Plant2_Attack_swing_18: 1551719678217450162
+      Plant2_Attack_swing_19: -3629804311032254029
+      Plant2_Attack_swing_2: -8678872008257025531
+      Plant2_Attack_swing_20: 4720723716816803869
+      Plant2_Attack_swing_21: 8162432298533361607
+      Plant2_Attack_swing_22: -7758312040953561626
+      Plant2_Attack_swing_23: 1275300341462815250
+      Plant2_Attack_swing_24: 4281656676717854934
+      Plant2_Attack_swing_25: 1555482573553412812
+      Plant2_Attack_swing_26: -2862953920303824346
+      Plant2_Attack_swing_27: -7125319928466716320
+      Plant2_Attack_swing_28: 4602925816451301827
+      Plant2_Attack_swing_29: 116365672374749071
+      Plant2_Attack_swing_3: 6068680087564825669
+      Plant2_Attack_swing_30: -2214846675511622980
+      Plant2_Attack_swing_31: 3661101545995853995
+      Plant2_Attack_swing_32: -1589348255045296785
+      Plant2_Attack_swing_33: 6596461335016181435
+      Plant2_Attack_swing_34: -5223082524811058705
+      Plant2_Attack_swing_35: -3659690531718619410
+      Plant2_Attack_swing_4: -1902108108579515400
+      Plant2_Attack_swing_5: -5176400151410956908
+      Plant2_Attack_swing_6: 6823412821872828223
+      Plant2_Attack_swing_7: 4421415344408908973
+      Plant2_Attack_swing_8: -3477214815960898742
+      Plant2_Attack_swing_9: 9071275514544446378
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

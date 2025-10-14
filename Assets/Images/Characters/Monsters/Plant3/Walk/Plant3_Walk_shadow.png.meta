@@ -165,6 +165,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -709,7 +722,31 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant3_Walk_shadow_0: 4206576757429954186
+      Plant3_Walk_shadow_1: 9181254348522756279
+      Plant3_Walk_shadow_10: -884099795654152704
+      Plant3_Walk_shadow_11: -3385157156375122691
+      Plant3_Walk_shadow_12: -8095616910990680730
+      Plant3_Walk_shadow_13: -2668499570150397087
+      Plant3_Walk_shadow_14: -8001018788128893444
+      Plant3_Walk_shadow_15: -5442443212847932909
+      Plant3_Walk_shadow_16: 3970215726905810197
+      Plant3_Walk_shadow_17: 5480646888707159603
+      Plant3_Walk_shadow_18: 8450149029364057517
+      Plant3_Walk_shadow_19: -385564776375379438
+      Plant3_Walk_shadow_2: -7697002318461610123
+      Plant3_Walk_shadow_20: -4759246844249423688
+      Plant3_Walk_shadow_21: -4672579711949586363
+      Plant3_Walk_shadow_22: 5943474378596937470
+      Plant3_Walk_shadow_23: 8632643572206325602
+      Plant3_Walk_shadow_3: -663317932697497533
+      Plant3_Walk_shadow_4: -140067827475944049
+      Plant3_Walk_shadow_5: 6244331715417622110
+      Plant3_Walk_shadow_6: -4355935522920276775
+      Plant3_Walk_shadow_7: -7529737779036676638
+      Plant3_Walk_shadow_8: -4768153081843542271
+      Plant3_Walk_shadow_9: -1655696898528833383
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -228,6 +228,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -1234,7 +1247,52 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant3_Death_body_0: 4437129881338170479
+      Plant3_Death_body_1: 5935312438092371792
+      Plant3_Death_body_10: -7247206086082621441
+      Plant3_Death_body_11: -1357398756027875544
+      Plant3_Death_body_12: 6749152896123434735
+      Plant3_Death_body_13: 3865497285571718381
+      Plant3_Death_body_14: 6830235715650926911
+      Plant3_Death_body_15: 6426162537744567617
+      Plant3_Death_body_16: 7994799707384553647
+      Plant3_Death_body_17: 3711688446464160579
+      Plant3_Death_body_18: -3965080303893117105
+      Plant3_Death_body_19: 8824723287847814858
+      Plant3_Death_body_2: 7509922636684355552
+      Plant3_Death_body_20: 8825994454309502671
+      Plant3_Death_body_21: 4624006729600032334
+      Plant3_Death_body_22: 6424839300940158293
+      Plant3_Death_body_23: 1720693528497793896
+      Plant3_Death_body_24: 9020814492127138416
+      Plant3_Death_body_25: -3526018315757278240
+      Plant3_Death_body_26: -2168257285778350231
+      Plant3_Death_body_27: 8113311177300391705
+      Plant3_Death_body_28: -6395011104329675399
+      Plant3_Death_body_29: 8612965438366029838
+      Plant3_Death_body_3: -8547330001357185581
+      Plant3_Death_body_30: 646876205496017912
+      Plant3_Death_body_31: -2896850060598790745
+      Plant3_Death_body_32: 4090738154919128914
+      Plant3_Death_body_33: -6726008044623080338
+      Plant3_Death_body_34: -1999943090835775584
+      Plant3_Death_body_35: 315415395361809862
+      Plant3_Death_body_36: 5576349014503064507
+      Plant3_Death_body_37: -4190504194104687401
+      Plant3_Death_body_38: 6109367752542794257
+      Plant3_Death_body_39: -6818346159862498835
+      Plant3_Death_body_4: 8412396599650012270
+      Plant3_Death_body_40: 8538055044185645168
+      Plant3_Death_body_41: -4254468162887231704
+      Plant3_Death_body_42: -4989950873767126483
+      Plant3_Death_body_43: -4447716903210464568
+      Plant3_Death_body_44: -4428957353926828657
+      Plant3_Death_body_5: -74787711564337635
+      Plant3_Death_body_6: -6889107882136069453
+      Plant3_Death_body_7: -309304726448273140
+      Plant3_Death_body_8: -5817063057530834055
+      Plant3_Death_body_9: -7401187599175161087
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

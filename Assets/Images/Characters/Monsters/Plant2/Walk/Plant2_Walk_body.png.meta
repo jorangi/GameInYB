@@ -216,6 +216,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -1134,7 +1147,48 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant2_Walk_body_0: 5426951834442027847
+      Plant2_Walk_body_1: -3027659307462979603
+      Plant2_Walk_body_10: -2575637952144820032
+      Plant2_Walk_body_11: 4508534856610903427
+      Plant2_Walk_body_12: -4704775440569869414
+      Plant2_Walk_body_13: 3518909622970712080
+      Plant2_Walk_body_14: -4556345456908622941
+      Plant2_Walk_body_15: 7180706881243986380
+      Plant2_Walk_body_16: 5254321880044961431
+      Plant2_Walk_body_17: -4959731770955554388
+      Plant2_Walk_body_18: 485804029964443574
+      Plant2_Walk_body_19: 1060252540247492859
+      Plant2_Walk_body_2: 1548703610309843208
+      Plant2_Walk_body_20: -4378132354696898700
+      Plant2_Walk_body_21: 7179858281097180328
+      Plant2_Walk_body_22: -752927367227387502
+      Plant2_Walk_body_23: 6113570845157770151
+      Plant2_Walk_body_24: -543553134305004814
+      Plant2_Walk_body_25: -4568951026322540581
+      Plant2_Walk_body_26: 5014893757806039274
+      Plant2_Walk_body_27: 7923326798571295306
+      Plant2_Walk_body_28: 373046461990192761
+      Plant2_Walk_body_29: 9177276235550814064
+      Plant2_Walk_body_3: -1996486883013345350
+      Plant2_Walk_body_30: -3520464091179692754
+      Plant2_Walk_body_31: 4762766797370045125
+      Plant2_Walk_body_32: -6162493467810747086
+      Plant2_Walk_body_33: 1608869051587876539
+      Plant2_Walk_body_34: -1663650404318967305
+      Plant2_Walk_body_35: -8607749208679053709
+      Plant2_Walk_body_36: -7604284554704288670
+      Plant2_Walk_body_37: -3695839556133648749
+      Plant2_Walk_body_38: -6425820662935585618
+      Plant2_Walk_body_39: 383940683361182322
+      Plant2_Walk_body_4: 1034094907641805356
+      Plant2_Walk_body_40: -1297731014811425121
+      Plant2_Walk_body_5: -1396031044780811075
+      Plant2_Walk_body_6: -3904204288830364213
+      Plant2_Walk_body_7: -4955823382046058919
+      Plant2_Walk_body_8: -8477401731831169792
+      Plant2_Walk_body_9: -5169767707627038111
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -237,6 +237,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -1309,7 +1322,55 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant2_Death_shadow_0: 5976063560999841925
+      Plant2_Death_shadow_1: -8644079250922235873
+      Plant2_Death_shadow_10: -5569343713733794292
+      Plant2_Death_shadow_11: -4444147195618872220
+      Plant2_Death_shadow_12: -8841482576915949863
+      Plant2_Death_shadow_13: -2286270919426178529
+      Plant2_Death_shadow_14: -3778123529032229517
+      Plant2_Death_shadow_15: -6484652415121829299
+      Plant2_Death_shadow_16: 8344791757168620211
+      Plant2_Death_shadow_17: 5078027772967072333
+      Plant2_Death_shadow_18: -5072067613378466082
+      Plant2_Death_shadow_19: 7519588113232773629
+      Plant2_Death_shadow_2: 5854100414075812426
+      Plant2_Death_shadow_20: -5161927153202937131
+      Plant2_Death_shadow_21: 6245237968237469231
+      Plant2_Death_shadow_22: -1076018916949217169
+      Plant2_Death_shadow_23: 16422105161709066
+      Plant2_Death_shadow_24: 3230750646521886511
+      Plant2_Death_shadow_25: -1422882271537987501
+      Plant2_Death_shadow_26: 3981991437416146650
+      Plant2_Death_shadow_27: -8936127518327349517
+      Plant2_Death_shadow_28: -2079753452109997241
+      Plant2_Death_shadow_29: 4708902442056849461
+      Plant2_Death_shadow_3: 8233347658889721793
+      Plant2_Death_shadow_30: -9014440355423819095
+      Plant2_Death_shadow_31: -3734217909465446946
+      Plant2_Death_shadow_32: -877653741531432201
+      Plant2_Death_shadow_33: -4422906793792380675
+      Plant2_Death_shadow_34: 2308209281321080723
+      Plant2_Death_shadow_35: 7249973899130793053
+      Plant2_Death_shadow_36: -8200097421663214730
+      Plant2_Death_shadow_37: -5478605598883021582
+      Plant2_Death_shadow_38: 4790406147268468382
+      Plant2_Death_shadow_39: -3240678563252051623
+      Plant2_Death_shadow_4: -1186170876061752080
+      Plant2_Death_shadow_40: -7897502670609939126
+      Plant2_Death_shadow_41: 1846063419264309962
+      Plant2_Death_shadow_42: 3392164061456861282
+      Plant2_Death_shadow_43: -2334278799284117520
+      Plant2_Death_shadow_44: -2368784005922090935
+      Plant2_Death_shadow_45: -9208300156582924847
+      Plant2_Death_shadow_46: 3273919996140311503
+      Plant2_Death_shadow_47: 9193504906758056533
+      Plant2_Death_shadow_5: -656793948823980132
+      Plant2_Death_shadow_6: -3769963627559083337
+      Plant2_Death_shadow_7: -2755567716601233745
+      Plant2_Death_shadow_8: 2500609731908966577
+      Plant2_Death_shadow_9: 8677467819601647704
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

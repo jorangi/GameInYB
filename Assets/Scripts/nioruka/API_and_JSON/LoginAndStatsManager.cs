@@ -82,7 +82,7 @@ public class LoginAndStatsManager : MonoBehaviour
         }
     }
 
-    IEnumerator GetStats()
+    public IEnumerator GetStats()
     {
         if (currentPlayer == null || string.IsNullOrEmpty(currentPlayer.accessToken))
         {
@@ -123,23 +123,23 @@ public class LoginAndStatsManager : MonoBehaviour
         }
     }
 
-    [System.Serializable]
     public class PlayerStats
-    {
-        public float hp;
-        public float atk;
-        public float def;
-        public float cri;
-        public float crid;
-        public float spd;
-        public float jmp;
-        public int clear;
-        public int chapter;
-        public int stage;
-        public string mapid;
-        public string equiped;
-        public string inventory;
-    }
+{
+    public float hp;
+    public float atk;
+    public float def;
+    public float cri;
+    public float crid;
+    public float spd;
+    public float jmp;
+    public int clear;
+    public int chapter;
+    public int stage;
+    public string mapid;
+    public string equiped;
+    public string inventory;
+}
+
 
     [System.Serializable]
     public class PlayerData

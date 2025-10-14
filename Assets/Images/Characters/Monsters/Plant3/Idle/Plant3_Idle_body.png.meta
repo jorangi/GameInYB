@@ -300,6 +300,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -1834,7 +1847,76 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant3_Idle_body_0: -4477562897164958523
+      Plant3_Idle_body_1: 4460182060817268735
+      Plant3_Idle_body_10: 5037563406511550883
+      Plant3_Idle_body_11: 2868285315211128631
+      Plant3_Idle_body_12: -2635818005530608846
+      Plant3_Idle_body_13: -65346030260188940
+      Plant3_Idle_body_14: -4472527108975600685
+      Plant3_Idle_body_15: -9112451930826956620
+      Plant3_Idle_body_16: -1034422538883098800
+      Plant3_Idle_body_17: 5073740452445569751
+      Plant3_Idle_body_18: 8498565587773531895
+      Plant3_Idle_body_19: 2354469369139280599
+      Plant3_Idle_body_2: -821608745450033845
+      Plant3_Idle_body_20: 416546874417607762
+      Plant3_Idle_body_21: -2375211592739970487
+      Plant3_Idle_body_22: -6875726521919601532
+      Plant3_Idle_body_23: 1485310873383800711
+      Plant3_Idle_body_24: -3634581692499090901
+      Plant3_Idle_body_25: 515141866381484308
+      Plant3_Idle_body_26: -4697957424247362155
+      Plant3_Idle_body_27: 6071994592397321963
+      Plant3_Idle_body_28: 6571146001149833355
+      Plant3_Idle_body_29: -7949561487813212776
+      Plant3_Idle_body_3: 5602037350611024142
+      Plant3_Idle_body_30: -4850254899219194515
+      Plant3_Idle_body_31: 5493866889048815440
+      Plant3_Idle_body_32: 5191450736148583848
+      Plant3_Idle_body_33: 8627401667648232994
+      Plant3_Idle_body_34: -4784404332799458199
+      Plant3_Idle_body_35: -5529482749446817784
+      Plant3_Idle_body_36: 8679290262463303572
+      Plant3_Idle_body_37: -9016196861551941564
+      Plant3_Idle_body_38: 6535005292996023778
+      Plant3_Idle_body_39: 6922551402577682336
+      Plant3_Idle_body_4: -881285679027169852
+      Plant3_Idle_body_40: -82222199912499840
+      Plant3_Idle_body_41: 1234198478497122411
+      Plant3_Idle_body_42: 3292937394462646292
+      Plant3_Idle_body_43: -8845186311694849026
+      Plant3_Idle_body_44: -3614325942649604829
+      Plant3_Idle_body_45: 410391916207758193
+      Plant3_Idle_body_46: -520722713998569991
+      Plant3_Idle_body_47: -8579341069580854611
+      Plant3_Idle_body_48: -5135838774475287361
+      Plant3_Idle_body_49: 4906392304482966478
+      Plant3_Idle_body_5: -551250817404950863
+      Plant3_Idle_body_50: 2504811728126119857
+      Plant3_Idle_body_51: -6769468934780224297
+      Plant3_Idle_body_52: -3072414322091893055
+      Plant3_Idle_body_53: -1848126889383427362
+      Plant3_Idle_body_54: 1722401766528163817
+      Plant3_Idle_body_55: -7977367360087153729
+      Plant3_Idle_body_56: -1104092182829681660
+      Plant3_Idle_body_57: 7590074356466819186
+      Plant3_Idle_body_58: 7855450507458329524
+      Plant3_Idle_body_59: -2038746632863820227
+      Plant3_Idle_body_6: -8225747034992308598
+      Plant3_Idle_body_60: 6316754612638883307
+      Plant3_Idle_body_61: -1897109621985280520
+      Plant3_Idle_body_62: 2167470620238020865
+      Plant3_Idle_body_63: 4921946830500412123
+      Plant3_Idle_body_64: -6731501660440233521
+      Plant3_Idle_body_65: 6228565291122735727
+      Plant3_Idle_body_66: -8620396391284684297
+      Plant3_Idle_body_67: -3851249743061985730
+      Plant3_Idle_body_68: 5100908782769116597
+      Plant3_Idle_body_7: 397769796675926162
+      Plant3_Idle_body_8: 3423846381541218084
+      Plant3_Idle_body_9: -6661726022449934656
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

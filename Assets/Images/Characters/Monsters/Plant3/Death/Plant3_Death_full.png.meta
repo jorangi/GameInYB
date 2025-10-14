@@ -435,6 +435,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -2959,7 +2972,121 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant3_Death_full_0: -6748570162319586660
+      Plant3_Death_full_1: 7665311266019850535
+      Plant3_Death_full_10: -9015188708261665229
+      Plant3_Death_full_100: -2215552802758437166
+      Plant3_Death_full_101: 7683271708673393507
+      Plant3_Death_full_102: 3641601352169382754
+      Plant3_Death_full_103: -9124534991281716918
+      Plant3_Death_full_104: -4629307865392065658
+      Plant3_Death_full_105: 4667195250248790938
+      Plant3_Death_full_106: -1372559830667231477
+      Plant3_Death_full_107: 4591126378284967960
+      Plant3_Death_full_108: 1729453546593092844
+      Plant3_Death_full_109: 3771629694729001475
+      Plant3_Death_full_11: 5395161204752315512
+      Plant3_Death_full_110: 1296642387537897726
+      Plant3_Death_full_111: 790852395369034829
+      Plant3_Death_full_112: -3621594600920707966
+      Plant3_Death_full_113: 2583375729738268582
+      Plant3_Death_full_12: -274305094110228378
+      Plant3_Death_full_13: 2516741528788785547
+      Plant3_Death_full_14: -7960468661829234623
+      Plant3_Death_full_15: -813309745330358604
+      Plant3_Death_full_16: -6856271633184074459
+      Plant3_Death_full_17: -7765455985658311144
+      Plant3_Death_full_18: -2674421196344392952
+      Plant3_Death_full_19: 5664961870049943119
+      Plant3_Death_full_2: 6488076478842190258
+      Plant3_Death_full_20: 4496702358489055464
+      Plant3_Death_full_21: 4121042307960585652
+      Plant3_Death_full_22: -4845405036237019358
+      Plant3_Death_full_23: 8638183311056247505
+      Plant3_Death_full_24: 1465435088144554347
+      Plant3_Death_full_25: 6009226889767085346
+      Plant3_Death_full_26: -7080062814388469610
+      Plant3_Death_full_27: 5927566837314246099
+      Plant3_Death_full_28: -324234546842737532
+      Plant3_Death_full_29: 8844194312295472719
+      Plant3_Death_full_3: -6724255991154693873
+      Plant3_Death_full_30: 2835882944461905958
+      Plant3_Death_full_31: -7939330372286904434
+      Plant3_Death_full_32: 8261880989510957433
+      Plant3_Death_full_33: -3816276145468483144
+      Plant3_Death_full_34: -5216405882938276565
+      Plant3_Death_full_35: 4449817375893685156
+      Plant3_Death_full_36: -3912844396087396738
+      Plant3_Death_full_37: -4895083854394198336
+      Plant3_Death_full_38: 3015347975749352263
+      Plant3_Death_full_39: -2776306703011646638
+      Plant3_Death_full_4: -1204249834488555448
+      Plant3_Death_full_40: 7012638144723725492
+      Plant3_Death_full_41: -209623004446050047
+      Plant3_Death_full_42: -1964163812837130758
+      Plant3_Death_full_43: 9115156628178875245
+      Plant3_Death_full_44: 4322730429744596785
+      Plant3_Death_full_45: 6006209447444765334
+      Plant3_Death_full_46: 4302233849258167594
+      Plant3_Death_full_47: -9190036316935053669
+      Plant3_Death_full_48: -2850508459513632428
+      Plant3_Death_full_49: 7585840231441972968
+      Plant3_Death_full_5: 6652923579910752384
+      Plant3_Death_full_50: -73577771098225190
+      Plant3_Death_full_51: 5823592066830747525
+      Plant3_Death_full_52: 4960996018493677284
+      Plant3_Death_full_53: -2550369510477817041
+      Plant3_Death_full_54: 7524193043139970716
+      Plant3_Death_full_55: 2873485453625203441
+      Plant3_Death_full_56: 6126216136851583822
+      Plant3_Death_full_57: -6748893777134010772
+      Plant3_Death_full_58: 1137089253285703279
+      Plant3_Death_full_59: -3653155128419713787
+      Plant3_Death_full_6: -8416837632517231755
+      Plant3_Death_full_60: 5208547141687866616
+      Plant3_Death_full_61: -7057675666795944877
+      Plant3_Death_full_62: -8028368422832476299
+      Plant3_Death_full_63: -6121493808933439581
+      Plant3_Death_full_64: 1374916994996632135
+      Plant3_Death_full_65: 1902133443496186278
+      Plant3_Death_full_66: -4831555682783795995
+      Plant3_Death_full_67: 1400877108527171428
+      Plant3_Death_full_68: 2901721203029341154
+      Plant3_Death_full_69: 4251940707987261972
+      Plant3_Death_full_7: 8291077070397471519
+      Plant3_Death_full_70: 4173722870999471861
+      Plant3_Death_full_71: -5815232587047521071
+      Plant3_Death_full_72: 2398066218907821132
+      Plant3_Death_full_73: 65054289824518681
+      Plant3_Death_full_74: -7643626375029696903
+      Plant3_Death_full_75: -5813622059775273015
+      Plant3_Death_full_76: 3967599538113842510
+      Plant3_Death_full_77: 8829369382799524628
+      Plant3_Death_full_78: 8790198304883833399
+      Plant3_Death_full_79: -27388163723685226
+      Plant3_Death_full_8: 2913202212977313172
+      Plant3_Death_full_80: 9213804488458713955
+      Plant3_Death_full_81: 5639074095488470341
+      Plant3_Death_full_82: 862290577134758881
+      Plant3_Death_full_83: -4932034572446460571
+      Plant3_Death_full_84: -7287228103319585205
+      Plant3_Death_full_85: -4047964328448419789
+      Plant3_Death_full_86: 1477845210995812802
+      Plant3_Death_full_87: 3204569285852478674
+      Plant3_Death_full_88: -9027480168632271686
+      Plant3_Death_full_89: -5863487602529770207
+      Plant3_Death_full_9: 9199049738253979098
+      Plant3_Death_full_90: -1786387903785611364
+      Plant3_Death_full_91: 5839379485642745343
+      Plant3_Death_full_92: -4366173596963394148
+      Plant3_Death_full_93: -4540035102726335313
+      Plant3_Death_full_94: 9171153008655060346
+      Plant3_Death_full_95: 5782236316398254265
+      Plant3_Death_full_96: 6687241891706632332
+      Plant3_Death_full_97: -6743075206265486848
+      Plant3_Death_full_98: -7581934682104443980
+      Plant3_Death_full_99: -2451004171136592214
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -342,6 +342,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -2184,7 +2197,90 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant3_Walk_body_0: 4943950681292463234
+      Plant3_Walk_body_1: -6840564822927060399
+      Plant3_Walk_body_10: -2291846627396450442
+      Plant3_Walk_body_11: -6973030081102672995
+      Plant3_Walk_body_12: 5753084300569386697
+      Plant3_Walk_body_13: -7746833064620879318
+      Plant3_Walk_body_14: 5037836512610521055
+      Plant3_Walk_body_15: 4847777510506237766
+      Plant3_Walk_body_16: -111908702616446105
+      Plant3_Walk_body_17: 210497737943115928
+      Plant3_Walk_body_18: 8059670204881215805
+      Plant3_Walk_body_19: -6023002712124246865
+      Plant3_Walk_body_2: 8428847869669481728
+      Plant3_Walk_body_20: -7441382774188893000
+      Plant3_Walk_body_21: 306458037563688118
+      Plant3_Walk_body_22: -4878478923648103498
+      Plant3_Walk_body_23: -1210702421643174427
+      Plant3_Walk_body_24: -4538205195079040953
+      Plant3_Walk_body_25: -6993114046014907394
+      Plant3_Walk_body_26: 6712130785781013689
+      Plant3_Walk_body_27: 3634326826371194973
+      Plant3_Walk_body_28: -6693465073333292939
+      Plant3_Walk_body_29: 5428005145253387296
+      Plant3_Walk_body_3: -8428448352355190744
+      Plant3_Walk_body_30: 1786588431246428550
+      Plant3_Walk_body_31: 6501154960061530921
+      Plant3_Walk_body_32: 1321545028560265853
+      Plant3_Walk_body_33: 1440869468590788283
+      Plant3_Walk_body_34: -3476329772552653637
+      Plant3_Walk_body_35: -1870967231864145420
+      Plant3_Walk_body_36: 327441708962572756
+      Plant3_Walk_body_37: 7928394105975346250
+      Plant3_Walk_body_38: 8960494430283423636
+      Plant3_Walk_body_39: 3948092310810523393
+      Plant3_Walk_body_4: -3390036598278953549
+      Plant3_Walk_body_40: 2251524154988599922
+      Plant3_Walk_body_41: 5603662578356010565
+      Plant3_Walk_body_42: 2693975304395586769
+      Plant3_Walk_body_43: 9085271745734212570
+      Plant3_Walk_body_44: -7973180932432518224
+      Plant3_Walk_body_45: 8324817343920241634
+      Plant3_Walk_body_46: 6972518925643410431
+      Plant3_Walk_body_47: 1513700099319767758
+      Plant3_Walk_body_48: -5421198871093142005
+      Plant3_Walk_body_49: -8496058252287281568
+      Plant3_Walk_body_5: 4982195947852937057
+      Plant3_Walk_body_50: 7605634113196022240
+      Plant3_Walk_body_51: 3238945891791153000
+      Plant3_Walk_body_52: 2295543018066867245
+      Plant3_Walk_body_53: 6888082871023711087
+      Plant3_Walk_body_54: 8459702207737876939
+      Plant3_Walk_body_55: 896318297576616521
+      Plant3_Walk_body_56: -3940565800952772279
+      Plant3_Walk_body_57: 4529265830936571711
+      Plant3_Walk_body_58: -1155013049610922187
+      Plant3_Walk_body_59: 5265935277024006526
+      Plant3_Walk_body_6: 2115209039393463533
+      Plant3_Walk_body_60: 1565515029392845607
+      Plant3_Walk_body_61: -5256559906256130086
+      Plant3_Walk_body_62: -5246068578263096255
+      Plant3_Walk_body_63: 5398830988711727800
+      Plant3_Walk_body_64: -7189101232982791070
+      Plant3_Walk_body_65: 3624791580632070369
+      Plant3_Walk_body_66: 3960964765874714447
+      Plant3_Walk_body_67: -175637428964310989
+      Plant3_Walk_body_68: -6545401086896063665
+      Plant3_Walk_body_69: -6351189391791953746
+      Plant3_Walk_body_7: 1260595092939620488
+      Plant3_Walk_body_70: -6390510402852809630
+      Plant3_Walk_body_71: 5702746202187589410
+      Plant3_Walk_body_72: -6751982108634793514
+      Plant3_Walk_body_73: 600193361102910660
+      Plant3_Walk_body_74: 7538573402482148354
+      Plant3_Walk_body_75: -5612451033767759441
+      Plant3_Walk_body_76: 279988047334759230
+      Plant3_Walk_body_77: 5929266080223087528
+      Plant3_Walk_body_78: 7217737266196338322
+      Plant3_Walk_body_79: -1095675702549717794
+      Plant3_Walk_body_8: 4689973379196607577
+      Plant3_Walk_body_80: -7290155864491851197
+      Plant3_Walk_body_81: -6775655108297108109
+      Plant3_Walk_body_82: 2568994747178066194
+      Plant3_Walk_body_9: 4328453547440622355
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

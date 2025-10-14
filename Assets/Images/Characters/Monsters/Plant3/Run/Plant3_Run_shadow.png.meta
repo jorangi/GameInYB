@@ -189,6 +189,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -909,7 +922,39 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant3_Run_shadow_0: 8333572725540897811
+      Plant3_Run_shadow_1: 2602786582218817533
+      Plant3_Run_shadow_10: -5371053768729768862
+      Plant3_Run_shadow_11: -2146479793264010366
+      Plant3_Run_shadow_12: 2847539164396747019
+      Plant3_Run_shadow_13: -707564247792041984
+      Plant3_Run_shadow_14: 5707967408699272870
+      Plant3_Run_shadow_15: 3560262495722025062
+      Plant3_Run_shadow_16: 4320248372898949469
+      Plant3_Run_shadow_17: -1258226499655615767
+      Plant3_Run_shadow_18: 1304705886891790262
+      Plant3_Run_shadow_19: -253061512670962
+      Plant3_Run_shadow_2: 1747849579998308478
+      Plant3_Run_shadow_20: -7280529846340291624
+      Plant3_Run_shadow_21: 8120635115552956150
+      Plant3_Run_shadow_22: 5461819652415285238
+      Plant3_Run_shadow_23: -389368284525115727
+      Plant3_Run_shadow_24: 6900664120783966316
+      Plant3_Run_shadow_25: -965837896398641080
+      Plant3_Run_shadow_26: -6904356717199207918
+      Plant3_Run_shadow_27: 8756859545706769860
+      Plant3_Run_shadow_28: -7234855042012625011
+      Plant3_Run_shadow_29: -6736558590361420968
+      Plant3_Run_shadow_3: 7275245120794961628
+      Plant3_Run_shadow_30: 1634752127580317982
+      Plant3_Run_shadow_31: 8883404884776790712
+      Plant3_Run_shadow_4: 7474769372119104051
+      Plant3_Run_shadow_5: -7748754326990824251
+      Plant3_Run_shadow_6: 7292856450619809750
+      Plant3_Run_shadow_7: 8253590170147264010
+      Plant3_Run_shadow_8: -7660453533047577759
+      Plant3_Run_shadow_9: 1700857068152509385
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

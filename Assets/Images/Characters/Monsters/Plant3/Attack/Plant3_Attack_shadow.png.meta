@@ -177,6 +177,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -809,7 +822,35 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant3_Attack_shadow_0: -4859427181576431769
+      Plant3_Attack_shadow_1: 8671405160647172837
+      Plant3_Attack_shadow_10: -6295101329022426318
+      Plant3_Attack_shadow_11: 2976199896024585305
+      Plant3_Attack_shadow_12: -8778804354704306425
+      Plant3_Attack_shadow_13: 3666584755041463713
+      Plant3_Attack_shadow_14: -1157274502997777133
+      Plant3_Attack_shadow_15: -3804434368878413082
+      Plant3_Attack_shadow_16: -6641082400321625497
+      Plant3_Attack_shadow_17: -6046727751154743582
+      Plant3_Attack_shadow_18: 3191493804606582860
+      Plant3_Attack_shadow_19: -7114844493651967542
+      Plant3_Attack_shadow_2: -5390682156995482739
+      Plant3_Attack_shadow_20: -8575874658390454611
+      Plant3_Attack_shadow_21: -4832579907762649514
+      Plant3_Attack_shadow_22: -421180288196001177
+      Plant3_Attack_shadow_23: -1372260055509048433
+      Plant3_Attack_shadow_24: 622973189756647602
+      Plant3_Attack_shadow_25: -7445078172296240546
+      Plant3_Attack_shadow_26: -9061801010958505419
+      Plant3_Attack_shadow_27: 322057547010307549
+      Plant3_Attack_shadow_3: -5120987915881380874
+      Plant3_Attack_shadow_4: 8952363430933781014
+      Plant3_Attack_shadow_5: -6380775959064801010
+      Plant3_Attack_shadow_6: -4910512327111004678
+      Plant3_Attack_shadow_7: -6387403134674988880
+      Plant3_Attack_shadow_8: 5065050549317350539
+      Plant3_Attack_shadow_9: -1634057054550224879
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

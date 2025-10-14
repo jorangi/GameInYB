@@ -153,6 +153,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -609,7 +622,27 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant2_Hurt_full_0: 4546666447258136832
+      Plant2_Hurt_full_1: 1444584614242418756
+      Plant2_Hurt_full_10: -9058447243059261468
+      Plant2_Hurt_full_11: 4203721034416865977
+      Plant2_Hurt_full_12: 2977468734396808257
+      Plant2_Hurt_full_13: 328090980258960750
+      Plant2_Hurt_full_14: -7000359131195675374
+      Plant2_Hurt_full_15: 5626081463457869728
+      Plant2_Hurt_full_16: 1294670228144275239
+      Plant2_Hurt_full_17: -3796298959845745884
+      Plant2_Hurt_full_18: 3793990582072943725
+      Plant2_Hurt_full_19: -189380699749436549
+      Plant2_Hurt_full_2: 2278276156493160539
+      Plant2_Hurt_full_3: 1500654721259406808
+      Plant2_Hurt_full_4: -9092952744640854186
+      Plant2_Hurt_full_5: -8708802223923074208
+      Plant2_Hurt_full_6: 1597310664814647533
+      Plant2_Hurt_full_7: 2552217890318124449
+      Plant2_Hurt_full_8: 4192384603971174500
+      Plant2_Hurt_full_9: 2702006889895717580
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

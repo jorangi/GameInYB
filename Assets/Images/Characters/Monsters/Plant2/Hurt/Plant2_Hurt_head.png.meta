@@ -174,6 +174,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -784,7 +797,34 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant2_Hurt_head_0: -7258126327255488186
+      Plant2_Hurt_head_1: -7865413385055906445
+      Plant2_Hurt_head_10: 1411308895485815492
+      Plant2_Hurt_head_11: 5236098712492517421
+      Plant2_Hurt_head_12: -5804673763466500774
+      Plant2_Hurt_head_13: -7139527049744148397
+      Plant2_Hurt_head_14: 712682726859046323
+      Plant2_Hurt_head_15: 4089624129376384602
+      Plant2_Hurt_head_16: -5022114497891542966
+      Plant2_Hurt_head_17: 3834878411410525605
+      Plant2_Hurt_head_18: -4895700936354752945
+      Plant2_Hurt_head_19: -5695454838250267269
+      Plant2_Hurt_head_2: -577922260064934120
+      Plant2_Hurt_head_20: -1457876499004766545
+      Plant2_Hurt_head_21: 929589824960384890
+      Plant2_Hurt_head_22: 3943358686002385096
+      Plant2_Hurt_head_23: 8816879364454161106
+      Plant2_Hurt_head_24: -6044621595258429881
+      Plant2_Hurt_head_25: 1611672491636814677
+      Plant2_Hurt_head_26: 3847758411161699893
+      Plant2_Hurt_head_3: 6987287190503774426
+      Plant2_Hurt_head_4: -6951755306784785311
+      Plant2_Hurt_head_5: 4519207556445581097
+      Plant2_Hurt_head_6: 8831454417200632549
+      Plant2_Hurt_head_7: -5340758030581613222
+      Plant2_Hurt_head_8: -633988022447593811
+      Plant2_Hurt_head_9: -6969188976785110212
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

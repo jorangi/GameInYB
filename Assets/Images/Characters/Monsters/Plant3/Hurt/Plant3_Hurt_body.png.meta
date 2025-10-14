@@ -315,6 +315,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -1959,7 +1972,81 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant3_Hurt_body_0: 2275286693682662388
+      Plant3_Hurt_body_1: -8029095434184408362
+      Plant3_Hurt_body_10: -8076330705600930583
+      Plant3_Hurt_body_11: 8334463541256110687
+      Plant3_Hurt_body_12: -8973756241906845262
+      Plant3_Hurt_body_13: 7859614405633349282
+      Plant3_Hurt_body_14: 638895642160480798
+      Plant3_Hurt_body_15: 2627737862993174711
+      Plant3_Hurt_body_16: 967711830746661170
+      Plant3_Hurt_body_17: 1223043343810957088
+      Plant3_Hurt_body_18: 1575214484053345312
+      Plant3_Hurt_body_19: 5181457467309411431
+      Plant3_Hurt_body_2: -5738632083012568488
+      Plant3_Hurt_body_20: -4360526333808248411
+      Plant3_Hurt_body_21: 1698313664843939009
+      Plant3_Hurt_body_22: 388692583222176509
+      Plant3_Hurt_body_23: -3646434113572653905
+      Plant3_Hurt_body_24: -2792637387396780169
+      Plant3_Hurt_body_25: 8605307150336026004
+      Plant3_Hurt_body_26: -890451524513289059
+      Plant3_Hurt_body_27: 5209798015785664019
+      Plant3_Hurt_body_28: 1172814013926002529
+      Plant3_Hurt_body_29: -7566388436063479794
+      Plant3_Hurt_body_3: 4934442263188048318
+      Plant3_Hurt_body_30: 406707512905989555
+      Plant3_Hurt_body_31: 6545812024801486104
+      Plant3_Hurt_body_32: 6246982066736296330
+      Plant3_Hurt_body_33: -5971842416503493472
+      Plant3_Hurt_body_34: 493017039800706642
+      Plant3_Hurt_body_35: 1353455280441710292
+      Plant3_Hurt_body_36: 5269245880645080280
+      Plant3_Hurt_body_37: 954782406691777455
+      Plant3_Hurt_body_38: 9104586758313376413
+      Plant3_Hurt_body_39: -6310631392618970733
+      Plant3_Hurt_body_4: 7373165913496198580
+      Plant3_Hurt_body_40: 7404287788529581328
+      Plant3_Hurt_body_41: -5473813610515182829
+      Plant3_Hurt_body_42: -6932485389325445530
+      Plant3_Hurt_body_43: 1614930614613666392
+      Plant3_Hurt_body_44: -8214236449623973488
+      Plant3_Hurt_body_45: -7300254631474276870
+      Plant3_Hurt_body_46: 7174462071475626361
+      Plant3_Hurt_body_47: 5381820721377256263
+      Plant3_Hurt_body_48: 1695125947387297324
+      Plant3_Hurt_body_49: -6360481558958323529
+      Plant3_Hurt_body_5: -7522179021401743757
+      Plant3_Hurt_body_50: -1317231291520118400
+      Plant3_Hurt_body_51: 5958573396099355605
+      Plant3_Hurt_body_52: 8806408341741721730
+      Plant3_Hurt_body_53: -7595908826239622964
+      Plant3_Hurt_body_54: 691626831785678224
+      Plant3_Hurt_body_55: 4370246394979359391
+      Plant3_Hurt_body_56: -5301877467175902201
+      Plant3_Hurt_body_57: -2425933889074979063
+      Plant3_Hurt_body_58: 3161974913300399313
+      Plant3_Hurt_body_59: 7789217731852418493
+      Plant3_Hurt_body_6: -7292380144740156314
+      Plant3_Hurt_body_60: -4919702006816373918
+      Plant3_Hurt_body_61: 7698409495826321128
+      Plant3_Hurt_body_62: 4389605504332954000
+      Plant3_Hurt_body_63: -1566973603855720652
+      Plant3_Hurt_body_64: -3007469597378316278
+      Plant3_Hurt_body_65: 1274774825919346820
+      Plant3_Hurt_body_66: 6411360158514050195
+      Plant3_Hurt_body_67: -7727492088790942237
+      Plant3_Hurt_body_68: 8184855024906502767
+      Plant3_Hurt_body_69: 5157157450216626709
+      Plant3_Hurt_body_7: -7794146506265174232
+      Plant3_Hurt_body_70: -8915430430186198748
+      Plant3_Hurt_body_71: 6324374811884587097
+      Plant3_Hurt_body_72: 202154967783687136
+      Plant3_Hurt_body_73: 7667216418105882884
+      Plant3_Hurt_body_8: 104018284060563861
+      Plant3_Hurt_body_9: -2963761807012839385
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

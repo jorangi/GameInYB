@@ -189,6 +189,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -909,7 +922,39 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant2_Run_full_0: 5262553725954133773
+      Plant2_Run_full_1: -945974031726470641
+      Plant2_Run_full_10: -5834496851539237608
+      Plant2_Run_full_11: 3179836990814694086
+      Plant2_Run_full_12: 2977423120306258993
+      Plant2_Run_full_13: 6889669816201825663
+      Plant2_Run_full_14: -390776645871725501
+      Plant2_Run_full_15: -1885339233722393317
+      Plant2_Run_full_16: -8705826633205412438
+      Plant2_Run_full_17: 7103371625037841839
+      Plant2_Run_full_18: -5166788815666883995
+      Plant2_Run_full_19: -4461197639176533780
+      Plant2_Run_full_2: 1073345882077491171
+      Plant2_Run_full_20: 5602275316367837695
+      Plant2_Run_full_21: 3942670867311425846
+      Plant2_Run_full_22: 6995500249583857044
+      Plant2_Run_full_23: 7095148359088155777
+      Plant2_Run_full_24: -4409418958556529317
+      Plant2_Run_full_25: 2516385962722020836
+      Plant2_Run_full_26: 8119166023692943971
+      Plant2_Run_full_27: -1705078665491537180
+      Plant2_Run_full_28: -7226016717842211536
+      Plant2_Run_full_29: 2206711269372107482
+      Plant2_Run_full_3: 1649743113098065606
+      Plant2_Run_full_30: -1860398213709218931
+      Plant2_Run_full_31: -1812672516120114536
+      Plant2_Run_full_4: 2931258105778296912
+      Plant2_Run_full_5: -6278128933398209376
+      Plant2_Run_full_6: -8416106816069114026
+      Plant2_Run_full_7: 1941561998409789231
+      Plant2_Run_full_8: -8712766320188027061
+      Plant2_Run_full_9: -4437297294190429784
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

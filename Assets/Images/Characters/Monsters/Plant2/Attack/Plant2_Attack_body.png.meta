@@ -225,6 +225,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -1209,7 +1222,51 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Plant2_Attack_body_0: -350354761793350430
+      Plant2_Attack_body_1: 2810626041392942228
+      Plant2_Attack_body_10: -8887152186875323902
+      Plant2_Attack_body_11: 2482236600684716577
+      Plant2_Attack_body_12: 2876527392277677013
+      Plant2_Attack_body_13: -6820271134951550618
+      Plant2_Attack_body_14: 8395303700179346343
+      Plant2_Attack_body_15: 3804003132615241194
+      Plant2_Attack_body_16: 2970636461621636967
+      Plant2_Attack_body_17: 3783785100722981071
+      Plant2_Attack_body_18: 5039274150431526160
+      Plant2_Attack_body_19: 8508864009070609448
+      Plant2_Attack_body_2: -6062131570857293967
+      Plant2_Attack_body_20: 7649708600375955621
+      Plant2_Attack_body_21: -1433992991615366235
+      Plant2_Attack_body_22: 3813276682884162661
+      Plant2_Attack_body_23: 3099312564922365655
+      Plant2_Attack_body_24: 4106030893227062293
+      Plant2_Attack_body_25: -5194515592851797668
+      Plant2_Attack_body_26: 6783257434315197973
+      Plant2_Attack_body_27: -2506939715136795459
+      Plant2_Attack_body_28: 8623488581766208436
+      Plant2_Attack_body_29: 3095333279837021426
+      Plant2_Attack_body_3: 863672760990393166
+      Plant2_Attack_body_30: 6694916298905679441
+      Plant2_Attack_body_31: 1860977693413587050
+      Plant2_Attack_body_32: -4842705707154639966
+      Plant2_Attack_body_33: -6220600017955685369
+      Plant2_Attack_body_34: -2734454844558077729
+      Plant2_Attack_body_35: -6954454250150311460
+      Plant2_Attack_body_36: -4949778185479923163
+      Plant2_Attack_body_37: 4019976687156848324
+      Plant2_Attack_body_38: 4236571112533700196
+      Plant2_Attack_body_39: 2905343892986006577
+      Plant2_Attack_body_4: 195815374512153522
+      Plant2_Attack_body_40: -6154419205848357117
+      Plant2_Attack_body_41: 7475235995719974940
+      Plant2_Attack_body_42: -1074039268346204443
+      Plant2_Attack_body_43: 62549949817453347
+      Plant2_Attack_body_5: 4612515657811859845
+      Plant2_Attack_body_6: 6989812652637123396
+      Plant2_Attack_body_7: -8225460850922741174
+      Plant2_Attack_body_8: 6884333777845240687
+      Plant2_Attack_body_9: 5364081375793150010
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
