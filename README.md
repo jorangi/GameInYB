@@ -212,4 +212,13 @@
   - 식인 식물 몬스터 추가
     - Hit State, Die State 추가
     - blackboard 수정
+  # 251015
+  ## v.1(신종혁)
+  - Hit State, Die State 완성
+    - HitStun, HitInvincibleTime 추가
+  - Health 클래스 별도 모듈화
+    - PlayerHPBarController를 옵저버 형식으로 하기 위함
+    - NPC, Player의 Data.HP를 Data.health.HP로 변경
+  - 몬스터의 HP바의 마스크를 적용
+  - 사용되지 않던 레거시 메소드 제거
 </details>

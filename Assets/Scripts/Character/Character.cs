@@ -40,6 +40,20 @@ public interface IStatModifierProvider
 {
     IEnumerable<StatModifier> GetStatModifiers();
 }
+public class Health
+{
+    private int _HP;
+    public int HP => _HP;
+    public Action OnHPChanged;
+    public Action OnDied;
+    public void ApplyHP(int value)
+    {
+        _HP = value;
+        OnHPChanged?.Invoke();
+        if (_HP <= 0)
+            OnDied?.Invoke();
+    }
+}
 public class CharacterStats
 {
     //기본 스탯
@@ -75,7 +89,7 @@ public class CharacterStats
         bool t = providers.TryGetValue(provider, out var cur);
         if (!t) return;
         int next = cur - count;
-        if(next > 0)providers[provider] = next;
+        if (next > 0) providers[provider] = next;
         else providers.Remove(provider);
         dirty = true;
     }
@@ -98,7 +112,8 @@ public class CharacterStats
             int count = kv.Value;
             foreach (var m in prov.GetStatModifiers())
             {
-                if (m.Op == StatOp.ADD) addBuckets[m.Stat] = addBuckets.TryGetValue(m.Stat, out var a) ? a + (m.Value * count) : (m.Value * count);
+                if (m.Op == StatOp.ADD)
+                    addBuckets[m.Stat] = addBuckets.TryGetValue(m.Stat, out var a) ? a + (m.Value * count) : (m.Value * count);
                 else
                 {
                     var key = (m.Stat, m.Priority);
@@ -129,6 +144,7 @@ public interface IStatProvider
 }
 public class CharacterData : IStatProvider
 {
+    public Health health = new();
     protected CharacterStats stats = new();
     protected string unitName;
     public string UnitName
@@ -149,20 +165,6 @@ public class CharacterData : IStatProvider
     }
     public float Spd => stats.GetFinal(StatType.SPD); // movement speed
     public int MaxHP => stats.GetFinal(StatType.HP) is float f ? (int)f : 0;
-    protected int _HP; // now Health
-    public int HP
-    {
-        get => _HP;
-        set
-        {
-            if (value < 0)
-                _HP = 0;
-            else if (value > stats.GetFinal(StatType.HP))
-                _HP = (int)stats.GetFinal(StatType.HP);
-            else
-                _HP = value;
-        }
-    }
     public float Atk => stats.GetFinal(StatType.ATK); // attack power
     public float Ats => stats.GetFinal(StatType.ATS); // attack speed
     public float Def => stats.GetFinal(StatType.DEF); // defense power
@@ -200,7 +202,7 @@ public class CharacterData : IStatProvider
         this.HitStunTime = hitStunTime;
         return this;
     }
-    public override string ToString() => $"Name: {unitName}, Speed: {Spd}, MaxHP: {MaxHP}, HP: {_HP}, Atk: {Atk}, Ats: {Ats}, Def: {Def}";
+    public override string ToString() => $"Name: {unitName}, Speed: {Spd}, MaxHP: {MaxHP}, HP: {health.HP}, Atk: {Atk}, Ats: {Ats}, Def: {Def}";
     public virtual CharacterStats GetStats() => stats;
 }
 [DisallowMultipleComponent]
@@ -240,15 +242,16 @@ public class Character : ParentObject
         get => invincibleTimer;
         set
         {
+            if (this is NonPlayableCharacter) return;
             if (value < 0.0f)
             {
                 invincibleTimer = 0.0f;
-                hitBox.enabled = true;
+                hitBox.gameObject.SetActive(true);
             }
             else
             {
                 invincibleTimer = value;
-                hitBox.enabled = false;
+                hitBox.gameObject.SetActive(false);
             }
         }
     }
@@ -263,11 +266,6 @@ public class Character : ParentObject
     #endregion
     protected virtual void Update()
     {
-        if (invincibleTimer > 0.0f)
-            invincibleTimer -= Time.deltaTime;
-        else
-            hitBox.enabled = true;
-
         isGround = GroundCheck();
         if (this is PlayableCharacter)
         {
@@ -321,8 +319,12 @@ public class Character : ParentObject
     }
     protected virtual void Awake()
     {
-        data = new("Default");
+        data ??= new("Default");
+        data.health.OnHPChanged += OnHPChanged;
+        data.health.OnDied += OnDied;
     }
+    protected virtual void OnDied(){}
+    protected virtual void OnHPChanged(){}
     protected virtual void FixedUpdate()
     {
         Movement();
@@ -423,5 +425,4 @@ public class Character : ParentObject
     }
     public void SetDesiredMove(float x) => desiredMoveX = x;
     public void SetRooted(bool rooted) => isRooted = rooted;
-
 }

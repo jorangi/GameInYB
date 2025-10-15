@@ -192,7 +192,7 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
     public void Refresh()
     {
         #region status
-        hp.text = $"{PlayableCharacter.Inst.Data.HP}/{PlayableCharacter.Inst.Data.MaxHP}";
+        hp.text = $"{PlayableCharacter.Inst.Data.health.HP}/{PlayableCharacter.Inst.Data.MaxHP}";
         atk.text = $"{PlayableCharacter.Inst.Data.Atk}";
         ats.text = $"{PlayableCharacter.Inst.Data.Ats}";
         def.text = $"{PlayableCharacter.Inst.Data.Def}";

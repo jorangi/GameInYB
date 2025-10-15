@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class DieState : StateBase
 {
-    public DieState(NonPlayableCharacter npc, Blackboard blackboard) : base(npc, blackboard){}
-
+    private float _despawnAt;
+    public DieState(NonPlayableCharacter npc, Blackboard blackboard) : base(npc, blackboard) { }
     public override string Name => "Die";
 
     public override void Enter()
@@ -12,11 +12,18 @@ public class DieState : StateBase
         npc.SetRooted(true);
         npc.AnimSetMoving(false);
         npc.AnimTriggerDeath();
+        npc.hitBox.gameObject.SetActive(false);
+        npc.SetMinStateLock(blackboard.MinStateDuration);
     }
     public override void Exit()
     {
     }
     public override void Update()
     {
+        if (npc.IsDieAnimFinished())
+        {
+            GameObject.Destroy(npc.gameObject);
+            return;
+        }
     }
 }

@@ -37,7 +37,6 @@ public class Weapon : MonoBehaviour
     public GameObject attackHitBox;
     private const int MAX_SWING_COUNT = 2; // Maximum number of swings allowed
     public Animator anim;
-    private Transform hitPoint;
     private CharacterStats stats;
     private IStatProvider provider;
     private void Awake()
@@ -46,7 +45,6 @@ public class Weapon : MonoBehaviour
         stats ??= provider.GetStats();
         stats.OnRecalculated += OnStatChanged;
         if (provider == null) Debug.LogError("[WeaponScript] provider에 stats할당 실패");
-        hitPoint = transform.GetChild(0);
         anim = GetComponent<Animator>();
     }
     public void OnStatChanged()

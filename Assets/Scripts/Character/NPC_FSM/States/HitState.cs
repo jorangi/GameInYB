@@ -9,6 +9,7 @@ public class HitState : StateBase
 
     public override void Enter()
     {
+        npc.hitBox.gameObject.SetActive(false);
         npc.SetDesiredMove(0f);
         npc.SetRooted(true);
         npc.AnimSetMoving(false);
@@ -16,20 +17,17 @@ public class HitState : StateBase
         _hitStunEndTime = blackboard.TimeNow + npc.NPCData.HitStunTime;
         blackboard.InvinsibleEndTime = blackboard.TimeNow + npc.NPCData.InvincibleTime;
         npc.SetMinStateLock(blackboard.MinStateDuration);
-        npc.hitBox.enabled = false;
     }
 
     public override void Exit()
     {
-        npc.hitBox.enabled = true;
     }
 
     public override void Update()
     {
         if (blackboard.TimeNow < _hitStunEndTime)
-        {
             return;
-        }
+        npc.hitBox.gameObject.SetActive(blackboard.TimeNow > blackboard.InvinsibleEndTime);
         npc.SetRooted(false);
         if (!npc.InMinStateLock())
         {

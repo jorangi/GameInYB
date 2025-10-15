@@ -17,13 +17,13 @@ public class IdleState : StateBase
     }
     public override void Update()
     {
-        if (blackboard.DistToTarget <= blackboard.AttackEnter && !InMinLock())
+        if (blackboard.DistToTarget <= blackboard.AttackEnter)
         {
             npc.RequestState<AttackState>();
             return;
         }
         // 타깃이 범위 내 + 볼 수 있음
-        if (!(blackboard.IsPrecipiceAhead || blackboard.IsWallAhead) && blackboard.CanSeeTarget && blackboard.DistToTarget <= blackboard.DetectEnter && !InMinLock())
+        if (!(blackboard.IsPrecipiceAhead || blackboard.IsWallAhead) && blackboard.CanSeeTarget && blackboard.DistToTarget <= blackboard.DetectEnter)
         {
             npc.RequestState<ChaseState>();
             return;

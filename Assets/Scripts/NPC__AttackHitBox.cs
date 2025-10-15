@@ -2,12 +2,11 @@ using System.Collections.Generic;
 using AnimationImporter.PyxelEdit;
 using UnityEngine;
 
-public class AttackHitBox : MonoBehaviour
+public class NPC__AttackHitBox : MonoBehaviour
 {
     public float timer = 0.2f;
-    private List<GameObject> targets = new();
     private CharacterStats stats;
-    
+    private GameObject target;
     public IStatProvider provider;
     void Awake()
     {
@@ -20,10 +19,10 @@ public class AttackHitBox : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && collision.gameObject.layer == LayerMask.NameToLayer("HitBox") && !targets.Contains(collision.gameObject))
+        if (collision.gameObject.CompareTag("Player") && collision.gameObject.layer == LayerMask.NameToLayer("HitBox") && target != collision.gameObject)
         {
-            targets.Add(collision.gameObject);
-            collision.transform.parent.GetComponent<NonPlayableCharacter>().TakeDamage(stats.GetFinal(StatType.ATK));
+            target=collision.gameObject;
+            collision.transform.parent.GetComponent<PlayableCharacter>().TakeDamage(stats.GetFinal(StatType.ATK));
         }
     }
 }

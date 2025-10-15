@@ -99,20 +99,6 @@ public class PlayableCharacterData : CharacterData
         return $"{base.ToString()}\nJump Count : {JumpCnt}\nJump Power : {JumpPower}\nCritical Chance : {Cri}\nCritical Damage : {CriDmg}";
     }
     public GameObject CharacterInformationObj;
-    public void RefreshUIData()
-    {
-        Transform status = CharacterInformationObj.transform.Find("CharacterDataUI").Find("Status");
-        Transform statusData = status.Find("Data");
-
-        statusData.Find("HP").Find("val").GetComponent<TextMeshProUGUI>().text = $"{MaxHP}";
-        statusData.Find("ATK").Find("val").GetComponent<TextMeshProUGUI>().text = $"{Atk}";
-        statusData.Find("ATS").Find("val").GetComponent<TextMeshProUGUI>().text = $"{Ats}";
-        statusData.Find("DEF").Find("val").GetComponent<TextMeshProUGUI>().text = $"{Def}";
-        statusData.Find("CRI").Find("val").GetComponent<TextMeshProUGUI>().text = $"{Cri}";
-        statusData.Find("CRID").Find("val").GetComponent<TextMeshProUGUI>().text = $"{CriDmg}";
-        statusData.Find("SPD").Find("val").GetComponent<TextMeshProUGUI>().text = $"{Spd}";
-        statusData.Find("JMP").Find("val").GetComponent<TextMeshProUGUI>().text = $"{JumpPower}";
-    }
     public override CharacterStats GetStats() => stats;
 }
 public class Backpack : IEnumerable<ItemSlot>
@@ -397,19 +383,12 @@ public class PlayableCharacter : Character, IInventoryData
     public GameObject messageObj; // 메시지 박스 오브젝트
     private RectTransform messageBox; // 메시지 박스의 RectTransform
     private InputSystem_Actions inputAction; // 인풋 액션
-    private const float hpBarSpd = 5.0f; // HP 바 스피드
     private Camera cam; // 메인 카메라
-    public SlicedFilledImage hpBar; // HP 바 이미지
-    public SlicedFilledImage hpBarSec; // HP 바 서브 이미지
-    public TextMeshProUGUI hpVal; // HP 값 텍스트
     public Transform arm; // 플레이어의 팔 트랜스폼
     private SpriteRenderer weaponSprite; // 플레이어의 무기 스프라이트 렌더러
     private SpriteRenderer subWeaponSprite; // 플레이어의 무기 스프라이트 렌더러
     private Weapon weaponScript; // 플레이어의 무기 스크립트
     private bool isDropdown; // 드롭다운 여부
-    private bool isHealing; // 힐링 여부
-    private Coroutine hpSmooth; // HP 바 부드럽게 채우기 코루틴
-    public GameObject statusObj;
     private SpriteAtlas weaponAtlas; // 무기 스프라이트 아틀라스
     public event Action<EquipmentType, Item> OnEquipmentChanged; //옵저버 패턴을 이용해 장비변경시 알림
     public event Action<int, ItemSlot> OnBackpackChanged;//옵저버 패턴을 이용해 인벤토리 변경시 알림
@@ -432,7 +411,8 @@ public class PlayableCharacter : Character, IInventoryData
             .SetCriDmg(1.5f);
         data.GetStats().SetBase(StatType.ATS, 0.0f);
         data.GetStats().SetBase(StatType.SPD, 5.0f);
-        data.HP = data.MaxHP;
+        data.GetStats().SetBase(StatType.DEF, 0f);
+        data.health.ApplyHP(data.MaxHP);
 
         ((PlayableCharacterData)data).SetInfoObj(CharacterInformationObj);
 
@@ -529,22 +509,17 @@ public class PlayableCharacter : Character, IInventoryData
     {
         // Character(부모 클래스)의 Update 메소드 호출
         base.Update();
+        
+        if (InvincibleTimer > 0.0f)
+            InvincibleTimer -= Time.deltaTime;
+        else
+            hitBox.gameObject.SetActive(true);
     }
     /// <summary>
     /// 부드러운 체력바 채우기 코루틴
     /// </summary>
     /// <param name="bar"></param>
     /// <returns></returns>
-    IEnumerator HpBarFillsSmooth(SlicedFilledImage bar)
-    {
-        yield return new WaitForSeconds(0.3f);
-        while (Mathf.Abs(bar.fillAmount - (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP)) > 0.01f)
-        {
-            bar.fillAmount = Mathf.Lerp(bar.fillAmount, (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP), Time.deltaTime * hpBarSpd);
-            yield return null;
-        }
-        bar.fillAmount = (float)Mathf.FloorToInt(Data.HP) / Mathf.FloorToInt(Data.MaxHP);
-    }
     protected override void Landing(LAYER layer)
     {
         jumpCnt = Data.JumpCnt;
@@ -664,37 +639,19 @@ public class PlayableCharacter : Character, IInventoryData
             isDropdown = false;
         }
     }
-    public void SetHP(int value) // 체력 설정 메소드
-    {
-        //회복일 경우 HPBar와 HPBarSec의 순서를 변경해야 함므로 사용
-        isHealing = Mathf.FloorToInt(value) > Mathf.FloorToInt(Data.HP);
-
-        //회복 로직
-        Data.HP = value;
-        hpVal.text = $"{Mathf.FloorToInt(value)} / {Mathf.FloorToInt(Data.MaxHP)}";
-        if (hpSmooth != null)
-            StopCoroutine(hpSmooth);
-        if (isHealing)
-        {
-            hpBar.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(Data.MaxHP);
-            hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBarSec));
-        }
-        else
-        {
-            hpBarSec.fillAmount = (float)Mathf.FloorToInt(value) / Mathf.FloorToInt(Data.MaxHP);
-            hpSmooth = StartCoroutine(HpBarFillsSmooth(hpBar));
-        }
-    }
+    public void SetHP(int value) => Data.health.ApplyHP(value);
     public override void TakeDamage(float damage) // 피해 적용 로직
     {
         base.TakeDamage(damage);
+        Debug.Log(damage);
         if (damage < 0.0f) return;
-        int dmg = Mathf.RoundToInt(damage - data.Def);
-        if (dmg < 0) dmg = 0;
-        SetHP(data.HP - dmg);
-        if (data.HP <= 0)
+        int dmg = Mathf.RoundToInt(damage - Data.Def);
+        Debug.Log($"{damage} - {Data.Def} = {dmg}");
+        if (dmg < 0) dmg = 1;
+        SetHP(Data.health.HP - dmg);
+        if (Data.health.HP <= 0)
         {
-            Debug.Log($"{data.UnitName} has died.");
+            Debug.Log($"{Data.UnitName} has died.");
         }
     }
     protected override void Movement()
@@ -705,7 +662,7 @@ public class PlayableCharacter : Character, IInventoryData
     protected override IEnumerator Hit()
     {
         InvincibleTimer = data.InvincibleTime;
-        hitBox.enabled = false;
+        hitBox.gameObject.SetActive(false);
 
         float colorVal = 0f;
         float elapsedTime = 0f;
