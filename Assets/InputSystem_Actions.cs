@@ -981,7 +981,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="PlayerActions" />
         public void AddCallbacks(IPlayerActions instance)
         {
-            if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
+            if (instance is null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
@@ -1156,7 +1156,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UserInterfaceActions" />
         public void AddCallbacks(IUserInterfaceActions instance)
         {
-            if (instance == null || m_Wrapper.m_UserInterfaceActionsCallbackInterfaces.Contains(instance)) return;
+            if (instance is null || m_Wrapper.m_UserInterfaceActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_UserInterfaceActionsCallbackInterfaces.Add(instance);
             @Positive.started += instance.OnPositive;
             @Positive.performed += instance.OnPositive;

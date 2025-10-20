@@ -105,7 +105,7 @@ namespace AnimationImporter
 		/// <returns>path relative to the project directory</returns>
 		public static string GetAssetPath(string path)
 		{
-			if (path == null)
+			if (path is null)
 			{
 				return null;
 			}

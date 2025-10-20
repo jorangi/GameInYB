@@ -13,13 +13,15 @@ using System.Threading.Tasks;
 /// </summary>
 public static class EnhancedToString
 {
-    public static string EnToString<T>(this IEnumerable<T> source, string sep = ", ") => source == null ? "null" : string.Join(sep, source.Select(x => $"{x}"));
+    public static string EnToString<T>(this IEnumerable<T> source, string sep = ", ") => source is null ? "null" : string.Join(sep, source.Select(x => $"{x}"));
 }
+[DefaultExecutionOrder(-10000)]
 public class DataLoader : MonoBehaviour
 {
+    [SerializeField]private Texture2D cursorTex;
     private static DataLoader instance;
     private string getResult;
-    private readonly Uri baseURI = new("https://developer-looper.duckdns.org/api/");
+    private readonly Uri baseURI = new("https://api-looper.duckdns.org/api/");
 #if UNITY_EDITOR
     [SerializeField] private TextAsset itemData;
 #endif
@@ -34,11 +36,15 @@ public class DataLoader : MonoBehaviour
         }
         DataLoader.instance = this;
         DontDestroyOnLoad(this);
-#if UNITY_EDITOR
-        ItemDataManager.Init(itemData.text);
-        Debug.Log("Editor 모드로 아이템 데이터를 초기화합니다.");
-        return;
-#endif
+        Cursor.SetCursor(cursorTex, Vector2.zero, CursorMode.ForceSoftware);
+        /*
+        //로컬 데이터를 바탕으로 테스트
+        // #if UNITY_EDITOR
+        //         ItemDataManager.Init(itemData.text);
+        //         Debug.Log("Editor 모드로 아이템 데이터를 초기화합니다.");
+        //         return;
+        // #endif
+        */
         try
         {
             await ItemDataLoad();
@@ -67,6 +73,6 @@ public class DataLoader : MonoBehaviour
     {
         string itemData = await HttpGetUniTask.GetJsonAsync(new Uri(baseURI, "items"));
         ItemDataManager.Init(itemData);
-        Debug.Log("items 데이터를 성공적으로 받아왔습니다.");
+        Debug.Log($"items 데이터를 성공적으로 받아왔습니다.\n\n{itemData}");
     }
 }

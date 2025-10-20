@@ -18,7 +18,7 @@ public class LogMessageParent : MonoBehaviour
             _prefabHandle = Addressables.LoadAssetAsync<GameObject>("Prefabs/LogMessage");
             _prefab = await _prefabHandle.ToUniTask(cancellationToken: ct);
 
-            if (_prefab == null) Debug.LogWarning($"[LogMessageParent] Addressable 'prefabs/LogMessage'가 로딩되지 않음.");
+            if (_prefab is null) Debug.LogWarning($"[LogMessageParent] Addressable 'prefabs/LogMessage'가 로딩되지 않음.");
         }
         catch (OperationCanceledException) { }
         catch (Exception e)

@@ -63,7 +63,7 @@ namespace AnimationImporter
 #if UNITY_2021_2_OR_NEWER
 		public void ApplyPreviousTextureImportSettings(ISpriteEditorDataProvider dataProvider)
 		{
-			if (!_hasPreviousTextureImportSettings || dataProvider == null)
+			if (!_hasPreviousTextureImportSettings || dataProvider is null)
 			{
 				return;
 			}
@@ -88,7 +88,7 @@ namespace AnimationImporter
 #else
 		public void ApplyPreviousTextureImportSettings(TextureImporter importer)
 		{
-			if (!_hasPreviousTextureImportSettings|| importer == null)
+			if (!_hasPreviousTextureImportSettings|| importer is null)
 			{
 				return;
 			}

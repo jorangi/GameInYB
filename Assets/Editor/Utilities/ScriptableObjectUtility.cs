@@ -53,7 +53,7 @@ namespace AnimationImporter
 		public static T LoadOrCreateSaveData<T>(string unityPathToFile) where T : ScriptableObject
 		{
 			var loadedSettings = LoadSaveData<T>(unityPathToFile);
-			if (loadedSettings == null)
+			if (loadedSettings is null)
 			{
 				loadedSettings = ScriptableObject.CreateInstance<T>();
 				AssetDatabaseUtility.CreateAssetAndDirectories(loadedSettings, unityPathToFile);

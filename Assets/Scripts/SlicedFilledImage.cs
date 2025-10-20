@@ -55,7 +55,7 @@ public class SlicedFilledImage : MaskableGraphic, ISerializationCallbackReceiver
 
 		public static bool SetClass<T>( ref T currentValue, T newValue ) where T : class
 		{
-			if( ( currentValue == null && newValue == null ) || ( currentValue != null && currentValue.Equals( newValue ) ) )
+			if( ( currentValue is null && newValue is null ) || ( currentValue != null && currentValue.Equals( newValue ) ) )
 				return false;
 
 			currentValue = newValue;
@@ -245,7 +245,7 @@ public class SlicedFilledImage : MaskableGraphic, ISerializationCallbackReceiver
 
 	protected override void OnPopulateMesh( VertexHelper vh )
 	{
-		if( activeSprite == null )
+		if( activeSprite is null )
 		{
 			base.OnPopulateMesh( vh );
 			return;
@@ -262,7 +262,7 @@ public class SlicedFilledImage : MaskableGraphic, ISerializationCallbackReceiver
 		base.UpdateMaterial();
 
 		// Check if this sprite has an associated alpha texture (generated when splitting RGBA = RGB + A as two textures without alpha)
-		if( activeSprite == null )
+		if( activeSprite is null )
 		{
 			canvasRenderer.SetAlphaTexture( null );
 			return;
@@ -491,7 +491,7 @@ public class SlicedFilledImage : MaskableGraphic, ISerializationCallbackReceiver
 	{
 		get
 		{
-			if( activeSprite == null )
+			if( activeSprite is null )
 				return 0;
 
 			return Sprites.DataUtility.GetMinSize( activeSprite ).x / pixelsPerUnit;
@@ -502,7 +502,7 @@ public class SlicedFilledImage : MaskableGraphic, ISerializationCallbackReceiver
 	{
 		get
 		{
-			if( activeSprite == null )
+			if( activeSprite is null )
 				return 0;
 
 			return Sprites.DataUtility.GetMinSize( activeSprite ).y / pixelsPerUnit;
@@ -520,7 +520,7 @@ public class SlicedFilledImage : MaskableGraphic, ISerializationCallbackReceiver
 		if( alphaHitTestMinimumThreshold > 1 )
 			return false;
 
-		if( activeSprite == null )
+		if( activeSprite is null )
 			return true;
 
 		Vector2 local;
@@ -607,7 +607,7 @@ public class SlicedFilledImage : MaskableGraphic, ISerializationCallbackReceiver
 
 	private void TrackImage()
 	{
-		if( activeSprite != null && activeSprite.texture == null )
+		if( activeSprite != null && activeSprite.texture is null )
 		{
 #if UNITY_2017_4 || UNITY_2018_2_OR_NEWER
 			if( !s_Initialized )

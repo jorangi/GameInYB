@@ -19,7 +19,7 @@ public class NPCGizmo : MonoBehaviour
     }
     void OnDrawGizmos()
     {
-        if (BB == null) return;
+        if (BB is null) return;
         Vector3 pos = transform.position;
 
 #if UNITY_EDITOR

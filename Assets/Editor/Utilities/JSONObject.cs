@@ -1,7 +1,7 @@
 /* JSONObject.cs -- Simple C# JSON parser
   version 1.4 - March 17, 2014
 
-  ## changed by Stephan Hövelbrinks (stephan.hoevelbrinks@craftinglegends.com)
+  ## changed by Stephan Hï¿½velbrinks (stephan.hoevelbrinks@craftinglegends.com)
      -- added InvariantCulture to string conversion
 	 -- removed RegularExpressions System.Text.RegularExpressions from WinRT version
 
@@ -119,7 +119,7 @@ namespace AnimationImporter
 
 			public JSONValue(JSONObject obj)
 			{
-				if (obj == null)
+				if (obj is null)
 				{
 					Type = JSONValueType.Null;
 				}
@@ -317,7 +317,7 @@ namespace AnimationImporter
 			public static JSONArray Parse(string jsonString)
 			{
 				var tempObject = JSONObject.Parse("{ \"array\" :" + jsonString + '}');
-				return tempObject == null ? null : tempObject.GetValue("array").Array;
+				return tempObject is null ? null : tempObject.GetValue("array").Array;
 			}
 
 			/// <summary>
@@ -425,9 +425,9 @@ namespace AnimationImporter
 			public string GetString(string key)
 			{
 				var value = GetValue(key);
-				if (value == null)
+				if (value is null)
 				{
-					JSONLogger.Error(key + "(string) == null");
+					JSONLogger.Error(key + "(string) is null");
 					return string.Empty;
 				}
 				return value.Str;
@@ -436,9 +436,9 @@ namespace AnimationImporter
 			public double GetNumber(string key)
 			{
 				var value = GetValue(key);
-				if (value == null)
+				if (value is null)
 				{
-					JSONLogger.Error(key + " == null");
+					JSONLogger.Error(key + " is null");
 					return double.NaN;
 				}
 				return value.Number;
@@ -447,9 +447,9 @@ namespace AnimationImporter
 			public JSONObject GetObject(string key)
 			{
 				var value = GetValue(key);
-				if (value == null)
+				if (value is null)
 				{
-					JSONLogger.Error(key + " == null");
+					JSONLogger.Error(key + " is null");
 					return null;
 				}
 				return value.Obj;
@@ -458,9 +458,9 @@ namespace AnimationImporter
 			public bool GetBoolean(string key)
 			{
 				var value = GetValue(key);
-				if (value == null)
+				if (value is null)
 				{
-					JSONLogger.Error(key + " == null");
+					JSONLogger.Error(key + " is null");
 					return false;
 				}
 				return value.Boolean;
@@ -469,9 +469,9 @@ namespace AnimationImporter
 			public JSONArray GetArray(string key)
 			{
 				var value = GetValue(key);
-				if (value == null)
+				if (value is null)
 				{
-					JSONLogger.Error(key + " == null");
+					JSONLogger.Error(key + " is null");
 					return null;
 				}
 				return value.Array;
@@ -540,7 +540,7 @@ namespace AnimationImporter
 								return Fail('}', startPosition);
 							}
 
-							if (currentValue.Parent == null)
+							if (currentValue.Parent is null)
 							{
 								return currentValue.Obj;
 							}
@@ -574,7 +574,7 @@ namespace AnimationImporter
 							}
 
 							var key = ParseString(jsonString, ref startPosition);
-							if (key == null)
+							if (key is null)
 							{
 								return Fail("key string", startPosition);
 							}
@@ -666,7 +666,7 @@ namespace AnimationImporter
 
 						case JSONParsingState.String:
 							var str = ParseString(jsonString, ref startPosition);
-							if (str == null)
+							if (str is null)
 							{
 								return Fail("string value", startPosition);
 							}
@@ -800,7 +800,7 @@ namespace AnimationImporter
 								return Fail(']', startPosition);
 							}
 
-							if (currentValue.Parent == null)
+							if (currentValue.Parent is null)
 							{
 								return currentValue.Obj;
 							}

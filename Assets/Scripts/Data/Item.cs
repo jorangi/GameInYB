@@ -29,10 +29,26 @@ public struct Item
     public string[] description;
     public ItemAttribute[] attributes;
     public string[] skills;
-    public bool two_hander;
+    public bool twoHander;
     public bool stackable;
     private readonly ItemProvide provider;
     public readonly ItemProvide GetProvider() => provider ?? new ItemProvide(this);
+    public static bool operator ==(Item i1, Item i2)
+    {
+        if (ReferenceEquals(i1, null))
+            return ReferenceEquals(i2, null);
+        return i1.id == i2.id;
+    }
+    public static bool operator !=(Item i1, Item i2) => !(i1 == i2);
+    public override bool Equals(object obj)
+    {
+        if (obj is Item otherItem) return this.id == otherItem.id;
+        return false;
+    }
+    public override int GetHashCode()
+    {
+        return id.GetHashCode();
+    }
     public override readonly string ToString()
     {
         var attrStr = string.Join(", ", (attributes ?? Array.Empty<ItemAttribute>())
@@ -42,7 +58,7 @@ public struct Item
         var descStr = string.Join(", ", description ?? Array.Empty<string>());
         var skillStr = string.Join(", ", skills ?? Array.Empty<string>());
 
-        return $"id:{id}, name:[{nameStr}], rarity:{rarity}, description:[{descStr}], attributes:[{attrStr}], two_hander:{two_hander}, stackable:{stackable}, skills:[{skillStr}]";
+        return $"id:{id}, name:[{nameStr}], rarity:{rarity}, description:[{descStr}], attributes:[{attrStr}], two_hander:{twoHander}, stackable:{stackable}, skills:[{skillStr}]";
     }
 }
 public sealed class ItemProvide : IStatModifierProvider
@@ -72,7 +88,7 @@ public sealed class ItemProvide : IStatModifierProvider
     public IEnumerable<StatModifier> GetStatModifiers()
     {
         var a = item.attributes;
-        if (a == null) yield break;
+        if (a is null) yield break;
         for (int i = 0; i < a.Length; i++)
         {
             var attr = a[i];
@@ -152,7 +168,9 @@ public class ItemBuilder
             rarity = this.rarity,
             description = this.description,
             attributes = this.attributes,
-            skills = this.skills
+            skills = this.skills,
+            twoHander = this.two_hander,
+            stackable = this.stackable
         };
     }
 }

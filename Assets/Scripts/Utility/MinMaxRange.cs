@@ -36,7 +36,7 @@ public class MinMaxRangeDrawer : PropertyDrawer
         var minProp = property.FindPropertyRelative("min");
         var maxProp = property.FindPropertyRelative("max");
 
-        if (minProp == null || maxProp == null)
+        if (minProp is null || maxProp is null)
         {
             EditorGUI.LabelField(position, label.text, "Use with MinMaxFloat(min/max)");
             return;

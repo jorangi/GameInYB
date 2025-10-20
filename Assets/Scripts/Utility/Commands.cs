@@ -101,7 +101,7 @@ namespace Looper.Console.Commands
                 return;
             }
             StringBuilder sb = new();
-            if (logMessageParent == null) return;
+            if (logMessageParent is null) return;
 
             logMessageParent = Component.FindAnyObjectByType<LogMessageParent>();
             foreach (var arg in args)
@@ -217,7 +217,8 @@ namespace Looper.Console.Commands
                 {
                     if (slotNumber < 16 && slotNumber > 0)
                     {
-                        PlayableCharacter.Inst.Inventory.backpack[slotNumber - 1] = (item, quantity);
+                        PlayableCharacter.Inst.Inventory.backpack[slotNumber - 1].item = item;
+                        PlayableCharacter.Inst.Inventory.backpack[slotNumber - 1].ea = quantity;
                         ctx.Info($"{slotNumber}번 아이템 슬롯에 '{item.name[1]}'을(를) {quantity}개 설정했습니다.");
                         return;
                     }
@@ -351,7 +352,7 @@ namespace Looper.Console.Commands
                 return;
             }
             var player = PlayableCharacter.Inst;
-            if (player == null)
+            if (player is null)
             {
                 ctx.Warn("플레이어 오브젝트를 찾을 수 없습니다.");
                 return;
@@ -438,7 +439,7 @@ namespace Looper.Console.Commands
 
         public string Summary => "선택한 아이템을 제거합니다.";
 
-        public string Usage => "";
+        public string Usage => "remove [slot_number]";
 
         public bool IsAsync => true;
 
@@ -467,7 +468,7 @@ namespace Looper.Console.Commands
                     ctx.Warn($"유효하지 않은 슬롯: {argIndex}");
                     return;
                 }
-                if (backpack[argIndex].item.id == null)
+                if (backpack[argIndex].item.id is null)
                 {
                     ctx.Info($"슬롯 {argIndex}는 비어있습니다.");
                     return;
@@ -502,7 +503,7 @@ namespace Looper.Console.Commands
                     ui.EventSystem.SetSelectedGameObject(ui.FirstInventorySelectable);
 
                 int picked = await data.Inventory.PickSlotAsync(cts.Token);
-                
+
                 if (!IsValidIndex(backpack, picked))
                 {
                     ctx.Warn("선택이 올바르지 않습니다.");
@@ -537,5 +538,144 @@ namespace Looper.Console.Commands
             return int.TryParse(args[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out index);
         }
         static bool IsValidIndex(Backpack backpack, int i) => (uint)i < (uint)backpack.Count;
+    }
+    public sealed class SpawnCommand : ICommand
+    {
+        public string Name => "Spawn";
+
+        public IReadOnlyList<string> Aliases => new string[] { };
+
+        public string Summary => "객체를 스폰합니다.";
+
+        public string Usage => "Spawn <object_id>";
+
+        public bool IsAsync => false;
+
+        public void Execute(CommandContext ctx, string[] args)
+        {
+            //객체 소환
+        }
+        public UniTask ExecuteAsync(CommandContext ctx, string[] args) => UniTask.CompletedTask;
+    }
+    public sealed class LoginCommand : ICommand
+    {
+        public string Name => "Login";
+
+        public IReadOnlyList<string> Aliases => new string[] { "login", "l", "signin" };
+
+        public string Summary => "서버에 로그인합니다.";
+
+        public string Usage => "login <id> <pw>";
+
+        public bool IsAsync => true;
+
+        public void Execute(CommandContext ctx, string[] args)
+        {
+            ExecuteAsync(ctx, args).Forget();
+        }
+        public async UniTask ExecuteAsync(CommandContext ctx, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                ctx.Warn("login <id> <pw>의 형식으로 입력해야합니다.");
+                return;
+            }
+            string id = args[0].Trim();
+            string pw = args[1].Trim();
+
+            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
+            {
+                ctx.Warn("ID/PW가 비어있습니다.");
+                return;
+            }
+
+            var svc = (ILoginService)ctx.Service.GetService(typeof(ILoginService));
+            if (svc is null)
+            {
+                ctx.Error("ILoginService가 등록되지 않았습니다.");
+                return;
+            }
+
+            ctx.Info("로그인 요청 중...");
+            await svc.LoginAsync(id, pw);
+            ctx.Info("로그인 요청 처리 완료.");
+        }
+    }
+    public sealed class LoadCommand : ICommand
+    {
+        public string Name => "load";
+
+        public IReadOnlyList<string> Aliases => new string[] { };
+
+        public string Summary => "서버에서 데이터를 불러옵니다.";
+
+        public string Usage => "load";
+
+        public bool IsAsync => true;
+
+        public void Execute(CommandContext ctx, string[] args)
+        {
+            ExecuteAsync(ctx, args).Forget();
+        }
+
+        public UniTask ExecuteAsync(CommandContext ctx, string[] args)
+        {
+
+            ctx.Info(PlayableCharacter.Inst.Data.statsDTO.ToString());
+            PlayableCharacter.Inst.Data.ApplyDto(PlayableCharacter.Inst.Data.statsDTO);
+            return UniTask.CompletedTask;
+        }
+    }
+    public sealed class SaveCommand : ICommand
+    {
+        public string Name => "save";
+
+        public IReadOnlyList<string> Aliases => new string[] { };
+
+        public string Summary => "데이터를 서버로 저장합니다.";
+
+        public string Usage => "save";
+
+        public bool IsAsync => true;
+
+        public void Execute(CommandContext ctx, string[] args)
+        {
+            ExecuteAsync(ctx, args).Forget();
+        }
+
+        public async UniTask ExecuteAsync(CommandContext ctx, string[] args)
+        {
+            var sp = GameBootstrapper.ServiceProvider;
+            if (sp == null)
+            {
+                Debug.LogError("[SaveCommand] ServiceProvider가 초기화되지 않았습니다.");
+                return;
+            }
+
+            var saver = sp.Get<IStatsSaver>();
+
+            if (saver == null)
+            {
+                Debug.LogWarning("[SaveCommand] IStatsSaver가 ServiceProvider에 없습니다. 폴백 인스턴스를 생성합니다.");
+
+                var tokenProvider = new PlayableCharacterAccessTokenProvider();
+                var refreshers = new IStatsRefresher[]
+                {
+                    new LoginServiceStatsRefresher(GameBootstrapper.ServiceProvider)
+                };
+                saver = new StatsSaver(tokenProvider, refreshers);
+            }
+            if (PlayableCharacter.Inst == null || PlayableCharacter.Inst.Data == null)
+            {
+                Debug.LogError("[SaveCommand] PlayableCharacter.Inst 또는 Inst.Data가 null입니다.");
+                return;
+            }
+            var statsDto = PlayableCharacter.Inst.Data.ToDto(PlayableCharacter.Inst.Snapshot());
+            var ok = await saver.SavePlayerStatsAsync(statsDto);
+            if (!ok)
+            {
+                Debug.LogWarning("[SaveCommand] SavePlayerStatsAsync 실패.");
+            }
+        }
     }
 }

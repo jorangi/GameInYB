@@ -19,7 +19,7 @@ namespace AnimationImporter
 		{
 			get
 			{
-				if (_namingSchemesValues == null)
+				if (_namingSchemesValues is null)
 				{
 					InitNamingLists();
 				}
@@ -33,7 +33,7 @@ namespace AnimationImporter
 		{
 			get
 			{
-				if (_namingSchemesDisplayValues == null)
+				if (_namingSchemesDisplayValues is null)
 				{
 					InitNamingLists();
 				}

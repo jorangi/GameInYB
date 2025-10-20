@@ -45,7 +45,7 @@ namespace AnimationImporter
 
 			AnimationImporter importer = AnimationImporter.Instance;
 
-			if (importer == null)
+			if (importer is null)
 			{
 				return;
 			}
@@ -54,7 +54,7 @@ namespace AnimationImporter
 			importer.LoadUserConfig();
 
 			// If no config exists, they can't have set up automatic importing so just return out.
-			if (importer.sharedData == null)
+			if (importer.sharedData is null)
 			{
 				return;
 			}
@@ -76,7 +76,7 @@ namespace AnimationImporter
 					_assetsMarkedForImport.Clear();
 					_assetsMarkedForImport.AddRange(markedAssets);
 
-					if (_importDelegate == null)
+					if (_importDelegate is null)
 					{
 						_importDelegate = new EditorApplication.CallbackFunction(ImportAssets);
 					}

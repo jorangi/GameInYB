@@ -100,7 +100,7 @@ namespace Looper.Console.Core
 
         public void Register(ICommand command)
         {
-            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (command is null) throw new ArgumentNullException(nameof(command));
             if (string.IsNullOrWhiteSpace(command.Name)) throw new ArgumentException("명령어는 반드시 Name 필드를 포함하고 있어야 합니다.");
             if (_byName.ContainsKey(command.Name)) throw new InvalidOperationException($"이미 {command.Name} 명령어가 등록되어 있습니다.");
 
@@ -167,6 +167,10 @@ namespace Looper.Console.UI
             _reg.Register(new SetHPCommand());
             _reg.Register(new ClearBackpackCommand());
             _reg.Register(new RemoveItemCommand());
+            _reg.Register(new SpawnCommand());
+            _reg.Register(new LoginCommand());
+            _reg.Register(new SaveCommand());
+            _reg.Register(new LoadCommand());
         }
         void OnEnable()
         {
@@ -236,7 +240,7 @@ namespace Looper.Console.UI
         }
         private void PrintLine(string s)
         {
-            if (outputSource == null)
+            if (outputSource is null)
             {
                 Debug.Log(s);
                 return;

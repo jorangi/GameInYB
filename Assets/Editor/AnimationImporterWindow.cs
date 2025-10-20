@@ -99,11 +99,11 @@ namespace AnimationImporter
 
 		private void CheckGUIStyles()
 		{
-			if (_dropBoxStyle == null)
+			if (_dropBoxStyle is null)
 			{
 				GetBoxStyle();
 			}
-			if (_infoTextStyle == null)
+			if (_infoTextStyle is null)
 			{
 				GetTextInfoStyle();
 			}
@@ -123,7 +123,7 @@ namespace AnimationImporter
 
 		private void ShowUserConfig()
 		{
-			if (importer == null || importer.sharedData == null)
+			if (importer is null || importer.sharedData is null)
 			{
 				return;
 			}

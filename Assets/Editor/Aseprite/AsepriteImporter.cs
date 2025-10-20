@@ -87,7 +87,7 @@ namespace AnimationImporter.Aseprite
 				JSONObject jsonObject = JSONObject.Parse(textAsset.ToString());
 				ImportedAnimationSheet animationSheet = GetAnimationInfo(jsonObject);
 
-				if (animationSheet == null)
+				if (animationSheet is null)
 				{
 					return null;
 				}
@@ -179,7 +179,7 @@ namespace AnimationImporter.Aseprite
 
 		private static ImportedAnimationSheet GetAnimationInfo(JSONObject root)
 		{
-			if (root == null)
+			if (root is null)
 			{
 				Debug.LogWarning("Error importing JSON animation info: JSONObject is NULL");
 				return null;
@@ -281,7 +281,7 @@ namespace AnimationImporter.Aseprite
 		{
 			var list = root["frames"].Array;
 
-			if (list == null)
+			if (list is null)
 			{
 				Debug.LogWarning("No 'frames' array found in JSON created by Aseprite.");
 				IssueVersionWarning();

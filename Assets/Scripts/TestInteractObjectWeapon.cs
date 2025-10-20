@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,10 @@ public class TestInteractObjectWeapon : TestInteractItems
     {
         base.Awake();
         itemType = ItemType.Weapon;
+    }
+    protected async UniTaskVoid Start()
+    {
+        await ItemDataManager.Ready;
         data = ItemDataManager.GetItem(weaponId);
     }
     protected override void OnInteract(InputAction.CallbackContext context)

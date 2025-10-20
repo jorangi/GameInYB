@@ -2,12 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
+public interface IItemRepository
+{
+    Item GetItem(string id);
+}
+public sealed class ItemRepositoryAdapter : IItemRepository
+{
+    public Item GetItem(string id)
+    {
+        return ItemDataManager.GetItem(id);
+    }
+}
 /// <summary>
 /// 아이템 정보를 Item으로 객체화하여 저장, 조회하는 클래스
 /// </summary>
 public static class ItemDataManager
 {
+    private static readonly Dictionary<string, Item> itemDic = new();
+    private static UniTaskCompletionSource _readyTcs = new();
+    public static bool IsReady { get; private set; }
+    public static UniTask Ready => _readyTcs.Task;
     /// <summary>
     /// 배열형태로 저장되는 item객체를 담는 클래스. ItemDataManager에서만 접근이 가능함.
     /// </summary>
@@ -17,8 +33,7 @@ public static class ItemDataManager
         public Item[] items = { };
     }
     [Serializable]
-    private class Wrap<T>{ public T[] items; }
-    private static readonly Dictionary<string, Item> itemDic = new();
+    private class Wrap<T> { public T[] items; }
     /// <summary>
     /// 서버로부터 받은 아이템 json 데이터를 객체화하여 Dictionary에 저장하는 함수
     /// </summary>
@@ -34,7 +49,7 @@ public static class ItemDataManager
                 var wrapped = $"{{\"items\":{JSONData}}}";
                 var data = JsonUtility.FromJson<Wrap<Item>>(wrapped);
 
-                if (data?.items == null)
+                if (data?.items is null)
                 {
                     Debug.LogError("[ItemDataManager] 배열을 감싸는 과정에서 실패했습니다.");
                     return;
@@ -49,7 +64,7 @@ public static class ItemDataManager
             else if (trimmed.StartsWith("{"))
             {
                 var data = JsonUtility.FromJson<ItemParsingData>(JSONData);
-                if (data?.items == null)
+                if (data?.items is null)
                 {
                     Debug.LogError("[ItemDataManager] 데이터의 root가 items가 아닙니다.");
                     return;
@@ -70,13 +85,15 @@ public static class ItemDataManager
         {
             Debug.LogWarning($"[ItemDataManager] {e}");
         }
+
+        IsReady = true;
+        if (!_readyTcs.Task.Status.IsCompleted())
+        {
+            _readyTcs.TrySetResult();
+        }
     }
     /// <summary>
     /// Item객체가 담긴 Dictionary를 id를 통해 조회하는 함수, id가 존재하지 않을경우 빈 값 반환
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns> <summary>
-    /// 
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -84,7 +101,13 @@ public static class ItemDataManager
     {
         if (itemDic.TryGetValue(id, out Item item)) return item;
         return new ItemBuilder().SetName(
-            new string[]{ $"\"{id}\" is not exist." , $"잘못된 id 조회 : \"{id}\"는 존재하지 않음"}
+            new string[] { $"\"{id}\" is not exist.", $"잘못된 id 조회 : \"{id}\"는 존재하지 않음" }
         ).Build();
+    }
+    public static void ResetForHotReload()
+    {
+        itemDic.Clear();
+        IsReady = false;
+        _readyTcs = new();
     }
 }

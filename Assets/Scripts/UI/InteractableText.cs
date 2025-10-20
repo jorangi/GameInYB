@@ -19,7 +19,7 @@ public class InteractableText : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private void Awake()
     {
         canvas = GetComponentInParent<Canvas>();
-        if (cam == null && canvas != null && canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+        if (cam is null && canvas != null && canvas.renderMode == RenderMode.ScreenSpaceOverlay)
         {
             cam = canvas.worldCamera != null ? canvas.worldCamera : Camera.main;
         }
@@ -29,7 +29,7 @@ public class InteractableText : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     /// </summary>
     private void OnValidate()
     {
-        if (source == null) source = GetComponent<TextMeshProUGUI>();
+        if (source is null) source = GetComponent<TextMeshProUGUI>();
     }
     /// <summary>
     /// 실제 Link 감지 처리로직
@@ -65,7 +65,7 @@ public class InteractableText : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     }
     private void Raise(TMPLinkEvent.EventType type, Vector2 screenPos, Camera c, int pointerId = -1)
     {
-        if (e == null) return;
+        if (e is null) return;
         int linkIndex = TMP_TextUtilities.FindIntersectingLink(source, screenPos, c ?? cam);
         string linkId = null;
         string linkText = null;

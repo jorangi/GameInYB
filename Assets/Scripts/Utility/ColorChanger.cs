@@ -15,7 +15,7 @@ public class ColorChanger : MonoBehaviour
     public List<ColorTimer> colorTimers = new();
     private void OnValidate()
     {
-        if (target == null) target = GetComponent<SpriteRenderer>();
+        if (target is null) target = GetComponent<SpriteRenderer>();
     }
     public IEnumerator ColorChange(ColorTimer colorTimer)
     {
