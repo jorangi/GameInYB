@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Text;
 using UnityEngine;
@@ -19,10 +18,10 @@ public class LoginAndStatsManager : MonoBehaviour
 
     void Start()
     {
-        // 자동 로그인
+        // 자동로그인
         if (currentPlayer != null && !string.IsNullOrEmpty(currentPlayer.accessToken))
         {
-            Debug.Log("저장된 토큰 발견 → Stats 호출");
+            Debug.Log("저장된 토큰 발견 Stats 호출");
             StartCoroutine(GetStats());
         }
     }
@@ -34,14 +33,14 @@ public class LoginAndStatsManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
         {
-            messageText.text = "ID/PW 입력 필요";
+            messageText.text = "ID/PW 입력";
             return;
         }
 
         StartCoroutine(LoginRequest(id, pw));
     }
 
-    public IEnumerator LoginRequest(string id, string pw)
+    IEnumerator LoginRequest(string id, string pw)
     {
         string jsonBody = JsonUtility.ToJson(new LoginData(id, pw));
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
@@ -116,7 +115,7 @@ public class LoginAndStatsManager : MonoBehaviour
                     Debug.Log($"HP: {currentPlayer.stats.hp}, ATK: {currentPlayer.stats.atk}, DEF: {currentPlayer.stats.def}");
                     messageText.text = $"HP {currentPlayer.stats.hp} / ATK {currentPlayer.stats.atk}";
                 }
-                catch (Exception e)
+                catch (System.Exception e)
                 {
                     Debug.LogWarning("Stats 파싱 실패: " + e.Message);
                 }
@@ -124,74 +123,23 @@ public class LoginAndStatsManager : MonoBehaviour
         }
     }
 
-    //TitleScene에서 호출
-    public IEnumerator LoginRequest_Title(string id, string pw, Action onSuccess, Action onFail)
-    {
-        string jsonBody = JsonUtility.ToJson(new LoginData(id, pw));
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
-
-        using (UnityWebRequest request = new UnityWebRequest(LOGIN_URL, "POST"))
-        {
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-            request.SetRequestHeader("Accept", "application/json");
-            request.timeout = 10;
-
-            yield return request.SendWebRequest();
-
-            Debug.Log($"[LOGIN_TITLE] responseCode={request.responseCode}");
-            Debug.Log($"[LOGIN_TITLE] responseText={request.downloadHandler.text}");
-
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                var res = JsonUtility.FromJson<TokenResponse>(request.downloadHandler.text);
-                if (!string.IsNullOrEmpty(res.accessToken))
-                {
-                    Debug.Log("로그인 성공 (TitleScene)");
-                    currentPlayer = new PlayerData
-                    {
-                        accessToken = res.accessToken,
-                        refreshToken = res.refreshToken,
-                        nickname = res.nickname,
-                        roles = res.roles
-                    };
-
-                    StartCoroutine(GetStats());
-                    onSuccess?.Invoke();
-                }
-                else
-                {
-                    Debug.LogError("로그인 실패 (TitleScene) - accessToken 없음");
-                    onFail?.Invoke();
-                }
-            }
-            else
-            {
-                Debug.LogError("로그인 실패 (TitleScene) - 서버 에러");
-                onFail?.Invoke();
-            }
-        }
-    }
-
-
-    [System.Serializable]
     public class PlayerStats
-    {
-        public float hp;
-        public float atk;
-        public float def;
-        public float cri;
-        public float crid;
-        public float spd;
-        public float jmp;
-        public int clear;
-        public int chapter;
-        public int stage;
-        public string mapid;
-        public string equiped;
-        public string inventory;
-    }
+{
+    public float hp;
+    public float atk;
+    public float def;
+    public float cri;
+    public float crid;
+    public float spd;
+    public float jmp;
+    public int clear;
+    public int chapter;
+    public int stage;
+    public string mapid;
+    public string equiped;
+    public string inventory;
+}
+
 
     [System.Serializable]
     public class PlayerData
