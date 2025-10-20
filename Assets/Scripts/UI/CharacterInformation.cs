@@ -61,8 +61,10 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
         }
         PlayableCharacter.Inst.OnEquipmentChanged += RefreshEquipment;
         PlayableCharacter.Inst.OnBackpackChanged += RefreshBackpack;
+        PlayableCharacter.Inst.Data.health.OnHPChanged += Refresh;
         gameObject.SetActive(false);
     }
+    
     IInventoryData inventory;
     private void Start()
     {
@@ -70,8 +72,11 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
     }
     private void OnEnable()
     {
+        inventory ??= inventory = (IInventoryData)GameBootstrapper.ServiceProvider.GetService(typeof(IInventoryData));
         if (name == "CharacterInformation")
+        {
             inventory.Inventory.OnSlotPicked += ShowItemInformation;
+        }
     }
     private void OnDisable()
     {
@@ -103,16 +108,16 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
         {
             for (int i = 5; i < 20; i++)
             {
-                slotIcons[i].color = item == default ? new(1, 1, 1, 0) : Color.white;
-                slotIcons[i].sprite = iconAtlas.GetSprite(item.item.id);
-                slotIcons[i].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
+                slotIcons[i].color = item is null || item.item == default || item.item.id == "00000" ? new(1, 1, 1, 0) : Color.white;
+                slotIcons[i].sprite = item is null || item.item == default || item.item.id == "00000" ? null : iconAtlas.GetSprite(item.item.id);
+                slotIcons[i].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item is null || item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
                 Refresh();
             }
         }
         else
         {
-            slotIcons[arg1 + 5].color = item == default ? new(1, 1, 1, 0) : Color.white;
-            slotIcons[arg1 + 5].sprite = iconAtlas.GetSprite(item.item.id);
+            slotIcons[arg1 + 5].color = item is null || item.item == default || item.item.id == "00000" ? new(1, 1, 1, 0) : Color.white;
+            slotIcons[arg1 + 5].sprite = item is null || item.item == default || item.item.id == "00000" ? null : iconAtlas.GetSprite(item.item.id);
             slotIcons[arg1 + 5].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
             Refresh();
         }
@@ -130,27 +135,28 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
             case EquipmentType.HELMET:
                 slotIcons[0].sprite = iconAtlas.GetSprite(item.id);
                 slotIcons[0].transform.parent.GetComponentInChildren<TextMeshProUGUI>().text = "";
-                slotIcons[0].color = item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
+                slotIcons[0].color = item == default || item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
                 break;
             case EquipmentType.ARMOR:
                 slotIcons[1].sprite = iconAtlas.GetSprite(item.id);
                 slotIcons[1].transform.parent.GetComponentInChildren<TextMeshProUGUI>().text = "";
-                slotIcons[1].color = item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
+                slotIcons[1].color = item == default || item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
                 break;
             case EquipmentType.PANTS:
                 slotIcons[2].sprite = iconAtlas.GetSprite(item.id);
                 slotIcons[2].transform.parent.GetComponentInChildren<TextMeshProUGUI>().text = "";
-                slotIcons[2].color = item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
+                slotIcons[2].color = item == default || item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
                 break;
             case EquipmentType.MAINWEAPON:
                 slotIcons[3].sprite = iconAtlas.GetSprite(item.id);
                 slotIcons[3].transform.parent.GetComponentInChildren<TextMeshProUGUI>().text = "";
-                slotIcons[3].color = item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
+                slotIcons[3].color = item == default || item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
+                if (item.twoHander) slotIcons[4].color = Color.gray;
                 break;
             case EquipmentType.SUBWEAPON:
                 slotIcons[4].sprite = iconAtlas.GetSprite(item.id);
                 slotIcons[4].transform.parent.GetComponentInChildren<TextMeshProUGUI>().text = "";
-                slotIcons[4].color = item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
+                slotIcons[4].color = item == default || item.id == "00000" ? new Color(1, 1, 1, 0) : PlayableCharacter.Inst.Inventory.equipments.MainWeapon.item.twoHander ? Color.gray : Color.white;
                 break;
             default:
                 break;

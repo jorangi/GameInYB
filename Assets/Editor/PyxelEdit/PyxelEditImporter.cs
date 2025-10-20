@@ -99,7 +99,7 @@ namespace AnimationImporter.PyxelEdit
 
 		private static ImportedAnimationSheet GetAnimationInfo(PyxelEditData data)
 		{
-			if (data == null)
+			if (data is null)
 			{
 				return null;
 			}
@@ -313,7 +313,7 @@ namespace AnimationImporter.PyxelEdit
 		{
 			Dictionary<string, byte[]> files = new Dictionary<string, byte[]>();
 
-			if (zipFileClass == null)
+			if (zipFileClass is null)
 			{
 				InitZipMethods();
 			}

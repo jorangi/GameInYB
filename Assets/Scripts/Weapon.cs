@@ -44,7 +44,7 @@ public class Weapon : MonoBehaviour
         provider = PlayableCharacter.Inst.Data;
         stats ??= provider.GetStats();
         stats.OnRecalculated += OnStatChanged;
-        if (provider == null) Debug.LogError("[WeaponScript] provider에 stats할당 실패");
+        if (provider is null) Debug.LogError("[WeaponScript] provider에 stats할당 실패");
         anim = GetComponent<Animator>();
     }
     public void OnStatChanged()
@@ -61,7 +61,7 @@ public class Weapon : MonoBehaviour
     }
     public void StartSwing()
     {
-        if (anim.GetBool("IsSwing")) return;
+        if (anim.GetBool("IsSwing") || spriteRenderer.sprite == null) return;
         anim.SetInteger("SwingCount", (anim.GetInteger("SwingCount") + 1) % MAX_SWING_COUNT);
         anim.SetBool("IsSwing", true);
     }

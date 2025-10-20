@@ -24,7 +24,7 @@ namespace AnimationImporter
 		{
 			get
 			{
-				if (_instance == null)
+				if (_instance is null)
 				{
 					_instance = new AnimationImporter();
 				}
@@ -223,7 +223,7 @@ namespace AnimationImporter
 		)
 		{
 			// making sure config is valid
-			if (sharedData == null)
+			if (sharedData is null)
 			{
 				LoadOrCreateUserConfig();
 			}
@@ -247,7 +247,7 @@ namespace AnimationImporter
 
 		private void Import(AnimationImportJob[] jobs)
 		{
-			if (jobs == null || jobs.Length == 0)
+			if (jobs is null || jobs.Length == 0)
 			{
 				return;
 			}
@@ -332,7 +332,7 @@ namespace AnimationImporter
 			string pathForAnimatorController = directory + "/" + animations.name + ".controller";
 			controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(pathForAnimatorController);
 
-			if (controller == null)
+			if (controller is null)
 			{
 				// create a new controller and place every animation as a state on the first layer
 				controller = AnimatorController.CreateAnimatorControllerAtPath(pathForAnimatorController);
@@ -378,7 +378,7 @@ namespace AnimationImporter
 
 			if (baseController != null)
 			{
-				if (overrideController == null)
+				if (overrideController is null)
 				{
 					overrideController = new AnimatorOverrideController();
 					AssetDatabase.CreateAsset(overrideController, pathForOverrideController);
@@ -422,7 +422,7 @@ namespace AnimationImporter
 
 		private void CreateAnimations(ImportedAnimationSheet animationSheet, AnimationImportJob job)
 		{
-			if (animationSheet == null)
+			if (animationSheet is null)
 			{
 				return;
 			}
@@ -448,7 +448,7 @@ namespace AnimationImporter
 
 		private void CreateSprites(ImportedAnimationSheet animationSheet, AnimationImportJob job)
 		{
-			if (animationSheet == null)
+			if (animationSheet is null)
 			{
 				return;
 			}
@@ -693,7 +693,7 @@ namespace AnimationImporter
 		/// </summary>
 		public void AutomaticReImport(string[] assetPaths)
 		{
-			if (sharedData == null)
+			if (sharedData is null)
 			{
 				LoadOrCreateUserConfig();
 			}

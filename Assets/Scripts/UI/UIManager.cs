@@ -70,13 +70,13 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
 
     private void Awake()
     {
-        if (inputAction == null)
+        if (inputAction is null)
         {
             inputAction = new();
             inputAction.UserInterface.Enable();
         }
-        if (canvas == null) canvas = GetComponentInParent<Canvas>();
-        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay && cam == null)
+        if (canvas is null) canvas = GetComponentInParent<Canvas>();
+        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay && cam is null)
         {
             canvasRect = canvas.GetComponent<RectTransform>();
             if (itemModal != null) itemModal.Hide();
@@ -122,7 +122,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
                     break;
                 }
             }
-            if (menu == null && uiList[^1] is PausedMenu) uiList[^1].NegativeInteract(context);
+            if (menu is null && uiList[^1] is PausedMenu) uiList[^1].NegativeInteract(context);
             return;
         }
         // 키워드 모달이 열려있을 때
@@ -134,7 +134,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
                 if (r.gameObject.TryGetComponent<MoveableInformationModal>(out modal))
                     break;
             }
-            if (modal == null && uiList[^1] is MoveableInformationModal) uiList[^1].NegativeInteract(context);
+            if (modal is null && uiList[^1] is MoveableInformationModal) uiList[^1].NegativeInteract(context);
         }
     }
     /// <summary>
@@ -231,7 +231,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     }
     private void ShowItemInfo(string content, Vector2 screenPos, Camera eventCam)
     {
-        if (itemModal == null) return;
+        if (itemModal is null) return;
         if (shown)
         {
             itemModal.Show(content, screenPos, eventCam != null ? eventCam : cam);
@@ -245,7 +245,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     }
     private void MoveItemInfo(Vector2 screenPos, Camera eventCam)
     {
-        if (itemModal == null || shown) return;
+        if (itemModal is null || shown) return;
         itemModal.Move(screenPos, eventCam != null ? eventCam : cam);
     }
     private void HandleMouseOut(TMPLinkEvent.TMPLinkEventPayload payload)
@@ -254,7 +254,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     }
     private void HideItemInfo()
     {
-        if (itemModal == null) return;
+        if (itemModal is null) return;
         if (shown)
         {
             itemModal.Hide();
@@ -269,12 +269,12 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     }
     private KeywordInformationModalController SpawnKeywordInfo(string termId, Vector2 screenPos, Camera cam)
     {
-        if (keywordModalPrefab == null)
+        if (keywordModalPrefab is null)
         {
             Debug.LogWarning("keywordModalPrefab(KeywordInformationModalController)이 없음");
             return null;
         }
-        if (keywordContainer == null)
+        if (keywordContainer is null)
         {
             Debug.LogWarning("keywordContainer(RectTransform)이 없음");
             return null;
@@ -299,7 +299,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     }
     private void SetBackdrop(bool v)
     {
-        if (backdrop == null) return;
+        if (backdrop is null) return;
         backdrop.SetActive(v);
         if (v) backdrop.transform.SetAsLastSibling();
     }
@@ -310,7 +310,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     }
     private void Focus(KeywordInformationModalController existingModal)
     {
-        if (existingModal == null) return;
+        if (existingModal is null) return;
         existingModal.Focus();
         existingModal.transform.SetAsLastSibling();
         SetBackdrop(true);
@@ -356,11 +356,11 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     }
     private void KeywordModalPooling(int count)
     {
-        if (keywordModalPrefab == null)
+        if (keywordModalPrefab is null)
         {
             Debug.LogWarning("keywordModalPrefab(KeywordInformationModalController)이 없음");
         }
-        if (keywordContainer == null)
+        if (keywordContainer is null)
         {
             Debug.LogWarning("keywordContainer(RectTransform)이 없음");
         }
@@ -373,7 +373,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     }
     private void CloseAndRecycle(KeywordInformationModalController top)
     {
-        if (top == null) return;
+        if (top is null) return;
         top.Hide();
 
         if (top.transform.parent != keywordContainer) top.transform.SetParent(keywordContainer, false);
@@ -386,7 +386,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     /// <param name="type"></param>
     public void Register(IUI ui, UIType type = UIType.NONE)
     {
-        if (ui == null) return;
+        if (ui is null) return;
         if (type != UIType.NONE && !uiDic.ContainsKey(type)) uiDic[type] = ui;
         ui.Hide();
     }

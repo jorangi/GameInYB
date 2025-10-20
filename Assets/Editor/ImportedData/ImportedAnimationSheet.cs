@@ -63,7 +63,7 @@ namespace AnimationImporter
 		// get animation by name; used when updating an existing AnimatorController 
 		public AnimationClip GetClip(string clipName)
 		{
-			if (_animationDatabase == null)
+			if (_animationDatabase is null)
 				BuildIndex();
 
 			if (_animationDatabase.ContainsKey(clipName))
@@ -387,7 +387,7 @@ namespace AnimationImporter
 
 		public void ApplyCreatedSprites(Sprite[] sprites)
 		{
-			if (sprites == null)
+			if (sprites is null)
 			{
 				return;
 			}

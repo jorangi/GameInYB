@@ -24,7 +24,7 @@ public class PrefabReplacer : EditorWindow
 
     private void ReplaceSelectedObjects()
     {
-        if (prefabToReplaceWith == null)
+        if (prefabToReplaceWith is null)
         {
             EditorUtility.DisplayDialog("경고", "교체할 프리팹을 먼저 등록해주세요.", "확인");
             return;

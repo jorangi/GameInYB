@@ -54,7 +54,7 @@ public class NonPlayableCharacter : Character
     public Animator animator;
     protected override void Awake()
     {
-        data = new NonPlayableCharacterData(new CharacterData("Plant"));
+        data = new NonPlayableCharacterData(new CharacterData("Plant").SetInvicibleTime(0.5f).SetHitStunTime(0.2f));
         data.GetStats().SetBase(StatType.ATK, 50);
         hpBar = transform.Find("HealthBar").Find("back").Find("healthBarMask").Find("health").GetComponent<SpriteRenderer>();
         hpBarSec = transform.Find("HealthBar").Find("back").Find("healthBarMask").Find("healthSec").GetComponent<SpriteRenderer>();
@@ -69,7 +69,7 @@ public class NonPlayableCharacter : Character
 
         
         provider = Data;
-        if (provider == null) Debug.LogError("[WeaponScript] provider에 stats할당 실패");
+        if (provider is null) Debug.LogError("[WeaponScript] provider에 stats할당 실패");
     }
     public void FSMInit()
     {
@@ -95,7 +95,7 @@ public class NonPlayableCharacter : Character
         wallChecker.localPosition = new(FacingSign > 0 ? 0.25f : -0.25f, 0.0f);
         RaycastHit2D hitWall = Physics2D.Raycast(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, 0.1f, LayerMask.GetMask("Floor", "Platform"));
         blackboard.IsWallAhead = hitWall;
-        blackboard.IsPrecipiceAhead = isPrecipice.collider == null;
+        blackboard.IsPrecipiceAhead = isPrecipice.collider is null;
 
         _fsm.Update();
     }
@@ -178,7 +178,7 @@ public class NonPlayableCharacter : Character
     public void RequestState<T>() where T : class, IStateBase
     {
         var next = _registry.Get<T>();
-        if (next == null) return;
+        if (next is null) return;
         _fsm.SetState(next);
     }
     public bool AnimGetTriggerAttack() => animator.GetCurrentAnimatorStateInfo(0).IsName("Attack");
