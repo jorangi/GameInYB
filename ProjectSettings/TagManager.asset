@@ -2,26 +2,23 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 3
-  tags:
-  - Enemy
-  - FallingZone
-  - MinimapCamera
+  serializedVersion: 2
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Light
+  - 
   - Water
   - UI
-  - Character
-  - Floor
-  - Player
-  - Platform
-  - HitBox
-  - WeaponHitBox
-  - ObjectMarker
-  - Landscape
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -41,17 +38,6 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Background
-    uniqueID: 2838283687
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Character
-    uniqueID: 3928382231
-    locked: 0
-  - name: UI
-    uniqueID: 1581125099
-    locked: 0
-  m_RenderingLayers:
-  - Default
