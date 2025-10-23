@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 public class NonPlayableCharacterData : CharacterData
 {
-    public NonPlayableCharacterData(CharacterData data) : base(data.UnitName) { }
+    public NonPlayableCharacterData(string name) : base(name) { }
     public override string ToString()
     {
         return $"{base.ToString()}";
@@ -54,8 +54,10 @@ public class NonPlayableCharacter : Character
     public Animator animator;
     protected override void Awake()
     {
-        data = new NonPlayableCharacterData(new CharacterData("Plant").SetInvicibleTime(0.5f).SetHitStunTime(0.2f));
+        data = new NonPlayableCharacterData("Plant");
         data.GetStats().SetBase(StatType.ATK, 50);
+        data.SetInvicibleTime(0.5f);
+        data.SetHitStunTime(0.5f);
         hpBar = transform.Find("HealthBar").Find("back").Find("healthBarMask").Find("health").GetComponent<SpriteRenderer>();
         hpBarSec = transform.Find("HealthBar").Find("back").Find("healthBarMask").Find("healthSec").GetComponent<SpriteRenderer>();
         wallChecker = transform.Find("wallChecker").transform;

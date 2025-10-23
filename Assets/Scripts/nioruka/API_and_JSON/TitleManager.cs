@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using Cysharp.Threading.Tasks;
 
 public class TitleManager : MonoBehaviour
 {
@@ -15,26 +16,33 @@ public class TitleManager : MonoBehaviour
     public TMP_Text messageText;
     public Image fadePanel;
     public float fadeSpeed = 1.5f;
-
-    private LoginAndStatsManager api;
-
-    void Start()
+    ILoginService loginSvc;
+    private async void Start()
     {
-        api = FindObjectOfType<LoginAndStatsManager>();
+        loginSvc = ServiceHub.Get<ILoginService>();
 
         startButton.gameObject.SetActive(false);
         loginPanel.alpha = 1;
         fadePanel.color = new Color(0, 0, 0, 1);
 
         StartCoroutine(FadeIn());
-
-        // 자동 로그인
-        if (LoginAndStatsManager.currentPlayer != null &&
-            !string.IsNullOrEmpty(LoginAndStatsManager.currentPlayer.accessToken))
+        try
         {
-            messageText.text = "자동 로그인";
-            loginPanel.alpha = 0;
-            startButton.gameObject.SetActive(true);
+            bool autoLogin = await loginSvc.InitializeAsync(true);
+            if (autoLogin)
+            {
+                messageText.text = "자동 로그인";
+                loginPanel.alpha = 0;
+                startButton.gameObject.SetActive(true);
+            }
+            else
+            {
+                //Debug.Log("자동 로그인 실패");
+            }
+        }
+        catch
+        {
+            //Debug.Log("자동 로그인 실패");
         }
     }
 
@@ -61,22 +69,19 @@ public class TitleManager : MonoBehaviour
         }
 
         messageText.text = "로그인 중...";
-        StartCoroutine(LoginAndShowStartButton(id, pw));
+        _ = LoginAndShowStartButton(id, pw);
     }
-
-    private IEnumerator LoginAndShowStartButton(string id, string pw)
+    private async UniTask LoginAndShowStartButton(string id, string pw)
     {
-        yield return StartCoroutine(api.LoginRequest(id, pw));
-
-        if (LoginAndStatsManager.currentPlayer != null &&
-            !string.IsNullOrEmpty(LoginAndStatsManager.currentPlayer.accessToken))
+        try
         {
-            Debug.Log("TitleScene 로그인 성공 — UI 갱신 ");
+            await loginSvc.LoginAsync(id, pw);
+            
             messageText.text = "로그인 성공!";
             loginPanel.alpha = 0;
             startButton.gameObject.SetActive(true);
         }
-        else
+        catch
         {
             Debug.LogError("TitleScene 로그인 실패 — 토큰 없음");
             messageText.text = "로그인 실패";
@@ -98,6 +103,6 @@ public class TitleManager : MonoBehaviour
             yield return null;
         }
 
-        SceneManager.LoadScene("MainScene"); //임시
+        SceneManager.LoadScene("TUTORIAL_MAP"); //임시
     }
 }

@@ -18,6 +18,7 @@ public interface IInventoryUI
     GraphicRaycaster Raycaster { get; }
     EventSystem EventSystem { get; }
     GameObject FirstInventorySelectable { get; }
+    void Refresh();
 }
 public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
 {
@@ -43,9 +44,9 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
     private SpriteAtlas iconAtlas;
     private readonly Image[] slotIcons = new Image[20];
     private bool awakeFlag = false;
-    private void Awake()
+    private async void Awake()
     {
-        InitAltas();
+        await InitAltas();
         uiContext = uiContext != null ? uiContext : GetComponentInParent<UIContext>();
         uiContext.UIRegistry.Register(this, UIType.CHARACTER_INFORMATION);
         Transform equipment = transform.GetChild(0).Find("Inventory").Find("Equipment");
@@ -64,15 +65,14 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
         PlayableCharacter.Inst.Data.health.OnHPChanged += Refresh;
         gameObject.SetActive(false);
     }
-    
     IInventoryData inventory;
     private void Start()
     {
-        inventory = (IInventoryData)GameBootstrapper.ServiceProvider.GetService(typeof(IInventoryData));
+        inventory = ServiceHub.Get<IInventoryData>();
     }
     private void OnEnable()
     {
-        inventory ??= inventory = (IInventoryData)GameBootstrapper.ServiceProvider.GetService(typeof(IInventoryData));
+        inventory ??= inventory = ServiceHub.Get<IInventoryData>();
         if (name == "CharacterInformation")
         {
             inventory.Inventory.OnSlotPicked += ShowItemInformation;
@@ -109,7 +109,7 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
             for (int i = 5; i < 20; i++)
             {
                 slotIcons[i].color = item is null || item.item == default || item.item.id == "00000" ? new(1, 1, 1, 0) : Color.white;
-                slotIcons[i].sprite = item is null || item.item == default || item.item.id == "00000" ? null : iconAtlas.GetSprite(item.item.id);
+                slotIcons[i].sprite = item is null || item.item == default || item.item.id == "00000" ? null : ServiceHub.Get<IAtlasService>().GetSprite("Icons", item.item.id);
                 slotIcons[i].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item is null || item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
                 Refresh();
             }
@@ -117,8 +117,10 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
         else
         {
             slotIcons[arg1 + 5].color = item is null || item.item == default || item.item.id == "00000" ? new(1, 1, 1, 0) : Color.white;
-            slotIcons[arg1 + 5].sprite = item is null || item.item == default || item.item.id == "00000" ? null : iconAtlas.GetSprite(item.item.id);
-            slotIcons[arg1 + 5].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text = item.ea == 0 || !item.item.stackable ? "" : item.ea.ToString();
+            slotIcons[arg1 + 5].sprite = item is null || item.item == default || item.item.id == "00000" ? null : ServiceHub.Get<IAtlasService>().GetSprite("Icons", item.item.id);
+            slotIcons[arg1 + 5].transform.parent.GetChild(2).GetComponent<TextMeshProUGUI>().text =
+                item is null || item.item == default || item.item.id == "00000" || item.ea == 0 || !item.item.stackable ?
+                "" : item.ea.ToString();
             Refresh();
         }
     }
@@ -133,28 +135,28 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
         switch (type)
         {
             case EquipmentType.HELMET:
-                slotIcons[0].sprite = iconAtlas.GetSprite(item.id);
+                slotIcons[0].sprite = ServiceHub.Get<IAtlasService>().GetSprite("Icons", item.id);
                 slotIcons[0].transform.parent.GetComponentInChildren<TextMeshProUGUI>().text = "";
                 slotIcons[0].color = item == default || item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
                 break;
             case EquipmentType.ARMOR:
-                slotIcons[1].sprite = iconAtlas.GetSprite(item.id);
+                slotIcons[1].sprite = ServiceHub.Get<IAtlasService>().GetSprite("Icons", item.id);
                 slotIcons[1].transform.parent.GetComponentInChildren<TextMeshProUGUI>().text = "";
                 slotIcons[1].color = item == default || item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
                 break;
             case EquipmentType.PANTS:
-                slotIcons[2].sprite = iconAtlas.GetSprite(item.id);
+                slotIcons[2].sprite = ServiceHub.Get<IAtlasService>().GetSprite("Icons", item.id);
                 slotIcons[2].transform.parent.GetComponentInChildren<TextMeshProUGUI>().text = "";
                 slotIcons[2].color = item == default || item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
                 break;
             case EquipmentType.MAINWEAPON:
-                slotIcons[3].sprite = iconAtlas.GetSprite(item.id);
+                slotIcons[3].sprite = ServiceHub.Get<IAtlasService>().GetSprite("Icons", item.id);
                 slotIcons[3].transform.parent.GetComponentInChildren<TextMeshProUGUI>().text = "";
                 slotIcons[3].color = item == default || item.id == "00000" ? new Color(1, 1, 1, 0) : Color.white;
                 if (item.twoHander) slotIcons[4].color = Color.gray;
                 break;
             case EquipmentType.SUBWEAPON:
-                slotIcons[4].sprite = iconAtlas.GetSprite(item.id);
+                slotIcons[4].sprite = ServiceHub.Get<IAtlasService>().GetSprite("Icons", item.id);
                 slotIcons[4].transform.parent.GetComponentInChildren<TextMeshProUGUI>().text = "";
                 slotIcons[4].color = item == default || item.id == "00000" ? new Color(1, 1, 1, 0) : PlayableCharacter.Inst.Inventory.equipments.MainWeapon.item.twoHander ? Color.gray : Color.white;
                 break;
@@ -169,7 +171,7 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
     /// 
     /// </summary>
     /// <returns></returns>
-    private async void InitAltas()
+    private async UniTask InitAltas()
     {
         var ct = this.GetCancellationTokenOnDestroy();
         var handle = Addressables.LoadAssetAsync<SpriteAtlas>("Icon/Icons");
@@ -210,6 +212,28 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
     }
     public void ShowItemInformation(int i)
     {
+        Debug.Log(i);
+        if (i < 0 && i > -6)
+            switch (i + 5)
+            {
+                case 0:
+                    Debug.Log(inventory.Equipment.Helmet.item.name);
+                    return;
+                case 1:
+                    Debug.Log(inventory.Equipment.Armor.item.name);
+                    return;
+                case 2:
+                    Debug.Log(inventory.Equipment.Pants.item.name);
+                    return;
+                case 3:
+                    Debug.Log(inventory.Equipment.MainWeapon.item.name);
+                    return;
+                case 4:
+                    Debug.Log(inventory.Equipment.SubWeapon.item.name);
+                    return;
+            }
+        Debug.Log($"{inventory.Backpack} {inventory.Backpack[i]}");
+        Debug.Log(inventory.Backpack[i].item);
         Debug.Log(inventory.Backpack[i].item.name);
     }
 }

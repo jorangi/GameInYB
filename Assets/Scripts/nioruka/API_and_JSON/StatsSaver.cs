@@ -124,11 +124,6 @@ public sealed class LoginServiceStatsRefresher : IStatsRefresher
 
     public string Name => "LoginServiceStatsRefresher";
 
-    public LoginServiceStatsRefresher(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-    }
-
     public async UniTask<bool> TryRefreshAsync()
     {
         var svc = _serviceProvider.GetService(typeof(ILoginService)) as ILoginService;
@@ -158,13 +153,10 @@ public sealed class PlayableCharacterAccessTokenProvider : IAccessTokenProvider
 {
     public string GetAccessToken()
     {
-        var data = PlayableCharacter.Inst != null ? PlayableCharacter.Inst.Data : null;
-        if (data == null || string.IsNullOrEmpty(data.accessToken))
-        {
-            Debug.LogWarning("[TokenProvider] accessToken 없음");
-            return null;
-        }
-        return data.accessToken;
+        if (!ServiceHub.TryGet<PlayerSession>(out var session))
+            session = PlayerSession.Inst; // 최후 fallback
+
+        return session?.Token?.accessToken ?? string.Empty;
     }
 }
 public sealed class LoginAndStatsManagerAdapter : IStatsUIRefresher

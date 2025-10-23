@@ -22,6 +22,26 @@ public sealed class UnityServiceProvider : IServiceProvider
     public void Add<T>(T imple) where T : class => map[typeof(T)] = imple;
     public object GetService(Type serviceType) => map.TryGetValue(serviceType, out var o) ? o : null;
     public T Get<T>() where T : class => (T)GetService(typeof(T));
+    public bool TryGet<T>(out T instance) where T : class
+    {
+        if (map.TryGetValue(typeof(T), out var obj))
+        {
+            // Lazy<T> 지원 (팩토리 등록 케이스)
+            if (obj is Lazy<T> lazy)
+            {
+                instance = lazy.Value;
+                // 생성 이후 캐시로 교체
+                map[typeof(T)] = instance;
+                return instance != null;
+            }
+
+            instance = obj as T;
+            return instance != null;
+        }
+
+        instance = null;
+        return false;
+    }
 }
 public readonly struct ItemStackSnap
 {
@@ -98,7 +118,7 @@ public enum EquipmentType
 public interface IPlayerStatMapper
 {
     public PlayerStats ToDto(in InventorySnapshot inv);
-    public void ApplyDto(in PlayerStats dto);
+    public void ApplyDto(PlayerStats dto);
 }
 [Serializable]
 public class PlayableCharacterData : CharacterData, IPlayerStatMapper
@@ -119,7 +139,9 @@ public class PlayableCharacterData : CharacterData, IPlayerStatMapper
     public Action<string, string, string, string, string> ApplyEquipIds;                    
     public Action<int, string, int> ApplyBackpackSlot;                                      
 
-    public PlayableCharacterData(CharacterData data) : base(data.UnitName) { }
+    
+    public PlayableCharacterData(string name) : base(name) {}
+    public PlayableCharacterData(CharacterData data) : base(data.UnitName) {}
     public int JumpCnt => (int)stats.GetFinal(StatType.JCNT); // 최대 점프 횟수
     public float JumpPower => stats.GetFinal(StatType.JMP); // 점프력
     public float Cri => stats.GetFinal(StatType.CRI); // 크리티컬 확률
@@ -253,7 +275,7 @@ public class PlayableCharacterData : CharacterData, IPlayerStatMapper
         }
         return sb.ToString();
     }
-    public void ApplyDto(in PlayerStats dto)
+    public void ApplyDto(PlayerStats dto)
     {
         var equipIds = ParseJsonStringArrayLocal(dto.equiped);
         string helmetId = equipIds[0];
@@ -261,14 +283,12 @@ public class PlayableCharacterData : CharacterData, IPlayerStatMapper
         string pantsId  = equipIds[2];
         string mainId   = equipIds[3];
         string subId    = equipIds[4];
-        
+
         PlayableCharacter.Inst.SetHelmet(ItemDataManager.GetItem(helmetId));
         PlayableCharacter.Inst.SetArmor(ItemDataManager.GetItem(armorId));
         PlayableCharacter.Inst.SetPants(ItemDataManager.GetItem(pantsId));
         PlayableCharacter.Inst.SetSubWeapon(ItemDataManager.GetItem(subId));
         PlayableCharacter.Inst.SetMainWeapon(ItemDataManager.GetItem(mainId));
-
-        Debug.Log($"ATK: {GetStats().GetFinal(StatType.ATK)}, DEF: {GetStats().GetFinal(StatType.DEF)}");
 
         var probe = new CharacterStats();
         void AddEquipProviderIfAny(string id)
@@ -284,7 +304,6 @@ public class PlayableCharacterData : CharacterData, IPlayerStatMapper
         AddEquipProviderIfAny(subId);
         
         _ = stats.GetAllFinal(); // Recalculate 유도
-        Debug.Log($"ATK: {GetStats().GetFinal(StatType.ATK)}, DEF: {GetStats().GetFinal(StatType.DEF)}");
 
         stats.SetBase(StatType.HP,   SolveBase(probe, StatType.HP,   dto.hp));
         stats.SetBase(StatType.ATK,  SolveBase(probe, StatType.ATK,  dto.atk));
@@ -295,7 +314,6 @@ public class PlayableCharacterData : CharacterData, IPlayerStatMapper
         stats.SetBase(StatType.JCNT, SolveBase(probe, StatType.JCNT, dto.jmp));
         
         _ = stats.GetAllFinal(); // Recalculate 유도
-        Debug.Log($"ATK: {GetStats().GetFinal(StatType.ATK)}, DEF: {GetStats().GetFinal(StatType.DEF)}");
 
         var invStrArr = ParseJsonStringArrayLocal(dto.inventory);
         var pc = PlayableCharacter.Inst;
@@ -316,25 +334,23 @@ public class PlayableCharacterData : CharacterData, IPlayerStatMapper
             prev.item = newItem;
             prev.ea = ea;
             bag[idx] = prev;
-
             PlayableCharacter.Inst.InvokeBackpackChanged(idx, bag[idx]);
 
             // 새 provider 추가
             if (newItem.id != null && newItem.id[0]=='0' && !Array.Exists(new char[] { '1','2','3','4','5'}, s => s == newItem.id[1]))
                 pc.Data.GetStats().AddProvider(newItem.GetProvider());
                 
-            Debug.Log($"ATK: {GetStats().GetFinal(StatType.ATK)}, DEF: {GetStats().GetFinal(StatType.DEF)}");
         }
-        
-        Debug.Log($"ATK: {GetStats().GetFinal(StatType.ATK)}, DEF: {GetStats().GetFinal(StatType.DEF)}");
         // 6) 최종 재계산 트리거(필요 시)
         _ = stats.GetAllFinal(); // Recalculate 유도
-        Debug.Log($"ATK: {GetStats().GetFinal(StatType.ATK)}, DEF: {GetStats().GetFinal(StatType.DEF)}");
     }
     string[] ParseJsonStringArrayLocal(string json)
     {
         // BuildJsonStringArray로 만든 포맷 ["...","..."] 전용 간단 파서
-        if (string.IsNullOrEmpty(json)) return Array.Empty<string>();
+        if (string.IsNullOrEmpty(json) || json.Equals("{}"))
+        {
+            return new string[5] { "", "", "", "", "" };
+        }
         var list = new List<string>(16);
         int i = 0, n = json.Length;
         void SkipWs(){ while(i<n && char.IsWhiteSpace(json[i])) i++; }
@@ -427,11 +443,6 @@ public class PlayableCharacterData : CharacterData, IPlayerStatMapper
         float b = (target / mul) - sumAdd;
         return b < 0f ? 0f : b;
     }
-    public string accessToken;
-    public string refreshToken;
-    public string nickname;
-    public string[] roles;
-    public PlayerStats statsDTO;
 }
 public class Backpack : IEnumerable<ItemSlot>
 {
@@ -452,8 +463,8 @@ public class Backpack : IEnumerable<ItemSlot>
         get
         {
 #if UNITY_EDITOR
-                if ((uint)index >= (uint)items.Length)
-                    throw new IndexOutOfRangeException("조회하는 인덱스가 백팩의 크기보다 큽니다.");
+            if ((uint)index >= (uint)items.Length)
+                throw new IndexOutOfRangeException("조회하는 인덱스가 백팩의 크기보다 큽니다.");
 #endif
             return items[index];
         }
@@ -564,6 +575,7 @@ public interface IInventoryData
 {
     Backpack Backpack { get; }
     Inventory Inventory { get; }
+    PlayerEquipments Equipment { get; }
     public event Action<EquipmentType, Item> OnEquipmentChanged; //옵저버 패턴을 이용해 장비변경시 알림
     public event Action<int, ItemSlot> OnBackpackChanged;//옵저버 패턴을 이용해 인벤토리 변경시 알림
     public void InvokeEquipmentChanged(EquipmentType type, Item item);
@@ -729,10 +741,10 @@ public sealed class PlayerStatsLoader
     {
         var equipIds = ParseJsonStringArrayLocal(dto.equiped);
         string helmetId = equipIds.Length > 0 ? equipIds[0] : "";
-        string armorId  = equipIds.Length > 1 ? equipIds[1] : "";
-        string pantsId  = equipIds.Length > 2 ? equipIds[2] : "";
-        string mainId   = equipIds.Length > 3 ? equipIds[3] : "";
-        string subId    = equipIds.Length > 4 ? equipIds[4] : "";
+        string armorId = equipIds.Length > 1 ? equipIds[1] : "";
+        string pantsId = equipIds.Length > 2 ? equipIds[2] : "";
+        string mainId = equipIds.Length > 3 ? equipIds[3] : "";
+        string subId = equipIds.Length > 4 ? equipIds[4] : "";
 
         var probe = new CharacterStats();
 
@@ -752,12 +764,12 @@ public sealed class PlayerStatsLoader
 
         var stats = _pc.Stats;
 
-        stats.SetBase(StatType.HP,   SolveBase(probe, StatType.HP,   dto.hp));
-        stats.SetBase(StatType.ATK,  SolveBase(probe, StatType.ATK,  dto.atk));
-        stats.SetBase(StatType.DEF,  SolveBase(probe, StatType.DEF,  dto.def));
-        stats.SetBase(StatType.CRI,  SolveBase(probe, StatType.CRI,  dto.cri));
+        stats.SetBase(StatType.HP, SolveBase(probe, StatType.HP, dto.hp));
+        stats.SetBase(StatType.ATK, SolveBase(probe, StatType.ATK, dto.atk));
+        stats.SetBase(StatType.DEF, SolveBase(probe, StatType.DEF, dto.def));
+        stats.SetBase(StatType.CRI, SolveBase(probe, StatType.CRI, dto.cri));
         stats.SetBase(StatType.CRID, SolveBase(probe, StatType.CRID, dto.crid));
-        stats.SetBase(StatType.SPD,  SolveBase(probe, StatType.SPD,  dto.spd));
+        stats.SetBase(StatType.SPD, SolveBase(probe, StatType.SPD, dto.spd));
         stats.SetBase(StatType.JCNT, SolveBase(probe, StatType.JCNT, dto.jmp));
 
         if (!string.IsNullOrEmpty(mainId))
@@ -863,6 +875,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     private readonly Inventory inventory = new();
     public Inventory Inventory => inventory;
     public Backpack Backpack => inventory.backpack;
+    public PlayerEquipments Equipment => inventory.equipments;
     public GameObject CharacterInformationObj;
     public Animator anim; // 플레이어 캐릭터 애니메이터
     public Material material;
@@ -871,7 +884,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         get
         {
             if (data is not null) return (PlayableCharacterData)data;
-            data = new PlayableCharacterData(new CharacterData("Player").SetInvicibleTime(0.2f))
+            data = new PlayableCharacterData(new CharacterData("Player"))
                 .SetJCnt(4)
                 .SetJPow(12.0f)
                 .SetCri(0.0f)
@@ -918,16 +931,17 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         PlayableCharacter.Inst = this;
         DontDestroyOnLoad(gameObject);
         // 데이터 초기화(우선적으로 getter에서 처리하지만, 명시적으로 초기화도 해둠)
-        data ??= new PlayableCharacterData(new CharacterData("Player").SetInvicibleTime(0.2f))
+        data ??= new PlayableCharacterData("Player")
             .SetJCnt(4)
             .SetJPow(12.0f)
             .SetCri(0.1f)
             .SetCriDmg(1.5f);
+        data.SetInvicibleTime(2.0f);
         data.GetStats().SetBase(StatType.ATS, 0.0f);
         data.GetStats().SetBase(StatType.SPD, 5.0f);
         data.GetStats().SetBase(StatType.DEF, 0f);
         data.health.ApplyHP(data.MaxHP);
-
+        Debug.Log(data.InvincibleTime);
         ((PlayableCharacterData)data).SetInfoObj(CharacterInformationObj);
 
         // 인풋 액션 초기화
@@ -939,7 +953,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         // 무기 스프라이트, 스크립트, 메시지 박스, 카메라 초기화
         weaponScript = arm.GetComponentInChildren<Weapon>();
         weaponSprite = weaponScript.GetComponent<SpriteRenderer>();
-        subWeaponSprite = arm.GetChild(1).GetComponent<SpriteRenderer>();
+        subWeaponSprite = transform.Find("Body").Find("SubWeapon").GetComponent<SpriteRenderer>();
         SetupMessageBox();
         cam = Camera.main;
         GameObject obj = Instantiate(new GameObject(), null);
@@ -950,6 +964,11 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     }
     private async void Start()
     {
+        if (ServiceHub.isLoadedFromLogin)
+        {
+            InitPos();
+            return;
+        }
         await InitAtlas();
         await ItemDataManager.Ready;
         BackpackClearWithEquiped();
@@ -965,7 +984,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     /// 무기 아틀라스 로드
     /// </summary>
     /// <returns></returns>
-    private async Task<int> InitAtlas()
+    private async UniTask<int> InitAtlas()
     {
         AsyncOperationHandle<SpriteAtlas> loadSprite = Addressables.LoadAssetAsync<SpriteAtlas>($"Characters/Weapons");
         var ct = this.GetCancellationTokenOnDestroy();
@@ -1048,6 +1067,31 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         anim.SetBool("JUMP", !isGround);
         if (weaponScript.anim.GetBool("IsSwing")) return;
 
+        // Vector3 mouseW = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // Vector2 delta = (Vector2)(mouseW - arm.position);
+        // float angleDeg = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
+        // Transform mainWeaponPivot = weaponScript.transform.parent;
+        // Debug.Log($"angleDeg: {angleDeg} / pivotRot: {mainWeaponPivot.eulerAngles.z}");
+        // arm.localScale = new(((angleDeg < -90 && angleDeg >= -180) || (angleDeg < 180 && angleDeg > 90)) ? -1 : 1, 1, 1);
+        // if (angleDeg >= -180 && angleDeg <= 0) //상
+        // {
+        //     mainWeaponPivot.transform.SetLocalPositionAndRotation(new(0.022f, 0.165f), Quaternion.Euler(0, 0, -154.777f));
+        // }
+        // else if (angleDeg > 0 && angleDeg < 180) //하
+        // {
+        //     mainWeaponPivot.transform.SetLocalPositionAndRotation(new(0.408f, -0.155f), Quaternion.Euler(0, 0, 48.392f));
+        // }
+
+        // Transform body = transform.GetChild(0);
+        // Vector3 s = body.localScale;
+        // s.x = (delta.x >= 0f) ? -2f : 2f;
+        // s.y = 2f;
+        // s.z = 1f;
+        // body.localScale = s;
+
+        // const float offsetDeg = -90f;
+        // float finalZ = angleDeg + offsetDeg;
+        // arm.rotation = Quaternion.Euler(0f, 0f, finalZ);
         const float offsetDeg = -90f; // 무기 이미지가 세로로 되어 있어 보정 각도 필요
 
         Vector3 mouseW = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -1068,7 +1112,6 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         }
         {
             Transform mainWeapon = weaponScript.transform;
-            Transform subWeapon = subWeaponSprite.transform;
             if (mainWeapon != null)
             {
                 float d = Vector3.Dot(arm.up, Vector3.right);
@@ -1076,7 +1119,6 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
                 float absX = Mathf.Abs(ls.x);
                 ls.x = (d >= 0f) ? -absX : absX;
                 mainWeapon.transform.parent.localScale = ls;
-                subWeapon.localScale = new(-ls.x, 1, 1);
             }
         }
     }
@@ -1202,7 +1244,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     public void SetMainWeapon(Item item)
     {
         SetSubWeapon(inventory.equipments.SubWeapon.item, item.twoHander);
-        weaponSprite.sprite = weaponAtlas.GetSprite(item.id);
+        weaponSprite.sprite = ServiceHub.Get<IAtlasService>().GetSprite("Weapons", item.id);
         Data.GetStats().RemoveProvider(inventory.equipments.MainWeapon.item.GetProvider());
         inventory.equipments.MainWeapon.item = item;
         Data.GetStats().AddProvider(item.GetProvider());
@@ -1218,7 +1260,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     public void SetSubWeapon(Item item, bool isTwoHander = false)
     {
         subWeaponSprite.color = isTwoHander ? new(1, 1, 1, 0) : Color.white;
-        subWeaponSprite.sprite = weaponAtlas.GetSprite(item.id);
+        subWeaponSprite.sprite = ServiceHub.Get<IAtlasService>().GetSprite("Weapons", item.id);
         if (inventory.equipments.SubWeapon is ItemSlot i)
             Data.GetStats().RemoveProvider(i.item.GetProvider());
 
@@ -1315,8 +1357,8 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     /// <param name="itemslot"></param>
     public void RemoveItem(ItemSlot itemslot)
     {
-        Backpack[itemslot.index] = default;
-        InvokeBackpackChanged(itemslot.index, null);
+        Backpack[itemslot.index].item = default;
+        InvokeBackpackChanged(itemslot.index, Backpack[itemslot.index]);
     }
     /// <summary>
     /// 백팩 초기화

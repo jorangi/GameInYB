@@ -18,7 +18,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
     public string idcode;
     private void Start()
     {
-        inventoryData = (IInventoryData)GameBootstrapper.ServiceProvider.GetService(typeof(IInventoryData));
+        inventoryData = ServiceHub.Get<IInventoryData>();
         inventory = PlayableCharacter.Inst.Inventory;
         icon = GetComponentInChildren<IconOver>();
         rect = icon.GetComponent<RectTransform>();
@@ -79,7 +79,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
     {
         if (itemSlot is null) return;
         if (eventData.button != PointerEventData.InputButton.Left) return;
-        inventory.NotifySlotClicked(equiped ? index : index - 5);
+        inventory.NotifySlotClicked(equiped ? index-5 : index);
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -125,12 +125,14 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                 rect.anchoredPosition = Vector2.zero;
                 return;
             }
-            Debug.Log($"{index}에서 {targetIndex}로");
+            ItemSlot targetItemSlot = targetSlot.itemSlot;
+            Debug.Log($"({index}){itemSlot.item.id}에서 ({targetIndex}){targetItemSlot.item.id}로");
             if (!targetSlot.equiped) // 가방으로
             {
-                ItemSlot targetItemSlot = targetSlot.itemSlot;
+                Debug.Log("가방으로");
                 if (equiped) // 장비를
                 {
+                    Debug.Log("장비를");
                     EquipmentType sourceType = EquipmentType.MAINWEAPON;
                     switch (index) // 현재 선택한 장비가 무엇인지
                     {
@@ -150,8 +152,9 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                             sourceType = EquipmentType.SUBWEAPON;
                             break;
                     }
-                    if (targetItemSlot.item == default || itemSlot.item.id == "00000") // 대상 슬롯이 비었을 경우
+                    if (targetItemSlot.item == default || targetItemSlot.item.id == "00000") // 대상 슬롯이 비었을 경우
                     {
+                        Debug.Log("장비를 빈 슬롯 가방으로");
                         Item targetItem = targetItemSlot.item;
                         int temp = targetItemSlot.ea;
                         targetItemSlot.item = itemSlot.item;
@@ -205,6 +208,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                         }
                         if (sourceType == targetType) //장비의 타입이 같을 경우
                         {
+                            Debug.Log("장비를 인벤토리의 다른 장비로");
                             Item targetItem = targetItemSlot.item;
                             int temp = targetItemSlot.ea;
                             targetItemSlot.ea = itemSlot.ea;
@@ -246,6 +250,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                 }
                 else // 가방의 아이템을
                 {
+                    Debug.Log("가방의 아이템을 다른 슬롯으로");
                     Item newInstance = itemSlot.item;
                     Item targetInstance = targetItemSlot.item;
                     int temp = targetItemSlot.ea;
@@ -262,10 +267,9 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
             }
             else // 장비로
             {
+                Debug.Log("장비로");
                 if (itemSlot.item.id[0] == '0') // id가 0일 경우
                 {
-                    ItemSlot targetItemSlot = targetSlot.itemSlot;
-
                     EquipmentType sourceType = EquipmentType.MAINWEAPON;
                     EquipmentType targetType = EquipmentType.MAINWEAPON;
                     //SourceType 책정
@@ -311,6 +315,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                     }
                     if (sourceType == targetType) // 같은 타입의 장비일 경우
                     {
+                        Debug.Log("가방의 장비를 장비슬롯으로");
                         Item targetInstance = targetItemSlot.item;
                         int temp = targetItemSlot.ea;
                         switch (sourceType)

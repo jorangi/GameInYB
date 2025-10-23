@@ -6,8 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/InTutorial/TUTORIAL_MAP.unity
+    path: Assets/Scenes/TUTORIAL_MAP.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/TitleScene.unity
+    guid: ddc46241213d638438df2c8c2e07ad58
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: c3e65c43fd64a414a915372d36d4b97e, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

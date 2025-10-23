@@ -69,6 +69,7 @@ public class CharacterStats
     {
         baseStats[stat] = value;
         dirty = true;
+        Recalculate();
     }
     public float GetBase(StatType stat) => baseStats.TryGetValue(stat, out var value) ? value : 0f;
     public float GetFinal(StatType stat)
