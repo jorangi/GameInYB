@@ -37,7 +37,7 @@ public class TitleManager : MonoBehaviour
 
         if (loginManager == null)
         {
-            Debug.LogError("[TitleManager] LoginAndStatsManager를 찾을 수 없습니다!");
+            Debug.LogError("LoginAndStatsManager가 없는것으로보임");
             return;
         }
 
@@ -47,23 +47,7 @@ public class TitleManager : MonoBehaviour
 
         await FadeIn();
 
-        // 자동 로그인 시도
-        var data = PlayableCharacter.Inst?.Data;
-        if (data != null && !string.IsNullOrEmpty(data.accessToken))
-        {
-            messageText.text = "자동 로그인 중...";
-            try
-            {
-                await UniTask.Delay(500);
-                await loginManager.InitializeAutoLogin();
-                OnLoginSuccess();
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"자동 로그인 실패: {e.Message}");
-                messageText.text = "자동 로그인 실패";
-            }
-        }
+        
     }
 
     private async void OnClick_Login()
