@@ -61,7 +61,6 @@ public class TitleManager : MonoBehaviour
     {
         string id = idInput.text.Trim();
         string pw = pwInput.text.Trim();
-
         if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
         {
             messageText.text = "ID/PW 입력 필요";
