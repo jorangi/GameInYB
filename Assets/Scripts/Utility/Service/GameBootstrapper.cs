@@ -60,13 +60,10 @@ public class GameBootstrapper : MonoBehaviour
             scope.Add<IInventoryData>(playableCharacter);
             scope.Add<IInventoryUI>(characterInformation);
 
-            var repo = new ItemRepositoryAdapter();
-            scope.Add<IItemRepository>(repo);
-
             var facade = new PlayableCharacterFacadeAdapter(PlayableCharacter.Inst);
             scope.Add<IPlayableCharacterFacade>(facade);
 
-            var loader = new PlayerStatsLoader(repo, facade);
+            var loader = new PlayerStatsLoader(ServiceHub.Get<IItemRepository>(), facade);
             scope.Add<PlayerStatsLoader>(loader);
 
             var tokenProvider = new PlayableCharacterAccessTokenProvider();

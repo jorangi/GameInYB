@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -15,27 +17,22 @@ public class ApiManager_All : MonoBehaviour
 
     IEnumerator GetNpcData()
     {
-        using (UnityWebRequest request = UnityWebRequest.Get(NPC_API_URL))
+        using UnityWebRequest request = UnityWebRequest.Get(NPC_API_URL);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Accept", "application/json");
+        request.timeout = 10;
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.ConnectionError ||
+            request.result == UnityWebRequest.Result.ProtocolError)
         {
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Accept", "application/json");
-            request.timeout = 10;
-
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.ConnectionError ||
-                request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError("NPC GET Error: " + request.error);
-            }
-            else
-            {
-                string npcJson = request.downloadHandler.text;
-                Debug.Log("=== NPC Raw JSON ===");
-                Debug.Log(npcJson);
-
-                TryParseNpc(npcJson);
-            }
+            Debug.LogError("NPC GET Error: " + request.error);
+        }
+        else
+        {
+            string npcJson = request.downloadHandler.text;
+            TryParseNpc(npcJson);
         }
     }
 
@@ -45,10 +42,7 @@ public class ApiManager_All : MonoBehaviour
         {
             Npc[] npcs = JsonHelper.FromJsonNpc(json);
             Debug.Log($"=== NPC 파싱 결과 ({npcs.Length}명) ===");
-            foreach (Npc npc in npcs)
-            {
-                Debug.Log($"NPC — ID: {npc.id}, 이름: {npc.name}, HP: {npc.hp}, MP: {npc.mp}");
-            }
+            NPCDataManager.Init(npcs);
         }
         catch (System.Exception e)
         {
@@ -59,36 +53,40 @@ public class ApiManager_All : MonoBehaviour
     [System.Serializable]
     public class Npc
     {
-        public int id;
-        public string name;
-        public string description;
-        public int hp;
-        public int mp;
+        public string id;
+        public string[] name;
+        public float hp;
+        public float atk;
+        public float def;
+        public float spd;
+        public string[] features;
+        public override string ToString()
+        {
+            return $"ID: {id}, 이름: [{name[0]}, {name[1]}]\nHP: {hp}, ATK: {atk} DEF: {def} SPD: {spd}\n{string.Join(",", features)}";
+        }
     }
 
     IEnumerator GetSkillData()
     {
-        using (UnityWebRequest request = UnityWebRequest.Get(SKILL_API_URL))
+        using UnityWebRequest request = UnityWebRequest.Get(SKILL_API_URL);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Accept", "application/json");
+        request.timeout = 10;
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.ConnectionError ||
+            request.result == UnityWebRequest.Result.ProtocolError)
         {
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Accept", "application/json");
-            request.timeout = 10;
+            Debug.LogError("Skill GET Error: " + request.error);
+        }
+        else
+        {
+            string skillJson = request.downloadHandler.text;
+            Debug.Log("=== Skill Raw JSON ===");
+            Debug.Log(skillJson);
 
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.ConnectionError ||
-                request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError("Skill GET Error: " + request.error);
-            }
-            else
-            {
-                string skillJson = request.downloadHandler.text;
-                Debug.Log("=== Skill Raw JSON ===");
-                Debug.Log(skillJson);
-
-                TryParseSkill(skillJson);
-            }
+            TryParseSkill(skillJson);
         }
     }
 
@@ -97,11 +95,11 @@ public class ApiManager_All : MonoBehaviour
         try
         {
             Skill[] skills = JsonHelper.FromJsonSkill(json);
-            Debug.Log($"=== Skill 파싱 결과 ({skills.Length}개) ===");
-            foreach (Skill sk in skills)
-            {
-                Debug.Log($"Skill — ID: {sk.id}, 이름: {sk.name}, Power: {sk.power}");
-            }
+            // Debug.Log($"=== Skill 파싱 결과 ({skills.Length}개) ===");
+            // foreach (Skill sk in skills)
+            // {
+            //     Debug.Log($"Skill — ID: {sk.id}, 이름: {sk.name}, Power: {sk.power}");
+            // }
         }
         catch (System.Exception e)
         {

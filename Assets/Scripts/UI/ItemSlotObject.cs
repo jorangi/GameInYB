@@ -126,7 +126,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                 return;
             }
             ItemSlot targetItemSlot = targetSlot.itemSlot;
-            Debug.Log($"({index}){itemSlot.item.id}에서 ({targetIndex}){targetItemSlot.item.id}로");
+            // Debug.Log($"({index}){itemSlot.item.id}에서 ({targetIndex}){targetItemSlot.item.id}로");
             if (!targetSlot.equiped) // 가방으로
             {
                 Debug.Log("가방으로");

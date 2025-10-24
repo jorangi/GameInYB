@@ -6,6 +6,7 @@ using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static ApiManager_All;
 
 public enum StatType
 {
@@ -147,20 +148,34 @@ public class CharacterData : IStatProvider
 {
     public Health health = new();
     protected CharacterStats stats = new();
+    private string id;
     protected string unitName;
     public string UnitName
     {
         get => unitName;
         set => unitName = value;
     }
-    public CharacterData(string name)
+    public CharacterData(string id)
     {
-        unitName = name;
-        stats.SetBase(StatType.HP, 100.0f);
-        stats.SetBase(StatType.ATK, 10.0f);
-        stats.SetBase(StatType.ATS, 0.8f);
-        stats.SetBase(StatType.DEF, 0.0f);
-        stats.SetBase(StatType.SPD, 3.0f);
+        if (id != "Player")
+        {
+            this.id = id;
+            Npc d = ServiceHub.Get<INPCRepository>().GetNPC(id);
+            unitName = d.name[0];
+            stats.SetBase(StatType.HP, d.hp);
+            stats.SetBase(StatType.ATK, d.atk);
+            stats.SetBase(StatType.DEF, d.def);
+            stats.SetBase(StatType.SPD, d.spd);
+        }
+        else
+        {
+            unitName = "Player";
+            stats.SetBase(StatType.HP, 100.0f);
+            stats.SetBase(StatType.ATK, 10.0f);
+            stats.SetBase(StatType.ATS, 0.8f);
+            stats.SetBase(StatType.DEF, 0.0f);
+            stats.SetBase(StatType.SPD, 3.0f);
+        }
         SetInvicibleTime();
         SetHitStunTime();
     }

@@ -52,9 +52,10 @@ public class NonPlayableCharacter : Character
     private const float BAR_SIZE = 3.5f;
     public GameObject DamageTextPrefab;
     public Animator animator;
+    [SerializeField]private string id;
     protected override void Awake()
     {
-        data = new NonPlayableCharacterData("Plant");
+        data = new NonPlayableCharacterData(id);
         data.GetStats().SetBase(StatType.ATK, 50);
         data.SetInvicibleTime(0.5f);
         data.SetHitStunTime(0.5f);
@@ -69,7 +70,7 @@ public class NonPlayableCharacter : Character
         _npcData.health.ApplyHP(_npcData.MaxHP);
         FSMInit();
 
-        
+
         provider = Data;
         if (provider is null) Debug.LogError("[WeaponScript] provider에 stats할당 실패");
     }
@@ -97,7 +98,7 @@ public class NonPlayableCharacter : Character
         wallChecker.localPosition = new(FacingSign > 0 ? 0.25f : -0.25f, 0.0f);
         RaycastHit2D hitWall = Physics2D.Raycast(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, 0.1f, LayerMask.GetMask("Floor", "Platform"));
         blackboard.IsWallAhead = hitWall;
-        blackboard.IsPrecipiceAhead = isPrecipice.collider is null;
+        blackboard.IsPrecipiceAhead = isPrecipice.collider == null;
 
         _fsm.Update();
     }
