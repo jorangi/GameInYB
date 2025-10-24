@@ -68,10 +68,9 @@ public class StatEditUI : MonoBehaviour, IStatText
 
     void Start()
     {
-        if (PlayableCharacter.Inst.Data != null &&
-            PlayableCharacter.Inst.Data.statsDTO != null)
+        if (ServiceHub.Get<PlayerSession>().Stats is var stats)
         {
-            UpdateUIFromStats(PlayableCharacter.Inst.Data.statsDTO);
+            UpdateUIFromStats(stats);
         }
     }
 
@@ -101,14 +100,11 @@ public class StatEditUI : MonoBehaviour, IStatText
 
     public async void OnClick_Save()
     {
-        if (PlayableCharacter.Inst.Data is null ||
-            PlayableCharacter.Inst.Data.statsDTO is null)
+        if (ServiceHub.Get<PlayerSession>().Stats is var stats)
         {
             Debug.LogError("플레이어 데이터 없음");
             return;
         }
-
-        var stats = PlayableCharacter.Inst.Data.statsDTO;
         stats.hp = float.Parse(string.IsNullOrEmpty(hpInput.text) ? hpInput.transform.Find("Text Area").Find("Placeholder").GetComponent<TextMeshProUGUI>().text : hpInput.text);
         stats.atk = float.Parse(string.IsNullOrEmpty(atkInput.text) ? atkInput.transform.Find("Text Area").Find("Placeholder").GetComponent<TextMeshProUGUI>().text : atkInput.text);
         //stats.ats = float.Parse(string.IsNullOrEmpty(atsInput.text) ? atsInput.transform.Find("Text Area").Find("Placeholder").GetComponent<TextMeshProUGUI>().text : hpInput.text);

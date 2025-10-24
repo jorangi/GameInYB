@@ -266,6 +266,7 @@ namespace Looper.Console.Commands
                 return;
             }
             PlayableCharacter.Inst.Data.GetStats().SetBase(stat, value);
+            ServiceHub.Get<IInventoryUI>().Refresh();
             ctx.Info($"기본 {stat} 스탯이 {value}(으)로 설정되었습니다.");
         }
         public UniTask ExecuteAsync(CommandContext ctx, string[] args) => UniTask.CompletedTask;
@@ -449,9 +450,9 @@ namespace Looper.Console.Commands
         }
         public async UniTask ExecuteAsync(CommandContext ctx, string[] args)
         {
-            var data = (IInventoryData)ctx.Service.GetService(typeof(IInventoryData));
-            var ui = (IInventoryUI)ctx.Service.GetService(typeof(IInventoryUI));
-            var neg = (INegativeSignal)ctx.Service.GetService(typeof(INegativeSignal));
+            var data = ServiceHub.Get<IInventoryData>();
+            var ui = ServiceHub.Get<IInventoryUI>();
+            var neg = ServiceHub.Get<INegativeSignal>();
 
             if (data is null || ui is null || neg is null)
             {
@@ -459,21 +460,46 @@ namespace Looper.Console.Commands
                 return;
             }
 
-            var backpack = data.Backpack;
-
+            var inventory = data.Inventory;
             if (TryParseIndex(args, out var argIndex))
             {
-                if (!IsValidIndex(backpack, argIndex))
+                if (argIndex < 0 && argIndex >= -5)
                 {
-                    ctx.Warn($"유효하지 않은 슬롯: {argIndex}");
-                    return;
+                    PlayerEquipments equip = inventory.equipments;
+                    Debug.Log(equip);
+                    argIndex += 5;
+                    switch (argIndex)
+                    {
+                        case 0:
+                            PlayableCharacter.Inst.SetHelmet(default);
+                            ctx.Info($"착용 중인 헬멧을 삭제했습니다.");
+                            return;
+                        case 1:
+                            PlayableCharacter.Inst.SetArmor(default);
+                            ctx.Info($"착용 중인 갑옷을 삭제했습니다.");
+                            return;
+                        case 2:
+                            PlayableCharacter.Inst.SetPants(default);
+                            ctx.Info($"착용 중인 바지를 삭제했습니다.");
+                            return;
+                        case 3:
+                            PlayableCharacter.Inst.SetMainWeapon(default);
+                            ctx.Info($"착용 중인 보조무기를 삭제했습니다.");
+                            return;
+                        case 4:
+                            PlayableCharacter.Inst.SetSubWeapon(default);
+                            ctx.Info($"착용 중인 주무기를 삭제했습니다.");
+                            return;
+                    }
                 }
-                if (backpack[argIndex].item.id is null)
+                Debug.Log($"{argIndex} / {inventory.backpack} / {inventory.backpack[argIndex]} / {inventory.backpack[argIndex] == null}");
+                Debug.Log(inventory.backpack[argIndex].item);
+                if (inventory.backpack[argIndex].item == default || inventory.backpack[argIndex].item.id == "00000")
                 {
                     ctx.Info($"슬롯 {argIndex}는 비어있습니다.");
                     return;
                 }
-                PlayableCharacter.Inst.RemoveItem(backpack[argIndex]);
+                PlayableCharacter.Inst.RemoveItem(inventory.backpack[argIndex]);
                 ctx.Info($"슬롯 {argIndex}의 아이템을 삭제했습니다.");
                 return;
             }
@@ -503,18 +529,40 @@ namespace Looper.Console.Commands
                     ui.EventSystem.SetSelectedGameObject(ui.FirstInventorySelectable);
 
                 int picked = await data.Inventory.PickSlotAsync(cts.Token);
-
-                if (!IsValidIndex(backpack, picked))
+                if (picked < 0 && picked >= -5)
                 {
-                    ctx.Warn("선택이 올바르지 않습니다.");
-                    return;
+                    PlayerEquipments equip = inventory.equipments;
+                    picked += 5;
+                    switch (picked)
+                    {
+                        case 0:
+                            PlayableCharacter.Inst.SetHelmet(default);
+                            ctx.Info($"착용 중인 헬멧을 삭제했습니다.");
+                            return;
+                        case 1:
+                            PlayableCharacter.Inst.SetArmor(default);
+                            ctx.Info($"착용 중인 갑옷을 삭제했습니다.");
+                            return;
+                        case 2:
+                            PlayableCharacter.Inst.SetPants(default);
+                            ctx.Info($"착용 중인 바지를 삭제했습니다.");
+                            return;
+                        case 3:
+                            PlayableCharacter.Inst.SetMainWeapon(default);
+                            ctx.Info($"착용 중인 보조무기를 삭제했습니다.");
+                            return;
+                        case 4:
+                            PlayableCharacter.Inst.SetSubWeapon(default);
+                            ctx.Info($"착용 중인 주무기를 삭제했습니다.");
+                            return;
+                    }
                 }
-                if (backpack[picked].item.id is null)
+                if (inventory.backpack[picked].item == default || inventory.backpack[picked].item.id == "00000")
                 {
                     ctx.Info($"슬롯 {picked}는 비어 있습니다.");
                     return;
                 }
-                PlayableCharacter.Inst.RemoveItem(backpack[picked]);
+                PlayableCharacter.Inst.RemoveItem(inventory.backpack[picked]);
                 ctx.Info($"슬롯 {picked}의 아이템을 삭제했습니다.");
             }
             catch (OperationCanceledException)
@@ -537,7 +585,6 @@ namespace Looper.Console.Commands
             if (args is null || args.Length == 0) return false;
             return int.TryParse(args[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out index);
         }
-        static bool IsValidIndex(Backpack backpack, int i) => (uint)i < (uint)backpack.Count;
     }
     public sealed class SpawnCommand : ICommand
     {
@@ -589,7 +636,7 @@ namespace Looper.Console.Commands
                 return;
             }
 
-            var svc = (ILoginService)ctx.Service.GetService(typeof(ILoginService));
+            var svc = ServiceHub.Get<ILoginService>();
             if (svc is null)
             {
                 ctx.Error("ILoginService가 등록되지 않았습니다.");
@@ -620,9 +667,7 @@ namespace Looper.Console.Commands
 
         public UniTask ExecuteAsync(CommandContext ctx, string[] args)
         {
-
-            ctx.Info(PlayableCharacter.Inst.Data.statsDTO.ToString());
-            PlayableCharacter.Inst.Data.ApplyDto(PlayableCharacter.Inst.Data.statsDTO);
+            PlayableCharacter.Inst.Data.ApplyDto(ServiceHub.Get<PlayerSession>().Stats);
             return UniTask.CompletedTask;
         }
     }
@@ -645,14 +690,7 @@ namespace Looper.Console.Commands
 
         public async UniTask ExecuteAsync(CommandContext ctx, string[] args)
         {
-            var sp = GameBootstrapper.ServiceProvider;
-            if (sp == null)
-            {
-                Debug.LogError("[SaveCommand] ServiceProvider가 초기화되지 않았습니다.");
-                return;
-            }
-
-            var saver = sp.Get<IStatsSaver>();
+            var saver = ServiceHub.Get<IStatsSaver>();
 
             if (saver == null)
             {
@@ -661,7 +699,7 @@ namespace Looper.Console.Commands
                 var tokenProvider = new PlayableCharacterAccessTokenProvider();
                 var refreshers = new IStatsRefresher[]
                 {
-                    new LoginServiceStatsRefresher(GameBootstrapper.ServiceProvider)
+                    new LoginServiceStatsRefresher()
                 };
                 saver = new StatsSaver(tokenProvider, refreshers);
             }
@@ -677,5 +715,33 @@ namespace Looper.Console.Commands
                 Debug.LogWarning("[SaveCommand] SavePlayerStatsAsync 실패.");
             }
         }
+    }
+    public sealed class DevConsoleModeCommand : ICommand
+    {
+        Action<bool> action;
+        public DevConsoleModeCommand(Action<bool> action) => this.action = action;
+        public string Name => "devmode";
+
+        public IReadOnlyList<string> Aliases => null;
+
+        public string Summary => "콘솔 오류시 개발자 전용 자세한 로그를 표시합니다.";
+
+        public string Usage => "devmode <true/false>";
+
+        public bool IsAsync => false;
+
+        public void Execute(CommandContext ctx, string[] args)
+        {
+            if (args.Length < 1)
+            {
+                ctx.Warn("devmod <true/false>의 형식으로 입력해야합니다.");
+                return;
+            }
+            var ui = ServiceHub.Get<IInventoryUI>();
+            action?.Invoke(args[0].Equals("true", StringComparison.OrdinalIgnoreCase));
+            ctx.Info($"devmod를 '{args[0]}'로 설정했습니다.");
+            return;
+        }
+        public UniTask ExecuteAsync(CommandContext ctx, string[] args) => UniTask.CompletedTask;
     }
 }

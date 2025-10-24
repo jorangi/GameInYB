@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: f00a763f0a3aff44287c9e7c0fccf93f
   m_currentHash:
     serializedVersion: 2
-    Hash: 4a044d5a777702063f6baf8b17ead581
+    Hash: f21e9226af434e30211618ea51e54643
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -60,6 +60,7 @@ MonoBehaviour:
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: 1ad1c717e6d690d40a49c6b239a40d28, type: 2}
+  - {fileID: 11400000, guid: 95ba094cb78c9fd49aca8f247faa57d1, type: 2}
   - {fileID: 11400000, guid: 015dc4fb3caadb14e833819998bfcff8, type: 2}
   - {fileID: 11400000, guid: 80c12b6813b3c8f4f806fbf17d6befc9, type: 2}
   m_BuildSettings:
@@ -101,6 +102,9 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
+    - WeaponAtlas
+    - IconsAtlas
+    - EffectPrefab
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 86633ee75e1c09341959ffb7e26f380e, type: 2}

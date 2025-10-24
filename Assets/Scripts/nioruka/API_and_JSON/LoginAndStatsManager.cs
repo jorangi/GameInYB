@@ -8,7 +8,7 @@ using System;
 
 public interface ILoginService
 {
-    UniTask InitializeAsync(bool autoLogin = true);
+    UniTask<bool> InitializeAsync(bool autoLogin = true);
     UniTask LoginAsync(string id, string pw);
     UniTask GetStatsAsync();
 }
@@ -63,35 +63,26 @@ public class LoginManager : ILoginService
 {
     private const string LOGIN_URL = "https://api-looper.duckdns.org/api/auth/login";
     private const string STATS_URL = "https://api-looper.duckdns.org/api/mypage/stats";
-    private readonly Func<PlayableCharacterData> _loadPlayerData;
-    private readonly Action<PlayableCharacterData> _savePlayerData;
-    public PlayableCharacterData playerData { get; private set; }
-    public LoginManager(Func<PlayableCharacterData> loadPlayerData, Action<PlayableCharacterData> savePlayerData)
+    private readonly IAccessTokenProvider _tokenProvider;
+    public LoginManager(IAccessTokenProvider tokenProvider) => _tokenProvider = tokenProvider ?? throw new ArgumentException(nameof(tokenProvider));
+    public async UniTask<bool> InitializeAsync(bool autoLogin = true)
     {
-        _loadPlayerData = loadPlayerData ?? throw new ArgumentNullException(nameof(loadPlayerData));
-        _savePlayerData = savePlayerData ?? throw new ArgumentNullException(nameof(savePlayerData));
-        playerData = _loadPlayerData() ?? PlayableCharacter.Inst.Data;
-        // if (playerData != null && !string.IsNullOrEmpty(playerData.accessToken))
-        // {
-        //     Debug.Log("저장된 토큰 발견 Stats 호출");
-        //     GetStats().Forget();
-        // }
-    }
-    public async UniTask InitializeAsync(bool autoLogin = true)
-    {
-        if (!autoLogin) return;
-        if (!string.IsNullOrEmpty(playerData?.accessToken))
+        if (!autoLogin) return false;
+        if (!string.IsNullOrEmpty(_tokenProvider.GetAccessToken()))
         {
             Debug.Log("[LoginManager] 저장된 토큰 발견 -> Stats 호출");
             try
             {
                 await GetStatsAsync();
+                return true;
             }
             catch (Exception e)
             {
                 Debug.LogWarning($"[LoginManager] 초기 Stats 호출 실패: {e.Message}");
+                return false;
             }
         }
+        return false;
     }
     public async UniTask LoginAsync(string id, string pw)
     {
@@ -109,12 +100,12 @@ public class LoginManager : ILoginService
         request.SetRequestHeader("Accept", "application/json");
         request.timeout = 10;
 
-        Debug.Log($"[Login] url={LOGIN_URL} method=post body={body}");
+        //Debug.Log($"[Login] url={LOGIN_URL} method=post body={body}");
 
         await request.SendWebRequest();
 
-        Debug.Log($"[LOGIN] responseCode={request.responseCode}, result={request.result}, error={request.error}");
-        Debug.Log($"[LOGIN] responseText={request.downloadHandler.text}");
+        //Debug.Log($"[LOGIN] responseCode={request.responseCode}, result={request.result}, error={request.error}");
+        //Debug.Log($"[LOGIN] responseText={request.downloadHandler.text}");
 
         if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             throw new Exception($"로그인 실패: {request.error} (code:{request.responseCode})");
@@ -123,27 +114,18 @@ public class LoginManager : ILoginService
         try
         {
             res = JsonUtility.FromJson<TokenResponseDTO>(request.downloadHandler.text);
-
         }
         catch (Exception e)
         {
             throw new Exception($"로그인 응답 파싱 실패: {e.Message}");
         }
+        PlayerSession.Inst.SetToken(res);
 
-        playerData ??= PlayableCharacter.Inst.Data;
-        playerData.accessToken = res.accessToken;
-        playerData.refreshToken = res.refreshToken;
-        playerData.nickname = res.nickname;
-        playerData.roles = res.roles;
-
-        _savePlayerData(playerData);
-
-        Debug.Log("[LoginManager] 로그인 성공. 토큰 저장 완료. -> Stats 호출");
         await GetStatsAsync();
     }
     public async UniTask GetStatsAsync()
     {
-        if (playerData is null || string.IsNullOrEmpty(playerData.accessToken))
+        if (string.IsNullOrEmpty(_tokenProvider.GetAccessToken()))
         {
             Debug.LogError("토큰 없음. 로그인 이후 시도");
             return;
@@ -151,7 +133,7 @@ public class LoginManager : ILoginService
         using UnityWebRequest request = UnityWebRequest.Get(STATS_URL);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Accept", "application/json");
-        request.SetRequestHeader("Authorization", "Bearer " + playerData.accessToken);
+        request.SetRequestHeader("Authorization", "Bearer " + _tokenProvider.GetAccessToken());
         request.timeout = 10;
 
         await request.SendWebRequest();
@@ -161,52 +143,15 @@ public class LoginManager : ILoginService
             throw new Exception($"Stats 호출 실패: {request.error} (code:{request.responseCode})");
         }
         string json = request.downloadHandler.text;
-        Debug.Log("[LoginManager] Stats: " + json);
         try
         {
             var parsed = JsonUtility.FromJson<PlayerStats>(json);
-            playerData.statsDTO = parsed;
-            _savePlayerData(playerData);
+            PlayerSession.Inst.SetStats(parsed);
+            ServiceHub.isLoadedFromLogin = true;
         }
         catch (Exception e)
         {
             throw new Exception($"Stats 파싱 실패: {e.Message}");
-        }
-    }
-
-    public async UniTask GetStats()
-    {
-        if (playerData is null || string.IsNullOrEmpty(playerData.accessToken))
-        {
-            Debug.LogError("토큰 없음. 로그인 이후 시도");
-            return;
-        }
-        using UnityWebRequest request = UnityWebRequest.Get(STATS_URL);
-        request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Accept", "application/json");
-        request.SetRequestHeader("Authorization", "Bearer " + playerData.accessToken);
-        request.timeout = 10;
-
-        await request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.ConnectionError ||
-            request.result == UnityWebRequest.Result.ProtocolError)
-        {
-            Debug.LogError("API 호출 실패: " + request.error);
-        }
-        else
-        {
-            string json = request.downloadHandler.text;
-            Debug.Log("Stats: " + json);
-            try
-            {
-                playerData.statsDTO = JsonUtility.FromJson<PlayerStats>(json);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning("Stats 파싱 실패: " + e.Message);
-            }
-
         }
     }
 }
@@ -224,8 +169,7 @@ public class LoginAndStatsManager : MonoBehaviour
     private async void Start()
     {
         // UI 연결
-        if (statText == null)
-            statText = FindAnyObjectByType<StatEditUI>();
+        statText ??= FindAnyObjectByType<StatEditUI>();
 
         // PlayableCharacter 준비가 되었는지 확인
         if (PlayableCharacter.Inst == null || PlayableCharacter.Inst.Data == null)
@@ -233,30 +177,13 @@ public class LoginAndStatsManager : MonoBehaviour
             Debug.LogError("[LoginAndStatsManager] PlayableCharacter 또는 Data가 아직 초기화되지 않았습니다. 초기화 순서를 확인하세요.");
             return;
         }
-
-        // LoginManager 구성: 절대 새 데이터 생성하지 않고, Inst.Data만 사용
-        _login = new LoginManager(
-            loadPlayerData: () =>
-            {
-                // 오직 Inst.Data만 반환(없으면 예외로 흐름 중단)
-                if (PlayableCharacter.Inst == null || PlayableCharacter.Inst.Data == null)
-                    throw new InvalidOperationException("PlayableCharacter.Inst.Data가 초기화되지 않았습니다.");
-                return PlayableCharacter.Inst.Data;
-            },
-            savePlayerData: (d) =>
-            {
-                // 저장은 Inst.Data에 이미 같은 참조가 들어있다는 전제 하에, 별도 동작 불필요.
-                // 필요 시 여기에서 PlayerPrefs/파일 저장을 호출하면 됨(옵션).
-                // 절대 새 PlayableCharacterData를 생성하거나 치환하지 않음.
-            }
-        );
-
+        _login = ServiceHub.Get<ILoginService>();
         // 자동 로그인/스탯 조회
         try
         {
             await _login.InitializeAsync(autoLogin: true);
             UpdateUIFromPlayableCharacter();
-            if (messageText != null && !string.IsNullOrEmpty(PlayableCharacter.Inst.Data?.accessToken))
+            if (messageText != null && !string.IsNullOrEmpty(ServiceHub.Get<IAccessTokenProvider>().GetAccessToken()))
                 messageText.text = "정상적으로 데이터가 적용되었습니다.";
         }
         catch (Exception e)
@@ -323,14 +250,14 @@ public class LoginAndStatsManager : MonoBehaviour
         if (statText == null)
             return;
 
-        var data = PlayableCharacter.Inst?.Data;
+        var data = ServiceHub.Get<PlayerSession>().Stats;
         if (data == null)
         {
             Debug.LogWarning("[LoginAndStatsManager] PlayableCharacter.Inst.Data가 null입니다.");
             return;
         }
 
-        var s = data.statsDTO; // PlayerStats
+        var s = data; // PlayerStats
         // 기본값과 구분이 필요하면 별도 플래그/필드로 판별(서버 호출 성공 시점에 세팅)하는 것도 방법
         // 여기서는 그대로 표시
         try

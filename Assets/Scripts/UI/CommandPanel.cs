@@ -42,17 +42,13 @@ namespace Looper.Console.Core
         public readonly Action<string> Print;
         public readonly Func<string, UniTask> PrintAsync;
         public readonly Transform World;
-        public readonly IServiceProvider Service;
-
         public CommandContext(
             Action<string> print,
-            Func<string, UniTask> printAsync,
-            IServiceProvider service
+            Func<string, UniTask> printAsync
         )
         {
             Print = print ?? Debug.Log;
             PrintAsync = printAsync ?? (s => { Debug.Log(s); return UniTask.CompletedTask; });
-            Service = service;
         }
         public void Info(string msg) => Print(msg);
         public void Warn(string msg) => Print($"<color=yellow>{msg}</color>");
@@ -129,6 +125,7 @@ namespace Looper.Console.UI
 {
     public class CommandPanel : MonoBehaviour, IUI
     {
+        public bool _devMode = false;
         [SerializeField] private UIContext uiContext;
         [SerializeField] private TextMeshProUGUI outputSource;
         private TMP_InputField inputSource;
@@ -152,6 +149,7 @@ namespace Looper.Console.UI
         /// </summary>
         private void RegisterCommand()
         {
+
             _reg = new();
             _reg.Register(new HelpCommand(_reg));
             _reg.Register(new EchoCommand());
@@ -171,6 +169,11 @@ namespace Looper.Console.UI
             _reg.Register(new LoginCommand());
             _reg.Register(new SaveCommand());
             _reg.Register(new LoadCommand());
+            _reg.Register(new DevConsoleModeCommand(new Action<bool>(SwitchDevMode)));
+        }
+        void SwitchDevMode(bool devmode)
+        {
+            _devMode = devmode;
         }
         void OnEnable()
         {
@@ -203,8 +206,8 @@ namespace Looper.Console.UI
             }
             var ctx = new CommandContext(
                 print: PrintLine,
-                printAsync: async s => { PrintLine(s); await UniTask.Yield(); },
-                service: GameBootstrapper.ServiceProvider);
+                printAsync: async s => { PrintLine(s); await UniTask.Yield(); }
+                );
 
             if (cmd.IsAsync) RunAsync(cmd, ctx, args).Forget();
             else
@@ -215,7 +218,7 @@ namespace Looper.Console.UI
                 }
                 catch (Exception e)
                 {
-                    PrintLine($"<color=orange>에러 : </color> {e.Message}");
+                    PrintLine($"<color=orange>에러 : </color> \n{(_devMode ? e.StackTrace : e.Message)}");
                 }
                 inputSource.text = string.Empty;
                 inputSource.ActivateInputField();
@@ -230,7 +233,7 @@ namespace Looper.Console.UI
             catch (OperationCanceledException) { }
             catch (Exception e)
             {
-                PrintLine($"<color=orange>에러 : </color> {e.Message}");
+                PrintLine($"<color=orange>에러 : </color> {(_devMode ? e.StackTrace : e.Message)}");
             }
             finally
             {

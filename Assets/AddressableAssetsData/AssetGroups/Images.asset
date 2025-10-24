@@ -18,12 +18,14 @@ MonoBehaviour:
   - m_GUID: 3d253a58d5c5efc478149e5bcb364968
     m_Address: Icon/Icons
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - IconsAtlas
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2142711b66bb3e4891b682d4e5326ee
     m_Address: Characters/Weapons
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - WeaponAtlas
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 34a7f3955eb1b6c4cad861ae9a5fb6aa, type: 2}

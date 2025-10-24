@@ -55,7 +55,7 @@ public class TitleManager : MonoBehaviour
             try
             {
                 await UniTask.Delay(500);
-                await loginManager.InitializeAutoLogin(); // ✅ 이 함수를 새로 추가할 거야
+                await loginManager.InitializeAutoLogin();
                 OnLoginSuccess();
             }
             catch (Exception e)
@@ -80,7 +80,7 @@ public class TitleManager : MonoBehaviour
         try
         {
             messageText.text = "로그인 중...";
-            await loginManager.TryLogin(id, pw); // ✅ 이 함수도 LoginAndStatsManager에 추가할거야
+            await loginManager.TryLogin(id, pw); 
             OnLoginSuccess();
         }
         catch (Exception e)
