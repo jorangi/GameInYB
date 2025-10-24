@@ -2,106 +2,126 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
-using System.Collections;
 using Cysharp.Threading.Tasks;
+using System;
 
 public class TitleManager : MonoBehaviour
 {
     [Header("UI References")]
     public CanvasGroup loginPanel;
-    public Button loginButton;
-    public Button startButton;
     public TMP_InputField idInput;
     public TMP_InputField pwInput;
     public TMP_Text messageText;
+    public Button loginButton;
+    public Button startButton;
+    public Button optionButton;
+    public GameObject optionsPanel;
     public Image fadePanel;
     public float fadeSpeed = 1.5f;
-    ILoginService loginSvc;
-    private async void Start()
+
+    private LoginAndStatsManager loginManager;
+
+    private void Awake()
     {
-        loginSvc = ServiceHub.Get<ILoginService>();
+        if (fadePanel != null)
+            fadePanel.color = new Color(0, 0, 0, 1);
 
         startButton.gameObject.SetActive(false);
-        loginPanel.alpha = 1;
-        fadePanel.color = new Color(0, 0, 0, 1);
-
-        StartCoroutine(FadeIn());
-        try
-        {
-            bool autoLogin = await loginSvc.InitializeAsync(true);
-            if (autoLogin)
-            {
-                messageText.text = "자동 로그인";
-                loginPanel.alpha = 0;
-                startButton.gameObject.SetActive(true);
-            }
-            else
-            {
-                //Debug.Log("자동 로그인 실패");
-            }
-        }
-        catch
-        {
-            //Debug.Log("자동 로그인 실패");
-        }
+        if (optionsPanel != null)
+            optionsPanel.SetActive(false);
     }
 
-    IEnumerator FadeIn()
+    private async void Start()
     {
-        while (fadePanel.color.a > 0)
+        loginManager = FindAnyObjectByType<LoginAndStatsManager>();
+
+        if (loginManager == null)
         {
-            Color c = fadePanel.color;
-            c.a -= Time.deltaTime * fadeSpeed;
-            fadePanel.color = c;
-            yield return null;
+            Debug.LogError("LoginAndStatsManager가 없는것으로보임");
+            return;
         }
+
+        loginButton.onClick.AddListener(OnClick_Login);
+        startButton.onClick.AddListener(OnClick_StartGame);
+        optionButton.onClick.AddListener(ToggleOptionsPanel);
+
+        await FadeIn();
+
+        
     }
 
-    public void OnClick_Login()
+    private async void OnClick_Login()
     {
         string id = idInput.text.Trim();
         string pw = pwInput.text.Trim();
+
         if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
         {
             messageText.text = "ID/PW 입력 필요";
             return;
         }
 
-        messageText.text = "로그인 중...";
-        _ = LoginAndShowStartButton(id, pw);
-    }
-    private async UniTask LoginAndShowStartButton(string id, string pw)
-    {
         try
         {
-            await loginSvc.LoginAsync(id, pw);
-            
-            messageText.text = "로그인 성공!";
-            loginPanel.alpha = 0;
-            startButton.gameObject.SetActive(true);
+            messageText.text = "로그인 중...";
+            await loginManager.TryLogin(id, pw); 
+            OnLoginSuccess();
         }
-        catch
+        catch (Exception e)
         {
-            Debug.LogError("TitleScene 로그인 실패 — 토큰 없음");
-            messageText.text = "로그인 실패";
+            Debug.LogError($"[TitleManager] 로그인 실패: {e.Message}");
+            messageText.text = "로그인 실패. 다시 시도하세요.";
         }
     }
 
-    public void OnClick_StartGame()
+    private void OnLoginSuccess()
     {
-        StartCoroutine(FadeOutAndLoad());
+        messageText.text = "로그인 성공!";
+        loginPanel.alpha = 0;
+        loginPanel.interactable = false;
+        loginPanel.blocksRaycasts = false;
+
+        startButton.gameObject.SetActive(true);
+        Debug.Log("[TitleManager] 로그인 성공 — Start 버튼 활성화");
     }
 
-    IEnumerator FadeOutAndLoad()
+    private async void OnClick_StartGame()
     {
-        while (fadePanel.color.a < 1)
+        await FadeOut();
+        SceneManager.LoadScene("MainScene");
+    }
+
+    private async UniTask FadeIn()
+    {
+        if (fadePanel == null) return;
+
+        Color c = fadePanel.color;
+        while (c.a > 0)
         {
-            Color c = fadePanel.color;
+            c.a -= Time.deltaTime * fadeSpeed;
+            fadePanel.color = c;
+            await UniTask.Yield();
+        }
+    }
+
+    private async UniTask FadeOut()
+    {
+        if (fadePanel == null) return;
+
+        Color c = fadePanel.color;
+        while (c.a < 1)
+        {
             c.a += Time.deltaTime * fadeSpeed;
             fadePanel.color = c;
-            yield return null;
+            await UniTask.Yield();
         }
+    }
 
-        SceneManager.LoadScene("TUTORIAL_MAP"); //임시
+    private void ToggleOptionsPanel()
+    {
+        if (optionsPanel == null) return;
+        bool active = !optionsPanel.activeSelf;
+        optionsPanel.SetActive(active);
+        Debug.Log($"[OPTION] {(active ? "열림" : "닫힘")}");
     }
 }

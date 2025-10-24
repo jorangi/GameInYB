@@ -1,0 +1,1950 @@
+fileFormatVersion: 2
+guid: de7bc81181169634aa4be2661bc39ef7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1602846170562613603
+    second: FontTitle_Red_0
+  - first:
+      213: 167729694111484826
+    second: FontTitle_Red_1
+  - first:
+      213: -2012905754900723075
+    second: FontTitle_Red_2
+  - first:
+      213: -2478154811834953898
+    second: FontTitle_Red_3
+  - first:
+      213: 1237230927122126395
+    second: FontTitle_Red_4
+  - first:
+      213: -3529140047401761054
+    second: FontTitle_Red_5
+  - first:
+      213: -1526526201388256600
+    second: FontTitle_Red_6
+  - first:
+      213: -2179103273632168476
+    second: FontTitle_Red_7
+  - first:
+      213: 3553945856878207302
+    second: FontTitle_Red_8
+  - first:
+      213: -5635404157675527557
+    second: FontTitle_Red_9
+  - first:
+      213: 2153594857869634541
+    second: FontTitle_Red_10
+  - first:
+      213: -3976154317493004668
+    second: FontTitle_Red_11
+  - first:
+      213: -2653860463915858846
+    second: FontTitle_Red_12
+  - first:
+      213: 861996883363507617
+    second: FontTitle_Red_13
+  - first:
+      213: -8698128685938724583
+    second: FontTitle_Red_14
+  - first:
+      213: -4698493220159740129
+    second: FontTitle_Red_15
+  - first:
+      213: 3899110974428542655
+    second: FontTitle_Red_16
+  - first:
+      213: -5175827188151966285
+    second: FontTitle_Red_17
+  - first:
+      213: -3531126382687433707
+    second: FontTitle_Red_18
+  - first:
+      213: -2461102933514203959
+    second: FontTitle_Red_19
+  - first:
+      213: 7797966464528058066
+    second: FontTitle_Red_20
+  - first:
+      213: 4900598831256005306
+    second: FontTitle_Red_21
+  - first:
+      213: -3891391042737549398
+    second: FontTitle_Red_22
+  - first:
+      213: 5149784659911819708
+    second: FontTitle_Red_23
+  - first:
+      213: -5430494014139329137
+    second: FontTitle_Red_24
+  - first:
+      213: 8859280694605287422
+    second: FontTitle_Red_25
+  - first:
+      213: -2438041383318490525
+    second: FontTitle_Red_26
+  - first:
+      213: 2408839253948358397
+    second: FontTitle_Red_27
+  - first:
+      213: -5248275896404592173
+    second: FontTitle_Red_28
+  - first:
+      213: -6753689026897895644
+    second: FontTitle_Red_29
+  - first:
+      213: 7512110225834044446
+    second: FontTitle_Red_30
+  - first:
+      213: 6346351045610198402
+    second: FontTitle_Red_31
+  - first:
+      213: 2665514009051123679
+    second: FontTitle_Red_32
+  - first:
+      213: 6219606183084761263
+    second: FontTitle_Red_33
+  - first:
+      213: -5264000140994267309
+    second: FontTitle_Red_34
+  - first:
+      213: 463168390004955953
+    second: FontTitle_Red_35
+  - first:
+      213: -199775949101287738
+    second: FontTitle_Red_36
+  - first:
+      213: 4389264984372751501
+    second: FontTitle_Red_37
+  - first:
+      213: -6076532438558017755
+    second: FontTitle_Red_38
+  - first:
+      213: 971721214042791395
+    second: FontTitle_Red_39
+  - first:
+      213: -6780126257191281361
+    second: FontTitle_Red_40
+  - first:
+      213: 4624173011548943177
+    second: FontTitle_Red_41
+  - first:
+      213: -2332688266651964186
+    second: FontTitle_Red_42
+  - first:
+      213: 3418668929126114942
+    second: FontTitle_Red_43
+  - first:
+      213: 711792216362422679
+    second: FontTitle_Red_44
+  - first:
+      213: 723698913635448894
+    second: FontTitle_Red_45
+  - first:
+      213: -993265687408740777
+    second: FontTitle_Red_46
+  - first:
+      213: -4601203964059807342
+    second: FontTitle_Red_47
+  - first:
+      213: -561491891360559439
+    second: FontTitle_Red_48
+  - first:
+      213: -6522466603819607593
+    second: FontTitle_Red_49
+  - first:
+      213: -4932719720099113254
+    second: FontTitle_Red_50
+  - first:
+      213: -1878529499532248095
+    second: FontTitle_Red_51
+  - first:
+      213: 5544531123815295218
+    second: FontTitle_Red_52
+  - first:
+      213: -7001762423974242768
+    second: FontTitle_Red_53
+  - first:
+      213: 5880010244116722145
+    second: FontTitle_Red_54
+  - first:
+      213: -2209585694525361346
+    second: FontTitle_Red_55
+  - first:
+      213: -4971614034651269346
+    second: FontTitle_Red_56
+  - first:
+      213: 378456479167578722
+    second: FontTitle_Red_57
+  - first:
+      213: -6556112155863326054
+    second: FontTitle_Red_58
+  - first:
+      213: -1209000162274537136
+    second: FontTitle_Red_59
+  - first:
+      213: 1219711352539069161
+    second: FontTitle_Red_60
+  - first:
+      213: -1126274172974503479
+    second: FontTitle_Red_61
+  - first:
+      213: -4743385808844194721
+    second: FontTitle_Red_62
+  - first:
+      213: -1801296411170866044
+    second: FontTitle_Red_63
+  - first:
+      213: 6500102276249910709
+    second: FontTitle_Red_64
+  - first:
+      213: -2441312585272381896
+    second: FontTitle_Red_65
+  - first:
+      213: 3715505902687445832
+    second: FontTitle_Red_66
+  - first:
+      213: 7844496836489970796
+    second: FontTitle_Red_67
+  - first:
+      213: 8562405012053621165
+    second: FontTitle_Red_68
+  - first:
+      213: 4624835891347649313
+    second: FontTitle_Red_69
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FontTitle_Red_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 65
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9e250e66eb81c9e0800000000000000
+      internalID: -1602846170562613603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_1
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 65
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9bccc3a445e35200800000000000000
+      internalID: 167729694111484826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_2
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 65
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7a8dc871e8b014e0800000000000000
+      internalID: -2012905754900723075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_3
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 65
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65f07261453db9dd0800000000000000
+      internalID: -2478154811834953898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_4
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 65
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b36dd3c19f68b2110800000000000000
+      internalID: 1237230927122126395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_5
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 65
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e6430833d9f50fc0800000000000000
+      internalID: -3529140047401761054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_6
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 65
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a23de9f180b0dae0800000000000000
+      internalID: -1526526201388256600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_7
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 65
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e583463e1542c1e0800000000000000
+      internalID: -2179103273632168476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_8
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 65
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 641623e5de6225130800000000000000
+      internalID: 3553945856878207302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_9
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 65
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b72adf7b6c50bc1b0800000000000000
+      internalID: -5635404157675527557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_10
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 65
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: deb6d6dec1b13ed10800000000000000
+      internalID: 2153594857869634541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_11
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 65
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48691bdf6bcd1d8c0800000000000000
+      internalID: -3976154317493004668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_12
+      rect:
+        serializedVersion: 2
+        x: 383
+        y: 65
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26487d408f79b2bd0800000000000000
+      internalID: -2653860463915858846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_13
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 65
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ad206e299d66fb00800000000000000
+      internalID: 861996883363507617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_14
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 65
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 911bcf77b0a0a4780800000000000000
+      internalID: -8698128685938724583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_15
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 65
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f172cc85f499bceb0800000000000000
+      internalID: -4698493220159740129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_16
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 63
+        width: 20
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb6f3aad5cc6c1630800000000000000
+      internalID: 3899110974428542655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_17
+      rect:
+        serializedVersion: 2
+        x: 543
+        y: 65
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b5a4675894cb28b0800000000000000
+      internalID: -5175827188151966285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_18
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 65
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51cc7ee734beefec0800000000000000
+      internalID: -3531126382687433707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_19
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 65
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ccc634ebe768ddd0800000000000000
+      internalID: -2461102933514203959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_20
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 65
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d68a902f21f73c60800000000000000
+      internalID: 7797966464528058066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_21
+      rect:
+        serializedVersion: 2
+        x: 671
+        y: 65
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aba65bb2cac620440800000000000000
+      internalID: 4900598831256005306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_22
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 65
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aafcd7fc6700ff9c0800000000000000
+      internalID: -3891391042737549398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_23
+      rect:
+        serializedVersion: 2
+        x: 735
+        y: 65
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb1cccb0dd5b77740800000000000000
+      internalID: 5149784659911819708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_24
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 65
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f851754577203a4b0800000000000000
+      internalID: -5430494014139329137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_25
+      rect:
+        serializedVersion: 2
+        x: 799
+        y: 65
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eff8c6f6adc72fa70800000000000000
+      internalID: 8859280694605287422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_26
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 33
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 362799777465a2ed0800000000000000
+      internalID: -2438041383318490525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_27
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 33
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfedb94f98aed6120800000000000000
+      internalID: 2408839253948358397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_28
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 33
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d93f87f0e06a27b0800000000000000
+      internalID: -5248275896404592173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_29
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 33
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42f1c44dc931642a0800000000000000
+      internalID: -6753689026897895644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_30
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 33
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1cea641370604860800000000000000
+      internalID: 7512110225834044446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_31
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 33
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 285568dc6a4c21850800000000000000
+      internalID: 6346351045610198402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_32
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 33
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdfc1556edecdf420800000000000000
+      internalID: 2665514009051123679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_33
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 33
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa02791eeda705650800000000000000
+      internalID: 6219606183084761263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_34
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 33
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3573e6af2c382f6b0800000000000000
+      internalID: -5264000140994267309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_35
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 33
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13b5f6d52318d6600800000000000000
+      internalID: 463168390004955953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_36
+      rect:
+        serializedVersion: 2
+        x: 383
+        y: 31
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c6b62f25d04a3df0800000000000000
+      internalID: -199775949101287738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_37
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 33
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8c299a7f3dc9ec30800000000000000
+      internalID: 4389264984372751501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_38
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 31
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5277c9521f1dbaba0800000000000000
+      internalID: -6076532438558017755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_39
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 33
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ed5bb7bb4f3c7d00800000000000000
+      internalID: 971721214042791395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_40
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 31
+        width: 12
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2d90db771728e1a0800000000000000
+      internalID: -6780126257191281361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_41
+      rect:
+        serializedVersion: 2
+        x: 543
+        y: 33
+        width: 12
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 943b255aadc5c2040800000000000000
+      internalID: 4624173011548943177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_42
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 43
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ecec7e6160a0afd0800000000000000
+      internalID: -2332688266651964186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_43
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 43
+        width: 20
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e762a35374d817f20800000000000000
+      internalID: 3418668929126114942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_44
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 33
+        width: 18
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7919b22ef3bc0e900800000000000000
+      internalID: 711792216362422679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_45
+      rect:
+        serializedVersion: 2
+        x: 671
+        y: 37
+        width: 18
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e38b39fd3581b0a00800000000000000
+      internalID: 723698913635448894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_46
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 41
+        width: 18
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 756fa6eae163732f0800000000000000
+      internalID: -993265687408740777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_47
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 37
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29198177f5d3520c0800000000000000
+      internalID: -4601203964059807342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_48
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 33
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1be0137891e2538f0800000000000000
+      internalID: -561491891360559439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_49
+      rect:
+        serializedVersion: 2
+        x: 799
+        y: 33
+        width: 20
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d9dbfb6e2b8b75a0800000000000000
+      internalID: -6522466603819607593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_50
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 33
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad69dea9c857b8bb0800000000000000
+      internalID: -4932719720099113254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_51
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 31
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ebb9408f5f1ee5e0800000000000000
+      internalID: -1878529499532248095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_52
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 33
+        width: 18
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f8ab115ea122fc40800000000000000
+      internalID: 5544531123815295218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_53
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 0
+        width: 16
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 036565d1c2eb4de90800000000000000
+      internalID: -7001762423974242768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_54
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 1
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e13c34d92ef99150800000000000000
+      internalID: 5880010244116722145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_55
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 1
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e33f7098489f551e0800000000000000
+      internalID: -2209585694525361346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_56
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 1
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e17b3405067410bb0800000000000000
+      internalID: -4971614034651269346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_57
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 1
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2628ab3a92c804500800000000000000
+      internalID: 378456479167578722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_58
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 0
+        width: 12
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a926522eab20405a0800000000000000
+      internalID: -6556112155863326054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_59
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 0
+        width: 12
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0519c3a02c4c83fe0800000000000000
+      internalID: -1209000162274537136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_60
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 0
+        width: 12
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ea3a9843094de010800000000000000
+      internalID: 1219711352539069161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_61
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 0
+        width: 12
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c968206b9bae50f0800000000000000
+      internalID: -1126274172974503479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_62
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 0
+        width: 14
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5c76370dbb1c2eb0800000000000000
+      internalID: -4743385808844194721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_63
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 0
+        width: 14
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48c79fc25728007e0800000000000000
+      internalID: -1801296411170866044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_64
+      rect:
+        serializedVersion: 2
+        x: 383
+        y: 0
+        width: 8
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5bd759bc490053a50800000000000000
+      internalID: 6500102276249910709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_65
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 5
+        width: 20
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83e26296327be1ed0800000000000000
+      internalID: -2441312585272381896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_66
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 0
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8436d82dee0209330800000000000000
+      internalID: 3715505902687445832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_67
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 0
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6409a49f404ddc60800000000000000
+      internalID: 7844496836489970796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_68
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 11
+        width: 18
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da9fa7e2ef5c3d670800000000000000
+      internalID: 8562405012053621165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FontTitle_Red_69
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 1
+        width: 18
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 123f0406db7be2040800000000000000
+      internalID: 4624835891347649313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      FontTitle_Red_0: -1602846170562613603
+      FontTitle_Red_1: 167729694111484826
+      FontTitle_Red_10: 2153594857869634541
+      FontTitle_Red_11: -3976154317493004668
+      FontTitle_Red_12: -2653860463915858846
+      FontTitle_Red_13: 861996883363507617
+      FontTitle_Red_14: -8698128685938724583
+      FontTitle_Red_15: -4698493220159740129
+      FontTitle_Red_16: 3899110974428542655
+      FontTitle_Red_17: -5175827188151966285
+      FontTitle_Red_18: -3531126382687433707
+      FontTitle_Red_19: -2461102933514203959
+      FontTitle_Red_2: -2012905754900723075
+      FontTitle_Red_20: 7797966464528058066
+      FontTitle_Red_21: 4900598831256005306
+      FontTitle_Red_22: -3891391042737549398
+      FontTitle_Red_23: 5149784659911819708
+      FontTitle_Red_24: -5430494014139329137
+      FontTitle_Red_25: 8859280694605287422
+      FontTitle_Red_26: -2438041383318490525
+      FontTitle_Red_27: 2408839253948358397
+      FontTitle_Red_28: -5248275896404592173
+      FontTitle_Red_29: -6753689026897895644
+      FontTitle_Red_3: -2478154811834953898
+      FontTitle_Red_30: 7512110225834044446
+      FontTitle_Red_31: 6346351045610198402
+      FontTitle_Red_32: 2665514009051123679
+      FontTitle_Red_33: 6219606183084761263
+      FontTitle_Red_34: -5264000140994267309
+      FontTitle_Red_35: 463168390004955953
+      FontTitle_Red_36: -199775949101287738
+      FontTitle_Red_37: 4389264984372751501
+      FontTitle_Red_38: -6076532438558017755
+      FontTitle_Red_39: 971721214042791395
+      FontTitle_Red_4: 1237230927122126395
+      FontTitle_Red_40: -6780126257191281361
+      FontTitle_Red_41: 4624173011548943177
+      FontTitle_Red_42: -2332688266651964186
+      FontTitle_Red_43: 3418668929126114942
+      FontTitle_Red_44: 711792216362422679
+      FontTitle_Red_45: 723698913635448894
+      FontTitle_Red_46: -993265687408740777
+      FontTitle_Red_47: -4601203964059807342
+      FontTitle_Red_48: -561491891360559439
+      FontTitle_Red_49: -6522466603819607593
+      FontTitle_Red_5: -3529140047401761054
+      FontTitle_Red_50: -4932719720099113254
+      FontTitle_Red_51: -1878529499532248095
+      FontTitle_Red_52: 5544531123815295218
+      FontTitle_Red_53: -7001762423974242768
+      FontTitle_Red_54: 5880010244116722145
+      FontTitle_Red_55: -2209585694525361346
+      FontTitle_Red_56: -4971614034651269346
+      FontTitle_Red_57: 378456479167578722
+      FontTitle_Red_58: -6556112155863326054
+      FontTitle_Red_59: -1209000162274537136
+      FontTitle_Red_6: -1526526201388256600
+      FontTitle_Red_60: 1219711352539069161
+      FontTitle_Red_61: -1126274172974503479
+      FontTitle_Red_62: -4743385808844194721
+      FontTitle_Red_63: -1801296411170866044
+      FontTitle_Red_64: 6500102276249910709
+      FontTitle_Red_65: -2441312585272381896
+      FontTitle_Red_66: 3715505902687445832
+      FontTitle_Red_67: 7844496836489970796
+      FontTitle_Red_68: 8562405012053621165
+      FontTitle_Red_69: 4624835891347649313
+      FontTitle_Red_7: -2179103273632168476
+      FontTitle_Red_8: 3553945856878207302
+      FontTitle_Red_9: -5635404157675527557
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

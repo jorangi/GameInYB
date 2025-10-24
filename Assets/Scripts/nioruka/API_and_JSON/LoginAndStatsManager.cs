@@ -301,4 +301,16 @@ public class LoginAndStatsManager : MonoBehaviour
             parts[i] = parts[i].Trim();
         return parts;
     }
+
+
+    // TitleManager에서 호출
+    public async UniTask InitializeAutoLogin()
+    {
+    await _login.InitializeAsync(autoLogin: true);
+    }
+
+    public async UniTask TryLogin(string id, string pw)
+    {
+    await _login.LoginAsync(id, pw);
+    }
 }
