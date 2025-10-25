@@ -3756,6 +3756,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5446498137963392094, guid: 72212066372a74551a5024743f1dabd5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5556270986642089483, guid: 72212066372a74551a5024743f1dabd5, type: 3}
       propertyPath: messageObj
       value: 
@@ -92583,10 +92587,17 @@ MonoBehaviour:
     DistToTarget: 0
     IsWallAhead: 0
     IsPrecipiceAhead: 0
+    enemies: []
     IdleEndTime: 0
     WanderEndTime: 0
     MinStateEndTime: 0
+    personality: 0
+    moveType: 0
     AttackCooldownEnd: 0
+    ComboStep: 0
+    MaxCombo: 0
+    ComboBuffer: 0.5
+    IsInCombo: 0
     DetectEnter: 6
     DetectExit: 7.5
     LostMemoryTime: 1
@@ -93380,7 +93391,7 @@ Transform:
   m_GameObject: {fileID: 1828037784}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3766329, y: 0.08000088, z: -10}
+  m_LocalPosition: {x: 1.494446, y: 0.08000088, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

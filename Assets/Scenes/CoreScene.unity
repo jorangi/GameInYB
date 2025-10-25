@@ -198,7 +198,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 2105072268}
+    TrackingTarget: {fileID: 0}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -402,7 +402,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 4
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -427,7 +427,7 @@ Transform:
   m_GameObject: {fileID: 327421195}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.3928607, y: 0.08000088, z: -10}
+  m_LocalPosition: {x: -9.61, y: -1.24, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1056,68 +1056,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &2105072267
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4434340721995705833, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -9.61
-      objectReference: {fileID: 0}
-    - target: {fileID: 4434340721995705833, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.24
-      objectReference: {fileID: 0}
-    - target: {fileID: 4434340721995705833, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4434340721995705833, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4434340721995705833, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4434340721995705833, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4434340721995705833, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4434340721995705833, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4434340721995705833, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4434340721995705833, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5446498137963392094, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 72212066372a74551a5024743f1dabd5, type: 3}
---- !u!4 &2105072268 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4434340721995705833, guid: 72212066372a74551a5024743f1dabd5, type: 3}
-  m_PrefabInstance: {fileID: 2105072267}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2131922718
 GameObject:
   m_ObjectHideFlags: 0
@@ -1435,7 +1373,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2972623284958466379, guid: 0794d3f292346694589452cb9f6a7414, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 2.4872742
+      value: 2.4873047
       objectReference: {fileID: 0}
     - target: {fileID: 3143472208935401304, guid: 0794d3f292346694589452cb9f6a7414, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2103,7 +2041,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 327421200}
   - {fileID: 300467309}
-  - {fileID: 2105072267}
   - {fileID: 1795470025}
   - {fileID: 2027202048}
   - {fileID: 2131922721}

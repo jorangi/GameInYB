@@ -14,9 +14,9 @@ public class HitState : StateBase
         npc.SetRooted(true);
         npc.AnimSetMoving(false);
         npc.AnimTriggerHit();
-        _hitStunEndTime = blackboard.TimeNow + npc.NPCData.HitStunTime;
-        blackboard.InvinsibleEndTime = blackboard.TimeNow + npc.NPCData.InvincibleTime;
-        npc.SetMinStateLock(blackboard.MinStateDuration);
+        _hitStunEndTime = bb.TimeNow + npc.NPCData.HitStunTime;
+        bb.InvinsibleEndTime = bb.TimeNow + npc.NPCData.InvincibleTime;
+        npc.SetMinStateLock(bb.MinStateDuration);
     }
 
     public override void Exit()
@@ -25,13 +25,13 @@ public class HitState : StateBase
 
     public override void Update()
     {
-        if (blackboard.TimeNow < _hitStunEndTime)
+        if (bb.TimeNow < _hitStunEndTime)
             return;
-        npc.hitBox.gameObject.SetActive(blackboard.TimeNow > blackboard.InvinsibleEndTime);
+        npc.hitBox.gameObject.SetActive(bb.TimeNow > bb.InvinsibleEndTime);
         npc.SetRooted(false);
         if (!npc.InMinStateLock())
         {
-            if (!InMinLock() && blackboard.CanSeeTarget && blackboard.DistToTarget <= blackboard.DetectEnter && !blackboard.IsWallAhead && !blackboard.IsPrecipiceAhead)
+            if (!InMinLock() && bb.CanSeeTarget && bb.DistToTarget <= bb.DetectEnter && !bb.IsWallAhead && !bb.IsPrecipiceAhead)
             {
                 npc.RequestState<ChaseState>();
                 return;
@@ -42,5 +42,5 @@ public class HitState : StateBase
             }
         }
     }
-    public bool InMinLock() => blackboard.TimeNow < blackboard.MinStateEndTime;
+    public bool InMinLock() => bb.TimeNow < bb.MinStateEndTime;
 }

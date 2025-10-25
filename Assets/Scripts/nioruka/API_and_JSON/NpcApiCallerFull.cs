@@ -41,7 +41,7 @@ public class ApiManager_All : MonoBehaviour
         try
         {
             Npc[] npcs = JsonHelper.FromJsonNpc(json);
-            Debug.Log($"=== NPC 파싱 결과 ({npcs.Length}명) ===");
+            // Debug.Log($"=== NPC 파싱 결과 ({npcs.Length}명) ===");
             NPCDataManager.Init(npcs);
         }
         catch (System.Exception e)
@@ -83,8 +83,8 @@ public class ApiManager_All : MonoBehaviour
         else
         {
             string skillJson = request.downloadHandler.text;
-            Debug.Log("=== Skill Raw JSON ===");
-            Debug.Log(skillJson);
+            // Debug.Log("=== Skill Raw JSON ===");
+            // Debug.Log(skillJson);
 
             TryParseSkill(skillJson);
         }

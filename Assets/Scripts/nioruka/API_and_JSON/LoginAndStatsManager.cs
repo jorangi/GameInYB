@@ -20,12 +20,12 @@ public class PlayerStats
 {
     public float hp;
     public float atk;
-    //public float ats;
+    public float ats;
     public float def;
     public float cri;
     public float crid;
     public float spd;
-    //public float jmp;
+    public float jCnt;
     public int jmp;
     public int clear;
     public int chapter;
@@ -100,12 +100,12 @@ public class LoginManager : ILoginService
         request.SetRequestHeader("Accept", "application/json");
         request.timeout = 10;
 
-        //Debug.Log($"[Login] url={LOGIN_URL} method=post body={body}");
+        Debug.Log($"[Login] url={LOGIN_URL} method=post body={body}");
 
         await request.SendWebRequest();
 
-        //Debug.Log($"[LOGIN] responseCode={request.responseCode}, result={request.result}, error={request.error}");
-        //Debug.Log($"[LOGIN] responseText={request.downloadHandler.text}");
+        Debug.Log($"[LOGIN] responseCode={request.responseCode}, result={request.result}, error={request.error}");
+        Debug.Log($"[LOGIN] responseText={request.downloadHandler.text}");
 
         if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             throw new Exception($"로그인 실패: {request.error} (code:{request.responseCode})");
@@ -172,11 +172,11 @@ public class LoginAndStatsManager : MonoBehaviour
         statText ??= FindAnyObjectByType<StatEditUI>();
 
         // PlayableCharacter 준비가 되었는지 확인
-        if (PlayableCharacter.Inst == null || PlayableCharacter.Inst.Data == null)
-        {
-            Debug.LogError("[LoginAndStatsManager] PlayableCharacter 또는 Data가 아직 초기화되지 않았습니다. 초기화 순서를 확인하세요.");
-            return;
-        }
+        // if (PlayableCharacter.Inst == null || PlayableCharacter.Inst.Data == null)
+        // {
+        //     Debug.LogError("[LoginAndStatsManager] PlayableCharacter 또는 Data가 아직 초기화되지 않았습니다. 초기화 순서를 확인하세요.");
+        //     return;
+        // }
         _login = ServiceHub.Get<ILoginService>();
         // 자동 로그인/스탯 조회
         try
@@ -185,6 +185,7 @@ public class LoginAndStatsManager : MonoBehaviour
             UpdateUIFromPlayableCharacter();
             if (messageText != null && !string.IsNullOrEmpty(ServiceHub.Get<IAccessTokenProvider>().GetAccessToken()))
                 messageText.text = "정상적으로 데이터가 적용되었습니다.";
+            Debug.Log(messageText.text);
         }
         catch (Exception e)
         {
@@ -194,11 +195,12 @@ public class LoginAndStatsManager : MonoBehaviour
 
     public async void OnClick_Login()
     {
-        if (PlayableCharacter.Inst == null || PlayableCharacter.Inst.Data == null)
-        {
-            Debug.LogError("[LoginAndStatsManager] PlayableCharacter 또는 Data가 아직 초기화되지 않았습니다.");
-            return;
-        }
+        Debug.Log(ServiceHub.Get<IAddressablesService>().GetProfile("10014").id);
+        // if (PlayableCharacter.Inst == null || PlayableCharacter.Inst.Data == null)
+        // {
+        //     Debug.LogError("[LoginAndStatsManager] PlayableCharacter 또는 Data가 아직 초기화되지 않았습니다.");
+        //     return;
+        // }
 
         string id = idInput != null ? idInput.text.Trim() : string.Empty;
         string pw = pwInput != null ? pwInput.text.Trim() : string.Empty;

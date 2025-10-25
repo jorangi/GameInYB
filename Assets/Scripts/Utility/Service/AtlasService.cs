@@ -61,8 +61,24 @@ public interface IAddressablesService : IAtlasService
 
     /// <summary>라벨/키를 아틀라스/프리팹으로 구성하여 프리로드.</summary>
     UniTask InitializeAsync(AtlasService.PreloadConfig config, CancellationToken ct = default);
-}
 
+
+
+    /// <summary>프로필 1개를 보장 로딩(이미 있으면 즉시 반환).</summary>
+    UniTask<NPCProfile> EnsureProfileAsync(object keyOrLabel, CancellationToken ct = default);
+
+    /// <summary>이미 로딩된 프로필 가져오기(이름 기반).</summary>
+    bool TryGetProfile(string profileName, out NPCProfile profile);
+
+    /// <summary>이미 로딩된 프로필을 이름 기반으로 반환(없으면 null).</summary>
+    NPCProfile GetProfile(string profileId);
+
+    /// <summary>프로필을 필요 시 로드하여 가져오기.</summary>
+    UniTask<NPCProfile> GetProfileAsync(object keyOrLabel, CancellationToken ct = default);
+
+    /// <summary>특정 프로필 해제(이름 기반).</summary>
+    void ReleaseByProfileName(string profileName);
+}
 public sealed class AtlasService : IAddressablesService
 {
     // ====== Public Preload Config ======
@@ -79,15 +95,19 @@ public sealed class AtlasService : IAddressablesService
         // Prefab (GameObject)
         public IEnumerable<string> PrefabLabels { get; set; } = null;
         public IEnumerable<object> PrefabKeys { get; set; } = null; // 주소 문자열, AssetReferenceGameObject 등
+        
+        // Profile (NPCProfile)
+        public IEnumerable<string> ProfileLabels { get; set; } = null;
+        public IEnumerable<object> ProfileKeys { get; set; } = null; // 주소 문자열, AssetReference 등
     }
 
     // ====== Internal Caches ======
     private readonly Dictionary<string, (SpriteAtlas atlas, AsyncOperationHandle handle, int refCount)> _atlases
         = new(StringComparer.Ordinal);
-
     private readonly Dictionary<string, (GameObject prefab, AsyncOperationHandle handle, int refCount)> _prefabs
         = new(StringComparer.Ordinal);
-
+    private readonly Dictionary<string, (NPCProfile profile, AsyncOperationHandle handle, int refCount)> _profiles
+        = new(StringComparer.Ordinal);
     private UniTaskCompletionSource _readyTcs;
     public bool IsReady { get; private set; }
     public UniTask Ready => _readyTcs?.Task ?? UniTask.CompletedTask;
@@ -220,6 +240,43 @@ public sealed class AtlasService : IAddressablesService
                         var handle = Addressables.LoadAssetAsync<GameObject>(key);
                         var prefab = await handle.WithCancellation(ct);
                         RegisterLoadedPrefab(prefab, handle);
+                    }
+                }
+                
+                // 5) Profile 라벨
+                if (config.ProfileLabels != null)
+                {
+                    foreach (var label in config.PrefabLabels)
+                    {
+                        ct.ThrowIfCancellationRequested();
+                        var handle = Addressables.LoadAssetsAsync<NPCProfile>(label, null, true);
+                        handle.Completed += h =>
+                        {
+                            if (h.Status == AsyncOperationStatus.Succeeded)
+                            {
+                                foreach (var profile in h.Result)
+                                    RegisterLoadedProfile(profile, h);
+                            }
+                        };
+                        await handle.WithCancellation(ct);
+                    }
+                }
+
+                // 6) Profile 키
+                if (config.ProfileKeys != null)
+                {
+                    foreach (var key in config.ProfileKeys)
+                    {
+                        if (((string)key)[((string)key).IndexOf('1') + 1] == '1')
+                        {
+                            // Debug.Log($"{key} is not found");
+                            continue;
+                        }
+                        // Debug.Log($"{key} is ready");
+                        ct.ThrowIfCancellationRequested();
+                        var handle = Addressables.LoadAssetAsync<NPCProfile>(key);
+                        var profile = await handle.WithCancellation(ct);
+                        RegisterLoadedProfile(profile, handle);
                     }
                 }
             }
@@ -440,6 +497,97 @@ public sealed class AtlasService : IAddressablesService
         }
     }
 
+    // ====== NPC Profile ======
+
+    public async UniTask<NPCProfile> EnsureProfileAsync(object keyOrLabel, CancellationToken ct = default)
+    {
+        if (keyOrLabel == null) throw new ArgumentNullException(nameof(keyOrLabel));
+
+        // 문자열이면서 ".profile"으로 끝나지 않으면 라벨로 간주(일괄 로드)
+        if (keyOrLabel is string label && !label.EndsWith(".profile", StringComparison.OrdinalIgnoreCase))
+        {
+            var handle = Addressables.LoadAssetsAsync<NPCProfile>(label, null, true);
+            handle.Completed += h =>
+            {
+                if (h.Status == AsyncOperationStatus.Succeeded)
+                {
+                    foreach (var profile in h.Result)
+                        RegisterLoadedProfile(profile, h);
+                }
+            };
+            await handle.WithCancellation(ct);
+
+            var first = _profiles.Values.FirstOrDefault(v => v.handle.Equals(handle)).profile;
+            if (first != null) return first;
+
+            var locsH = Addressables.LoadResourceLocationsAsync(label, typeof(NPCProfile));
+            await locsH.Task;
+            if (locsH.Status == AsyncOperationStatus.Succeeded && locsH.Result.Count > 0)
+            {
+                var loadH = Addressables.LoadAssetAsync<NPCProfile>(locsH.Result[0]);
+                var profile = await loadH.Task;
+                RegisterLoadedProfile(profile, loadH);
+                Addressables.Release(locsH);
+                return profile;
+            }
+            Addressables.Release(locsH);
+            throw new InvalidOperationException($"[AtlasService] 라벨 '{label}'에서 Prefab 리소스 위치를 찾지 못했습니다.");
+        }
+        else
+        {
+            // 주소/AssetReference 등 단일 키 로드
+            var handle = Addressables.LoadAssetAsync<NPCProfile>(keyOrLabel);
+            var profile = await handle.WithCancellation(ct);
+            RegisterLoadedProfile(profile, handle);
+            return profile;
+        }
+    }
+    public bool TryGetProfile(string profileName, out NPCProfile profile)
+    {
+        if (string.IsNullOrWhiteSpace(profileName))
+        {
+            profile = null;
+            return false;
+        }
+        if (_profiles.TryGetValue(profileName, out var entry) && entry.profile != null)
+        {
+            profile = entry.profile;
+            return true;
+        }
+        profile = null;
+        return false;
+    }
+    public NPCProfile GetProfile(string profileId)
+    {
+        if (string.IsNullOrWhiteSpace(profileId)) return null;
+        return _profiles.TryGetValue(profileId, out var entry) ? entry.profile : null;
+    }
+    public async UniTask<NPCProfile> GetProfileAsync(object keyOrLabel, CancellationToken ct = default)
+    {
+        // 필요 시 로드
+        var profile = await EnsureProfileAsync(keyOrLabel, ct);
+        if (profile == null)
+            Debug.LogWarning($"[AtlasService] (동적) 프리팹을 찾지 못했습니다. keyOrLabel='{keyOrLabel}'");
+        return profile;
+    }
+    public void ReleaseByProfileName(string profileName)
+    {
+        if (string.IsNullOrWhiteSpace(profileName)) return;
+
+        if (_profiles.TryGetValue(profileName, out var entry))
+        {
+            try
+            {
+                if (entry.handle.IsValid())
+                    Addressables.Release(entry.handle);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[AtlasService] Release(Prefab) 실패: {profileName}, {ex.Message}");
+            }
+            _profiles.Remove(profileName);
+        }
+    }
     // ====== Global Release ======
     public void ReleaseAll()
     {
@@ -494,7 +642,6 @@ public sealed class AtlasService : IAddressablesService
             _atlases[key] = (atlas, handle, 1);
         }
     }
-
     private void RegisterLoadedPrefab(GameObject prefab, AsyncOperationHandle handle)
     {
         if (prefab == null) return;
@@ -507,6 +654,19 @@ public sealed class AtlasService : IAddressablesService
         else
         {
             _prefabs[key] = (prefab, handle, 1);
+        }
+    }
+    private void RegisterLoadedProfile(NPCProfile profile, AsyncOperationHandle handle)
+    {
+        if (profile == null) return;
+        var key = profile.id; // 기본 키: asset.name (라벨 일괄 로드시 주소를 모를 수 있음)
+        if (_profiles.TryGetValue(key, out var entry))
+        {
+            _profiles[key] = (entry.profile, handle, entry.refCount + 1);
+        }
+        else
+        {
+            _profiles[key] = (profile, handle, 1);
         }
     }
 }

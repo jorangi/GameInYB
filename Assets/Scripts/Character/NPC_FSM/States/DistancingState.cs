@@ -23,23 +23,23 @@ public class DistancingState : StateBase
     public override void Update()
     {
         //공격 범위 내에 플레이어가 있을 경우
-        if (blackboard.AttackExit > blackboard.DistToTarget && blackboard.AttackEnter < blackboard.DistToTarget)
+        if (bb.AttackExit > bb.DistToTarget && bb.AttackEnter < bb.DistToTarget)
         {
             npc.RequestState<AttackState>();
             return;
         }
         // 공격 범위 바깥에 플레이어가 있을 경우
-        if (blackboard.AttackExit < blackboard.DistToTarget)
+        if (bb.AttackExit < bb.DistToTarget)
         {
             npc.RequestState<ChaseState>();
             return;
         }
         // 공격 범위보다 플레이어가 가까울 경우
-        if (blackboard.AttackEnter > blackboard.DistToTarget && !InMinLock())
+        if (bb.AttackEnter > bb.DistToTarget && !InMinLock())
         {
             npc.SetDesiredMove(-npc.FacingSign);
-            blackboard.MinStateEndTime = blackboard.TimeNow + blackboard.MinStateDuration;
+            bb.MinStateEndTime = bb.TimeNow + bb.MinStateDuration;
         }
     }
-    private bool InMinLock() => blackboard.TimeNow < blackboard.MinStateEndTime;
+    private bool InMinLock() => bb.TimeNow < bb.MinStateEndTime;
 }
