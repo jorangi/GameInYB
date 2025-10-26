@@ -13,7 +13,7 @@ public class DieState : StateBase
         npc.AnimSetMoving(false);
         npc.AnimTriggerDeath();
         npc.hitBox.gameObject.SetActive(false);
-        npc.SetMinStateLock(blackboard.MinStateDuration);
+        npc.SetMinStateLock(bb.MinStateDuration);
     }
     public override void Exit()
     {

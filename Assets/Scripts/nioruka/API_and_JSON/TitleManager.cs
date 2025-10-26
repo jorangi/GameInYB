@@ -43,7 +43,7 @@ public class TitleManager : MonoBehaviour
 
         loginButton.onClick.AddListener(OnClick_Login);
         startButton.onClick.AddListener(OnClick_StartGame);
-        optionButton.onClick.AddListener(ToggleOptionsPanel);
+//        optionButton.onClick.AddListener(ToggleOptionsPanel);
 
         await FadeIn();
 
@@ -64,14 +64,15 @@ public class TitleManager : MonoBehaviour
         try
         {
             messageText.text = "로그인 중...";
-            await loginManager.TryLogin(id, pw); 
-            OnLoginSuccess();
+            await loginManager.TryLogin(id, pw);
         }
         catch (Exception e)
         {
             Debug.LogError($"[TitleManager] 로그인 실패: {e.Message}");
             messageText.text = "로그인 실패. 다시 시도하세요.";
+            return;
         }
+        OnLoginSuccess();
     }
 
     private void OnLoginSuccess()

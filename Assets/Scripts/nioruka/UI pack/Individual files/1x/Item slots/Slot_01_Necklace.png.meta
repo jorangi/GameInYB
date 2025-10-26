@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Slot_01_Necklace_0: -5475477621872496064
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

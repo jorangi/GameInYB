@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
@@ -23,6 +24,10 @@ public class NonPlayableCharacter : Character
     private NPCStateMachine _fsm;
     private StateRegistry _registry = new();
     private bool dieAnimFinished;
+
+    // 예시 유틸
+    public void ApplyImpulse(Vector2 v) { /* Rigidbody2D에 순간 힘/속도 적용 */ }
+    public void BeginDash(Vector2 vel, float time) { /* time 동안 vel 유지(충돌/멈춤 로직 포함) */ }
 
     [Header("데이터 관련")]
     public CharacterData Data => data;
@@ -52,9 +57,10 @@ public class NonPlayableCharacter : Character
     private const float BAR_SIZE = 3.5f;
     public GameObject DamageTextPrefab;
     public Animator animator;
+    [SerializeField] private string id;
     protected override void Awake()
     {
-        data = new NonPlayableCharacterData("Plant");
+        data = new NonPlayableCharacterData(id);
         data.GetStats().SetBase(StatType.ATK, 50);
         data.SetInvicibleTime(0.5f);
         data.SetHitStunTime(0.5f);
@@ -69,7 +75,7 @@ public class NonPlayableCharacter : Character
         _npcData.health.ApplyHP(_npcData.MaxHP);
         FSMInit();
 
-        
+
         provider = Data;
         if (provider is null) Debug.LogError("[WeaponScript] provider에 stats할당 실패");
     }
@@ -97,7 +103,7 @@ public class NonPlayableCharacter : Character
         wallChecker.localPosition = new(FacingSign > 0 ? 0.25f : -0.25f, 0.0f);
         RaycastHit2D hitWall = Physics2D.Raycast(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, 0.1f, LayerMask.GetMask("Floor", "Platform"));
         blackboard.IsWallAhead = hitWall;
-        blackboard.IsPrecipiceAhead = isPrecipice.collider is null;
+        blackboard.IsPrecipiceAhead = isPrecipice.collider == null;
 
         _fsm.Update();
     }
@@ -183,6 +189,12 @@ public class NonPlayableCharacter : Character
         if (next is null) return;
         _fsm.SetState(next);
     }
+    public void AnimTrigger(string triggerName) => animator.SetTrigger(triggerName);
+    public bool AnimIs(string stateName) => animator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
+    public void OnAttackStart() { SetRooted(true); SetDesiredMove(0); }
+    public void OnHitFrame() {/*히트박스 활성/데미지 처리*/}
+    public void OnAttackEnd() { SetRooted(false); }
+
     public bool AnimGetTriggerAttack() => animator.GetCurrentAnimatorStateInfo(0).IsName("Attack");
     public void AnimSetMoving(bool on) => animator.SetBool("IsMoving", on);
     public void AnimTriggerAttack() => animator.SetTrigger("Attack");
@@ -199,5 +211,30 @@ public class NonPlayableCharacter : Character
         hitbox.GetComponent<NPC__AttackHitBox>().provider = provider;
         hitbox.transform.position = transform.Find("attackPosition").position;
         hitbox.transform.localScale = new(2f, 2f);
+    }
+    /// <summary>
+    /// EngageState 등록(후처리)
+    /// </summary>
+    /// <param name="engage"></param>
+    public void BindEngage(EngageState engage) => _registry.Register(engage);
+    /// <summary>
+    /// abilities를 이용한 등록
+    /// </summary>
+    /// <param name="abilities"></param>
+    public void BindEngage(List<IAbility> abilities)
+    {
+        var engage = new EngageState(this, blackboard, abilities);
+        BindEngage(engage);
+    }
+    private void AnimSetAttack(int idx) => animator.SetFloat("AttackIndex", idx);
+    private void AnimDoAttack()
+    {
+        animator.ResetTrigger("Attack");
+        animator.SetTrigger("Attack");
+    }
+    public void AnimPlayAttack(int idx)
+    {
+        AnimSetAttack(idx);
+        AnimDoAttack();
     }
 }

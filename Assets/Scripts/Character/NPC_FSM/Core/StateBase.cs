@@ -2,6 +2,18 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+
+public enum Personality
+{
+    AGGRESSIVE,
+    DEFENSIVE
+}
+public enum Mobility
+{
+    GROUND,
+    FLY
+}
 public interface IStateBase
 {
     string Name { get; }
@@ -22,6 +34,7 @@ public class Blackboard
     // 센싱
     public bool IsWallAhead;
     public bool IsPrecipiceAhead;
+    public NonPlayableCharacter[] enemies;
 
     //Idle/Wander용 타이머
     public float IdleEndTime;
@@ -29,9 +42,14 @@ public class Blackboard
 
     //최소 상태 유지 시간 (움찔 방지)
     public float MinStateEndTime;
-
-    //공격 쿨타임
-    public float AttackCooldownEnd;
+    //공격 관련
+    public Personality personality; //성격
+    public Mobility moveType; //이동 타입
+    public float AttackCooldownEnd; //공격 쿨다운(콤보 마지막)
+    public int ComboStep; // 현재 콤보
+    public int MaxCombo; // 최대 콤보
+    public float ComboBuffer = 0.5f; //콤보 사이 유예시간
+    public bool IsInCombo;
 
 
     //---------몬스터별 데이터----------
@@ -62,11 +80,11 @@ public class Blackboard
 public abstract class StateBase : IStateBase
 {
     protected NonPlayableCharacter npc;
-    protected readonly Blackboard blackboard;
-    protected StateBase(NonPlayableCharacter npc, Blackboard blackboard)
+    protected readonly Blackboard bb;
+    protected StateBase(NonPlayableCharacter npc, Blackboard bb)
     {
         this.npc = npc;
-        this.blackboard = blackboard;
+        this.bb = bb;
     }
     public abstract string Name { get; }
     /// <summary>

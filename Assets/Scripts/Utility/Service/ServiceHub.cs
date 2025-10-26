@@ -11,8 +11,9 @@ public static class ServiceHub
     {
         Root ??= new();
 
-        Root.Add<PlayerSession>(PlayerSession.Inst);
+        Root.Add(PlayerSession.Inst);
         Root.Add<IItemRepository>(new ItemRepositoryAdapter());
+        Root.Add<INPCRepository>(new NPCRepositoryAdapter());
 
         Root.Add<ILoginService>(new LoginManager(new PlayableCharacterAccessTokenProvider()));
     }

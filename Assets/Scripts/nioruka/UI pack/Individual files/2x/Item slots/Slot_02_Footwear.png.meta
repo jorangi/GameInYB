@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Slot_02_Footwear_0: 7784451389860695706
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

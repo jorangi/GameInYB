@@ -1722,7 +1722,71 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      FontTitle_Brown_0: 8799868391123007951
+      FontTitle_Brown_1: -1547882028600162444
+      FontTitle_Brown_10: -4677715989990334882
+      FontTitle_Brown_11: 1936851905180038365
+      FontTitle_Brown_12: -344762660380613179
+      FontTitle_Brown_13: -5502909303749574982
+      FontTitle_Brown_14: -4764004024247543218
+      FontTitle_Brown_15: 7650728296121453640
+      FontTitle_Brown_16: -8381036709488390025
+      FontTitle_Brown_17: -6042977296929681751
+      FontTitle_Brown_18: 4141717703160745900
+      FontTitle_Brown_19: -8929236617365113084
+      FontTitle_Brown_2: 4525302371423804829
+      FontTitle_Brown_20: 4506789365109226672
+      FontTitle_Brown_21: -2229460028139116764
+      FontTitle_Brown_22: 6313507362224370034
+      FontTitle_Brown_23: 5829713319093972370
+      FontTitle_Brown_24: -1814025122053187922
+      FontTitle_Brown_25: -1774077031972245442
+      FontTitle_Brown_26: -8742771263437674050
+      FontTitle_Brown_27: -759865267628569291
+      FontTitle_Brown_28: -9070902451440197922
+      FontTitle_Brown_29: 1119425295911070967
+      FontTitle_Brown_3: 2881625040069590634
+      FontTitle_Brown_30: 470388319047610836
+      FontTitle_Brown_31: -2864181494427694897
+      FontTitle_Brown_32: 2531088033627436982
+      FontTitle_Brown_33: -8698818579306131220
+      FontTitle_Brown_34: -2230731386120471712
+      FontTitle_Brown_35: -543659964708873081
+      FontTitle_Brown_36: 8039868236684323867
+      FontTitle_Brown_37: 3164688777710799788
+      FontTitle_Brown_38: -1273596931894508640
+      FontTitle_Brown_39: -3606819029683783735
+      FontTitle_Brown_4: 3654757832507052674
+      FontTitle_Brown_40: -328497190095373088
+      FontTitle_Brown_41: -3266168524717547367
+      FontTitle_Brown_42: 8933621954420024267
+      FontTitle_Brown_43: 6672250338106296128
+      FontTitle_Brown_44: 4561700429323928422
+      FontTitle_Brown_45: 4971843051125502187
+      FontTitle_Brown_46: 3275611794218489504
+      FontTitle_Brown_47: 572124840733796153
+      FontTitle_Brown_48: 3137118658110213686
+      FontTitle_Brown_49: -4134302755184391261
+      FontTitle_Brown_5: 8368351787151436766
+      FontTitle_Brown_50: -2917550588426679037
+      FontTitle_Brown_51: 2735766496331917175
+      FontTitle_Brown_52: -5007243744833856273
+      FontTitle_Brown_53: -7100874567877979693
+      FontTitle_Brown_54: 7246608341532949409
+      FontTitle_Brown_55: -6613052605597633330
+      FontTitle_Brown_56: -1992907388451777973
+      FontTitle_Brown_57: 6098811882180001592
+      FontTitle_Brown_58: 5688931770674228295
+      FontTitle_Brown_59: 4053458330859335720
+      FontTitle_Brown_6: 2481901868518265606
+      FontTitle_Brown_60: 6475632281691901774
+      FontTitle_Brown_61: -1342454240693235958
+      FontTitle_Brown_62: -971814848878715884
+      FontTitle_Brown_63: -2218594603091731381
+      FontTitle_Brown_7: -1279341630156451725
+      FontTitle_Brown_8: -2322621442697959460
+      FontTitle_Brown_9: -4606977763736181333
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -322,7 +322,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Spellbook_Opening_0: -114397082528104154
+      Spellbook_Opening_1: 77807486143435313
+      Spellbook_Opening_2: -4802477900552452727
+      Spellbook_Opening_3: 7489453918879766187
+      Spellbook_Opening_4: -1302047661103039216
+      Spellbook_Opening_5: 2114964647504297875
+      Spellbook_Opening_6: -8774184475009100229
+      Spellbook_Opening_7: 1634570361036564406
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

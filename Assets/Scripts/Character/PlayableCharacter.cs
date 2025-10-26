@@ -898,7 +898,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         get
         {
             if (inst != null) return inst;
-            return Component.FindFirstObjectByType<PlayableCharacter>();
+            return FindFirstObjectByType<PlayableCharacter>();
         }
         private set
         {
@@ -923,12 +923,12 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     protected override void Awake()
     {
         //싱글턴 인스턴스 설정
-        if (PlayableCharacter.Inst != null && PlayableCharacter.Inst != this)
+        if (Inst != null && Inst != this)
         {
-            Destroy(PlayableCharacter.Inst);
+            //Destroy(Inst.gameObject);
             return;
         }
-        PlayableCharacter.Inst = this;
+        Inst = this;
         DontDestroyOnLoad(gameObject);
         // 데이터 초기화(우선적으로 getter에서 처리하지만, 명시적으로 초기화도 해둠)
         data ??= new PlayableCharacterData("Player")
@@ -941,7 +941,6 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         data.GetStats().SetBase(StatType.SPD, 5.0f);
         data.GetStats().SetBase(StatType.DEF, 0f);
         data.health.ApplyHP(data.MaxHP);
-        Debug.Log(data.InvincibleTime);
         ((PlayableCharacterData)data).SetInfoObj(CharacterInformationObj);
 
         // 인풋 액션 초기화

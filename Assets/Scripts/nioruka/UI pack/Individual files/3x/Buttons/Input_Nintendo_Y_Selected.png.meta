@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Input_Nintendo_Y_Selected_0: -4963034760948542486
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

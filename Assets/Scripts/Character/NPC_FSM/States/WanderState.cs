@@ -15,12 +15,12 @@ public class WanderState : StateBase
         npc.SetRooted(false);
 
         //이동 방향 결정
-        if (blackboard.IsPrecipiceAhead || blackboard.IsWallAhead)
+        if (bb.IsPrecipiceAhead || bb.IsWallAhead)
         {
             npc.FacingSign = -npc.FacingSign;
-            blackboard.NextObstacleDecisionTime = blackboard.TimeNow + blackboard.ObstacleDecisionCooldown;
-            blackboard.IsPrecipiceAhead = false;
-            blackboard.IsWallAhead = false;
+            bb.NextObstacleDecisionTime = bb.TimeNow + bb.ObstacleDecisionCooldown;
+            bb.IsPrecipiceAhead = false;
+            bb.IsWallAhead = false;
         }
         else
         {
@@ -30,10 +30,10 @@ public class WanderState : StateBase
         npc.SetDesiredMove(npc.FacingSign);
 
         //이동 시간 결정
-        float dur = Random.Range(blackboard.WanderDurationRange.x, blackboard.WanderDurationRange.y);
-        blackboard.WanderEndTime = blackboard.TimeNow + dur;
+        float dur = Random.Range(bb.WanderDurationRange.x, bb.WanderDurationRange.y);
+        bb.WanderEndTime = bb.TimeNow + dur;
         //최소 유지시간
-        npc.SetMinStateLock(blackboard.MinStateDuration);
+        npc.SetMinStateLock(bb.MinStateDuration);
     }
 
     public override void Exit()
@@ -46,26 +46,26 @@ public class WanderState : StateBase
     public override void Update()
     {
         //장애물 대응
-        if (blackboard.TimeNow >= blackboard.NextObstacleDecisionTime && (blackboard.IsWallAhead || blackboard.IsPrecipiceAhead))
+        if (bb.TimeNow >= bb.NextObstacleDecisionTime && (bb.IsWallAhead || bb.IsPrecipiceAhead))
         {
             float r = Random.value;
             //정지
-            if (r < blackboard.StopAtObstacleChance && !InMinLock())
+            if (r < bb.StopAtObstacleChance && !InMinLock())
             {
                 npc.RequestState<IdleState>();
                 return;
             }
 
             //방향 전환 후 계속 이동
-            if (r < blackboard.StopAtObstacleChance + blackboard.FlipAtObstacleChance)
+            if (r < bb.StopAtObstacleChance + bb.FlipAtObstacleChance)
             {
                 npc.FacingSign = -npc.FacingSign;
                 //잦은 방향 전환 방지
-                blackboard.NextObstacleDecisionTime = blackboard.TimeNow + blackboard.ObstacleDecisionCooldown;
+                bb.NextObstacleDecisionTime = bb.TimeNow + bb.ObstacleDecisionCooldown;
             }
         }
         //타깃 감지
-        if (!InMinLock() && blackboard.CanSeeTarget && blackboard.DistToTarget <= blackboard.DetectEnter && !blackboard.IsWallAhead && !blackboard.IsPrecipiceAhead)
+        if (!InMinLock() && bb.CanSeeTarget && bb.DistToTarget <= bb.DetectEnter && !bb.IsWallAhead && !bb.IsPrecipiceAhead)
         {
             npc.RequestState<ChaseState>();
             return;
@@ -73,5 +73,5 @@ public class WanderState : StateBase
         
         npc.SetDesiredMove(npc.FacingSign);
     }
-    private bool InMinLock() => blackboard.TimeNow < blackboard.MinStateEndTime;
+    private bool InMinLock() => bb.TimeNow < bb.MinStateEndTime;
 }

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BannerMedium_01B_0: -7976946684053745336
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

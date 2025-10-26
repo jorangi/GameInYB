@@ -322,7 +322,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Spellbook_NextPage_0: -3413147964912274382
+      Spellbook_NextPage_1: -2502238555604181242
+      Spellbook_NextPage_2: 8271088729310833637
+      Spellbook_NextPage_3: -4073171393417200538
+      Spellbook_NextPage_4: 8523709759339527144
+      Spellbook_NextPage_5: -3895104613540474150
+      Spellbook_NextPage_6: -6232330029241401077
+      Spellbook_NextPage_7: -164802115423455054
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

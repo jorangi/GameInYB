@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Slot_01_Headgear_0: -285693748296905971
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

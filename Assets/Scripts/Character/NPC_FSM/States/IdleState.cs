@@ -8,29 +8,29 @@ public class IdleState : StateBase
     {
         npc.AnimSetMoving(false);
         npc.SetDesiredMove(0f);
-        float idleDur = Random.Range(blackboard.IdleDurationRange.x, blackboard.IdleDurationRange.y);
-        blackboard.IdleEndTime = blackboard.TimeNow + idleDur;
-        npc.SetMinStateLock(blackboard.MinStateDuration);
+        float idleDur = Random.Range(bb.IdleDurationRange.x, bb.IdleDurationRange.y);
+        bb.IdleEndTime = bb.TimeNow + idleDur;
+        npc.SetMinStateLock(bb.MinStateDuration);
     }
     public override void Exit()
     {
     }
     public override void Update()
     {
-        if (blackboard.DistToTarget <= blackboard.AttackEnter)
+        if (bb.DistToTarget <= bb.AttackEnter)
         {
             npc.RequestState<AttackState>();
             return;
         }
         // 타깃이 범위 내 + 볼 수 있음
-        if (!(blackboard.IsPrecipiceAhead || blackboard.IsWallAhead) && blackboard.CanSeeTarget && blackboard.DistToTarget <= blackboard.DetectEnter)
+        if (!(bb.IsPrecipiceAhead || bb.IsWallAhead) && bb.CanSeeTarget && bb.DistToTarget <= bb.DetectEnter)
         {
             npc.RequestState<ChaseState>();
             return;
         }
-        if (blackboard.TimeNow >= blackboard.IdleEndTime && !InMinLock())
+        if (bb.TimeNow >= bb.IdleEndTime && !InMinLock())
         {
-            bool goWander = Random.value < blackboard.WanderProbabilityAfterIdle;
+            bool goWander = Random.value < bb.WanderProbabilityAfterIdle;
             if (goWander)
             {
                 npc.RequestState<WanderState>();
@@ -38,13 +38,13 @@ public class IdleState : StateBase
             }
             else
             {
-                float idleDur = Random.Range(blackboard.IdleDurationRange.x, blackboard.IdleDurationRange.y);
-                blackboard.IdleEndTime = blackboard.TimeNow + idleDur;
-                npc.SetMinStateLock(blackboard.MinStateDuration);
+                float idleDur = Random.Range(bb.IdleDurationRange.x, bb.IdleDurationRange.y);
+                bb.IdleEndTime = bb.TimeNow + idleDur;
+                npc.SetMinStateLock(bb.MinStateDuration);
             }
         }
         npc.SetDesiredMove(0);
         npc.SetRooted(true);
     }
-    private bool InMinLock() => blackboard.TimeNow < blackboard.MinStateEndTime;
+    private bool InMinLock() => bb.TimeNow < bb.MinStateEndTime;
 }

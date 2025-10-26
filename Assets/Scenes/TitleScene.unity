@@ -409,6 +409,7 @@ GameObject:
   m_Component:
   - component: {fileID: 487202528}
   - component: {fileID: 487202527}
+  - component: {fileID: 487202529}
   m_Layer: 0
   m_Name: DataLoader
   m_TagString: Untagged
@@ -445,6 +446,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &487202529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 487202526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b4aac617d5def149bc6dc141d93ec44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &569439634
 GameObject:
   m_ObjectHideFlags: 0
@@ -794,8 +807,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Enter text...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3082eab7b6afc41b4ab14e37a1368668, type: 2}
-  m_sharedMaterial: {fileID: 8025632571255523923, guid: 3082eab7b6afc41b4ab14e37a1368668, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3eb8814ef47fb8a4085f89f87a73873e, type: 2}
+  m_sharedMaterial: {fileID: 6173337107237856897, guid: 3eb8814ef47fb8a4085f89f87a73873e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -883,6 +896,7 @@ GameObject:
   - component: {fileID: 611571095}
   - component: {fileID: 611571094}
   - component: {fileID: 611571093}
+  - component: {fileID: 611571097}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -979,6 +993,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &611571097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611571092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90195fd88fc11c343a6b95649c38601e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idInput: {fileID: 1692046256}
+  pwInput: {fileID: 1962969952}
+  messageText: {fileID: 1744194806}
 --- !u!1 &748352306
 GameObject:
   m_ObjectHideFlags: 0
@@ -2260,11 +2289,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loginPanel: {fileID: 1417723803}
-  loginButton: {fileID: 569439636}
-  startButton: {fileID: 1573033083}
   idInput: {fileID: 1692046256}
   pwInput: {fileID: 1962969952}
   messageText: {fileID: 1744194806}
+  loginButton: {fileID: 569439636}
+  startButton: {fileID: 1573033083}
+  optionButton: {fileID: 0}
+  optionsPanel: {fileID: 0}
   fadePanel: {fileID: 1123883044}
   fadeSpeed: 1.5
 --- !u!4 &1759042699
@@ -2362,8 +2393,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Enter text...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3082eab7b6afc41b4ab14e37a1368668, type: 2}
-  m_sharedMaterial: {fileID: 8025632571255523923, guid: 3082eab7b6afc41b4ab14e37a1368668, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3eb8814ef47fb8a4085f89f87a73873e, type: 2}
+  m_sharedMaterial: {fileID: 6173337107237856897, guid: 3eb8814ef47fb8a4085f89f87a73873e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Input_Nintendo_B_Pressed_0: -6875867632604789092
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
