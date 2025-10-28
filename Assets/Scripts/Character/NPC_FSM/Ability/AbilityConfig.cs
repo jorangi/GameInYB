@@ -9,5 +9,6 @@ public abstract class AbilityConfig : ScriptableObject
     public float cooldown;
     public float enter;
     public float exit;
+    public bool backAttack;
     public abstract IAbility Build(NonPlayableCharacter npc);
 }

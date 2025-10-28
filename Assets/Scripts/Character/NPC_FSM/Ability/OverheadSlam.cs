@@ -1,33 +1,58 @@
+using System;
 using UnityEngine;
 
 public sealed class OverheadSlam : IAbility
 {
     public string Id => "OverheadSlam";
-    public float Cooldown => 3.0f;
+    public float Cooldown => _cfg.cooldown;
     public float NextReadyTime { get; set; }
-    public float EnterRange  = 0.8f;
-    public float ExitRange   = 1.6f;
-    public float WDist = 0.6f, WFace = 0.3f;
-    public Vector2 OptimalDistanceRange => throw new System.NotImplementedException();
-
+    private readonly OverheadSlamConfig _cfg;
+    public OverheadSlam(OverheadSlamConfig cfg) { _cfg = cfg; }
+    public Vector2 OptimalDistanceRange => new(_cfg.enter, _cfg.exit);
     public bool CanExecute(AbilityContext ctx)
     {
         if (ctx.TimeNow < NextReadyTime) return false;
         if (!ctx.npc.blackboard.CanSeeTarget) return false;
-        if (ctx.Dist <= ExitRange) return false;
-        return true;
+        return ctx.Dist <= _cfg.exit;
+    }
+    private Func<GameObject> meleeHitLogic;
+    
+    public void Execute(AbilityContext ctx)
+    {
+        var npc = ctx.npc;
+        npc.blackboard.AttackEnter = _cfg.enter;
+        npc.blackboard.AttackEnter = _cfg.exit;
+        NextReadyTime = ctx.TimeNow + Cooldown;
+        // 실행 시작 상태
+        npc.IsAbilityRunning = true;
+        npc.AnimSetMoving(false);
+        npc.SetDesiredMove(0f);
+        npc.SetRooted(_cfg.rootDuring);
+        meleeHitLogic = () =>
+        {
+            //기절?
+            return null;
+        };
+        // 히트 프레임 처리(순간 전진 등)
+        npc.OnHitFrame += meleeHitLogic;
+        npc.OnAbilityEnd = () =>
+        {
+            // 실행 종료 상태
+            npc.IsAbilityRunning = false;
+            if (meleeHitLogic != null)
+            {
+                npc.OnHitFrame -= meleeHitLogic;
+            }
+            npc.OnAbilityEnd = null;
+        };
+        // 애니메이션 딱 한 번 재생
+        npc.AnimPlayAttack(_cfg.animIndex);
     }
     public float Score(AbilityContext ctx)
     {
-        float sDist = Mathf.Clamp01(1f -Mathf.Abs((ctx.Dist - EnterRange) / (ExitRange - EnterRange + 0.0001f))); // 가우시안 예시
-        float sFace = ctx.IsFacingTarget ? 1f : 0.1f;
-        return WDist * sDist + WFace * sFace;
-    }
-    public void Execute(AbilityContext ctx)
-    {
-        ctx.npc.SetRooted(true);
-        ctx.npc.AnimTrigger("OvewrheadSlam");
-        NextReadyTime = ctx.TimeNow + Cooldown;
-        // 애니 이벤트에서 실제 속도 가속/히트판정 시작 → 종료 후 Root 해제
+        float sDist = Mathf.Clamp01(1f - Mathf.Abs(ctx.Dist - _cfg.enter) / (_cfg.exit - _cfg.enter + 0.0001f));
+        float sFace = ctx.IsFacingTarget == !_cfg.backAttack ? 1f : 0.2f;
+
+        return _cfg.WDist * sDist + _cfg.WFace * sFace;
     }
 }

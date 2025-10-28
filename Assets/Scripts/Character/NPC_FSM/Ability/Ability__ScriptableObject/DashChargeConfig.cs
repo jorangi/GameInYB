@@ -3,14 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName="Ability/DashCharge")]
 public sealed class DashChargeConfig : AbilityConfig
 {
-    public float prefer = 3.5f;
-    public float runway = 3f;
-    public override IAbility Build(NonPlayableCharacter npc)
-    {
-        return new DashChargeAbility {
-            NextReadyTime = 0,
-            // EnterRange = enter, ExitRange = exit, PreferRange = prefer,
-            // RequiredRunway = runway,
-        };
-    }
+    public float duration = 1f;
+    public float dir;
+    public float speed = 2f;
+    public bool stopOnWall = false;
+    public override IAbility Build(NonPlayableCharacter npc) => new DashCharge(this);
 }

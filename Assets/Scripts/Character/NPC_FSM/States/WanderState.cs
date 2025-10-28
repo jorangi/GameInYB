@@ -80,7 +80,6 @@ public class WanderState : StateBase
         }
         if (!InMinLock() && bb.CanSeeTarget && bb.DistToTarget <= bb.DetectEnter && !bb.IsWallAhead && !bb.IsPrecipiceAhead)//감지 범위 내 진입
         {
-            Debug.Log("6");
             npc.RequestState<ChaseState>();
             return;
         }

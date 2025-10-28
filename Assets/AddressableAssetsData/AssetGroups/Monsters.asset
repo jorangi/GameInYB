@@ -51,6 +51,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - NPCPrefab
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a81572abfc260064b980acc5921e15e7
+    m_Address: 10007
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - NPCPrefab
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c8abd278cb1242e458160b76ad38f98e
     m_Address: 10013
     m_ReadOnly: 0

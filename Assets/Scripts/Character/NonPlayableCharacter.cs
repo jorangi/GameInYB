@@ -23,7 +23,7 @@ public interface INPCProfileInjector
 [RequireComponent(typeof(Animator))]
 public class NonPlayableCharacter : Character, INPCProfileInjector
 {
-    public bool IsAbilityRunning { get; set;}
+    [SerializeField]public bool IsAbilityRunning { get; set;}
     private List<IAbility> _abilities = new();
     public IReadOnlyCollection<IAbility> Abilities => _abilities;
     private static readonly WaitForSeconds _waitForSeconds0_3 = new(0.3f);
@@ -250,8 +250,11 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
     }
     public void AnimTrigger(string triggerName) => animator.SetTrigger(triggerName);
     public bool AnimIs(string stateName) => animator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
-    public Action OnHitFrame;
+    public Func<GameObject> OnHitFrame;
     public Action OnAbilityEnd;
+    public void AnimEvent_OnAbility() => OnAbility?.Invoke();
+    public void AnimEvent_Dash() => OnDash?.Invoke();
+    public void AnimEvent_DashEnd() => OnDashEnd?.Invoke();
     public void AnimEvent_HitFrame() => OnHitFrame?.Invoke();
     public void AnimEvent_AbilityEnd() => OnAbilityEnd?.Invoke();
     public bool AnimGetTriggerAttack() => animator.GetCurrentAnimatorStateInfo(0).IsName("Attack");
@@ -263,7 +266,7 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
     public void SetMinStateLock(float minStateDuration) => blackboard.MinStateEndTime = blackboard.TimeNow + blackboard.MinStateDuration;
     public void OnDieAnimationComplete() => dieAnimFinished = true;
     public bool IsDieAnimFinished() => dieAnimFinished;
-    public void CheckHit()
+    public GameObject CheckHit()
     {
         var p = transform.Find("attackPosition").localPosition;
         transform.Find("attackPosition").localPosition = new(Mathf.Abs(p.x) * FacingSign, p.y, p.z);
@@ -272,6 +275,7 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         hitbox.GetComponent<NPC__AttackHitBox>().provider = provider;
         hitbox.transform.position = transform.Find("attackPosition").position;
         hitbox.transform.localScale = new(2f, 2f);
+        return hitbox;
     }
     /// <summary>
     /// EngageState 등록(후처리)

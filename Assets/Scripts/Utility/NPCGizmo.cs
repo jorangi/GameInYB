@@ -10,8 +10,8 @@ public class NPCGizmo : MonoBehaviour
     public Transform frontRay;
     public Transform foot;
 
-    public Vector2 attackBoxSize = new(1.0f, 0.8f);
-    public Vector2 attackBoxOffset = new(0.7f, 0.3f);
+    public Vector2 attackBoxSize => new(BB.AttackEnter, BB.AttackEnter);
+    public Vector2 attackBoxOffset => new(BB.AttackEnter * 0.5f + BB.AttackExit, 0.3f);
 
     void OnEnable()
     {

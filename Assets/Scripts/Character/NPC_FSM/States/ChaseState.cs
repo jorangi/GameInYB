@@ -42,7 +42,7 @@ public class ChaseState : StateBase
         // Debug.Log($"{bb.targetKnown} && {TryExecuteAbilityOnce()}");
         if (bb.targetKnown)
         {
-            Debug.Log($"1) 먼저 한 번 공격 시도");
+            //Debug.Log($"1) 먼저 한 번 공격 시도");
             if (TryExecuteAbilityOnce(out var bestOne)) return;
             else if(bestOne != null)
             {

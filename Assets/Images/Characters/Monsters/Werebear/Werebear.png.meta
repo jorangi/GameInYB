@@ -238,7 +238,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -252,7 +252,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 14
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -301,13 +301,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Werebear_0
+      name: Werebear_Idle_01
       rect:
         serializedVersion: 2
-        x: 41
-        y: 642
-        width: 21
-        height: 19
+        x: 0
+        y: 600
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -323,13 +323,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_1
+      name: Werebear_Idle_02
       rect:
         serializedVersion: 2
-        x: 141
-        y: 642
-        width: 21
-        height: 19
+        x: 100
+        y: 600
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -345,13 +345,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_2
+      name: Werebear_Idle_03
       rect:
         serializedVersion: 2
-        x: 241
-        y: 642
-        width: 21
-        height: 20
+        x: 200
+        y: 600
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -367,13 +367,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_3
+      name: Werebear_Idle_04
       rect:
         serializedVersion: 2
-        x: 341
-        y: 642
-        width: 21
-        height: 20
+        x: 300
+        y: 600
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -389,13 +389,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_4
+      name: Werebear_Idle_05
       rect:
         serializedVersion: 2
-        x: 441
-        y: 642
-        width: 21
-        height: 19
+        x: 400
+        y: 600
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -411,13 +411,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_5
+      name: Werebear_Idle_06
       rect:
         serializedVersion: 2
-        x: 541
-        y: 642
-        width: 21
-        height: 19
+        x: 500
+        y: 600
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -433,13 +433,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_6
+      name: Werebear_Move_01
       rect:
         serializedVersion: 2
-        x: 41
-        y: 542
-        width: 22
-        height: 19
+        x: 0
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -455,13 +455,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_7
+      name: Werebear_Move_02
       rect:
         serializedVersion: 2
-        x: 142
-        y: 543
-        width: 22
-        height: 19
+        x: 100
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -477,13 +477,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_8
+      name: Werebear_Move_03
       rect:
         serializedVersion: 2
-        x: 243
-        y: 542
-        width: 21
-        height: 19
+        x: 200
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -499,13 +499,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_9
+      name: Werebear_Move_04
       rect:
         serializedVersion: 2
-        x: 343
-        y: 542
-        width: 21
-        height: 18
+        x: 300
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -521,13 +521,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_10
+      name: Werebear_Move_05
       rect:
         serializedVersion: 2
-        x: 442
-        y: 542
-        width: 21
-        height: 19
+        x: 400
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -543,13 +543,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_11
+      name: Werebear_Move_06
       rect:
         serializedVersion: 2
-        x: 541
-        y: 543
-        width: 22
-        height: 19
+        x: 500
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -565,13 +565,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_12
+      name: Werebear_Move_07
       rect:
         serializedVersion: 2
-        x: 641
-        y: 542
-        width: 22
-        height: 19
+        x: 600
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -587,13 +587,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_13
+      name: Werebear_Move_08
       rect:
         serializedVersion: 2
-        x: 741
-        y: 541
-        width: 22
-        height: 19
+        x: 700
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -609,13 +609,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_14
+      name: Werebear_Attack1_01
       rect:
         serializedVersion: 2
-        x: 41
-        y: 442
-        width: 21
-        height: 19
+        x: 0
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -631,13 +631,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_15
+      name: Werebear_Attack1_02
       rect:
         serializedVersion: 2
-        x: 141
-        y: 442
-        width: 21
-        height: 20
+        x: 100
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -653,13 +653,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_16
+      name: Werebear_Attack1_03
       rect:
         serializedVersion: 2
-        x: 241
-        y: 442
-        width: 23
-        height: 20
+        x: 200
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -675,13 +675,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_17
+      name: Werebear_Attack1_04
       rect:
         serializedVersion: 2
-        x: 342
-        y: 442
-        width: 23
-        height: 20
+        x: 300
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -697,13 +697,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_18
+      name: Werebear_Attack1_05
       rect:
         serializedVersion: 2
-        x: 443
-        y: 442
-        width: 23
-        height: 20
+        x: 400
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -719,13 +719,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_19
+      name: Werebear_Attack1_06
       rect:
         serializedVersion: 2
-        x: 544
-        y: 440
-        width: 25
-        height: 24
+        x: 500
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -741,13 +741,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_20
+      name: Werebear_Attack1_07
       rect:
         serializedVersion: 2
-        x: 566
-        y: 441
-        width: 8
-        height: 23
+        x: 600
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -763,13 +763,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_21
+      name: Werebear_Attack1_08
       rect:
         serializedVersion: 2
-        x: 571
-        y: 441
-        width: 12
-        height: 24
+        x: 700
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -785,13 +785,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_22
+      name: Werebear_Attack1_09
       rect:
         serializedVersion: 2
-        x: 644
-        y: 440
-        width: 25
-        height: 20
+        x: 800
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -807,13 +807,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_23
+      name: Werebear_Attack2_01
       rect:
         serializedVersion: 2
-        x: 668
-        y: 440
-        width: 6
-        height: 11
+        x: 0
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -829,13 +829,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_24
+      name: Werebear_Attack2_02
       rect:
         serializedVersion: 2
-        x: 673
-        y: 440
-        width: 9
-        height: 9
+        x: 100
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -851,13 +851,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_25
+      name: Werebear_Attack2_03
       rect:
         serializedVersion: 2
-        x: 744
-        y: 442
-        width: 22
-        height: 18
+        x: 200
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -873,13 +873,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_26
+      name: Werebear_Attack2_04
       rect:
         serializedVersion: 2
-        x: 841
-        y: 442
-        width: 21
-        height: 19
+        x: 300
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -895,13 +895,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_27
+      name: Werebear_Attack2_05
       rect:
         serializedVersion: 2
-        x: 41
-        y: 342
-        width: 21
-        height: 19
+        x: 400
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -917,13 +917,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_28
+      name: Werebear_Attack2_06
       rect:
         serializedVersion: 2
-        x: 141
-        y: 342
-        width: 21
-        height: 20
+        x: 500
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -939,13 +939,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_29
+      name: Werebear_Attack2_07
       rect:
         serializedVersion: 2
-        x: 241
-        y: 342
-        width: 24
-        height: 20
+        x: 600
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -961,13 +961,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_30
+      name: Werebear_Attack2_08
       rect:
         serializedVersion: 2
-        x: 341
-        y: 342
-        width: 26
-        height: 20
+        x: 700
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -983,13 +983,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_31
+      name: Werebear_Attack2_09
       rect:
         serializedVersion: 2
-        x: 441
-        y: 341
-        width: 36
-        height: 24
+        x: 800
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1005,13 +1005,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_32
+      name: Werebear_Attack2_10
       rect:
         serializedVersion: 2
-        x: 464
-        y: 338
-        width: 17
-        height: 20
+        x: 900
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1027,13 +1027,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_33
+      name: Werebear_Attack2_11
       rect:
         serializedVersion: 2
-        x: 541
-        y: 339
-        width: 34
-        height: 21
+        x: 1000
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1049,13 +1049,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_34
+      name: Werebear_Attack2_12
       rect:
         serializedVersion: 2
-        x: 564
-        y: 338
-        width: 15
-        height: 11
+        x: 1100
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1071,13 +1071,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_35
+      name: Werebear_Attack2_13
       rect:
         serializedVersion: 2
-        x: 640
-        y: 340
-        width: 23
-        height: 21
+        x: 1200
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1093,13 +1093,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_36
+      name: Werebear_Attack3_01
       rect:
         serializedVersion: 2
-        x: 740
-        y: 341
-        width: 23
-        height: 20
+        x: 0
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1115,13 +1115,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_37
+      name: Werebear_Attack3_02
       rect:
         serializedVersion: 2
-        x: 844
-        y: 340
-        width: 19
-        height: 20
+        x: 100
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1137,13 +1137,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_38
+      name: Werebear_Attack3_03
       rect:
         serializedVersion: 2
-        x: 944
-        y: 334
-        width: 31
-        height: 25
+        x: 200
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1159,13 +1159,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_39
+      name: Werebear_Attack3_04
       rect:
         serializedVersion: 2
-        x: 962
-        y: 337
-        width: 18
-        height: 16
+        x: 300
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1181,13 +1181,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_40
+      name: Werebear_Attack3_05
       rect:
         serializedVersion: 2
-        x: 1044
-        y: 338
-        width: 19
-        height: 21
+        x: 400
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1203,13 +1203,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_41
+      name: Werebear_Attack3_06
       rect:
         serializedVersion: 2
-        x: 1062
-        y: 335
-        width: 13
-        height: 10
+        x: 500
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1225,13 +1225,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_42
+      name: Werebear_Attack3_07
       rect:
         serializedVersion: 2
-        x: 1068
-        y: 337
-        width: 12
-        height: 10
+        x: 600
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1247,13 +1247,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_43
+      name: Werebear_Attack3_08
       rect:
         serializedVersion: 2
-        x: 1144
-        y: 338
-        width: 19
-        height: 21
+        x: 700
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1269,13 +1269,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_44
+      name: Werebear_Attack3_09
       rect:
         serializedVersion: 2
-        x: 1241
-        y: 342
-        width: 21
-        height: 17
+        x: 800
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1291,13 +1291,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_45
+      name: Werebear_Hit_01
       rect:
         serializedVersion: 2
-        x: 1060
-        y: 334
-        width: 9
-        height: 7
+        x: 0
+        y: 100
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1313,13 +1313,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_46
+      name: Werebear_Hit_02
       rect:
         serializedVersion: 2
-        x: 41
-        y: 242
-        width: 21
-        height: 19
+        x: 100
+        y: 100
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1335,13 +1335,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_47
+      name: Werebear_Hit_03
       rect:
         serializedVersion: 2
-        x: 141
-        y: 242
-        width: 21
-        height: 20
+        x: 200
+        y: 100
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1357,13 +1357,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_48
+      name: Werebear_Hit_04
       rect:
         serializedVersion: 2
-        x: 242
-        y: 242
-        width: 20
-        height: 20
+        x: 300
+        y: 100
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1379,13 +1379,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_49
+      name: Werebear_Die_01
       rect:
         serializedVersion: 2
-        x: 343
-        y: 242
-        width: 20
-        height: 20
+        x: 0
+        y: 0
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1401,13 +1401,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_50
+      name: Werebear_Die_02
       rect:
         serializedVersion: 2
-        x: 444
-        y: 242
-        width: 19
-        height: 20
+        x: 100
+        y: 0
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1423,13 +1423,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_51
+      name: Werebear_Die_03
       rect:
         serializedVersion: 2
-        x: 535
-        y: 242
-        width: 31
-        height: 25
+        x: 200
+        y: 0
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1445,13 +1445,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werebear_52
+      name: Werebear_Die_04
       rect:
         serializedVersion: 2
-        x: 567
-        y: 242
-        width: 15
-        height: 23
+        x: 300
+        y: 0
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1466,341 +1466,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Werebear_53
-      rect:
-        serializedVersion: 2
-        x: 626
-        y: 242
-        width: 18
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 101f17c6f0cab5d60800000000000000
-      internalID: 7880081155258708225
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_54
-      rect:
-        serializedVersion: 2
-        x: 643
-        y: 242
-        width: 23
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: efee8f45f17d86cb0800000000000000
-      internalID: -4870406467431633154
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_55
-      rect:
-        serializedVersion: 2
-        x: 667
-        y: 242
-        width: 19
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 332377bfc0d43e3a0800000000000000
-      internalID: -6637376707660139981
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_56
-      rect:
-        serializedVersion: 2
-        x: 724
-        y: 242
-        width: 12
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e47a848d3545d9090800000000000000
-      internalID: -8026166241816697010
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_57
-      rect:
-        serializedVersion: 2
-        x: 743
-        y: 242
-        width: 23
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dc615e635a97eb920800000000000000
-      internalID: 3007975351627617997
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_58
-      rect:
-        serializedVersion: 2
-        x: 776
-        y: 242
-        width: 12
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b12b589c4b85f6f70800000000000000
-      internalID: 9182655698730070555
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_59
-      rect:
-        serializedVersion: 2
-        x: 843
-        y: 242
-        width: 23
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6cff0071fdd4c1c00800000000000000
-      internalID: 872658048362020806
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_60
-      rect:
-        serializedVersion: 2
-        x: 41
-        y: 140
-        width: 22
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d9d7b484bb0038e20800000000000000
-      internalID: 3351523352065572253
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_61
-      rect:
-        serializedVersion: 2
-        x: 141
-        y: 140
-        width: 22
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 46cc8e3ae003565e0800000000000000
-      internalID: -1917073226938659740
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_62
-      rect:
-        serializedVersion: 2
-        x: 241
-        y: 140
-        width: 22
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f0b3f18df0a9f21e0800000000000000
-      internalID: -2220386698429252849
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_63
-      rect:
-        serializedVersion: 2
-        x: 341
-        y: 140
-        width: 22
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a54f64d9e06a01ae0800000000000000
-      internalID: -1580580887508618150
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_64
-      rect:
-        serializedVersion: 2
-        x: 41
-        y: 42
-        width: 21
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: efdf7619f2cfa2f00800000000000000
-      internalID: 1092963140823940606
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_65
-      rect:
-        serializedVersion: 2
-        x: 144
-        y: 42
-        width: 19
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ea7e5e60538965f00800000000000000
-      internalID: 1105238112082454446
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_66
-      rect:
-        serializedVersion: 2
-        x: 244
-        y: 42
-        width: 19
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 06be9b3ba11a49370800000000000000
-      internalID: 8328458746971417440
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werebear_67
-      rect:
-        serializedVersion: 2
-        x: 345
-        y: 42
-        width: 21
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bcf3d50a0449bbc80800000000000000
-      internalID: -8305882082465464373
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 3af905f70ec2e2d4ca3a92d86d8530b6
     internalID: 0
     vertices: []
     indices: 
@@ -1809,7 +1479,60 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Werebear_Attack1_01: 4377229601821885261
+      Werebear_Attack1_02: 823282532899735930
+      Werebear_Attack1_03: 5049009043550475664
+      Werebear_Attack1_04: 3838521965833474507
+      Werebear_Attack1_05: -7402394413439522698
+      Werebear_Attack1_06: -5881129359773427386
+      Werebear_Attack1_07: -8141395339092774154
+      Werebear_Attack1_08: 320267281029601206
+      Werebear_Attack1_09: -5322291083808647472
+      Werebear_Attack2_01: -2813304748194575181
+      Werebear_Attack2_02: 38884662252390712
+      Werebear_Attack2_03: 827275961911671260
+      Werebear_Attack2_04: 5590574869196844575
+      Werebear_Attack2_05: 1546432348095314376
+      Werebear_Attack2_06: -8607993233245555081
+      Werebear_Attack2_07: 8256993954645699421
+      Werebear_Attack2_08: 899185383936635337
+      Werebear_Attack2_09: -2126146314877119079
+      Werebear_Attack2_11: -5993872026111622683
+      Werebear_Attack2_12: -5724772780398808206
+      Werebear_Attack2_13: 530485760652650934
+      Werebear_Attack2_1Werebear_Attack2_00: 7829399854784093324
+      Werebear_Attack3_01: 6925308264595978509
+      Werebear_Attack3_02: 2378462591118407874
+      Werebear_Attack3_03: 4827250631769452497
+      Werebear_Attack3_04: 2417445602656415455
+      Werebear_Attack3_05: -8916959009069035913
+      Werebear_Attack3_06: -4260244112763964737
+      Werebear_Attack3_07: 50987747986891920
+      Werebear_Attack3_08: -2195306874349356179
+      Werebear_Attack3_09: -5600686713789328756
+      Werebear_Die_01: -7956760078248184452
+      Werebear_Die_02: -2556142476518122757
+      Werebear_Die_03: -545758199203246101
+      Werebear_Die_04: -5337318574984559350
+      Werebear_Hit_01: -7543676242660636479
+      Werebear_Hit_02: 6343384621670454090
+      Werebear_Hit_03: -5046893431723601654
+      Werebear_Hit_04: -2755014146484108695
+      Werebear_Idle_01: 4407900946912368253
+      Werebear_Idle_02: -898466698600553782
+      Werebear_Idle_03: 8972128934113201936
+      Werebear_Idle_04: -5623469106769332012
+      Werebear_Idle_05: 839346068492796879
+      Werebear_Idle_06: -180988266085926809
+      Werebear_Move_01: -9023689843868918229
+      Werebear_Move_02: -45186938670468780
+      Werebear_Move_03: 3659774151896638017
+      Werebear_Move_04: 5324620823098652390
+      Werebear_Move_05: -5322670222807094943
+      Werebear_Move_06: -7978190137318091515
+      Werebear_Move_07: -1733143832805873755
+      Werebear_Move_08: -5796316212258797681
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

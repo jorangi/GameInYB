@@ -15,7 +15,7 @@ public sealed class PushKnockback : IAbility
         if (!ctx.npc.blackboard.CanSeeTarget) return false;
         return ctx.Dist <= _cfg.exit;
     }
-    private Action meleeHitLogic;
+    private Func<GameObject> meleeHitLogic;
     
     public void Execute(AbilityContext ctx)
     {
@@ -37,6 +37,7 @@ public sealed class PushKnockback : IAbility
                 float dir = Mathf.Sign(ctx.target.position.x - ctx.self.position.x);
                 npc.ApplyImpulse(new Vector2(dir * _cfg.advanceDistanceOnHit, 0f));
             }
+            return null;
         };
         // 히트 프레임 처리(순간 전진 등)
         npc.OnHitFrame += meleeHitLogic;
@@ -56,8 +57,7 @@ public sealed class PushKnockback : IAbility
     public float Score(AbilityContext ctx)
     {
         float sDist = Mathf.Clamp01(1f - Mathf.Abs(ctx.Dist - _cfg.enter) / (_cfg.exit - _cfg.enter + 0.0001f));
-        float sFace = ctx.IsFacingTarget ? 1f : 0.2f;
-
+        float sFace = ctx.IsFacingTarget == !_cfg.backAttack ? 1f : 0.2f;
         return _cfg.WDist * sDist + _cfg.WFace * sFace;
     }
 }

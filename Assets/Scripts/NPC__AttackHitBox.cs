@@ -11,11 +11,18 @@ public class NPC__AttackHitBox : MonoBehaviour
     void Awake()
     {
         name = "AttackHitBox";
-        Destroy(gameObject, timer);
     }
     void Start()
     {
         stats = provider.GetStats();
+    }
+    void Update()
+    {
+        timer -= Time.deltaTime;
+        if (timer <= 0f)
+        {
+            Destroy(gameObject);
+        }
     }
     void OnTriggerEnter2D(Collider2D collision)
     {

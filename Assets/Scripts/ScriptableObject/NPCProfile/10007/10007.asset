@@ -13,10 +13,7 @@ MonoBehaviour:
   m_Name: 10007
   m_EditorClassIdentifier: 
   id: 10007
-  isAggressive: 0
-  useMeleeCombo: 0
-  meleeParams:
-    enter: 0
-    exit: 0
-    cd: 0
-  useDashCharge: 0
+  isAggressive: 1
+  abilityConfigs:
+  - {fileID: 11400000, guid: 2cbbe9c57b0b30045b6fab2f443b2012, type: 2}
+  - {fileID: 11400000, guid: 09a70404d6524c64690aa16fa59418a9, type: 2}

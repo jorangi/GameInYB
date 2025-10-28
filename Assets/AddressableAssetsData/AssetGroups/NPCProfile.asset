@@ -18,77 +18,92 @@ MonoBehaviour:
   - m_GUID: 04260d141b0bd044cb9baf4de25704bb
     m_Address: NPCProfile/10008
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 068d376d215729a46aec3b583893f414
     m_Address: NPCProfile/10009
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4d1192d9f4e5390419f17b1158f80c28
     m_Address: NPCProfile/10014
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4f12794baa064174ab88ddd8302bf534
     m_Address: NPCProfile/10002
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7010ed3530070ec40a2b06dd7453888b
     m_Address: NPCProfile/10003
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 82594baecb301b4459de81096636d4f4
     m_Address: NPCProfile/10005
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 88bcd3d7ab3e13348ad4a32c3a3d29e0
     m_Address: NPCProfile/10011
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 94aa74aba66af9246aba1ff4b14aaa75
     m_Address: NPCProfile/10004
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9ae4fea47bb82a144b0bba427b6d2b6d
     m_Address: NPCProfile/10001
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bbdacfd30205e7743a2905f5c93bada8
     m_Address: NPCProfile/10007
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e7111747085de4041b9a5c1a678b9aac
     m_Address: NPCProfile/10012
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e956713897123e34d997e8cead2347c6
     m_Address: NPCProfile/10006
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ea114b0e6cefac649a8cfd6c786eb144
     m_Address: NPCProfile/10010
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f100cad2279c2704693b0d02597a43a9
     m_Address: NPCProfile/10015
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f9049fe0dd289ba429fcd43574cf29b3
     m_Address: NPCProfile/10013
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NPCProfile
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 34a7f3955eb1b6c4cad861ae9a5fb6aa, type: 2}

@@ -175,7 +175,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -189,7 +189,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -238,15 +238,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Werewolf_0
+      name: Werewolf_Idle_01
       rect:
         serializedVersion: 2
-        x: 41
-        y: 542
-        width: 29
-        height: 18
+        x: 0
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -260,15 +260,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_1
+      name: Werewolf_Idle_02
       rect:
         serializedVersion: 2
-        x: 141
-        y: 542
-        width: 29
-        height: 18
+        x: 100
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -282,15 +282,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_2
+      name: Werewolf_Idle_03
       rect:
         serializedVersion: 2
-        x: 242
-        y: 542
-        width: 28
-        height: 19
+        x: 200
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -304,15 +304,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_3
+      name: Werewolf_Idle_04
       rect:
         serializedVersion: 2
-        x: 342
-        y: 542
-        width: 28
-        height: 19
+        x: 300
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -326,15 +326,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_4
+      name: Werewolf_Idle_05
       rect:
         serializedVersion: 2
-        x: 442
-        y: 542
-        width: 28
-        height: 17
+        x: 400
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -348,15 +348,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_5
+      name: Werewolf_Idle_06
       rect:
         serializedVersion: 2
-        x: 542
-        y: 542
-        width: 28
-        height: 17
+        x: 500
+        y: 500
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -370,15 +370,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_6
+      name: Werewolf_Move_01
       rect:
         serializedVersion: 2
-        x: 41
-        y: 442
-        width: 29
-        height: 18
+        x: 0
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -392,15 +392,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_7
+      name: Werewolf_Move_02
       rect:
         serializedVersion: 2
-        x: 141
-        y: 443
-        width: 29
-        height: 18
+        x: 100
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -414,15 +414,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_8
+      name: Werewolf_Move_03
       rect:
         serializedVersion: 2
-        x: 241
-        y: 442
-        width: 29
-        height: 18
+        x: 200
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -436,15 +436,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_9
+      name: Werewolf_Move_04
       rect:
         serializedVersion: 2
-        x: 342
-        y: 441
-        width: 28
-        height: 18
+        x: 300
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -458,15 +458,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_10
+      name: Werewolf_Move_05
       rect:
         serializedVersion: 2
-        x: 442
-        y: 442
-        width: 28
-        height: 17
+        x: 400
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -480,15 +480,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_11
+      name: Werewolf_Move_06
       rect:
         serializedVersion: 2
-        x: 542
-        y: 443
-        width: 29
-        height: 17
+        x: 500
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -502,15 +502,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_12
+      name: Werewolf_Move_07
       rect:
         serializedVersion: 2
-        x: 642
-        y: 442
-        width: 29
-        height: 18
+        x: 600
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -524,15 +524,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_13
+      name: Werewolf_Move_08
       rect:
         serializedVersion: 2
-        x: 741
-        y: 441
-        width: 29
-        height: 18
+        x: 700
+        y: 400
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -546,15 +546,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_14
+      name: Werewolf_Attack1_01
       rect:
         serializedVersion: 2
-        x: 41
-        y: 342
-        width: 29
-        height: 18
+        x: 0
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -568,15 +568,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_15
+      name: Werewolf_Attack1_02
       rect:
         serializedVersion: 2
-        x: 142
-        y: 342
-        width: 28
-        height: 19
+        x: 100
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -590,15 +590,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_16
+      name: Werewolf_Attack1_03
       rect:
         serializedVersion: 2
-        x: 242
-        y: 342
-        width: 28
-        height: 19
+        x: 200
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -612,15 +612,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_17
+      name: Werewolf_Attack1_04
       rect:
         serializedVersion: 2
-        x: 342
-        y: 342
-        width: 16
-        height: 27
+        x: 300
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -634,15 +634,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_18
+      name: Werewolf_Attack1_05
       rect:
         serializedVersion: 2
-        x: 442
-        y: 342
-        width: 17
-        height: 26
+        x: 400
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -656,15 +656,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_19
+      name: Werewolf_Attack1_06
       rect:
         serializedVersion: 2
-        x: 542
-        y: 341
-        width: 36
-        height: 27
+        x: 500
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -678,15 +678,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_20
+      name: Werewolf_Attack1_07
       rect:
         serializedVersion: 2
-        x: 642
-        y: 341
-        width: 36
-        height: 25
+        x: 600
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -700,15 +700,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_21
+      name: Werewolf_Attack1_08
       rect:
         serializedVersion: 2
-        x: 742
-        y: 341
-        width: 31
-        height: 17
+        x: 700
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -722,15 +722,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_22
+      name: Werewolf_Attack1_09
       rect:
         serializedVersion: 2
-        x: 842
-        y: 342
-        width: 28
-        height: 17
+        x: 800
+        y: 300
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -744,15 +744,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_23
+      name: Werewolf_Attack2_01
       rect:
         serializedVersion: 2
-        x: 34
-        y: 242
-        width: 26
-        height: 18
+        x: 0
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -766,15 +766,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_24
+      name: Werewolf_Attack2_02
       rect:
         serializedVersion: 2
-        x: 134
-        y: 242
-        width: 26
-        height: 19
+        x: 100
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -788,15 +788,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_25
+      name: Werewolf_Attack2_03
       rect:
         serializedVersion: 2
-        x: 234
-        y: 242
-        width: 26
-        height: 17
+        x: 200
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -810,15 +810,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_26
+      name: Werewolf_Attack2_04
       rect:
         serializedVersion: 2
-        x: 339
-        y: 241
-        width: 21
-        height: 18
+        x: 300
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -832,15 +832,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_27
+      name: Werewolf_Attack2_05
       rect:
         serializedVersion: 2
-        x: 442
-        y: 242
-        width: 32
-        height: 16
+        x: 400
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -854,15 +854,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_28
+      name: Werewolf_Attack2_06
       rect:
         serializedVersion: 2
-        x: 537
-        y: 242
-        width: 111
-        height: 16
+        x: 500
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -876,15 +876,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_29
+      name: Werewolf_Attack2_07
       rect:
         serializedVersion: 2
-        x: 743
-        y: 234
-        width: 35
-        height: 39
+        x: 600
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -898,15 +898,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_30
+      name: Werewolf_Attack2_08
       rect:
         serializedVersion: 2
-        x: 843
-        y: 234
-        width: 45
-        height: 24
+        x: 700
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -920,15 +920,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_31
+      name: Werewolf_Attack2_09
       rect:
         serializedVersion: 2
-        x: 943
-        y: 242
-        width: 32
-        height: 16
+        x: 800
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -942,15 +942,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_32
+      name: Werewolf_Attack2_10
       rect:
         serializedVersion: 2
-        x: 966
-        y: 236
-        width: 22
-        height: 9
+        x: 900
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -964,15 +964,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_33
+      name: Werewolf_Attack2_11
       rect:
         serializedVersion: 2
-        x: 969
-        y: 244
-        width: 14
-        height: 19
+        x: 1000
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -986,15 +986,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_34
+      name: Werewolf_Attack2_12
       rect:
         serializedVersion: 2
-        x: 1043
-        y: 236
-        width: 33
-        height: 30
+        x: 1100
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1008,15 +1008,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_35
+      name: Werewolf_Attack2_13
       rect:
         serializedVersion: 2
-        x: 1143
-        y: 238
-        width: 45
-        height: 25
+        x: 1200
+        y: 200
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1030,15 +1030,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_36
+      name: Werewolf_Hit_01
       rect:
         serializedVersion: 2
-        x: 1243
-        y: 242
-        width: 32
-        height: 16
+        x: 0
+        y: 100
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1052,15 +1052,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_37
+      name: Werewolf_Hit_02
       rect:
         serializedVersion: 2
-        x: 41
-        y: 142
-        width: 28
-        height: 19
+        x: 99
+        y: 100
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1074,15 +1074,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_38
+      name: Werewolf_Hit_03
       rect:
         serializedVersion: 2
-        x: 141
-        y: 142
-        width: 28
-        height: 19
+        x: 200
+        y: 100
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1096,15 +1096,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_39
+      name: Werewolf_Hit_04
       rect:
         serializedVersion: 2
-        x: 241
-        y: 142
-        width: 28
-        height: 19
+        x: 300
+        y: 100
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1118,15 +1118,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_40
+      name: Werewolf_Die_01
       rect:
         serializedVersion: 2
-        x: 341
-        y: 142
-        width: 28
-        height: 19
+        x: 0
+        y: 0
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1140,15 +1140,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_41
+      name: Werewolf_Die_02
       rect:
         serializedVersion: 2
-        x: 41
-        y: 42
-        width: 29
-        height: 18
+        x: 100
+        y: 0
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1162,15 +1162,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_42
+      name: Werewolf_Die_03
       rect:
         serializedVersion: 2
-        x: 138
-        y: 44
-        width: 30
-        height: 19
+        x: 200
+        y: 0
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1184,15 +1184,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Werewolf_43
+      name: Werewolf_Die_04
       rect:
         serializedVersion: 2
-        x: 233
-        y: 45
-        width: 18
-        height: 15
+        x: 300
+        y: 0
+        width: 100
+        height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1205,77 +1205,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Werewolf_44
-      rect:
-        serializedVersion: 2
-        x: 252
-        y: 42
-        width: 15
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d3cc8b72de456b850800000000000000
-      internalID: 6392390098649402429
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werewolf_45
-      rect:
-        serializedVersion: 2
-        x: 331
-        y: 42
-        width: 18
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c7c56554c48303480800000000000000
-      internalID: -8921568961588994948
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Werewolf_46
-      rect:
-        serializedVersion: 2
-        x: 352
-        y: 42
-        width: 15
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2cc9a78aa675387d0800000000000000
-      internalID: -2917392018001191742
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 9dba7149de4372646842c4040ae32418
     internalID: 0
     vertices: []
     indices: 
@@ -1284,7 +1218,52 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Werewolf_Attack1_01: 311302858611107973
+      Werewolf_Attack1_02: 3761191356072169554
+      Werewolf_Attack1_03: -5616277621127483909
+      Werewolf_Attack1_04: -4674353366947060051
+      Werewolf_Attack1_05: 3395412976277762662
+      Werewolf_Attack1_06: 6831079648215828977
+      Werewolf_Attack1_07: 5538747638897747115
+      Werewolf_Attack1_08: 893935484804469062
+      Werewolf_Attack1_09: -6870394805590033354
+      Werewolf_Attack2_01: 3798235061639887099
+      Werewolf_Attack2_02: -5833252901003085387
+      Werewolf_Attack2_03: 4430445262239690041
+      Werewolf_Attack2_04: 2687128235138895975
+      Werewolf_Attack2_05: -1652819366694446763
+      Werewolf_Attack2_06: -7145958135962531756
+      Werewolf_Attack2_07: -4636790347502337617
+      Werewolf_Attack2_08: -8138598896754451461
+      Werewolf_Attack2_09: -516191120988285368
+      Werewolf_Attack2_10: 1171953242437596345
+      Werewolf_Attack2_11: 3855730170155589084
+      Werewolf_Attack2_12: 8692853123435719183
+      Werewolf_Attack2_13: 8702716143174249559
+      Werewolf_Die_01: -4651775060435960688
+      Werewolf_Die_02: 3323877048210360184
+      Werewolf_Die_03: 1178124506327463235
+      Werewolf_Die_04: -403369723618378096
+      Werewolf_HitAttack3_02: 4846216417174006683
+      Werewolf_Hit_01: 2968298199458516139
+      Werewolf_Hit_02: 4846216417174006683
+      Werewolf_Hit_03: 5227272338158175394
+      Werewolf_Hit_04: -3267269319244915930
+      Werewolf_Idle_01: -4039291315573906701
+      Werewolf_Idle_02: 723631876087963526
+      Werewolf_Idle_03: -3299843380189705091
+      Werewolf_Idle_04: -1350873707619346500
+      Werewolf_Idle_05: 4299287511660973690
+      Werewolf_Idle_06: 7802833567663523447
+      Werewolf_Move_01: -6762656221699352082
+      Werewolf_Move_02: -158642565098311506
+      Werewolf_Move_03: -1833525740663284025
+      Werewolf_Move_04: 6470967088447779136
+      Werewolf_Move_05: 8956913061271456296
+      Werewolf_Move_06: 1518055275297750949
+      Werewolf_Move_07: 3292675844788303852
+      Werewolf_Move_08: -7431533796282127209
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

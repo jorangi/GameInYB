@@ -16,7 +16,8 @@ MonoBehaviour:
   WFace: 0.3
   animIndex: 0
   cooldown: 2
-  enter: 1
-  exit: 1.5
+  enter: 1.5
+  exit: 1
+  backAttack: 0
   rootDuring: 1
   advanceDistanceOnHit: 0

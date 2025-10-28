@@ -351,12 +351,63 @@ public class Character : ParentObject
         data ??= new("Default");
         data.health.OnHPChanged += OnHPChanged;
         data.health.OnDied += OnDied;
+        OnDashEnd += EndDash;
     }
     protected virtual void OnDied(){}
-    protected virtual void OnHPChanged(){}
+    public bool isDash;
+    private DashParams dashParams;
+    
+    public Action OnDash;
+    public Action OnDashEnd;
+    public Action OnAbility;
+    public virtual void StartDash(in DashParams p)
+    {
+        dashParams = p;
+        isDash = true;
+        SetRooted(false);
+        SetDesiredMove(dashParams.dir);
+    }
+    private void EndDash()
+    {
+        Debug.Log("대쉬 종료");
+        dashParams = default;
+        SetDesiredMove(0f);
+        SetRooted(true);
+        isDash = false;
+    }
+    protected virtual void UpdateDash()
+    {
+        Debug.Log(!isDash);
+        if (!isDash) return;
+        Debug.Log($"{isPrecipice.collider != null} || {fronthit.collider != null} && {dashParams.stopOnWall}");
+        if ((isPrecipice.collider == null || fronthit.collider == null) && dashParams.stopOnWall)
+        {
+            Debug.Log($"OnDashEnd invoked");
+            OnDashEnd?.Invoke();
+            return;
+        }
+        frontRay.localPosition = new(
+            Mathf.Abs(frontRay.localPosition.x) * (desiredMoveX > 0 ? 1 : -1),
+            frontRay.localPosition.y
+        );
+        Debug.Log($"{isGround} && {isSlope} && {!isJump}");
+        if (isGround && isSlope && !isJump)
+        {
+            Debug.Log($"Dash on slope");
+            rigid.linearVelocity = Mathf.Abs(desiredMoveX) * data.Spd * dashParams.speed * perp;
+        }
+        else if (!isSlope)
+        {
+            Debug.Log($"Dash on flat");
+            rigid.linearVelocity = new Vector2(desiredMoveX * data.Spd * dashParams.speed, rigid.linearVelocityY);
+        }
+        SetRooted(false);
+    }
+    protected virtual void OnHPChanged() { }
     protected virtual void FixedUpdate()
     {
-        Movement();
+        if (!isDash) Movement();
+        else UpdateDash();
     }
     protected virtual void Attack()
     {
