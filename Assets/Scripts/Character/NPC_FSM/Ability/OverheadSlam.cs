@@ -20,6 +20,7 @@ public sealed class OverheadSlam : IAbility
     public void Execute(AbilityContext ctx)
     {
         var npc = ctx.npc;
+        npc.RunningAbilityCfg = _cfg;
         npc.blackboard.AttackEnter = _cfg.enter;
         npc.blackboard.AttackEnter = _cfg.exit;
         NextReadyTime = ctx.TimeNow + Cooldown;
@@ -39,10 +40,13 @@ public sealed class OverheadSlam : IAbility
         {
             // 실행 종료 상태
             npc.IsAbilityRunning = false;
+            npc.RunningAbilityCfg = null;
             if (meleeHitLogic != null)
             {
                 npc.OnHitFrame -= meleeHitLogic;
             }
+            npc.SetDesiredMove(0f);
+            npc.SetRooted(true);
             npc.OnAbilityEnd = null;
         };
         // 애니메이션 딱 한 번 재생

@@ -10,5 +10,8 @@ public abstract class AbilityConfig : ScriptableObject
     public float enter;
     public float exit;
     public bool backAttack;
+    public bool rootDuring = true;
+    public float speed = 0f;
+    public float AttackSize = 1.0f;
     public abstract IAbility Build(NonPlayableCharacter npc);
 }

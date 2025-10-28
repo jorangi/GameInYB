@@ -6,11 +6,38 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/NewTitle.unity
+    guid: 0d775dd7d7368234c8c8700739c1049c
+  - enabled: 1
+    path: Assets/Scenes/CoreScene.unity
+    guid: b281e6d309c53c242a79d4e92b9e38d7
+  - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Scenes/TitleScene.unity
-    guid: ddc46241213d638438df2c8c2e07ad58
+    path: Assets/Scenes/Forest/Forest_Stage_01.unity
+    guid: 8689e74859544a2479135b0a34a63bc3
+  - enabled: 1
+    path: Assets/Scenes/Forest/Forest_Stage_02.unity
+    guid: 934c1541ee86f8848a082bb9cba8222b
+  - enabled: 1
+    path: Assets/Scenes/Forest/Forest_Stage_03.unity
+    guid: 2a29bf69c46ae9843b47faedefa3030e
+  - enabled: 1
+    path: Assets/Scenes/Forest/Forest_Stage_04.unity
+    guid: 17ff4acb5fc7a504593f1ebec54ea9ca
+  - enabled: 1
+    path: Assets/Scenes/Forest/Forest_Stage_05.unity
+    guid: 58402d4f14f59ff41a50388033b1365a
+  - enabled: 1
+    path: Assets/Scenes/Forest/Forest_Stage_06.unity
+    guid: 33846f0225b88af42ab50532aed56ca1
+  - enabled: 1
+    path: Assets/Scenes/Forest/Forest_Stage_07.unity
+    guid: 645a4c223284b2a40ad6bf17625a9824
+  - enabled: 1
+    path: Assets/Scenes/Forest/Forest_Stage_08.unity
+    guid: 56889d8b47581ad4696c0d8973a1b964
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: c3e65c43fd64a414a915372d36d4b97e, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

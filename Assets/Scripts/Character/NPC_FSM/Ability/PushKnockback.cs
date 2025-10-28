@@ -13,13 +13,14 @@ public sealed class PushKnockback : IAbility
     {
         if (ctx.TimeNow < NextReadyTime) return false;
         if (!ctx.npc.blackboard.CanSeeTarget) return false;
-        return ctx.Dist <= _cfg.exit;
+        return ctx.Dist <= OptimalDistanceRange.x && ctx.Dist >= OptimalDistanceRange.y;
     }
     private Func<GameObject> meleeHitLogic;
     
     public void Execute(AbilityContext ctx)
     {
         var npc = ctx.npc;
+        npc.RunningAbilityCfg = _cfg;
         npc.blackboard.AttackEnter = _cfg.enter;
         npc.blackboard.AttackEnter = _cfg.exit;
         NextReadyTime = ctx.TimeNow + Cooldown;
@@ -35,7 +36,7 @@ public sealed class PushKnockback : IAbility
             if (_cfg.advanceDistanceOnHit != 0f)
             {
                 float dir = Mathf.Sign(ctx.target.position.x - ctx.self.position.x);
-                npc.ApplyImpulse(new Vector2(dir * _cfg.advanceDistanceOnHit, 0f));
+                npc.SetDesiredMove(dir);
             }
             return null;
         };
@@ -45,11 +46,14 @@ public sealed class PushKnockback : IAbility
         {
             // 실행 종료 상태
             npc.IsAbilityRunning = false;
+            npc.RunningAbilityCfg = null;
             if (meleeHitLogic != null)
             {
                 npc.OnHitFrame -= meleeHitLogic;
             }
             npc.OnAbilityEnd = null;
+            npc.SetDesiredMove(0f);
+            npc.SetRooted(true);
         };
         // 애니메이션 딱 한 번 재생
         npc.AnimPlayAttack(_cfg.animIndex);

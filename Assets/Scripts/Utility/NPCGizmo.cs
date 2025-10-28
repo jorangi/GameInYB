@@ -37,7 +37,7 @@ public class NPCGizmo : MonoBehaviour
 #endif
         if (frontRay)
         {
-            Vector2 dir = (owner.FacingSign >= 0 ? Vector2.right : Vector2.left);
+            Vector2 dir = owner.FacingSign >= 0 ? Vector2.right : Vector2.left;
             Debug.DrawLine(frontRay.position, (Vector2)frontRay.position + dir * 0.2f, Color.yellow);
             
             Vector2 cliffDir = (owner.FacingSign >= 0 ? new Vector2(1, -2.5f) : new Vector2(-1, -2.5f)).normalized;

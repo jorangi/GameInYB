@@ -369,7 +369,6 @@ public class Character : ParentObject
     }
     private void EndDash()
     {
-        Debug.Log("대쉬 종료");
         dashParams = default;
         SetDesiredMove(0f);
         SetRooted(true);
@@ -377,12 +376,9 @@ public class Character : ParentObject
     }
     protected virtual void UpdateDash()
     {
-        Debug.Log(!isDash);
         if (!isDash) return;
-        Debug.Log($"{isPrecipice.collider != null} || {fronthit.collider != null} && {dashParams.stopOnWall}");
         if ((isPrecipice.collider == null || fronthit.collider == null) && dashParams.stopOnWall)
         {
-            Debug.Log($"OnDashEnd invoked");
             OnDashEnd?.Invoke();
             return;
         }
@@ -390,15 +386,12 @@ public class Character : ParentObject
             Mathf.Abs(frontRay.localPosition.x) * (desiredMoveX > 0 ? 1 : -1),
             frontRay.localPosition.y
         );
-        Debug.Log($"{isGround} && {isSlope} && {!isJump}");
         if (isGround && isSlope && !isJump)
         {
-            Debug.Log($"Dash on slope");
             rigid.linearVelocity = Mathf.Abs(desiredMoveX) * data.Spd * dashParams.speed * perp;
         }
         else if (!isSlope)
         {
-            Debug.Log($"Dash on flat");
             rigid.linearVelocity = new Vector2(desiredMoveX * data.Spd * dashParams.speed, rigid.linearVelocityY);
         }
         SetRooted(false);
@@ -415,6 +408,7 @@ public class Character : ParentObject
     /// <summary>
     /// 유닛 이동 메소드
     /// </summary>
+    public float specialSpd = 1.0f;
     protected virtual void Movement()
     {
         if (isKnockback) return;
@@ -429,11 +423,11 @@ public class Character : ParentObject
         );
         if (isGround && isSlope && !isJump)
         {
-            rigid.linearVelocity = Mathf.Abs(desiredMoveX) * data.Spd * perp;
+            rigid.linearVelocity = Mathf.Abs(desiredMoveX) * data.Spd * specialSpd * perp;
         }
         else if (!isSlope)
         {
-            rigid.linearVelocity = new Vector2(desiredMoveX * data.Spd, rigid.linearVelocityY);
+            rigid.linearVelocity = new Vector2(desiredMoveX * data.Spd * specialSpd, rigid.linearVelocityY);
         }
     }
     /// <summary>

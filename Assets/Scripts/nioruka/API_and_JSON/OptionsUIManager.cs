@@ -1,9 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
 
-public class OptionsUIManager : MonoBehaviour
+public class OptionsUIManager : MonoBehaviour, IUI
 {
+    [SerializeField] private UIContext uiContext;
     [Header("UI References")]
     public GameObject optionsPanel;
     public Button optionButton;
@@ -13,17 +15,18 @@ public class OptionsUIManager : MonoBehaviour
     public TMP_Text sfxValueText;
     public Toggle bgmToggle;
     public Toggle sfxToggle;
-    public Button saveButton;
     public Button closeButton;
 
     private float bgmValue;
     private float sfxValue;
-    private bool bgmOn;
-    private bool sfxOn;
+    private bool bgmOn = true;
+    private bool sfxOn = true;
 
-    void Start()
+    void Awake()
     {
         // 초기 비활성화
+        uiContext = uiContext != null ? uiContext : FindAnyObjectByType<UIContext>();
+        uiContext?.UIRegistry.Register(this, UIType.PAUSED_MENU);
         optionsPanel.SetActive(false);
 
         // 저장된 값 불러오기
@@ -39,20 +42,10 @@ public class OptionsUIManager : MonoBehaviour
         sfxToggle.isOn = sfxOn;
         UpdateValueText();
 
-        optionButton.onClick.AddListener(() =>
-        {
-            bool active = !optionsPanel.activeSelf;
-            optionsPanel.SetActive(active);
-            Debug.Log($"[OPTION] 패널 {(active ? "열림" : "닫힘")}");
-        });
-
         bgmSlider.onValueChanged.AddListener(OnBGMVolumeChanged);
         sfxSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
         bgmToggle.onValueChanged.AddListener(OnBGMEnabledChanged);
         sfxToggle.onValueChanged.AddListener(OnSFXEnabledChanged);
-
-        saveButton.onClick.AddListener(OnSave);
-        closeButton.onClick.AddListener(OnClose);
 
         if (AudioManager.Inst)
         {
@@ -62,13 +55,13 @@ public class OptionsUIManager : MonoBehaviour
             AudioManager.Inst.SetSFXEnabled(sfxOn);
         }
     }
-
     void OnBGMVolumeChanged(float value)
     {
         bgmValue = value;
         bgmValueText.text = $"{Mathf.RoundToInt(value * 100)}%";
         if (AudioManager.Inst)
             AudioManager.Inst.SetBGMVolume(value);
+        OnSave();
     }
 
     void OnSFXVolumeChanged(float value)
@@ -80,6 +73,7 @@ public class OptionsUIManager : MonoBehaviour
             AudioManager.Inst.SetSFXVolume(value);
             AudioManager.Inst.PlaySFX(); // 슬라이더 테스트용 소리
         }
+        OnSave();
     }
 
     void OnBGMEnabledChanged(bool enabled)
@@ -87,6 +81,7 @@ public class OptionsUIManager : MonoBehaviour
         bgmOn = enabled;
         if (AudioManager.Inst)
             AudioManager.Inst.SetBGMEnabled(enabled);
+        OnSave();
     }
 
     void OnSFXEnabledChanged(bool enabled)
@@ -94,8 +89,8 @@ public class OptionsUIManager : MonoBehaviour
         sfxOn = enabled;
         if (AudioManager.Inst)
             AudioManager.Inst.SetSFXEnabled(enabled);
+        OnSave();
     }
-
     void OnSave()
     {
         PlayerPrefs.SetFloat("BGM_VOLUME", bgmValue);
@@ -103,18 +98,30 @@ public class OptionsUIManager : MonoBehaviour
         PlayerPrefs.SetInt("BGM_ON", bgmOn ? 1 : 0);
         PlayerPrefs.SetInt("SFX_ON", sfxOn ? 1 : 0);
         PlayerPrefs.Save();
-        Debug.Log("옵션 저장 완료");
     }
-
-    void OnClose()
-    {
-        optionsPanel.SetActive(false);
-        Debug.Log("옵션 패널 닫힘");
-    }
-
     private void UpdateValueText()
     {
         bgmValueText.text = $"{Mathf.RoundToInt(bgmValue * 100)}%";
         sfxValueText.text = $"{Mathf.RoundToInt(sfxValue * 100)}%";
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+        uiContext.UIRegistry.CloseUI(this);
+    }
+
+    public void PositiveInteract(InputAction.CallbackContext context)
+    {
+        Show();
+    }
+
+    public void NegativeInteract(InputAction.CallbackContext context)
+    {
+        Hide();
     }
 }

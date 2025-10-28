@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WDist: 0.6
   WFace: 0.3
-  animIndex: 1
+  animIndex: 2
   cooldown: 4
   enter: 1.5
-  exit: 1
+  exit: 1.2
   backAttack: 0
   rootDuring: 1
+  speed: 0
   chaseTarget: 0

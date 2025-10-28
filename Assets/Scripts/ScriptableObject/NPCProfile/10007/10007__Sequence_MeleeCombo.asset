@@ -18,7 +18,8 @@ MonoBehaviour:
   cooldown: 0
   enter: 0
   exit: 0
+  backAttack: 0
   steps:
   - {fileID: 11400000, guid: 6c05b05b05dd1e44ebb1c930b05e99bd, type: 2}
   - {fileID: 11400000, guid: 086666da196075148a5e4d0aa09d8927, type: 2}
-  linkMaxWait: 0.25
+  linkMaxWait: 0.6

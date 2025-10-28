@@ -17,6 +17,7 @@ public class HitState : StateBase
         _hitStunEndTime = bb.TimeNow + npc.NPCData.HitStunTime;
         bb.InvinsibleEndTime = bb.TimeNow + npc.NPCData.InvincibleTime;
         npc.SetMinStateLock(bb.MinStateDuration);
+        npc.Profile.isAggressive = true;
     }
 
     public override void Exit()
@@ -31,7 +32,7 @@ public class HitState : StateBase
         npc.SetRooted(false);
         if (!npc.InMinStateLock())
         {
-            if (!InMinLock() && bb.CanSeeTarget && bb.DistToTarget <= bb.DetectEnter && !bb.IsWallAhead && !bb.IsPrecipiceAhead)
+            if (!InMinLock() && bb.CanSeeTarget && bb.DistToTarget <= bb.DetectEnter && !bb.IsWallAhead && !bb.IsPrecipiceAhead && npc.Profile.isAggressive)
             {
                 npc.RequestState<ChaseState>();
                 return;

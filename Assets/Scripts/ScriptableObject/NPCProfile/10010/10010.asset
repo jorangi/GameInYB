@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 10010
   m_EditorClassIdentifier: 
   id: 10010
-  isAggressive: 0
+  isAggressive: 1
   abilityConfigs:
-  - {fileID: 11400000, guid: 37b3a0ca09b67984fa461ea03f02e2c7, type: 2}
+  - {fileID: 11400000, guid: 282fd99a245cb704bba76e3c156c1af4, type: 2}
   - {fileID: 11400000, guid: f79c60b7566d43e4fbad947195323db6, type: 2}

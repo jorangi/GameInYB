@@ -17,11 +17,11 @@ public class IdleState : StateBase
     }
     public override void Update()
     {
-        if (bb.TargetKnown && TryExecuteAbilityOnce(out var bestOne)) npc.RequestState<ChaseState>();
+        if (bb.TargetKnown && TryExecuteAbilityOnce(out var bestOne) && npc.Profile.isAggressive) npc.RequestState<ChaseState>();
         
         if (!(bb.IsPrecipiceAhead || bb.IsWallAhead)
             && bb.CanSeeTarget
-            && bb.DistToTarget <= bb.DetectEnter)
+            && bb.DistToTarget <= bb.DetectEnter && npc.Profile.isAggressive)
         {
             npc.RequestState<ChaseState>();
             return;

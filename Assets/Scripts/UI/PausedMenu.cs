@@ -33,7 +33,7 @@ public class PausedMenu : MonoBehaviour, IUI
     public void OnSettings()
     {
         transform.GetChild(0).gameObject.SetActive(false);
-        transform.GetChild(1).gameObject.SetActive(true);
+        transform.GetChild(1).GetComponent<OptionsUIManager>().Show();
     }
     public void Show()
     {

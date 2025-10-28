@@ -30,7 +30,7 @@ public class EngageState : StateBase
     }
     public override void Update()
     {
-        if (bb.target == null || !bb.CanSeeTarget)
+        if ((bb.target == null || !bb.CanSeeTarget) && npc.Profile.isAggressive)
         {
             npc.RequestState<ChaseState>();
             return;
@@ -39,7 +39,7 @@ public class EngageState : StateBase
         if (bb.TimeNow < _nextThinkTime) return;
 
         var pick = AbilitySelector.PickBest(_ctx, _abilities, out var bestOne);
-        if (pick == null)
+        if (pick == null && npc.Profile.isAggressive)
         {
             npc.RequestState<ChaseState>();
             return;

@@ -466,7 +466,6 @@ namespace Looper.Console.Commands
                 if (argIndex < 0 && argIndex >= -5)
                 {
                     PlayerEquipments equip = inventory.equipments;
-                    Debug.Log(equip);
                     argIndex += 5;
                     switch (argIndex)
                     {
@@ -492,8 +491,6 @@ namespace Looper.Console.Commands
                             return;
                     }
                 }
-                Debug.Log($"{argIndex} / {inventory.backpack} / {inventory.backpack[argIndex]} / {inventory.backpack[argIndex] == null}");
-                Debug.Log(inventory.backpack[argIndex].item);
                 if (inventory.backpack[argIndex].item == default || inventory.backpack[argIndex].item.id == "00000")
                 {
                     ctx.Info($"슬롯 {argIndex}는 비어있습니다.");

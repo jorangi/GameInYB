@@ -21,9 +21,7 @@ public sealed class SequenceAbility : IAbility
     public bool CanExecute(AbilityContext ctx)
     {
         if (_steps == null || _steps.Count == 0) return false;
-        // Debug.Log($"Sequence의 CanExecute_1: {ctx.TimeNow} < {NextReadyTime} = {ctx.TimeNow < NextReadyTime}");
         if (ctx.TimeNow < NextReadyTime) return false;
-        // Debug.Log($"Sequence의 _steps[0] CanExecute: {_steps[0].CanExecute(ctx)}");
         return _steps[0].CanExecute(ctx);
     }
     public float Score(AbilityContext ctx)
@@ -69,8 +67,9 @@ public sealed class SequenceAbility : IAbility
         // 종료 처리(한 번만 쿨다운 적용)
         npc.OnAbilityEnd = null;
         npc.SetRooted(false);
+        npc.SetDesiredMove(0f);
         npc.IsAbilityRunning = false;
+        npc.RunningAbilityCfg = null;
         NextReadyTime = ctx.bb.TimeNow + Cooldown; // ✅ 여기서만 쿨다운
-        // Debug.Log($"{NextReadyTime} set on sequence end");
     }
 }

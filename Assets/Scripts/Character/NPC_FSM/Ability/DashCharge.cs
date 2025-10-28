@@ -19,7 +19,7 @@ public sealed class DashCharge : IAbility
     {
         if (ctx.TimeNow < NextReadyTime) return false;
         if (!ctx.npc.blackboard.CanSeeTarget) return false;
-        return ctx.Dist <= _cfg.exit;
+        return ctx.Dist <= OptimalDistanceRange.x && ctx.Dist >= OptimalDistanceRange.y;
     }
     private Action dashLogic;
     private Func<GameObject> hitByBody;
@@ -27,6 +27,7 @@ public sealed class DashCharge : IAbility
     public void Execute(AbilityContext ctx)
     {
         var npc = ctx.npc;
+        npc.RunningAbilityCfg = _cfg;
         npc.blackboard.AttackEnter = _cfg.enter;
         npc.blackboard.AttackEnter = _cfg.exit;
         NextReadyTime = ctx.TimeNow + Cooldown;
@@ -40,6 +41,7 @@ public sealed class DashCharge : IAbility
             obj = npc.CheckHit();
             obj.GetComponent<NPC__AttackHitBox>().timer = 10.0f;
             obj.transform.parent = npc.transform;
+            obj.transform.localScale = new Vector3(_cfg.AttackSize, _cfg.AttackSize, 1.0f);
             obj.transform.localPosition = Vector3.zero;
             return obj;
         };
@@ -59,6 +61,7 @@ public sealed class DashCharge : IAbility
         {
             // 실행 종료 상태
             npc.IsAbilityRunning = false;
+            npc.RunningAbilityCfg = null;
             if (dashLogic != null)
                 npc.OnAbility -= dashLogic;
             if (hitByBody != null)
@@ -66,11 +69,12 @@ public sealed class DashCharge : IAbility
                 GameObject.Destroy(obj);
                 npc.OnHitFrame -= hitByBody;
             }
+            npc.SetDesiredMove(0f);
+            npc.SetRooted(true);
             npc.OnAbilityEnd = null;
         };
         // 애니메이션 딱 한 번 재생
         npc.AnimPlayAttack(_cfg.animIndex);
-        Debug.Log($"AnimPlay Attack {_cfg.animIndex}");
     }
     public float Score(AbilityContext ctx)
     {

@@ -85,11 +85,11 @@ public class TitleManager : MonoBehaviour
         startButton.gameObject.SetActive(true);
         Debug.Log("[TitleManager] 로그인 성공 — Start 버튼 활성화");
     }
-
+    public string sceneName = "MainScene";
     private async void OnClick_StartGame()
     {
         await FadeOut();
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene(sceneName);
     }
 
     private async UniTask FadeIn()

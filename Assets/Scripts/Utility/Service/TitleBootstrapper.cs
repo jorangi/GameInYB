@@ -47,7 +47,6 @@ public class TitleBootstrapper : MonoBehaviour
                     .Select(ToAddress)
                     .Distinct()
                     .ToArray();
-                Debug.Log($"{string.Join(",", profileKey)}");
                 var config = new AtlasService.PreloadConfig
                 {
                     AtlasLabels = new[] { "IconsAtlas", "WeaponAtlas" },
@@ -64,7 +63,6 @@ public class TitleBootstrapper : MonoBehaviour
                 var atlasSvc = ServiceHub.Get<IAtlasService>();
                 await atlasSvc.InitializeAsync(preloadLabels, ct);
             }
-
             Debug.Log("[TitleBootstrapper] Atlas/Prefabs/NPCProfile Ready");
         }
         catch (OperationCanceledException)

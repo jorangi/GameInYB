@@ -174,7 +174,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     /// <param name="context"></param>
     private void OnCharacterInformation(InputAction.CallbackContext context)
     {
-        if (!uiList.Contains(uiDic[UIType.PAUSED_MENU]) && !uiList.Contains(uiDic[UIType.COMMAND_PANEL])  && uiDic.TryGetValue(UIType.CHARACTER_INFORMATION, out IUI ui))
+        if (!uiList.Contains(uiDic[UIType.PAUSED_MENU]) && !uiList.Contains(uiDic[UIType.COMMAND_PANEL]) && uiDic.TryGetValue(UIType.CHARACTER_INFORMATION, out IUI ui))
         {
             ui.Show();
             uiList.Add(ui);

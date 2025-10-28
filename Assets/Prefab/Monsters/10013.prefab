@@ -200,7 +200,10 @@ MonoBehaviour:
   hitBox: {fileID: 2172398143946894851}
   savedPos: {x: 0, y: 0, z: 0}
   FacingSign: 0
+  isDash: 0
+  specialSpd: 1
   timeMul: 10
+  RunningAbilityCfg: {fileID: 0}
   blackboard:
     self: {fileID: 5104908404764369108}
     target: {fileID: 0}
@@ -272,8 +275,6 @@ MonoBehaviour:
   owner: {fileID: 76473348029265081}
   frontRay: {fileID: 9171836017290671102}
   foot: {fileID: 3590029744506465615}
-  attackBoxSize: {x: 1, y: 0.8}
-  attackBoxOffset: {x: 0.7, y: 0.3}
 --- !u!1 &5007320643876117679
 GameObject:
   m_ObjectHideFlags: 0
@@ -596,7 +597,7 @@ Transform:
   m_GameObject: {fileID: 8207230948086539884}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.792, y: -0.188, z: 0}
+  m_LocalPosition: {x: -1, y: -0.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

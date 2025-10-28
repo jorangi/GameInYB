@@ -10,7 +10,6 @@ public class NPCStateMachine
     public void SetState(IStateBase next)
     {
         if (_current == next) return;
-        Debug.Log(_current?.Name + " -> " + next?.Name);
         _current?.Exit();
         _current = next;
         _current?.Enter();

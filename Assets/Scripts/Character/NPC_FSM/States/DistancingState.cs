@@ -22,7 +22,7 @@ public class DistancingState : StateBase
 
     public override void Update()
     {
-        if (bb.TargetKnown && TryExecuteAbilityOnce(out var bestOne)) npc.RequestState<ChaseState>();
+        if (bb.TargetKnown && TryExecuteAbilityOnce(out var bestOne) && npc.Profile.isAggressive) npc.RequestState<ChaseState>();
         //공격 범위 내에 플레이어가 있을 경우
         if (bb.AttackExit > bb.DistToTarget && bb.AttackEnter < bb.DistToTarget)
         {
@@ -30,7 +30,7 @@ public class DistancingState : StateBase
             return;
         }
         // 공격 범위 바깥에 플레이어가 있을 경우
-        if (bb.AttackExit < bb.DistToTarget)
+        if (bb.AttackExit < bb.DistToTarget && npc.Profile.isAggressive)
         {
             npc.RequestState<ChaseState>();
             return;

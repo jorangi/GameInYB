@@ -1556,7 +1556,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8832284132581214311}
   m_HandleRect: {fileID: 7989665802542625681}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3782,6 +3782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9792b397b494a5041b437a33b3df4aa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _devMode: 0
   uiContext: {fileID: 2828299797304361438}
   outputSource: {fileID: 2331279630618499185}
   logMessageParent: {fileID: 7406555250796579644}
@@ -5126,7 +5127,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 2.4868164}
+  m_AnchoredPosition: {x: 0, y: 2.4873047}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &386020964195755886
@@ -9929,6 +9930,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3597771274032809600}
     m_Modifications:
+    - target: {fileID: 1646137447832103531, guid: 7766e8691e364cd4e85db77f55e05e08, type: 3}
+      propertyPath: m_text
+      value: "\uC124\uBA85\uC744 \uC801\uB294 \uACF3. <link=\"asd\">\n<u><color=\"red\">\uB9C1\uD06C\uB791
+        \uC5B8\uB354\uBC14\uB85C \uC774\uB7F0\uAC83\uB3C4 \uAC00\uB2A5</color></u></link>\n<i>\uBCFC\uB4DC\uB294
+        \uC548\uC4F0\uB294\uAC8C \uC88B\uC744\uB4EF</i>\n<link=\"asd\"><color=\"green\">\uC774\uAC70\uB294
+        \uB450\uBC88\uC9F8 \uB9C1\uD06C\uC784</color></link>"
+      objectReference: {fileID: 0}
     - target: {fileID: 2683365922435416503, guid: 7766e8691e364cd4e85db77f55e05e08, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -10019,11 +10027,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2892978585973623161, guid: 7766e8691e364cd4e85db77f55e05e08, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 198.01
+      value: 72.01
       objectReference: {fileID: 0}
     - target: {fileID: 2892978585973623161, guid: 7766e8691e364cd4e85db77f55e05e08, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 129.005
+      value: 66.005005
       objectReference: {fileID: 0}
     - target: {fileID: 2892978585973623161, guid: 7766e8691e364cd4e85db77f55e05e08, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -10033,6 +10041,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MoveableInformationModal
       objectReference: {fileID: 0}
+    - target: {fileID: 5991444710658427572, guid: 7766e8691e364cd4e85db77f55e05e08, type: 3}
+      propertyPath: m_text
+      value: "\uC81C\uBAA9"
+      objectReference: {fileID: 0}
     - target: {fileID: 6721912506818209865, guid: 7766e8691e364cd4e85db77f55e05e08, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -10040,6 +10052,10 @@ PrefabInstance:
     - target: {fileID: 6721912506818209865, guid: 7766e8691e364cd4e85db77f55e05e08, type: 3}
       propertyPath: m_AnchorMin.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6721912506818209865, guid: 7766e8691e364cd4e85db77f55e05e08, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 362.51
       objectReference: {fileID: 0}
     - target: {fileID: 6721912506818209865, guid: 7766e8691e364cd4e85db77f55e05e08, type: 3}
       propertyPath: m_SizeDelta.y
@@ -10051,7 +10067,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6721912506818209865, guid: 7766e8691e364cd4e85db77f55e05e08, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -133.755
+      value: -166.255
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

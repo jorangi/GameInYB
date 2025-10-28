@@ -13,13 +13,16 @@ public sealed class MeleeAttack : IAbility
     {
         if (ctx.TimeNow < NextReadyTime) return false;
         if (!ctx.npc.blackboard.CanSeeTarget) return false;
-        return ctx.Dist <= _cfg.exit;
+        return ctx.Dist <= OptimalDistanceRange.x && ctx.Dist >= OptimalDistanceRange.y;
     }
     private Func<GameObject> meleeHitLogic;
-    
+    private Func<GameObject> hitByBody;
+    GameObject obj;
+    int hitByBodyCount = 0;
     public void Execute(AbilityContext ctx)
     {
         var npc = ctx.npc;
+        npc.RunningAbilityCfg = _cfg;
         npc.blackboard.AttackEnter = _cfg.enter;
         npc.blackboard.AttackEnter = _cfg.exit;
         NextReadyTime = ctx.TimeNow + Cooldown;
@@ -28,25 +31,52 @@ public sealed class MeleeAttack : IAbility
         npc.AnimSetMoving(false);
         npc.SetDesiredMove(0f);
         npc.SetRooted(_cfg.rootDuring);
+        hitByBody = () =>
+        {
+            hitByBodyCount++;
+            if (hitByBodyCount > 1 && obj != null)
+            {
+                obj.GetComponent<NPC__AttackHitBox>().timer = 10.0f;
+                return null;
+            }
+            obj = npc.CheckHit();
+            obj.GetComponent<NPC__AttackHitBox>().timer = 10.0f;
+            obj.transform.parent = npc.transform;
+            obj.transform.localScale = new Vector3(_cfg.AttackSize, _cfg.AttackSize, 1.0f);
+            obj.transform.localPosition = Vector3.zero;
+            return obj;
+        };
         meleeHitLogic = () =>
         {
-            if (_cfg.advanceDistanceOnHit != 0f)
+            if (!_cfg.rootDuring)
             {
-                float dir = Mathf.Sign(ctx.target.position.x - ctx.self.position.x);
-                npc.ApplyImpulse(new Vector2(dir * _cfg.advanceDistanceOnHit, 0f));
+                float dir = Mathf.Sign(npc.blackboard.target.position.x - npc.blackboard.self.position.x);
+                npc.SetDesiredMove(dir);
+                if (npc.blackboard.IsPrecipiceAhead || npc.blackboard.IsWallAhead)
+                    npc.SetDesiredMove(-dir);
             }
             return null;
         };
         // 히트 프레임 처리(순간 전진 등)
         npc.OnHitFrame += meleeHitLogic;
+        npc.OnHitFrame += hitByBody;
         npc.OnAbilityEnd = () =>
         {
             // 실행 종료 상태
             npc.IsAbilityRunning = false;
+            npc.RunningAbilityCfg = null;
             if (meleeHitLogic != null)
             {
                 npc.OnHitFrame -= meleeHitLogic;
             }
+            if (hitByBody != null)
+            {
+                GameObject.Destroy(obj);
+                npc.OnHitFrame -= hitByBody;
+            }
+            npc.SetDesiredMove(0f);
+            npc.SetRooted(true);
+            npc.specialSpd = 1.0f;
             npc.OnAbilityEnd = null;
         };
         // 애니메이션 딱 한 번 재생

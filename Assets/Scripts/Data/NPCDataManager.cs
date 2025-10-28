@@ -32,7 +32,6 @@ public static class NPCDataManager
         foreach (var npc in npcs)
         {
             npcDic[npc.id] = npc;
-            //UnityEngine.Debug.Log($"NPC — {npc}");
         }
         IsReady = true;
         if (!_readyTcs.Task.Status.IsCompleted())

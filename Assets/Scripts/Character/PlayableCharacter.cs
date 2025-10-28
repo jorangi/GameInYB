@@ -1000,6 +1000,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     }
     void OnDisable()
     {
+        material.color = Color.white;
         inputAction.Player.Move.performed -= OnMovement;
         inputAction.Player.Move.canceled -= OnMovement;
         inputAction.Player.Jump.performed -= OnJump;

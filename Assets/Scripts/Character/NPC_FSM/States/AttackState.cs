@@ -47,7 +47,7 @@ public class AttackState : StateBase
         }
         else if (!npc.AnimGetTriggerAttack())
         {
-            if (bb.DistToTarget < bb.DetectExit)
+            if (bb.DistToTarget < bb.DetectExit && npc.Profile.isAggressive)
             {
                 npc.RequestState<ChaseState>();
                 return;

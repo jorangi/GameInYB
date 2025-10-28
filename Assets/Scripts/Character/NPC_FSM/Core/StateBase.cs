@@ -110,13 +110,10 @@ public abstract class StateBase : IStateBase
     public bool TryExecuteAbilityOnce(out IAbility best)
     {
         best = null;
-        //Debug.Log($"{_ctx.npc.IsAbilityRunning} and {_ctx.bb.TimeNow} < {_nextThinkTime} = {_ctx.bb.TimeNow < _nextThinkTime}");
         if (_ctx.npc.IsAbilityRunning) return true;           // 이미 실행 중이면 상태 로직 스킵
         if (_ctx.bb.TimeNow < _nextThinkTime) return false;   // 스로틀
 
-        Debug.Log($"Ability selection thinking...");
         var pick = AbilitySelector.PickBest(_ctx, npc.Abilities, out IAbility bestOne); // 내부에서 CanExecute 포함
-        Debug.Log($"picked: {(pick != null ? pick.Id : "null")} / bestOne: {(bestOne != null ? bestOne.Id : "null")}");
         best = bestOne;
         if (pick == null)
         {
@@ -133,8 +130,7 @@ public abstract class StateBase : IStateBase
             _ctx.npc.blackboard.AttackExit = pick.OptimalDistanceRange.y;
         }
 
-        // Debug.Log($"{pick.Id} selected to execute");
-            pick.Execute(_ctx);            // ★ Ability가 루트/애니/쿨다운/종료 처리
+        pick.Execute(_ctx);            // ★ Ability가 루트/애니/쿨다운/종료 처리
         _nextThinkTime = _ctx.bb.TimeNow + ThinkInterval;
         return true;                  // 이 틱 상태 로직은 스킵
     }

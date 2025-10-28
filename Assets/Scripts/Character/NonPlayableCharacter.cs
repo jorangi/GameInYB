@@ -24,6 +24,7 @@ public interface INPCProfileInjector
 public class NonPlayableCharacter : Character, INPCProfileInjector
 {
     [SerializeField]public bool IsAbilityRunning { get; set;}
+    public AbilityConfig RunningAbilityCfg = null;
     private List<IAbility> _abilities = new();
     public IReadOnlyCollection<IAbility> Abilities => _abilities;
     private static readonly WaitForSeconds _waitForSeconds0_3 = new(0.3f);
@@ -33,8 +34,6 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
     private StateRegistry _registry = new();
     private bool dieAnimFinished;
 
-    // 예시 유틸
-    public void ApplyImpulse(Vector2 v) { /* Rigidbody2D에 순간 힘/속도 적용 */ }
     public void BeginDash(Vector2 vel, float time) { /* time 동안 vel 유지(충돌/멈춤 로직 포함) */ }
 
     [Header("데이터 관련")]
@@ -99,6 +98,7 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
     {
         blackboard.HasOverheadPlatform = true;
         return; // 임시 비활성화
+        /*
         if (blackboard.target == null) { blackboard.HasOverheadPlatform = false; return; }
 
         float dy = blackboard.target.position.y - blackboard.self.position.y;
@@ -116,6 +116,7 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         var hit = Physics2D.BoxCast(headY, size, 0f, Vector2.up, dist, platformMask);
 
         blackboard.HasOverheadPlatform = hit.collider != null;
+        */
     }
     public void FSMInit()
     {

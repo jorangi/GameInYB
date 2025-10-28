@@ -62,7 +62,7 @@ public class WanderState : StateBase
                 return;
             }
         }
-        if (bb.TargetKnown && TryExecuteAbilityOnce(out var bestOne)) npc.RequestState<ChaseState>();
+        if (bb.TargetKnown && TryExecuteAbilityOnce(out var bestOne) && npc.Profile.isAggressive) npc.RequestState<ChaseState>();
         if (bb.TimeNow >= bb.NextObstacleDecisionTime && (bb.IsWallAhead || bb.IsPrecipiceAhead))//장애물 충돌 판단
         {
             float r = Random.value;
@@ -78,7 +78,7 @@ public class WanderState : StateBase
                 bb.NextObstacleDecisionTime = bb.TimeNow + bb.ObstacleDecisionCooldown;
             }
         }
-        if (!InMinLock() && bb.CanSeeTarget && bb.DistToTarget <= bb.DetectEnter && !bb.IsWallAhead && !bb.IsPrecipiceAhead)//감지 범위 내 진입
+        if (!InMinLock() && bb.CanSeeTarget && bb.DistToTarget <= bb.DetectEnter && !bb.IsWallAhead && !bb.IsPrecipiceAhead && npc.Profile.isAggressive)//감지 범위 내 진입
         {
             npc.RequestState<ChaseState>();
             return;
