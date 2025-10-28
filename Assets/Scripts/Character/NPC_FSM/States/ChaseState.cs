@@ -19,33 +19,151 @@ public class ChaseState : StateBase
         //최소 유지시간
         npc.SetMinStateLock(bb.MinStateDuration);
     }
-
     public override void Exit()
     {
     }
     float MemoryTime = 0.0f;
+    private const float UnreachableUpThreshold = 1.25f; // 자기보다 이 높이 이상 위면 '상단'으로 간주
+    private bool HasUpwardAbilityReady()
+    {
+        // TODO: 나중에 IAbility에 Tags/Meta를 넣으면, a.Tags.Has(Upward) && a.CanExecute(_ctx)
+        return false;
+    }
+    float _holdUntil;
     public override void Update()
     {
-        npc.AnimSetMoving(true);
+        npc.SenseOverheadPlatform();
+        if (bb.target == null)
+        {
+            npc.RequestState<IdleState>();
+            return;
+        }
+        // 1) 먼저 한 번 공격 시도(있으면 이 틱 종료)
+        // Debug.Log($"{bb.targetKnown} && {TryExecuteAbilityOnce()}");
+        if (bb.targetKnown)
+        {
+            Debug.Log($"1) 먼저 한 번 공격 시도");
+            if (TryExecuteAbilityOnce(out var bestOne)) return;
+            else if(bestOne != null)
+            {
+                Debug.Log("쓸 수 있는 공격 없음");
+                //현재 공격을 당장은 할 수 없을 경우 해당 공격에 적합한 위치로 이동
+                float enter = bestOne.OptimalDistanceRange.x;
+                float exit = bestOne.OptimalDistanceRange.y;
+                float center = 0.5f * (enter + exit);
+
+                const float dead = 0.10f;              // 10cm 정도
+                const float hysteresis = 0.20f;        // 20cm 정도
+
+                float delta = bb.DistToTarget - center;
+                int dirToTarget = Mathf.Sign(bb.target.position.x - bb.self.position.x) >= 0 ? 1 : -1;
+
+                if (bb.TimeNow < _holdUntil)
+                {
+                    Debug.Log($"이전 위치 유지 중");
+                    npc.SetDesiredMove(0);
+                    npc.AnimSetMoving(false);
+                    npc.FacingSign = Mathf.Sign(dirToTarget);
+                    return;
+                }
+
+                //유지 시간 처리
+                if (Mathf.Abs(delta) <= hysteresis)
+                {
+                    Debug.Log("hysteresis 이내 도달, 잠시 유지");
+                    _holdUntil = bb.TimeNow + Random.value * 0.3f + 0.2f;
+                    npc.FacingSign = Mathf.Sign(dirToTarget);
+                    npc.SetDesiredMove(0);
+                    npc.AnimSetMoving(false);
+                    return;
+                }
+                if (Mathf.Abs(delta) <= dead)
+                {
+                    Debug.Log("dead 이내 도달, 잠시 유지");
+                    _holdUntil = bb.TimeNow + Random.value * 0.3f + 0.2f;
+                    npc.FacingSign = Mathf.Sign(dirToTarget);
+                    npc.SetDesiredMove(0);
+                    npc.AnimSetMoving(false);
+                    return;
+                }
+                if (Mathf.Abs(delta) > 0.1f && !bb.IsPrecipiceAhead && bb.IsWallAhead)
+                {
+                    Debug.Log("공격 최적 위치로 이동");
+                    int approach = (delta > 0f) ? +1 : -1; // +1=접근, -1=후퇴
+                    int moveSign = dirToTarget * approach;
+                    npc.SetRooted(false);
+                    npc.AnimSetMoving(true);
+                    npc.FacingSign = dirToTarget;   // 정면 요구 능력이면 유지
+                    npc.SetDesiredMove(moveSign);
+                    return;
+                }
+            }
+        }
+
+
+        // 2) '머리 위 발판 + 상향 불가' 케이스 차단
+        Debug.Log($"2) '머리 위 발판 + 상향 불가' 케이스 차단");
+        const float UnreachableUpThreshold = 1.25f; // 자기보다 이 높이 이상 위면 '상단'으로 간주
+        float dy = bb.target.position.y - bb.self.position.y;
+        bool targetFarAbove = dy > UnreachableUpThreshold;
+        bool overheadBlocked = bb.HasOverheadPlatform; // ★ Blackboard에 추가 필요
+        bool upwardReady = false; // 현재 상향 공격 없음(추후 상향 Ability가 생기면 실제 체크로 교체)
+
+        if (bb.targetKnown && targetFarAbove && overheadBlocked && !upwardReady)
+        {
+            Debug.Log($"이동/추격 중단(빙빙 도는 현상 방지), 기억 타이머로 자연 복귀");
+            // 이동/추격 중단(빙빙 도는 현상 방지), 기억 타이머로 자연 복귀
+            npc.AnimSetMoving(false);
+            npc.SetRooted(true);
+
+            // 기억 만료되면 Idle/Wander로 전환
+            Debug.Log($"{!InMinLock()} && {bb.TimeNow} - {bb.LastSeenTime} = {bb.TimeNow - bb.LastSeenTime} > {bb.LostMemoryTime}");
+            if (!InMinLock() && (bb.TimeNow - bb.LastSeenTime) > bb.LostMemoryTime)
+            {
+                Debug.Log($"기억 만료되면 Idle/Wander로 전환");
+                if (Random.value < bb.WanderProbabilityAfterIdle)
+                {
+                    npc.RequestState<WanderState>();
+                    return;
+                }
+                npc.RequestState<IdleState>();
+                return;
+            }
+
+            // 아직 기억이 남아있으면 그 자리에서 대기(다음 틱 재판단)
+            Debug.Log($"아직 기억이 남아있으면 그 자리에서 대기(다음 틱 재판단)");
+            return;
+        }
+
+        // 3) 일반 추격 이동
+        Debug.Log($"3) 일반 추격 이동 + CanSeeTarget: {bb.CanSeeTarget}");
         npc.SetRooted(false);
-        npc.FacingSign = Mathf.Sign(bb.target.position.x - bb.self.position.x);
+        npc.AnimSetMoving(true);
+
+        Vector3 aimPos = bb.CanSeeTarget ? bb.target.position : bb.LastKnownPos;
+        float dir = Mathf.Sign(aimPos.x - bb.self.position.x);
+        Debug.Log($"CanSeeTarget: {bb.CanSeeTarget}");
+        if (!bb.CanSeeTarget)
+        {
+            Debug.Log($"{bb.targetKnown} && {bb.TimeNow} >= {bb.FlipCooldownEnd}");
+            if (bb.targetKnown && bb.TimeNow >= bb.FlipCooldownEnd)
+            {
+                Debug.Log($"놓친 타겟을 향해 방향 전환");
+                bb.FlipCooldownEnd = bb.TimeNow + bb.FlipCooldown;
+                npc.FacingSign = dir;
+                SetMinDuration();
+            }
+            else
+            {
+                SetMinDuration();
+            }
+        }
         npc.SetDesiredMove(npc.FacingSign);
 
-        //공격 거리 내에 들어온 플레이어
-        if (bb.DistToTarget < bb.AttackExit && bb.DistToTarget > bb.AttackEnter)
-        {
-            npc.RequestState<AttackState>();
-            return;
-        }
-        //공격 거리 보다 가까운 플레이어
-        if (bb.DistToTarget < bb.AttackEnter)
-        {
-            npc.RequestState<DistancingState>();
-            return;
-        }
-        // 장애물 대응
+        // 4) 장애물 대응(기존 로직 유지)
         if (bb.TimeNow >= bb.NextObstacleDecisionTime && (bb.IsWallAhead || bb.IsPrecipiceAhead))
         {
+            Debug.Log($"4) 장애물 대응(기존 로직 유지)");
             if (Random.value < bb.WanderProbabilityAfterIdle)
             {
                 npc.RequestState<WanderState>();
@@ -54,18 +172,19 @@ public class ChaseState : StateBase
             npc.RequestState<IdleState>();
             return;
         }
-        //인지 거리 밖으로 나간 플레이어
-        if (bb.DetectExit < bb.DistToTarget && !InMinLock())
+
+        // 5) 인지 범위 이탈(기억 기반)
+        Debug.Log($"{!bb.targetKnown} && {!InMinLock()}");
+        if (!bb.targetKnown && !InMinLock())
         {
-            //기억 시간 설정
+            Debug.Log($"5) 인지 범위 이탈(기억 기반)");
             if (MemoryTime < bb.TimeNow)
             {
-                MemoryTime = bb.LostMemoryTime + bb.TimeNow;
+                MemoryTime = bb.TimeNow + bb.LostMemoryTime;
             }
             else
             {
-                float r = Random.value;
-                if (r < bb.WanderProbabilityAfterIdle)
+                if (Random.value < bb.WanderProbabilityAfterIdle)
                 {
                     npc.RequestState<WanderState>();
                     return;
@@ -75,6 +194,5 @@ public class ChaseState : StateBase
             }
         }
     }
-    
     private bool InMinLock() => bb.TimeNow < bb.MinStateEndTime;
 }

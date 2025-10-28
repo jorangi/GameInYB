@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
@@ -14,14 +15,21 @@ public class NonPlayableCharacterData : CharacterData
         return $"{base.ToString()}";
     }
 }
-
-[RequireComponent(typeof(Animator))]
-public class NonPlayableCharacter : Character
+public interface INPCProfileInjector
 {
-    private static WaitForSeconds _waitForSeconds0_3 = new WaitForSeconds(0.3f);
+    public void InjectProfile(NPCProfile profile);
+    public void BindAbilites(List<IAbility> abilities);
+}
+[RequireComponent(typeof(Animator))]
+public class NonPlayableCharacter : Character, INPCProfileInjector
+{
+    public bool IsAbilityRunning { get; set;}
+    private List<IAbility> _abilities = new();
+    public IReadOnlyCollection<IAbility> Abilities => _abilities;
+    private static readonly WaitForSeconds _waitForSeconds0_3 = new(0.3f);
     [Header("FSM관련")]
     public Blackboard blackboard = new();
-    private NPCStateMachine _fsm;
+    [SerializeField]private NPCStateMachine _fsm;
     private StateRegistry _registry = new();
     private bool dieAnimFinished;
 
@@ -50,7 +58,7 @@ public class NonPlayableCharacter : Character
     private Transform wallChecker;
     public float idleTimer = 0.0f;
     public float moveTimer = 0.0f;
-    private const float hpBarSpd = 1.0f;
+    private const float hpBarSpd = 5.0f;
     private SpriteRenderer hpBar, hpBarSec;
     private bool isHealing;
     private Coroutine hpSmooth;
@@ -58,8 +66,15 @@ public class NonPlayableCharacter : Character
     public GameObject DamageTextPrefab;
     public Animator animator;
     [SerializeField] private string id;
+    [SerializeField] LayerMask platformMask;   // Ground/Platform/Tilemap 등
+    [SerializeField] float minUpDy = 1.25f;    // '머리 위'로 간주할 최소 높이차
+    [SerializeField] float maxProbe = 6f;      // 최대 탐지 높이
+    [SerializeField] float headPad = 0.05f;    // 머리 위 시작 오프셋
+    [SerializeField] float boxShrinkX = 0.1f;  // 박스 폭 약간 축소
     protected override void Awake()
     {
+        blackboard.self = transform;
+        blackboard.target = PlayableCharacter.Inst.transform;
         data = new NonPlayableCharacterData(id);
         data.GetStats().SetBase(StatType.ATK, 50);
         data.SetInvicibleTime(0.5f);
@@ -73,11 +88,34 @@ public class NonPlayableCharacter : Character
         base.Awake();
         _npcData = data as NonPlayableCharacterData;
         _npcData.health.ApplyHP(_npcData.MaxHP);
+        OnHitFrame += CheckHit;
         FSMInit();
 
 
         provider = Data;
         if (provider is null) Debug.LogError("[WeaponScript] provider에 stats할당 실패");
+    }
+    public void SenseOverheadPlatform()
+    {
+        blackboard.HasOverheadPlatform = true;
+        return; // 임시 비활성화
+        if (blackboard.target == null) { blackboard.HasOverheadPlatform = false; return; }
+
+        float dy = blackboard.target.position.y - blackboard.self.position.y;
+        if (dy <= minUpDy) { blackboard.HasOverheadPlatform = false; return; }
+
+        // 캐스팅 시작점: 머리 위
+        var headY = (Vector2)transform.position;
+        if (col) headY.y = col.bounds.max.y + headPad; else headY.y += 0.9f; // 콜라이더 없으면 대략치
+
+        float dist = Mathf.Min(maxProbe, dy);
+        // NPC 폭 기준 얇은 상향 박스캐스트
+        var size = new Vector2((col ? col.bounds.size.x : 0.8f) - boxShrinkX, 0.2f);
+
+        // 위로 막는 플랫폼/천장만 레이어에 포함 시켜두기
+        var hit = Physics2D.BoxCast(headY, size, 0f, Vector2.up, dist, platformMask);
+
+        blackboard.HasOverheadPlatform = hit.collider != null;
     }
     public void FSMInit()
     {
@@ -97,15 +135,35 @@ public class NonPlayableCharacter : Character
     protected override void Update()
     {
         base.Update();
-        blackboard.TimeNow = Time.time;
-        blackboard.DistToTarget = Vector2.Distance(blackboard.self.position, blackboard.target.position);
-        blackboard.CanSeeTarget = Mathf.Sign(blackboard.target.position.x - blackboard.self.position.x) == Mathf.Sign(FacingSign);
+        Sense();
+        
+        //blackboard.CanSeeTarget = Mathf.Sign(blackboard.target.position.x - blackboard.self.position.x) == Mathf.Sign(FacingSign);
         wallChecker.localPosition = new(FacingSign > 0 ? 0.25f : -0.25f, 0.0f);
-        RaycastHit2D hitWall = Physics2D.Raycast(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, 0.1f, LayerMask.GetMask("Floor", "Platform"));
+        Debug.DrawRay(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, Color.red);
+        RaycastHit2D hitWall = Physics2D.Raycast(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, 1, LayerMask.GetMask("Floor", "Platform"));
         blackboard.IsWallAhead = hitWall;
         blackboard.IsPrecipiceAhead = isPrecipice.collider == null;
 
         _fsm.Update();
+    }
+    private void Sense()
+    {
+        blackboard.TimeNow = Time.time;
+
+        // 2) 시야 판정(프로젝트 로직에 맞게)
+        blackboard.CanSeeTarget = blackboard.target != null
+                            && Mathf.Abs(blackboard.DistToTarget) <= blackboard.DetectEnter
+                            && Mathf.Sign(blackboard.target.position.x - blackboard.self.position.x) == FacingSign;
+                        // + 필요하면 Raycast 등 Line of Sight
+        blackboard.DistToTarget = Vector2.Distance(blackboard.self.position, blackboard.target.position);
+        // Debug.Log($"{blackboard.TimeNow} - {blackboard.LastSeenTime} = {blackboard.TimeNow - blackboard.LastSeenTime} <= {blackboard.LostMemoryTime}");
+        blackboard.targetKnown = (blackboard.TimeNow - blackboard.LastSeenTime) <= blackboard.LostMemoryTime;
+        // 3) 마지막 시야 갱신
+        if (blackboard.CanSeeTarget)
+        {
+            blackboard.LastSeenTime = blackboard.TimeNow;
+            blackboard.LastKnownPos = blackboard.target.position;
+        }
     }
     protected override void Movement()
     {
@@ -172,6 +230,7 @@ public class NonPlayableCharacter : Character
         if (data.health.HP <= 0)
         {
             // Handle death logic here
+            RequestState<DieState>();
             Debug.Log($"{data.UnitName} has died.");
         }
     }
@@ -191,10 +250,10 @@ public class NonPlayableCharacter : Character
     }
     public void AnimTrigger(string triggerName) => animator.SetTrigger(triggerName);
     public bool AnimIs(string stateName) => animator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
-    public void OnAttackStart() { SetRooted(true); SetDesiredMove(0); }
-    public void OnHitFrame() {/*히트박스 활성/데미지 처리*/}
-    public void OnAttackEnd() { SetRooted(false); }
-
+    public Action OnHitFrame;
+    public Action OnAbilityEnd;
+    public void AnimEvent_HitFrame() => OnHitFrame?.Invoke();
+    public void AnimEvent_AbilityEnd() => OnAbilityEnd?.Invoke();
     public bool AnimGetTriggerAttack() => animator.GetCurrentAnimatorStateInfo(0).IsName("Attack");
     public void AnimSetMoving(bool on) => animator.SetBool("IsMoving", on);
     public void AnimTriggerAttack() => animator.SetTrigger("Attack");
@@ -206,6 +265,8 @@ public class NonPlayableCharacter : Character
     public bool IsDieAnimFinished() => dieAnimFinished;
     public void CheckHit()
     {
+        var p = transform.Find("attackPosition").localPosition;
+        transform.Find("attackPosition").localPosition = new(Mathf.Abs(p.x) * FacingSign, p.y, p.z);
         GameObject hitbox = Instantiate(attackHitBox);
         hitbox.GetComponent<BoxCollider2D>().size = new Vector2(1f, 1f);
         hitbox.GetComponent<NPC__AttackHitBox>().provider = provider;
@@ -216,15 +277,24 @@ public class NonPlayableCharacter : Character
     /// EngageState 등록(후처리)
     /// </summary>
     /// <param name="engage"></param>
-    public void BindEngage(EngageState engage) => _registry.Register(engage);
+    private void BindAbilites(EngageState engage) => _registry.Register(engage);
     /// <summary>
     /// abilities를 이용한 등록
     /// </summary>
     /// <param name="abilities"></param>
-    public void BindEngage(List<IAbility> abilities)
+    public void BindAbilites(List<IAbility> abilities)
     {
+        _abilities.Clear();
+        _abilities = abilities;
+
+
         var engage = new EngageState(this, blackboard, abilities);
-        BindEngage(engage);
+        StringBuilder sb = new();
+        sb.AppendLine($"[{id}]");
+        foreach (var a in abilities)
+            sb.AppendLine(a.Id);
+        Debug.Log(sb.ToString());
+        BindAbilites(engage);
     }
     private void AnimSetAttack(int idx) => animator.SetFloat("AttackIndex", idx);
     private void AnimDoAttack()
@@ -237,4 +307,6 @@ public class NonPlayableCharacter : Character
         AnimSetAttack(idx);
         AnimDoAttack();
     }
+    public NPCProfile Profile{ get; private set; }
+    public void InjectProfile(NPCProfile profile) => Profile = profile;
 }

@@ -20,22 +20,26 @@ public interface IAbility
     void Execute(AbilityContext ctx);
     float Cooldown { get; }
     float NextReadyTime { get; set; }
+    public Vector2 OptimalDistanceRange { get;}
 }
 public static class AbilitySelector
 {
-    public static IAbility PickBest(AbilityContext ctx, IEnumerable<IAbility> abilities)
+    public static IAbility PickBest(AbilityContext ctx, IEnumerable<IAbility> abilities, out IAbility bestOne)
     {
         IAbility best = null;
         float bestscore = float.NegativeInfinity;
-
+        bestOne = abilities.Count() > 0 ? abilities.First() : null;
         foreach (var a in abilities)
         {
-            if (!a.CanExecute(ctx)) continue;
             float s = a.Score(ctx);
             if (s > bestscore)
             {
-                best = a;
-                bestscore = s;
+                if (a.CanExecute(ctx))
+                {
+                    best = a;
+                    bestscore = s;
+                }
+                bestOne = a;
             }
         }
         return best;

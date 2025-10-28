@@ -9,9 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f2db1ccc0b145249bd4aac7cb64ac1d, type: 3}
-  m_Name: PushKnockback__10008
+  m_Script: {fileID: 11500000, guid: 28df9050a70b58a428a68682f57de80c, type: 3}
+  m_Name: 10008__MeleeAttack1
   m_EditorClassIdentifier: 
-  cooldown: 0
-  enter: 0
-  exit: 0
+  WDist: 0.6
+  WFace: 0.3
+  animIndex: 0
+  cooldown: 2
+  enter: 1
+  exit: 1.5
+  rootDuring: 1
+  advanceDistanceOnHit: 0

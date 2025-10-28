@@ -17,21 +17,19 @@ public class IdleState : StateBase
     }
     public override void Update()
     {
-        if (bb.DistToTarget <= bb.AttackEnter)
-        {
-            npc.RequestState<AttackState>();
-            return;
-        }
-        // 타깃이 범위 내 + 볼 수 있음
-        if (!(bb.IsPrecipiceAhead || bb.IsWallAhead) && bb.CanSeeTarget && bb.DistToTarget <= bb.DetectEnter)
+        if (bb.TargetKnown && TryExecuteAbilityOnce(out var bestOne)) npc.RequestState<ChaseState>();
+        
+        if (!(bb.IsPrecipiceAhead || bb.IsWallAhead)
+            && bb.CanSeeTarget
+            && bb.DistToTarget <= bb.DetectEnter)
         {
             npc.RequestState<ChaseState>();
             return;
         }
+
         if (bb.TimeNow >= bb.IdleEndTime && !InMinLock())
         {
-            bool goWander = Random.value < bb.WanderProbabilityAfterIdle;
-            if (goWander)
+            if (Random.value < bb.WanderProbabilityAfterIdle)
             {
                 npc.RequestState<WanderState>();
                 return;
@@ -43,6 +41,7 @@ public class IdleState : StateBase
                 npc.SetMinStateLock(bb.MinStateDuration);
             }
         }
+
         npc.SetDesiredMove(0);
         npc.SetRooted(true);
     }

@@ -166,6 +166,7 @@ namespace Looper.Console.UI
             _reg.Register(new ClearBackpackCommand());
             _reg.Register(new RemoveItemCommand());
             _reg.Register(new SpawnCommand());
+            _reg.Register(new PositionCommand());
             _reg.Register(new LoginCommand());
             _reg.Register(new SaveCommand());
             _reg.Register(new LoadCommand());

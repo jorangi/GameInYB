@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using static ApiManager_All;
 
 public interface INPCRepository
@@ -52,18 +53,36 @@ public static class NPCDataManager
             return null;
         }
     }
-    public static void SetupMonster(string id)
+    public static GameObject SetupMonster(string id, Vector3 pos, Transform parent = null)
     {
         var svc = ServiceHub.Get<IAddressablesService>();
         var prefab = svc.GetPrefab(id);
-        var npc = prefab.GetComponent<NonPlayableCharacter>();
+        GameObject gameObject = UnityEngine.Object.Instantiate(prefab, pos, Quaternion.identity);
+        var npc = gameObject.GetComponent<INPCProfileInjector>();
         var profile = svc.GetProfile(id);
-        var abilities = new List<IAbility>();
+        Debug.Log(profile.id);
+        npc.InjectProfile(profile);
+        var abilities = AbilityFactory.BuildFromProfile(profile, npc as NonPlayableCharacter);
+        npc.BindAbilites(abilities);
 
-        npc.BindEngage(abilities);
+        return gameObject;
     }
     public static string[] ToArray()
     {
         return npcDic.Keys.ToArray();
+    }
+}
+public static class AbilityFactory
+{
+    public static List<IAbility> BuildFromProfile(NPCProfile profile, NonPlayableCharacter npc)
+    {
+        var list = new List<IAbility>(profile.abilityConfigs.Count);
+        foreach (var cfg in profile.abilityConfigs)
+        {
+            if (cfg == null) continue;
+            var a = cfg.Build(npc);
+            if (a != null) list.Add(a);
+        }
+        return list;
     }
 }

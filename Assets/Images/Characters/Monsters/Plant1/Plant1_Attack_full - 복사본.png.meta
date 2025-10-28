@@ -148,7 +148,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -1059,7 +1059,45 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_0": 6857669774853668603
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_1": -8609418866965534542
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_10": -5133272853613262828
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_11": 3107949258198015576
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_12": -1438529495740093626
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_13": 1805338707080227739
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_14": -2427704787605712223
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_15": -2593493649541667183
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_16": 8005949964722595693
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_17": 5009087383738543153
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_18": -8106648919503607957
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_19": 9105372998219742914
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_2": 446961490890598730
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_20": -1851387258362047769
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_21": -4932139928698761814
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_22": -3633432767810809280
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_23": -9175071248510146261
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_24": 8195667444252292603
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_25": -7059702155596406787
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_26": 2018929864819934657
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_27": 1611576506963508413
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_28": 4354571761201875389
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_29": 7983314429255903804
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_3": -5098630796456450761
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_30": 7478666488294749983
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_31": 5032868610321161831
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_32": 2218547898255701356
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_33": -6492066541051582334
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_34": -2656093218818673254
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_35": 8220982625561498813
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_36": 1848171986212696532
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_37": -7558179892216129405
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_4": 8575264985643490383
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_5": 1031240734697967541
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_6": -3877554912016126469
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_7": 479199770925725424
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_8": -1080710813040201834
+      "Plant1_Attack_full - \uBCF5\uC0AC\uBCF8_9": 7801107412438200604
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,29 +1,33 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class EngageState : StateBase
 {
     private readonly List<IAbility> _abilities;
-    private readonly AbilityContext _ctx;
     private float _nextThinkTime;
     private const float ThinkInterval = 0.12f; // 의사결정 주기
 
     public EngageState(NonPlayableCharacter npc, Blackboard bb, List<IAbility> abilities) : base(npc, bb)
     {
         _abilities = abilities;
-        _ctx = new AbilityContext { npc = npc, bb = bb };
     }
 
     public override string Name => "Engage";
+    public IAbility TryPickAbility()
+    {
+        if (bb.TimeNow < _nextThinkTime) return null;
+        _nextThinkTime = bb.TimeNow + ThinkInterval;
 
+        return AbilitySelector.PickBest(_ctx, _abilities, out var bestOne);
+    }
     public override void Enter()
     {
         npc.SetRooted(false);
         npc.AnimSetMoving(false);
         _nextThinkTime = 0f;
     }
-
     public override void Update()
     {
         if (bb.target == null || !bb.CanSeeTarget)
@@ -34,7 +38,7 @@ public class EngageState : StateBase
 
         if (bb.TimeNow < _nextThinkTime) return;
 
-        var pick = AbilitySelector.PickBest(_ctx, _abilities);
+        var pick = AbilitySelector.PickBest(_ctx, _abilities, out var bestOne);
         if (pick == null)
         {
             npc.RequestState<ChaseState>();
@@ -48,7 +52,6 @@ public class EngageState : StateBase
         _nextThinkTime = bb.TimeNow + ThinkInterval;
         // 여기서 다른 상태로 전환하지 않음. (AttackState 불필요)
     }
-
     public override void Exit() { }
 }
 

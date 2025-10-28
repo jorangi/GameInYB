@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28df9050a70b58a428a68682f57de80c, type: 3}
-  m_Name: MeleeCombo__10008
+  m_Name: 10009__MeleeAttack
   m_EditorClassIdentifier: 
   cooldown: 0
   enter: 0

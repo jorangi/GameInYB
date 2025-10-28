@@ -89,7 +89,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.48333332
-    functionName: CheckHit
+    functionName: AnimEvent_HitFrame
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.6666667
+    functionName: AnimEvent_AbilityEnd
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

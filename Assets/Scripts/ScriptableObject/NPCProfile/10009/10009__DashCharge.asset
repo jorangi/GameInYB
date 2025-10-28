@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72920c07fdb33f54d860d7389edc5f4b, type: 3}
-  m_Name: DashCharge__10009
+  m_Name: 10009__DashCharge
   m_EditorClassIdentifier: 
   cooldown: 0
   enter: 0

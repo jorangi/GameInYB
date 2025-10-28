@@ -1,12 +1,63 @@
+using System;
 using UnityEngine;
 
-public sealed class PushKnockback : IAbility {
-    public string Id=>"PushKnockback"; public float Cooldown=>6f; public float NextReadyTime{get;set;}
-    public float Enter=0.9f, Exit=1.5f;
-    public bool CanExecute(AbilityContext c){ return c.TimeNow>=NextReadyTime && c.Dist<=Exit; }
-    public float Score(AbilityContext c){
-        float sDist = Mathf.Clamp01(1f - Mathf.Abs(c.Dist-Enter)/(Exit-Enter+1e-4f));
-        return 0.8f*sDist; // 주기 기술이면 Selector에서 우선권도 가능
+public sealed class PushKnockback : IAbility
+{
+    public string Id => "PushKnockback";
+    public float Cooldown => _cfg.cooldown;
+    public float NextReadyTime { get; set; }
+    private readonly PushKnockbackConfig _cfg;
+    public PushKnockback(PushKnockbackConfig cfg) { _cfg = cfg; }
+    public Vector2 OptimalDistanceRange => new(_cfg.enter, _cfg.exit);
+    public bool CanExecute(AbilityContext ctx)
+    {
+        if (ctx.TimeNow < NextReadyTime) return false;
+        if (!ctx.npc.blackboard.CanSeeTarget) return false;
+        return ctx.Dist <= _cfg.exit;
     }
-    public void Execute(AbilityContext c){ c.npc.SetRooted(true); c.npc.AnimTrigger("Push"); NextReadyTime=c.TimeNow+Cooldown; }
+    private Action meleeHitLogic;
+    
+    public void Execute(AbilityContext ctx)
+    {
+        var npc = ctx.npc;
+        npc.blackboard.AttackEnter = _cfg.enter;
+        npc.blackboard.AttackEnter = _cfg.exit;
+        NextReadyTime = ctx.TimeNow + Cooldown;
+        // 실행 시작 상태
+        npc.IsAbilityRunning = true;
+        npc.AnimSetMoving(false);
+        npc.SetDesiredMove(0f);
+        npc.SetRooted(_cfg.rootDuring);
+        meleeHitLogic = () =>
+        {
+            var target = npc.blackboard.target.GetComponent<PlayableCharacter>();
+            target.Knockback(new Vector2(Mathf.Sign(ctx.target.position.x - ctx.self.position.x) * 10, 5f), ForceMode2D.Impulse);
+            if (_cfg.advanceDistanceOnHit != 0f)
+            {
+                float dir = Mathf.Sign(ctx.target.position.x - ctx.self.position.x);
+                npc.ApplyImpulse(new Vector2(dir * _cfg.advanceDistanceOnHit, 0f));
+            }
+        };
+        // 히트 프레임 처리(순간 전진 등)
+        npc.OnHitFrame += meleeHitLogic;
+        npc.OnAbilityEnd = () =>
+        {
+            // 실행 종료 상태
+            npc.IsAbilityRunning = false;
+            if (meleeHitLogic != null)
+            {
+                npc.OnHitFrame -= meleeHitLogic;
+            }
+            npc.OnAbilityEnd = null;
+        };
+        // 애니메이션 딱 한 번 재생
+        npc.AnimPlayAttack(_cfg.animIndex);
+    }
+    public float Score(AbilityContext ctx)
+    {
+        float sDist = Mathf.Clamp01(1f - Mathf.Abs(ctx.Dist - _cfg.enter) / (_cfg.exit - _cfg.enter + 0.0001f));
+        float sFace = ctx.IsFacingTarget ? 1f : 0.2f;
+
+        return _cfg.WDist * sDist + _cfg.WFace * sFace;
+    }
 }

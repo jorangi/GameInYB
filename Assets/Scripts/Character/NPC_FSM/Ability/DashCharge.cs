@@ -10,6 +10,7 @@ public sealed class DashChargeAbility : IAbility
     public float ExitRange   = 5.0f;
     public float RequiredRunway = 3.0f; // 돌진할 직선 여유
     public float WDist = 0.5f, WFace = 0.2f;
+    public Vector2 OptimalDistanceRange => throw new System.NotImplementedException();
 
     public bool CanExecute(AbilityContext ctx)
     {

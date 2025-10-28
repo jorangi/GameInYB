@@ -15,5 +15,5 @@ MonoBehaviour:
   id: 10008
   isAggressive: 1
   abilityConfigs:
-  - {fileID: 11400000, guid: 7791730b06b4d4949afed451dc47e90a, type: 2}
   - {fileID: 11400000, guid: a7b537ae8fdf0564e814dd0ed8f6d5ee, type: 2}
+  - {fileID: 11400000, guid: 7791730b06b4d4949afed451dc47e90a, type: 2}

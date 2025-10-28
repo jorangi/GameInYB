@@ -9,6 +9,7 @@ public sealed class PoisonSwipe : IAbility
     public float Enter = 1.1f;   // 선호거리
     public float Exit  = 1.6f;   // 히스테리시스
     public System.Func<bool> IsTargetPoisoned; // 외부 주입(타깃 상태 확인)
+    public Vector2 OptimalDistanceRange => throw new System.NotImplementedException();
 
     public bool CanExecute(AbilityContext c)
     {
@@ -40,6 +41,7 @@ public sealed class PoisonConditionalCombo : IAbility
     public string Id => "PoisonConditional"; public float Cooldown => 2.3f; public float NextReadyTime { get; set; }
     public float Enter = 1.1f, Exit = 1.6f;
     public System.Func<bool> IsTargetPoisoned; // 외부 주입
+    public Vector2 OptimalDistanceRange => throw new System.NotImplementedException();
     public bool CanExecute(AbilityContext c) { return c.TimeNow >= NextReadyTime && c.Dist <= Exit; }
     public float Score(AbilityContext c)
     { // 거리+상태 가중

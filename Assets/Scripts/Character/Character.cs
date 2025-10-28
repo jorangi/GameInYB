@@ -2,8 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Unity.VisualScripting;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static ApiManager_All;
@@ -225,28 +224,25 @@ public class CharacterData : IStatProvider
 public class Character : ParentObject
 {
     #region fields
-    [SerializeField]protected CharacterData data;
+    [SerializeField] protected CharacterData data;
     protected enum LAYER
     {
         FLOOR = 7,
         PLATFORM = 9
     };
+
     public Transform frontRay;
     public Transform foot;
     public float gravityScale = 3.5f; // 중력 적용 세기
-
     public Collider2D col;
     public Rigidbody2D rigid;
-
-
     protected Vector2 moveVec = Vector2.zero;
     protected Vector2 perp;
     protected float cAngle;
     public bool isSlope;
     protected bool isGround;
     protected bool isJump;
-    protected float rayDistance = 0.5f;
-    protected float chkGroundRad = 0.1f;
+    protected float rayDistance = 0.2f;
     protected int jumpCnt;
     RaycastHit2D hit, fronthit;
     private Vector2 slopeTop;
@@ -279,21 +275,30 @@ public class Character : ParentObject
     protected float desiredMoveX;
     protected bool isRooted;
     public float FacingSign;
+    protected bool isKnockback;
     #endregion
+    public async void Knockback(Vector2 force, ForceMode2D mode = ForceMode2D.Impulse)
+    {
+        touchedGround = false;
+        isKnockback = true;
+        rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+        rigid.AddForce(force, mode);
+        await UniTask.WaitUntil(() => touchedGround);
+        isKnockback = false;
+    }
     protected virtual void Update()
     {
         isGround = GroundCheck();
         if (this is PlayableCharacter)
         {
-            isPrecipice = Physics2D.Raycast(frontRay.position, new Vector2(1, -1).normalized,
-            1, LayerMask.GetMask("Floor", "Platform"));
+            isPrecipice = Physics2D.Raycast(frontRay.position, desiredMoveX > 0 ? new Vector2(1, -1).normalized : new Vector2(-1, -1).normalized,
+            rayDistance, LayerMask.GetMask("Floor", "Platform"));
+            Debug.DrawRay(frontRay.position, (desiredMoveX > 0 ? new Vector2(1, -1).normalized : new Vector2(-1, -1).normalized) * rayDistance, Color.red);
         }
         else
         {
             isPrecipice = Physics2D.Raycast(frontRay.position, FacingSign < 0 ? new Vector2(-1, -2.5f).normalized : new Vector2(1, -2.5f).normalized, 1, LayerMask.GetMask("Floor", "Platform"));
         }
-
-
 
         if (isPrecipice && isGround) savedPos = transform.position;
 
@@ -304,10 +309,18 @@ public class Character : ParentObject
             desiredMoveX > 0 ? Vector2.right : Vector2.left, 0.2f,
             LayerMask.GetMask("Floor", "Platform")
         );
-        if (!Mathf.Approximately(desiredMoveX, 0f))
-            rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+        if (!isKnockback)
+        {
+            if (!Mathf.Approximately(desiredMoveX, 0f))
+                rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+            else
+                rigid.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
+        }
         else
-            rigid.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
+        {
+            rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+            touchedGround = false;
+        }
         if (fronthit)
         {
 
@@ -353,6 +366,7 @@ public class Character : ParentObject
     /// </summary>
     protected virtual void Movement()
     {
+        if (isKnockback) return;
         if (isRooted || Mathf.Approximately(desiredMoveX, 0f))
         {
             rigid.linearVelocity = new(0, rigid.linearVelocityY);
@@ -380,6 +394,7 @@ public class Character : ParentObject
     /// <param name="layer"></param>
     protected virtual void Landing(LAYER layer)
     {
+        touchedGround = true;
         col.isTrigger = false;
         landingLayer = layer;
     }
@@ -404,12 +419,23 @@ public class Character : ParentObject
     }
     private bool GroundCheck()
     {
-        return Physics2D.OverlapCircle(foot.position, chkGroundRad, LayerMask.GetMask("Floor", "Platform"));
+        Debug.DrawRay(foot.position, Vector2.down * rayDistance, Color.red);
+        RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));
+        if (h.collider != null)
+        {
+            Vector2 normal = h.normal;
+            return normal.y < maxAngle;
+        }
+        touchedGround = false;
+        return false;
+
+        //return Physics2D.OverlapCircle(foot.position, chkGroundRad, LayerMask.GetMask("Floor", "Platform"));
     }
     public virtual void TakeDamage(float damage)
     {
         hitCoroutine ??= StartCoroutine(Hit());
     }
+    protected bool touchedGround = false;
     void OnCollisionStay2D(Collision2D col)
     {
         if (!this.CompareTag("Player")) return;

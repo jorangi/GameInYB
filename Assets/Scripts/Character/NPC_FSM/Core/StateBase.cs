@@ -1,8 +1,6 @@
 using System;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
-
-
 
 public enum Personality
 {
@@ -35,6 +33,8 @@ public class Blackboard
     public bool IsWallAhead;
     public bool IsPrecipiceAhead;
     public NonPlayableCharacter[] enemies;
+    public bool TargetKnown;
+    public bool HasOverheadPlatform;
 
     //Idle/Wander용 타이머
     public float IdleEndTime;
@@ -50,7 +50,9 @@ public class Blackboard
     public int MaxCombo; // 최대 콤보
     public float ComboBuffer = 0.5f; //콤보 사이 유예시간
     public bool IsInCombo;
-
+    public float LastSeenTime;
+    public Vector3 LastKnownPos;
+    public float FlipCooldownEnd;
 
     //---------몬스터별 데이터----------
     [Header("인지")]
@@ -76,15 +78,19 @@ public class Blackboard
 
     [Header("피격 관련")]
     public float InvinsibleEndTime;
+    public bool targetKnown;
+    public float FlipCooldown = 1.0f;
 }
 public abstract class StateBase : IStateBase
 {
     protected NonPlayableCharacter npc;
     protected readonly Blackboard bb;
+    protected readonly AbilityContext _ctx;
     protected StateBase(NonPlayableCharacter npc, Blackboard bb)
     {
         this.npc = npc;
         this.bb = bb;
+        this._ctx = new AbilityContext { npc = npc, bb = bb };
     }
     public abstract string Name { get; }
     /// <summary>
@@ -99,4 +105,29 @@ public abstract class StateBase : IStateBase
     /// 상태 업데이트 로직
     /// </summary>
     public abstract void Update();
+    private float _nextThinkTime;
+    private const float ThinkInterval = 0.12f;
+    public bool TryExecuteAbilityOnce(out IAbility best)
+    {
+        best = null;
+        // Debug.Log($"{_ctx.npc.IsAbilityRunning} and {_ctx.bb.TimeNow} < {_nextThinkTime} = {_ctx.bb.TimeNow < _nextThinkTime}");
+        if (_ctx.npc.IsAbilityRunning) return true;           // 이미 실행 중이면 상태 로직 스킵
+        if (_ctx.bb.TimeNow < _nextThinkTime) return false;   // 스로틀
+
+        // Debug.Log($"Ability selection thinking...");
+        var pick = AbilitySelector.PickBest(_ctx, npc.Abilities, out IAbility bestOne); // 내부에서 CanExecute 포함
+        Debug.Log(pick != null ? pick.Id : "null");
+        best = bestOne;
+        // Debug.Log($"{(pick == null ? "null" : pick.Id)}");
+        if (pick == null) return false;
+
+        // Debug.Log($"{pick.Id} selected to execute");
+        pick.Execute(_ctx);            // ★ Ability가 루트/애니/쿨다운/종료 처리
+        _nextThinkTime = _ctx.bb.TimeNow + ThinkInterval;
+        return true;                  // 이 틱 상태 로직은 스킵
+    }
+    public void SetMinDuration()
+    {
+        bb.MinStateEndTime = bb.TimeNow + UnityEngine.Random.value * 0.3f + bb.MinStateDuration;
+    }
 }

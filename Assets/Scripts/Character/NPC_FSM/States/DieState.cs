@@ -12,7 +12,6 @@ public class DieState : StateBase
         npc.SetRooted(true);
         npc.AnimSetMoving(false);
         npc.AnimTriggerDeath();
-        npc.hitBox.gameObject.SetActive(false);
         npc.SetMinStateLock(bb.MinStateDuration);
     }
     public override void Exit()

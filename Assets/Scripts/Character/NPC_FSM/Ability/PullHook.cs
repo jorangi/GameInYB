@@ -5,11 +5,15 @@ public sealed class PullHook : IAbility
     public string Id => "PullHook";
     public float Cooldown => 4.0f;
     public float NextReadyTime { get; set; }
+
+    public Vector2 OptimalDistanceRange => throw new System.NotImplementedException();
+
     public float PreferRange = 3.5f; // 중거리 선호
     public float EnterRange  = 3.0f;
     public float ExitRange   = 5.0f;
     public float RequiredRunway = 3.0f; // 돌진할 직선 여유
     public float WDist = 0.5f, WFace = 0.2f;
+    
 
     public bool CanExecute(AbilityContext ctx)
     {

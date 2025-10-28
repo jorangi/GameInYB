@@ -22,6 +22,7 @@ public class DistancingState : StateBase
 
     public override void Update()
     {
+        if (bb.TargetKnown && TryExecuteAbilityOnce(out var bestOne)) npc.RequestState<ChaseState>();
         //공격 범위 내에 플레이어가 있을 경우
         if (bb.AttackExit > bb.DistToTarget && bb.AttackEnter < bb.DistToTarget)
         {
@@ -38,7 +39,7 @@ public class DistancingState : StateBase
         if (bb.AttackEnter > bb.DistToTarget && !InMinLock())
         {
             npc.SetDesiredMove(-npc.FacingSign);
-            bb.MinStateEndTime = bb.TimeNow + bb.MinStateDuration;
+            SetMinDuration();
         }
     }
     private bool InMinLock() => bb.TimeNow < bb.MinStateEndTime;

@@ -19,8 +19,6 @@ public class WanderState : StateBase
         {
             npc.FacingSign = -npc.FacingSign;
             bb.NextObstacleDecisionTime = bb.TimeNow + bb.ObstacleDecisionCooldown;
-            bb.IsPrecipiceAhead = false;
-            bb.IsWallAhead = false;
         }
         else
         {
@@ -45,32 +43,47 @@ public class WanderState : StateBase
 
     public override void Update()
     {
-        //장애물 대응
-        if (bb.TimeNow >= bb.NextObstacleDecisionTime && (bb.IsWallAhead || bb.IsPrecipiceAhead))
+        if (!InMinLock() && bb.TimeNow >= bb.WanderEndTime)
+        {
+            if (Random.value < 0.5f)
+            {
+                npc.RequestState<IdleState>();
+                return;
+            }
+            else
+            {
+                npc.FacingSign = Random.value < 0.5f ? -1 : +1;
+                float dur = Random.Range(bb.WanderDurationRange.x, bb.WanderDurationRange.y);
+                bb.WanderEndTime = bb.TimeNow + dur;
+                npc.SetMinStateLock(bb.MinStateDuration);
+                npc.SetDesiredMove(npc.FacingSign);
+                npc.SetRooted(false);
+                npc.AnimSetMoving(true);
+                return;
+            }
+        }
+        if (bb.TargetKnown && TryExecuteAbilityOnce(out var bestOne)) npc.RequestState<ChaseState>();
+        if (bb.TimeNow >= bb.NextObstacleDecisionTime && (bb.IsWallAhead || bb.IsPrecipiceAhead))//장애물 충돌 판단
         {
             float r = Random.value;
-            //정지
+            
             if (r < bb.StopAtObstacleChance && !InMinLock())
             {
                 npc.RequestState<IdleState>();
                 return;
             }
-
-            //방향 전환 후 계속 이동
             if (r < bb.StopAtObstacleChance + bb.FlipAtObstacleChance)
             {
                 npc.FacingSign = -npc.FacingSign;
-                //잦은 방향 전환 방지
                 bb.NextObstacleDecisionTime = bb.TimeNow + bb.ObstacleDecisionCooldown;
             }
         }
-        //타깃 감지
-        if (!InMinLock() && bb.CanSeeTarget && bb.DistToTarget <= bb.DetectEnter && !bb.IsWallAhead && !bb.IsPrecipiceAhead)
+        if (!InMinLock() && bb.CanSeeTarget && bb.DistToTarget <= bb.DetectEnter && !bb.IsWallAhead && !bb.IsPrecipiceAhead)//감지 범위 내 진입
         {
+            Debug.Log("6");
             npc.RequestState<ChaseState>();
             return;
         }
-        
         npc.SetDesiredMove(npc.FacingSign);
     }
     private bool InMinLock() => bb.TimeNow < bb.MinStateEndTime;

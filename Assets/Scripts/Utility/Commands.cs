@@ -586,6 +586,31 @@ namespace Looper.Console.Commands
             return int.TryParse(args[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out index);
         }
     }
+    public sealed class PositionCommand : ICommand
+    {
+        public string Name => "position";
+
+        public IReadOnlyList<string> Aliases => new string[] {"pos","location"};
+
+        public string Summary => "플레이어의 위치를 확인합니다.";
+
+        public string Usage => "position";
+
+        public bool IsAsync => false;
+
+        public void Execute(CommandContext ctx, string[] args)
+        {
+            var player = PlayableCharacter.Inst;
+            if (player is null)
+            {
+                ctx.Warn("플레이어 오브젝트를 찾을 수 없습니다.");
+                return;
+            }
+            ctx.Info($"플레이어의 위치: ({player.transform.position.x}, {player.transform.position.y})");
+        }
+        public UniTask ExecuteAsync(CommandContext ctx, string[] args) => UniTask.CompletedTask;
+    }
+    
     public sealed class SpawnCommand : ICommand
     {
         public string Name => "Spawn";
@@ -594,13 +619,29 @@ namespace Looper.Console.Commands
 
         public string Summary => "객체를 스폰합니다.";
 
-        public string Usage => "Spawn <object_id>";
+        public string Usage => "Spawn <object_id> <x> <y>";
 
         public bool IsAsync => false;
 
         public void Execute(CommandContext ctx, string[] args)
         {
-            //객체 소환
+            if (args.Length < 3)
+            {
+                ctx.Warn("Spawn <object_id> <x> <y>의 형식으로 입력해야합니다.");
+                return;
+            }
+            string objectId = args[0];
+            if (!float.TryParse(args[1], out float x))
+            {
+                ctx.Warn("x는 유리수여야 합니다.");
+                return;
+            }
+            if (!float.TryParse(args[2], out float y))
+            {
+                ctx.Warn("y는 유리수여야 합니다.");
+                return;
+            }
+            NPCDataManager.SetupMonster(objectId, new(x, y));
         }
         public UniTask ExecuteAsync(CommandContext ctx, string[] args) => UniTask.CompletedTask;
     }

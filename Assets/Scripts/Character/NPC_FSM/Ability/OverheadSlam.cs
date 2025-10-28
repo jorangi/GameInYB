@@ -8,6 +8,7 @@ public sealed class OverheadSlam : IAbility
     public float EnterRange  = 0.8f;
     public float ExitRange   = 1.6f;
     public float WDist = 0.6f, WFace = 0.3f;
+    public Vector2 OptimalDistanceRange => throw new System.NotImplementedException();
 
     public bool CanExecute(AbilityContext ctx)
     {

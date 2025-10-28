@@ -269,10 +269,8 @@ public sealed class AtlasService : IAddressablesService
                     {
                         if (((string)key)[((string)key).IndexOf('1') + 1] == '1')
                         {
-                            // Debug.Log($"{key} is not found");
                             continue;
                         }
-                        // Debug.Log($"{key} is ready");
                         ct.ThrowIfCancellationRequested();
                         var handle = Addressables.LoadAssetAsync<NPCProfile>(key);
                         var profile = await handle.WithCancellation(ct);

@@ -3,6 +3,7 @@ using UnityEngine;
 public sealed class HowlBuff : IAbility {
     public string Id=>"HowlBuff"; public float Cooldown=>8f; public float NextReadyTime{get;set;}
     public System.Func<int> NearbyPackCount; // 외부 주입
+    public Vector2 OptimalDistanceRange => throw new System.NotImplementedException();
     public bool CanExecute(AbilityContext c){ return c.TimeNow>=NextReadyTime && NearbyPackCount!=null && NearbyPackCount()>0; }
     public float Score(AbilityContext c){
         int n = NearbyPackCount?.Invoke() ?? 0; // 스택 기반 가중

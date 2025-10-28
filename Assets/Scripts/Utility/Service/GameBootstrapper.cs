@@ -77,5 +77,7 @@ public class GameBootstrapper : MonoBehaviour
             PlayableCharacter.Inst.Data.ApplyDto(s);
             _applied = true;
         }
+
+        NPCDataManager.SetupMonster("10015", new(0f, -1.55f));
     }
 }

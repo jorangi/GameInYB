@@ -15,6 +15,7 @@ using UnityEngine.U2D;
 using UnityEngine.UI;
 using static PlayerStats;
 using System.Text;
+using Unity.Cinemachine;
 
 public sealed class UnityServiceProvider : IServiceProvider
 {
@@ -953,13 +954,9 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         weaponScript = arm.GetComponentInChildren<Weapon>();
         weaponSprite = weaponScript.GetComponent<SpriteRenderer>();
         subWeaponSprite = transform.Find("Body").Find("SubWeapon").GetComponent<SpriteRenderer>();
-        SetupMessageBox();
+        //SetupMessageBox();
         cam = Camera.main;
-        GameObject obj = Instantiate(new GameObject(), null);
-        obj.transform.position = weaponSprite.transform.position;
-        obj.name = "HitBox";
-        BoxCollider2D bC = obj.AddComponent<BoxCollider2D>();
-        bC.size = new Vector2(0.5f, 0.5f);
+        FindAnyObjectByType<CinemachineCamera>().Target.TrackingTarget = transform;
     }
     private async void Start()
     {
@@ -1044,9 +1041,9 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         base.Update();
 
         if (InvincibleTimer > 0.0f)
-            InvincibleTimer -= Time.deltaTime;
-        else
-            hitBox.gameObject.SetActive(true);
+                InvincibleTimer -= Time.deltaTime;
+            else
+                hitBox.gameObject.SetActive(true);
     }
     /// <summary>
     /// 부드러운 체력바 채우기 코루틴
@@ -1065,7 +1062,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         //공중 판정 체크
         anim.SetBool("JUMP", !isGround);
         if (weaponScript.anim.GetBool("IsSwing")) return;
-
+        #region legacy_code
         // Vector3 mouseW = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         // Vector2 delta = (Vector2)(mouseW - arm.position);
         // float angleDeg = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
@@ -1091,6 +1088,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         // const float offsetDeg = -90f;
         // float finalZ = angleDeg + offsetDeg;
         // arm.rotation = Quaternion.Euler(0f, 0f, finalZ);
+        #endregion
         const float offsetDeg = -90f; // 무기 이미지가 세로로 되어 있어 보정 각도 필요
 
         Vector3 mouseW = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -1123,12 +1121,14 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     }
     public void OnMovement(InputAction.CallbackContext context) // 이동 액션 등록
     {
+        if(isKnockback) return;
         SetDesiredMove(context.ReadValue<Vector2>().x);
     }
     public void OnJump(InputAction.CallbackContext context) // 점프 액션 등록
     {
         if (jumpCnt > 0 && context.performed) //점프 조건 분기
         {
+            touchedGround = false;
             rigid.gravityScale = 1.5f; // 중력 초기화
             isJump = true; // 점프 상태 등록
             rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, Data.JumpPower); // 점프 적용 계산
@@ -1182,11 +1182,22 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
             transform.position = savedPos + Vector3.up;
             TakeDamage(data.MaxHP * 0.2f);
         }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Floor"))
+        {
+            col.isTrigger = false;
+        }
         RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));         // 바닥 충돌 처리 전용 레이캐스트 히트
 
         if (h && !isDropdown && rigid.linearVelocityY <= 0.0f) // 바닥 착지 조건 분기
         {
             Landing((LAYER)collision.gameObject.layer); //착지 메소드 호출
+        }
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Floor"))
+        {
+            col.isTrigger = false;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -1195,6 +1206,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         if (collision.gameObject.layer == (int)LAYER.PLATFORM && isDropdown) // 하강은 플랫폼 레이어에서만 가능
         {
             isDropdown = false;
+            touchedGround = false;
         }
     }
     public void SetHP(int value) => Data.health.ApplyHP(value);

@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: f00a763f0a3aff44287c9e7c0fccf93f
   m_currentHash:
     serializedVersion: 2
-    Hash: 487da7e4751089701694b025b0848175
+    Hash: 535a93abca93668bd2fdd5f5d716dacd
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -61,6 +61,7 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: 1ad1c717e6d690d40a49c6b239a40d28, type: 2}
   - {fileID: 11400000, guid: d30cb5d1e4002614bb1e988223bcb660, type: 2}
+  - {fileID: 11400000, guid: 38dd75e711725984a923edc0b930c954, type: 2}
   - {fileID: 11400000, guid: 95ba094cb78c9fd49aca8f247faa57d1, type: 2}
   - {fileID: 11400000, guid: 015dc4fb3caadb14e833819998bfcff8, type: 2}
   - {fileID: 11400000, guid: 80c12b6813b3c8f4f806fbf17d6befc9, type: 2}
@@ -106,6 +107,8 @@ MonoBehaviour:
     - WeaponAtlas
     - IconsAtlas
     - EffectPrefab
+    - NPCPrefab
+    - Prefab.Monster
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 86633ee75e1c09341959ffb7e26f380e, type: 2}

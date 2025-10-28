@@ -12,7 +12,7 @@ public sealed class SequenceAbility : IAbility
 
     private readonly List<IAbility> _steps;
     private readonly float _linkMaxWait = 0.25f;
-
+    public Vector2 OptimalDistanceRange => _steps.Count > 0 ? _steps[0].OptimalDistanceRange : new Vector2(0f, 0f);
     public SequenceAbility(List<IAbility> steps, float linkMaxWait = 0.25f)
     {
         _steps = steps ?? new List<IAbility>();
@@ -21,7 +21,9 @@ public sealed class SequenceAbility : IAbility
     public bool CanExecute(AbilityContext ctx)
     {
         if (_steps == null || _steps.Count == 0) return false;
+        // Debug.Log($"Sequence의 CanExecute_1: {ctx.TimeNow} < {NextReadyTime} = {ctx.TimeNow < NextReadyTime}");
         if (ctx.TimeNow < NextReadyTime) return false;
+        // Debug.Log($"Sequence의 _steps[0] CanExecute: {_steps[0].CanExecute(ctx)}");
         return _steps[0].CanExecute(ctx);
     }
     public float Score(AbilityContext ctx)
@@ -54,19 +56,21 @@ public sealed class SequenceAbility : IAbility
                 while (!step.CanExecute(ctx) && Time.time < deadline && !ct.IsCancellationRequested)
                 {
                     await UniTask.Yield(PlayerLoopTiming.Update, ct);
-                    ctx.bb.TimeNow = Time.time; // 타임 갱신
                 }
                 if (!step.CanExecute(ctx) || ct.IsCancellationRequested) break;
                 step.Execute(ctx);
             }
-
+            await UniTask.WaitUntil(() => !ctx.npc.IsAbilityRunning, PlayerLoopTiming.Update, ct);
             // 한 프레임 양보
             await UniTask.Yield(PlayerLoopTiming.Update, ct);
-            ctx.bb.TimeNow = Time.time;
         }
 
-        // ✅ 마지막 스텝의 쿨다운 사용
-        ctx.bb.TimeNow = Time.time;
-        NextReadyTime = ctx.bb.TimeNow + Cooldown;
+        var npc = ctx.npc;
+        // 종료 처리(한 번만 쿨다운 적용)
+        npc.OnAbilityEnd = null;
+        npc.SetRooted(false);
+        npc.IsAbilityRunning = false;
+        NextReadyTime = ctx.bb.TimeNow + Cooldown; // ✅ 여기서만 쿨다운
+        // Debug.Log($"{NextReadyTime} set on sequence end");
     }
 }

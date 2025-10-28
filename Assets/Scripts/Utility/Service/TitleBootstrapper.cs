@@ -47,12 +47,12 @@ public class TitleBootstrapper : MonoBehaviour
                     .Select(ToAddress)
                     .Distinct()
                     .ToArray();
-                // Debug.Log($"{string.Join(",", profileKey)}");
+                Debug.Log($"{string.Join(",", profileKey)}");
                 var config = new AtlasService.PreloadConfig
                 {
                     AtlasLabels = new[] { "IconsAtlas", "WeaponAtlas" },
                     AtlasKeys = null,
-                    PrefabLabels = new[] { "EffectPrefab" },
+                    PrefabLabels = new[] { "EffectPrefab", "NPCPrefab" },
                     PrefabKeys = null,
                     ProfileLabels = null,
                     ProfileKeys = profileKey
