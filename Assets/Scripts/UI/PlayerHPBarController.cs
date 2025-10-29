@@ -1,4 +1,5 @@
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -12,8 +13,9 @@ public class PlayerHPBarController : MonoBehaviour
     public TextMeshProUGUI hpVal; // HP 값 텍스트
     private Coroutine hpSmooth; // HP 바 부드럽게 채우기 코루틴
     private const float hpBarSpd = 5.0f; // HP 바 스피드
-    public void Awake()
+    public async void Awake()
     {
+        await PlayableCharacter.ReadyAsync(this.GetCancellationTokenOnDestroy());
         Data = PlayableCharacter.Inst.Data;
         cachedHP = Data.health.HP;
         Data.health.OnHPChanged += HPBarAction;

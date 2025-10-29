@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.Playables;
+using Cysharp.Threading.Tasks;
 [System.Serializable]
 public class ItemData
 {
@@ -82,8 +83,10 @@ public class Weapon : MonoBehaviour
     private CharacterStats stats;
     private IStatProvider provider;
     private IAddressablesService svc;
-    private void Awake()
+    private async void Awake()
     {
+        await PlayableCharacter.ReadyAsync(this.GetCancellationTokenOnDestroy());
+        Debug.Log("웨폰");
         provider = PlayableCharacter.Inst.Data;
         stats ??= provider.GetStats();
         stats.OnRecalculated += OnStatChanged;

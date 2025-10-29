@@ -42,7 +42,7 @@ public class TitleManager : MonoBehaviour
         }
 
         loginButton.onClick.AddListener(OnClick_Login);
-        startButton.onClick.AddListener(OnClick_StartGame);
+        //startButton.onClick.AddListener(OnClick_StartGame);
 //        optionButton.onClick.AddListener(ToggleOptionsPanel);
 
         await FadeIn();
@@ -85,13 +85,20 @@ public class TitleManager : MonoBehaviour
         startButton.gameObject.SetActive(true);
         Debug.Log("[TitleManager] 로그인 성공 — Start 버튼 활성화");
     }
-    public string sceneName = "MainScene";
-    private async void OnClick_StartGame()
+    public string sceneName = "CoreScene";
+    public SceneTransition c;
+    public async void StartGame()
     {
-        await FadeOut();
+        c.gameObject.SetActive(true);
+        await UniTask.WaitUntil(() => c.end);
         SceneManager.LoadScene(sceneName);
     }
-
+    private async void OnClick_StartGame()
+    {
+        //await FadeOut();
+        //await LoadSubSceneAsync(sceneName);
+        SceneManager.LoadScene(sceneName);
+    }
     private async UniTask FadeIn()
     {
         if (fadePanel == null) return;

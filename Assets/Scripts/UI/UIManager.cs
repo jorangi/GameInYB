@@ -70,6 +70,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
 
     private void Awake()
     {
+        cam = Camera.main;
         if (inputAction is null)
         {
             inputAction = new();

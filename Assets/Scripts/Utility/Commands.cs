@@ -232,7 +232,7 @@ namespace Looper.Console.Commands
                 return;
             }
             PlayableCharacter.Inst.GetItem(item, quantity);
-            ctx.Info($"아이템 '{item.name[1]}'을(를) {quantity}개 획득했습니다.");
+            ctx.Info($"아이템 '{(item.name.Length == 2 ? item.name[1] : item.id)}'을(를) {quantity}개 획득했습니다.");
         }
         public UniTask ExecuteAsync(CommandContext ctx, string[] args) => UniTask.CompletedTask;
     }
@@ -607,7 +607,6 @@ namespace Looper.Console.Commands
         }
         public UniTask ExecuteAsync(CommandContext ctx, string[] args) => UniTask.CompletedTask;
     }
-    
     public sealed class SpawnCommand : ICommand
     {
         public string Name => "Spawn";

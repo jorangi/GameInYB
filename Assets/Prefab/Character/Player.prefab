@@ -388,6 +388,8 @@ MonoBehaviour:
   hitBox: {fileID: 8946068807373210611}
   savedPos: {x: 0, y: 0, z: 0}
   FacingSign: 0
+  isDash: 0
+  specialSpd: 1
   timeMul: 10
   gameTimeScale: 1
   CharacterInformationObj: {fileID: 0}
@@ -395,6 +397,9 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   messageObj: {fileID: 0}
   arm: {fileID: 1031143247360078182}
+  weaponSprite: {fileID: 3795418341820401284}
+  subWeaponSprite: {fileID: 4379440933791857555}
+  weaponScript: {fileID: 6921233488063739015}
   logMessageParent: {fileID: 0}
 --- !u!1 &6394229451876132354
 GameObject:
@@ -511,7 +516,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -366585065
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: 6
   m_Sprite: {fileID: 21300000, guid: 922d0798d9bbe1a4fb5b9f72581fb66b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -724,6 +729,11 @@ PrefabInstance:
 --- !u!4 &3358004628112284912 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 317288009917981453, guid: 7c89e2d0c27d049cca8ec6a406dc9bca, type: 3}
+  m_PrefabInstance: {fileID: 3097698816965935101}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &4379440933791857555 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 1602114860056904814, guid: 7c89e2d0c27d049cca8ec6a406dc9bca, type: 3}
   m_PrefabInstance: {fileID: 3097698816965935101}
   m_PrefabAsset: {fileID: 0}
 --- !u!70 &7109514369102601027 stripped

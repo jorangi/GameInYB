@@ -25,8 +25,8 @@ public class PlayerStats
     public float cri;
     public float crid;
     public float spd;
-    public float jCnt;
-    public int jmp;
+    public float jmp;
+    public int jcnt;
     public int clear;
     public int chapter;
     public int stage;

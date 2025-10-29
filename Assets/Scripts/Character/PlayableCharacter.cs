@@ -205,13 +205,12 @@ public class PlayableCharacterData : CharacterData, IPlayerStatMapper
             hp   = MaxHP,
             atk  = stats.GetFinal(StatType.ATK),
             def  = stats.GetFinal(StatType.DEF),
-            // ats = stats.GetFinal(StatType.ATS),
+            ats = stats.GetFinal(StatType.ATS),
             cri  = stats.GetFinal(StatType.CRI),
             crid = stats.GetFinal(StatType.CRID),
             spd  = stats.GetFinal(StatType.SPD),
-            jmp  = (int)stats.GetFinal(StatType.JCNT),
-            //jCnt  = (int)stats.GetFinal(StatType.JCNT),
-            //jmp  = stats.GetFinal(StatType.Jmp),
+            jcnt  = (int)stats.GetFinal(StatType.JCNT),
+            jmp  = stats.GetFinal(StatType.JMP),
 
             clear   = 0,
             chapter = 0,
@@ -278,57 +277,70 @@ public class PlayableCharacterData : CharacterData, IPlayerStatMapper
     }
     public void ApplyDto(PlayerStats dto)
     {
+        
         var equipIds = ParseJsonStringArrayLocal(dto.equiped);
         string helmetId = equipIds[0];
-        string armorId  = equipIds[1];
-        string pantsId  = equipIds[2];
-        string mainId   = equipIds[3];
-        string subId    = equipIds[4];
+        string armorId = equipIds[1];
+        string pantsId = equipIds[2];
+        string mainId = equipIds[3];
+        string subId = equipIds[4];
 
         PlayableCharacter.Inst.SetHelmet(ItemDataManager.GetItem(helmetId));
         PlayableCharacter.Inst.SetArmor(ItemDataManager.GetItem(armorId));
         PlayableCharacter.Inst.SetPants(ItemDataManager.GetItem(pantsId));
         PlayableCharacter.Inst.SetSubWeapon(ItemDataManager.GetItem(subId));
         PlayableCharacter.Inst.SetMainWeapon(ItemDataManager.GetItem(mainId));
+        
 
         var probe = new CharacterStats();
+        
         void AddEquipProviderIfAny(string id)
         {
             if (string.IsNullOrEmpty(id)) return;
             var item = ItemDataManager.GetItem(id);
             probe.AddProvider(item.GetProvider());
         }
+        
         AddEquipProviderIfAny(helmetId);
         AddEquipProviderIfAny(armorId);
         AddEquipProviderIfAny(pantsId);
         AddEquipProviderIfAny(mainId);
         AddEquipProviderIfAny(subId);
         
-        _ = stats.GetAllFinal(); // Recalculate 유도
 
-        stats.SetBase(StatType.HP,   SolveBase(probe, StatType.HP,   dto.hp));
-        stats.SetBase(StatType.ATK,  SolveBase(probe, StatType.ATK,  dto.atk));
-        stats.SetBase(StatType.DEF,  SolveBase(probe, StatType.DEF,  dto.def));
-        stats.SetBase(StatType.CRI,  SolveBase(probe, StatType.CRI,  dto.cri));
-        stats.SetBase(StatType.CRID, SolveBase(probe, StatType.CRID, dto.crid));
-        stats.SetBase(StatType.SPD,  SolveBase(probe, StatType.SPD,  dto.spd));
-        stats.SetBase(StatType.JCNT, SolveBase(probe, StatType.JCNT, dto.jmp));
-        
         _ = stats.GetAllFinal(); // Recalculate 유도
+        
+
+        stats.SetBase(StatType.HP, SolveBase(probe, StatType.HP, dto.hp));
+        stats.SetBase(StatType.ATK, SolveBase(probe, StatType.ATK, dto.atk));
+        stats.SetBase(StatType.ATS, SolveBase(probe, StatType.ATS, dto.ats));
+        stats.SetBase(StatType.DEF, SolveBase(probe, StatType.DEF, dto.def));
+        stats.SetBase(StatType.CRI, SolveBase(probe, StatType.CRI, dto.cri));
+        stats.SetBase(StatType.CRID, SolveBase(probe, StatType.CRID, dto.crid));
+        stats.SetBase(StatType.SPD, SolveBase(probe, StatType.SPD, dto.spd));
+        stats.SetBase(StatType.JCNT, SolveBase(probe, StatType.JCNT, dto.jcnt));
+        stats.SetBase(StatType.JMP, SolveBase(probe, StatType.JMP, dto.jmp));
+        
+
+        _ = stats.GetAllFinal(); // Recalculate 유도
+        
 
         var invStrArr = ParseJsonStringArrayLocal(dto.inventory);
         var pc = PlayableCharacter.Inst;
         var bag = pc.Inventory.backpack; // ItemSlot[]
+        
         for (int i = 0; i < invStrArr.Length; i++)
         {
             if (!TryParseInventoryObject(invStrArr[i], out int idx, out string itemId, out int ea))
                 continue;
             if (idx < 0 || idx >= bag.Length) continue;
+        
 
             // 기존 슬롯의 provider 제거
             var prev = bag[idx];
             if (prev.item.id != null)
                 pc.Data.GetStats().RemoveProvider(prev.item.GetProvider());
+        
             // 새 아이템 대입
             var newItem = ItemDataManager.GetItem(itemId);
             prev.index = idx;
@@ -337,13 +349,17 @@ public class PlayableCharacterData : CharacterData, IPlayerStatMapper
             bag[idx] = prev;
             PlayableCharacter.Inst.InvokeBackpackChanged(idx, bag[idx]);
 
+        
             // 새 provider 추가
-            if (newItem.id != null && newItem.id[0]=='0' && !Array.Exists(new char[] { '1','2','3','4','5'}, s => s == newItem.id[1]))
+            if (newItem.id != null && newItem.id[0] == '0' && !Array.Exists(new char[] { '1', '2', '3', '4', '5' }, s => s == newItem.id[1]))
                 pc.Data.GetStats().AddProvider(newItem.GetProvider());
-                
+        
+
         }
         // 6) 최종 재계산 트리거(필요 시)
+        
         _ = stats.GetAllFinal(); // Recalculate 유도
+        
     }
     string[] ParseJsonStringArrayLocal(string json)
     {
@@ -705,27 +721,26 @@ public interface IPlayableCharacterFacade
 }
 public sealed class PlayableCharacterFacadeAdapter : IPlayableCharacterFacade
 {
-    private readonly PlayableCharacter _pc;
+    private readonly Func<PlayableCharacter> _pcAccessor;
+    private PlayableCharacter PC
+        => _pcAccessor() ?? throw new InvalidOperationException("PlayableCharacter not ready yet.");
 
-    public PlayableCharacterFacadeAdapter(PlayableCharacter pc)
+    public PlayableCharacterFacadeAdapter(Func<PlayableCharacter> pcAccessor)
     {
-        _pc = pc != null ? pc : throw new System.ArgumentNullException(nameof(pc));
+        _pcAccessor = pcAccessor ?? throw new ArgumentNullException(nameof(pcAccessor));
     }
 
-    public CharacterStats Stats => _pc.Data.GetStats();
+    public CharacterStats Stats => PC.Data.GetStats();
+    public Backpack Backpack   => PC.Inventory.backpack;
 
-    public Backpack Backpack => _pc.Inventory.backpack;
-
-    public void SetMainWeapon(Item item) => _pc.SetMainWeapon(item);
-    public void SetSubWeapon(Item item)  => _pc.SetSubWeapon(item);
-    public void SetHelmet(Item item)     => _pc.SetHelmet(item);
-    public void SetArmor(Item item)      => _pc.SetArmor(item);
-    public void SetPants(Item item)      => _pc.SetPants(item);
+    public void SetMainWeapon(Item item) => PC.SetMainWeapon(item);
+    public void SetSubWeapon(Item item)  => PC.SetSubWeapon(item);
+    public void SetHelmet(Item item)     => PC.SetHelmet(item);
+    public void SetArmor(Item item)      => PC.SetArmor(item);
+    public void SetPants(Item item)      => PC.SetPants(item);
 
     public void InvokeBackpackChanged(int index, ItemSlot slot)
-    {
-        _pc.InvokeBackpackChanged(index, slot);
-    }
+        => PC.InvokeBackpackChanged(index, slot);
 }
 public sealed class PlayerStatsLoader
 {
@@ -894,18 +909,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         }
     }
     private static PlayableCharacter inst; // 싱글턴 인스턴스
-    public static PlayableCharacter Inst
-    {
-        get
-        {
-            if (inst != null) return inst;
-            return FindFirstObjectByType<PlayableCharacter>();
-        }
-        private set
-        {
-            inst = value;
-        }
-    }
+    public static PlayableCharacter Inst => inst;
     private Image messagePortrait, imageOnMessage; // 메시지 박스에 표시되는 이미지
     private TextMeshProUGUI unitName, message; // 메시지 박스에 표시되는 유닛 이름과 메시지
     public GameObject messageObj; // 메시지 박스 오브젝트
@@ -913,27 +917,29 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     private InputSystem_Actions inputAction; // 인풋 액션
     private Camera cam; // 메인 카메라
     public Transform arm; // 플레이어의 팔 트랜스폼
-    private SpriteRenderer weaponSprite; // 플레이어의 무기 스프라이트 렌더러
-    private SpriteRenderer subWeaponSprite; // 플레이어의 무기 스프라이트 렌더러
-    private Weapon weaponScript; // 플레이어의 무기 스크립트
+    [SerializeField]private SpriteRenderer weaponSprite; // 플레이어의 무기 스프라이트 렌더러
+    [SerializeField]private SpriteRenderer subWeaponSprite; // 플레이어의 무기 스프라이트 렌더러
+    [SerializeField]private Weapon weaponScript; // 플레이어의 무기 스크립트
     private bool isDropdown; // 드롭다운 여부
     private SpriteAtlas weaponAtlas; // 무기 스프라이트 아틀라스
     public event Action<EquipmentType, Item> OnEquipmentChanged; //옵저버 패턴을 이용해 장비변경시 알림
     public event Action<int, ItemSlot> OnBackpackChanged;//옵저버 패턴을 이용해 인벤토리 변경시 알림
     [SerializeField] private LogMessageParent logMessageParent;
-    protected override void Awake()
+    public static event Action<PlayableCharacter> OnReady;
+    private static Cysharp.Threading.Tasks.UniTaskCompletionSource<PlayableCharacter> _tcs;
+    public static UniTask<PlayableCharacter> ReadyAsync(CancellationToken ct = default)
     {
-        //싱글턴 인스턴스 설정
-        if (Inst != null && Inst != this)
-        {
-            //Destroy(Inst.gameObject);
-            return;
-        }
-        Inst = this;
-        DontDestroyOnLoad(gameObject);
-        // 데이터 초기화(우선적으로 getter에서 처리하지만, 명시적으로 초기화도 해둠)
+        if (inst != null) return UniTask.FromResult(inst);
+        _tcs ??= new UniTaskCompletionSource<PlayableCharacter>();
+        if (ct.CanBeCanceled)
+            ct.Register(() => _tcs.TrySetCanceled());
+        return _tcs.Task;
+    }
+    public void ResetPlayerData()
+    {
+        BackpackClearWithEquiped();
         data ??= new PlayableCharacterData("Player")
-            .SetJCnt(4)
+            .SetJCnt(2)
             .SetJPow(12.0f)
             .SetCri(0.1f)
             .SetCriDmg(1.5f);
@@ -942,8 +948,21 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         data.GetStats().SetBase(StatType.SPD, 5.0f);
         data.GetStats().SetBase(StatType.DEF, 0f);
         data.health.ApplyHP(data.MaxHP);
-        ((PlayableCharacterData)data).SetInfoObj(CharacterInformationObj);
+    }
+    protected override void Awake()
+    {
+        //싱글턴 인스턴스 설정
+        if (inst != null && inst != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        inst = this;
+        OnReady?.Invoke(this);
+        _tcs?.TrySetResult(this);
 
+        Debug.Log("캐릭터");
+        ((PlayableCharacterData)data).SetInfoObj(CharacterInformationObj);
         // 인풋 액션 초기화
         inputAction = new();
         Application.targetFrameRate = 120;
@@ -952,11 +971,14 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
 
         // 무기 스프라이트, 스크립트, 메시지 박스, 카메라 초기화
         weaponScript = arm.GetComponentInChildren<Weapon>();
-        weaponSprite = weaponScript.GetComponent<SpriteRenderer>();
-        subWeaponSprite = transform.Find("Body").Find("SubWeapon").GetComponent<SpriteRenderer>();
+        weaponSprite = weaponSprite != null ? weaponSprite : weaponScript.GetComponent<SpriteRenderer>();
+        subWeaponSprite = subWeaponSprite != null ? subWeaponSprite : transform.Find("Body").Find("SubWeapon").GetComponent<SpriteRenderer>();
         //SetupMessageBox();
         cam = Camera.main;
-        FindAnyObjectByType<CinemachineCamera>().Target.TrackingTarget = transform;
+    }
+    private void OnDestroy()
+    {
+        if (inst == this) inst = null;
     }
     private async void Start()
     {
@@ -968,11 +990,11 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         await InitAtlas();
         await ItemDataManager.Ready;
         BackpackClearWithEquiped();
-        SetMainWeapon(ItemDataManager.GetItem("01001"));
-        SetSubWeapon(ItemDataManager.GetItem("02001"));
-        SetHelmet(ItemDataManager.GetItem("03001"));
-        SetArmor(ItemDataManager.GetItem("04001"));
-        SetPants(ItemDataManager.GetItem("05001"));
+        // SetHelmet(ItemDataManager.GetItem("03001"));
+        // SetArmor(ItemDataManager.GetItem("04001"));
+        // SetPants(ItemDataManager.GetItem("05001"));
+        // SetMainWeapon(ItemDataManager.GetItem("01001"));
+        // SetSubWeapon(ItemDataManager.GetItem("02001"));
 
         InitPos();
     }
@@ -1091,7 +1113,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         // arm.rotation = Quaternion.Euler(0f, 0f, finalZ);
         #endregion
         const float offsetDeg = -90f; // 무기 이미지가 세로로 되어 있어 보정 각도 필요
-
+        if (Camera.main == null) return;
         Vector3 mouseW = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseW.z = arm.position.z;
 
@@ -1271,6 +1293,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     /// <param name="isTwoHander"></param>
     public void SetSubWeapon(Item item, bool isTwoHander = false)
     {
+        Debug.Log($"{subWeaponSprite} {isTwoHander}");
         subWeaponSprite.color = isTwoHander ? new(1, 1, 1, 0) : Color.white;
         subWeaponSprite.sprite = ServiceHub.Get<IAtlasService>().GetSprite("Weapons", item.id);
         if (inventory.equipments.SubWeapon is ItemSlot i)

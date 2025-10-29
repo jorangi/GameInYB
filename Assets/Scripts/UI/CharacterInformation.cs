@@ -46,6 +46,7 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
     private bool awakeFlag = false;
     private async void Awake()
     {
+        await PlayableCharacter.ReadyAsync(this.GetCancellationTokenOnDestroy());
         await InitAltas();
         uiContext = uiContext != null ? uiContext : GetComponentInParent<UIContext>();
         uiContext.UIRegistry.Register(this, UIType.CHARACTER_INFORMATION);

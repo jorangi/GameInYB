@@ -171,7 +171,7 @@ public class CharacterData : IStatProvider
             unitName = "Player";
             stats.SetBase(StatType.HP, 100.0f);
             stats.SetBase(StatType.ATK, 10.0f);
-            stats.SetBase(StatType.ATS, 0.8f);
+            stats.SetBase(StatType.ATS, 0f);
             stats.SetBase(StatType.DEF, 0.0f);
             stats.SetBase(StatType.SPD, 3.0f);
         }
