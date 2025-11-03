@@ -14,16 +14,23 @@ public class SceneTransition : MonoBehaviour
     {
         c = GetComponent<CanvasGroup>();
         fadePanel = transform;
-        StartCoroutine(FadeOut());
-    }
-    public void OnEnable()
-    {
+        
+        
         c.alpha = 1.0f;
         for (int i = 0; i < transform.childCount; i++)
         {
             transform.GetChild(i).gameObject.SetActive(false);
         }
         end = false;
+        StartCoroutine(FadeOut());
+    }
+    private void OnDisable()
+    {
+        c.alpha = 1.0f;
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
     }
     public IEnumerator FadeOut()
     {
@@ -111,6 +118,7 @@ public class SceneTransition : MonoBehaviour
         }
 
         end = true;
+        gameObject.SetActive(false);
     }
     public IEnumerator FadeIn()
     {

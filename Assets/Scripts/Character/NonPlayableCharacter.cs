@@ -140,7 +140,7 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         
         //blackboard.CanSeeTarget = Mathf.Sign(blackboard.target.position.x - blackboard.self.position.x) == Mathf.Sign(FacingSign);
         wallChecker.localPosition = new(FacingSign > 0 ? 0.25f : -0.25f, 0.0f);
-        Debug.DrawRay(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, Color.red);
+        Debug.DrawRay(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, Color.yellow);
         RaycastHit2D hitWall = Physics2D.Raycast(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, 1, LayerMask.GetMask("Floor", "Platform"));
         blackboard.IsWallAhead = hitWall;
         blackboard.IsPrecipiceAhead = isPrecipice.collider == null;
@@ -298,7 +298,7 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         sb.AppendLine($"[{id}]");
         foreach (var a in abilities)
             sb.AppendLine(a.Id);
-        Debug.Log(sb.ToString());
+        // Debug.Log(sb.ToString());
         BindAbilites(engage);
     }
     private void AnimSetAttack(int idx) => animator.SetFloat("AttackIndex", idx);

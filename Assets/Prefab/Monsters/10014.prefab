@@ -450,13 +450,16 @@ MonoBehaviour:
   frontRay: {fileID: 2092061487537357839}
   foot: {fileID: 5608565846385726882}
   gravityScale: 2
-  col: {fileID: 0}
+  col: {fileID: 8557156625932560592}
   rigid: {fileID: 4528652972802474982}
   isSlope: 0
   hitBox: {fileID: 2622792449010714901}
   savedPos: {x: 0, y: 0, z: 0}
   FacingSign: 0
+  isDash: 0
+  specialSpd: 1
   timeMul: 10
+  RunningAbilityCfg: {fileID: 0}
   blackboard:
     self: {fileID: 4935461169461274697}
     target: {fileID: 0}
@@ -528,8 +531,6 @@ MonoBehaviour:
   owner: {fileID: 6024772360725660844}
   frontRay: {fileID: 2092061487537357839}
   foot: {fileID: 5608565846385726882}
-  attackBoxSize: {x: 1, y: 0.8}
-  attackBoxOffset: {x: 0.7, y: 0.3}
 --- !u!1 &6638306976914993589
 GameObject:
   m_ObjectHideFlags: 0

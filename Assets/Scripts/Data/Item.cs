@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 [Serializable]
@@ -31,8 +32,13 @@ public struct Item
     public string[] skills;
     public bool twoHander;
     public bool stackable;
-    private readonly ItemProvide provider;
-    public readonly ItemProvide GetProvider() => provider ?? new ItemProvide(this);
+    private ItemProvide provider;
+    //public readonly ItemProvide GetProvider() => provider ?? new ItemProvide(this);
+    public ItemProvide GetProvider()
+    {
+        provider ??= new ItemProvide(this);
+        return provider;
+    }
     public static bool operator ==(Item i1, Item i2)
     {
         if (ReferenceEquals(i1, null))
@@ -49,7 +55,7 @@ public struct Item
     {
         return id.GetHashCode();
     }
-    public override readonly string ToString()
+    public readonly override string ToString()
     {
         var attrStr = string.Join(", ", (attributes ?? Array.Empty<ItemAttribute>())
                                         .Select(a => a.ToString()));

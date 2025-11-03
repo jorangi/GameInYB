@@ -4,8 +4,15 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
 using System;
+using System.Threading;
 
-public class TitleManager : MonoBehaviour
+public interface ITitleManager
+{
+    public void OnLoginSuccess();
+    public void SetMessageText(string text);
+    public void LoginPanelShow(bool show = true);
+}
+public class TitleManager : MonoBehaviour, ITitleManager
 {
     [Header("UI References")]
     public CanvasGroup loginPanel;
@@ -13,6 +20,7 @@ public class TitleManager : MonoBehaviour
     public TMP_InputField pwInput;
     public TMP_Text messageText;
     public Button loginButton;
+    public Button logoutButton;
     public Button startButton;
     public Button optionButton;
     public GameObject optionsPanel;
@@ -27,10 +35,10 @@ public class TitleManager : MonoBehaviour
             fadePanel.color = new Color(0, 0, 0, 1);
 
         startButton.gameObject.SetActive(false);
+        logoutButton.gameObject.SetActive(false);
         if (optionsPanel != null)
             optionsPanel.SetActive(false);
     }
-
     private async void Start()
     {
         loginManager = FindAnyObjectByType<LoginAndStatsManager>();
@@ -42,14 +50,11 @@ public class TitleManager : MonoBehaviour
         }
 
         loginButton.onClick.AddListener(OnClick_Login);
-        //startButton.onClick.AddListener(OnClick_StartGame);
-//        optionButton.onClick.AddListener(ToggleOptionsPanel);
-
+        logoutButton.onClick.AddListener(OnClick_Logout);
         await FadeIn();
 
-        
-    }
 
+    }
     private async void OnClick_Login()
     {
         string id = idInput.text.Trim();
@@ -72,10 +77,19 @@ public class TitleManager : MonoBehaviour
             messageText.text = "로그인 실패. 다시 시도하세요.";
             return;
         }
-        OnLoginSuccess();
     }
-
-    private void OnLoginSuccess()
+    private void OnClick_Logout()
+    {
+        messageText.text = "";
+        idInput.text = "";
+        pwInput.text = "";
+        loginPanel.alpha = 1;
+        loginPanel.interactable = true;
+        loginPanel.blocksRaycasts = true;
+        startButton.gameObject.SetActive(false);
+        logoutButton.gameObject.SetActive(false);
+    }
+    public void OnLoginSuccess()
     {
         messageText.text = "로그인 성공!";
         loginPanel.alpha = 0;
@@ -83,7 +97,7 @@ public class TitleManager : MonoBehaviour
         loginPanel.blocksRaycasts = false;
 
         startButton.gameObject.SetActive(true);
-        Debug.Log("[TitleManager] 로그인 성공 — Start 버튼 활성화");
+        logoutButton.gameObject.SetActive(true);
     }
     public string sceneName = "CoreScene";
     public SceneTransition c;
@@ -91,12 +105,6 @@ public class TitleManager : MonoBehaviour
     {
         c.gameObject.SetActive(true);
         await UniTask.WaitUntil(() => c.end);
-        SceneManager.LoadScene(sceneName);
-    }
-    private async void OnClick_StartGame()
-    {
-        //await FadeOut();
-        //await LoadSubSceneAsync(sceneName);
         SceneManager.LoadScene(sceneName);
     }
     private async UniTask FadeIn()
@@ -111,25 +119,14 @@ public class TitleManager : MonoBehaviour
             await UniTask.Yield();
         }
     }
-
-    private async UniTask FadeOut()
+    public void SetMessageText(string text)
     {
-        if (fadePanel == null) return;
-
-        Color c = fadePanel.color;
-        while (c.a < 1)
-        {
-            c.a += Time.deltaTime * fadeSpeed;
-            fadePanel.color = c;
-            await UniTask.Yield();
-        }
+        messageText.text = text;
     }
-
-    private void ToggleOptionsPanel()
+    public void LoginPanelShow(bool show = true)
     {
-        if (optionsPanel == null) return;
-        bool active = !optionsPanel.activeSelf;
-        optionsPanel.SetActive(active);
-        Debug.Log($"[OPTION] {(active ? "열림" : "닫힘")}");
+        loginPanel.alpha = show ? 1 : 0;
+        loginPanel.interactable = show;
+        loginPanel.blocksRaycasts = show;
     }
 }

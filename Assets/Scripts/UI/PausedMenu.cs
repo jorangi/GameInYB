@@ -43,16 +43,6 @@ public class PausedMenu : MonoBehaviour, IUI
         gameObject.SetActive(true);
         Time.timeScale = 0.0f;
     }
-    public async void OnGiveup()
-    {
-        Debug.Log("기브업");
-        PlayableCharacter.Inst.ResetPlayerData();
-        Debug.Log("초기화");
-        await OnSave();
-        Debug.Log("세이브");
-        var f = FindAnyObjectByType<SceneTransition>();
-        await UniTask.WaitUntil(() => f.end);
-    }
     public async UniTask OnSave()
     {
         var saver = ServiceHub.Get<IStatsSaver>();

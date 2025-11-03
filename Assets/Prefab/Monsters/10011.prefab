@@ -194,7 +194,7 @@ MonoBehaviour:
   frontRay: {fileID: 9171836017290671102}
   foot: {fileID: 3590029744506465615}
   gravityScale: 2
-  col: {fileID: 0}
+  col: {fileID: 617342791959183805}
   rigid: {fileID: 6093266171188599761}
   isSlope: 0
   hitBox: {fileID: 2172398143946894851}

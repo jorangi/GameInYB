@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using TMPro;
 using Cysharp.Threading.Tasks;
 using System;
+using UnityEngine.UI;
 
 public interface ILoginService
 {
@@ -68,17 +69,22 @@ public class LoginManager : ILoginService
     public async UniTask<bool> InitializeAsync(bool autoLogin = true)
     {
         if (!autoLogin) return false;
-        if (!string.IsNullOrEmpty(_tokenProvider.GetAccessToken()))
+        ITitleManager titleManager = Component.FindAnyObjectByType<TitleManager>();
+        string id = PlayerPrefs.GetString("id");
+        string pw = PlayerPrefs.GetString("pw");
+        if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(pw))
         {
-            Debug.Log("[LoginManager] 저장된 토큰 발견 -> Stats 호출");
+            titleManager.SetMessageText("자동 로그인 중…");
+            titleManager.LoginPanelShow(false);
             try
             {
-                await GetStatsAsync();
+                await LoginAsync(id, pw);
+                titleManager?.OnLoginSuccess();
                 return true;
             }
-            catch (Exception e)
+            catch
             {
-                Debug.LogWarning($"[LoginManager] 초기 Stats 호출 실패: {e.Message}");
+                Debug.LogWarning($"자동 로그인 실패");
                 return false;
             }
         }
@@ -100,12 +106,8 @@ public class LoginManager : ILoginService
         request.SetRequestHeader("Accept", "application/json");
         request.timeout = 10;
 
-        Debug.Log($"[Login] url={LOGIN_URL} method=post body={body}");
 
         await request.SendWebRequest();
-
-        Debug.Log($"[LOGIN] responseCode={request.responseCode}, result={request.result}, error={request.error}");
-        Debug.Log($"[LOGIN] responseText={request.downloadHandler.text}");
 
         if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             throw new Exception($"로그인 실패: {request.error} (code:{request.responseCode})");
@@ -120,6 +122,8 @@ public class LoginManager : ILoginService
             throw new Exception($"로그인 응답 파싱 실패: {e.Message}");
         }
         PlayerSession.Inst.SetToken(res);
+        PlayerPrefs.SetString("loginToken", res.accessToken);
+        PlayerPrefs.Save();
 
         await GetStatsAsync();
     }
@@ -165,43 +169,37 @@ public class LoginAndStatsManager : MonoBehaviour
     public TMP_InputField pwInput;
     public TMP_Text messageText;
     private ILoginService _login;
-
+    [SerializeField] Toggle autoLogin;
+    public void Awake()
+    {
+        autoLogin.isOn = PlayerPrefs.GetInt("AutoLogin") != 0;
+    }
     private async void Start()
     {
         // UI 연결
         statText ??= FindAnyObjectByType<StatEditUI>();
-
-        // PlayableCharacter 준비가 되었는지 확인
-        // if (PlayableCharacter.Inst == null || PlayableCharacter.Inst.Data == null)
-        // {
-        //     Debug.LogError("[LoginAndStatsManager] PlayableCharacter 또는 Data가 아직 초기화되지 않았습니다. 초기화 순서를 확인하세요.");
-        //     return;
-        // }
         _login = ServiceHub.Get<ILoginService>();
         // 자동 로그인/스탯 조회
-        try
+        if (autoLogin.isOn)
         {
-            await _login.InitializeAsync(autoLogin: true);
-            UpdateUIFromPlayableCharacter();
-            if (messageText != null && !string.IsNullOrEmpty(ServiceHub.Get<IAccessTokenProvider>().GetAccessToken()))
-                messageText.text = "정상적으로 데이터가 적용되었습니다.";
-            Debug.Log(messageText.text);
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"[LoginAndStatsManager] Initialize 실패: {e.Message}");
+            try
+            {
+                await _login.InitializeAsync(autoLogin.isOn);
+                //UpdateUIFromPlayableCharacter();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[LoginAndStatsManager] Initialize 실패: {e.Message}");
+            }
         }
     }
-
+    public void OnAutoLoginToggle()
+    {
+        PlayerPrefs.SetInt("AutoLogin", autoLogin.isOn ? 1 : 0);
+        PlayerPrefs.Save();
+    }
     public async void OnClick_Login()
     {
-        Debug.Log(ServiceHub.Get<IAddressablesService>().GetProfile("10014").id);
-        // if (PlayableCharacter.Inst == null || PlayableCharacter.Inst.Data == null)
-        // {
-        //     Debug.LogError("[LoginAndStatsManager] PlayableCharacter 또는 Data가 아직 초기화되지 않았습니다.");
-        //     return;
-        // }
-
         string id = idInput != null ? idInput.text.Trim() : string.Empty;
         string pw = pwInput != null ? pwInput.text.Trim() : string.Empty;
 
@@ -213,9 +211,13 @@ public class LoginAndStatsManager : MonoBehaviour
 
         try
         {
-            if (messageText != null) messageText.text = "로그인 중…";
-            await _login.LoginAsync(id, pw);   // 로그인 + Stats 호출
+            await _login.LoginAsync(id, pw);
             UpdateUIFromPlayableCharacter();
+            if (autoLogin.isOn)
+            {
+                Debug.Log($"Auto Login: {id} / {pw}");
+                Debug.Log($"Saved Login Info: {PlayerPrefs.GetString("id")} / {PlayerPrefs.GetString("pw")}");
+            }
             if (messageText != null) messageText.text = "정상적으로 데이터가 적용되었습니다.";
         }
         catch (Exception e)
@@ -224,7 +226,6 @@ public class LoginAndStatsManager : MonoBehaviour
             if (messageText != null) messageText.text = "로그인 실패";
         }
     }
-
     public async void OnClick_RefreshStats()
     {
         if (PlayableCharacter.Inst == null || PlayableCharacter.Inst.Data == null)
@@ -246,7 +247,6 @@ public class LoginAndStatsManager : MonoBehaviour
             if (messageText != null) messageText.text = "스탯 갱신 실패";
         }
     }
-
     private void UpdateUIFromPlayableCharacter()
     {
         if (statText == null)
@@ -292,7 +292,6 @@ public class LoginAndStatsManager : MonoBehaviour
             Debug.LogWarning($"[LoginAndStatsManager] UI 업데이트 중 예외: {e.Message}");
         }
     }
-
     private static string[] SplitEquipped(string raw)
     {
         if (string.IsNullOrEmpty(raw)) return Array.Empty<string>();
@@ -303,16 +302,33 @@ public class LoginAndStatsManager : MonoBehaviour
             parts[i] = parts[i].Trim();
         return parts;
     }
-
-
     // TitleManager에서 호출
     public async UniTask InitializeAutoLogin()
     {
-    await _login.InitializeAsync(autoLogin: true);
+        await _login.InitializeAsync(autoLogin.isOn);
     }
-
     public async UniTask TryLogin(string id, string pw)
     {
-    await _login.LoginAsync(id, pw);
+        ITitleManager titleManager = Component.FindAnyObjectByType<TitleManager>();
+        titleManager.LoginPanelShow(false);
+        if (messageText != null) messageText.text = "로그인 중…";
+        try
+        {
+            await _login.LoginAsync(id, pw);
+
+            titleManager.OnLoginSuccess();
+
+            PlayerPrefs.SetString("id", id);
+            PlayerPrefs.SetString("pw", pw);
+            PlayerPrefs.Save();
+            Debug.Log(PlayerPrefs.GetString("id"));
+            Debug.Log(PlayerPrefs.GetString("pw"));
+        }
+        catch
+        {
+            titleManager.LoginPanelShow(true);
+            messageText.text = "로그인 실패";
+            Debug.Log("로그인 실패");
+        }
     }
 }

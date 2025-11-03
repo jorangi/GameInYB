@@ -75,6 +75,7 @@ public class TitleBootstrapper : MonoBehaviour
         }
         ServiceHub.RebuildSceneScope(scope =>
         {
+            ServiceHub.SceneScope.Add<ITitleManager>(FindAnyObjectByType<TitleManager>());
         });
     }
 }

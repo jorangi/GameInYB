@@ -173,9 +173,11 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                                 PlayableCharacter.Inst.SetSubWeapon(targetItem);
                                 break;
                         }
+                        itemSlot.item = targetItem;
                         itemSlot.ea = temp;
                         rect.anchoredPosition = Vector2.zero;
                         inventoryData.InvokeBackpackChanged(targetIndex, targetItemSlot);
+                        inventoryData.InvokeEquipmentChanged(sourceType, itemSlot.item);
                         return;
                     }
                     EquipmentType targetType = EquipmentType.MAINWEAPON;
@@ -206,27 +208,28 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                         {
                             Item targetItem = targetItemSlot.item;
                             int temp = targetItemSlot.ea;
-                            targetItemSlot.ea = itemSlot.ea;
+                            
+                            targetItemSlot.item = itemSlot.item; //대상 아이템을 현재 아이템을 교체
+                            targetItemSlot.ea = itemSlot.ea; // 대상 아이템 개수를 현재 아이템 개수로 교체
                             switch (sourceType) // 현재 선택한 장비가 무엇인지
                             {
                                 case EquipmentType.HELMET:
-                                    PlayableCharacter.Inst.SetHelmet(itemSlot.item);
+                                    PlayableCharacter.Inst.SetHelmet(targetItem);
                                     break;
                                 case EquipmentType.ARMOR:
-                                    PlayableCharacter.Inst.SetArmor(itemSlot.item);
+                                    PlayableCharacter.Inst.SetArmor(targetItem);
                                     break;
                                 case EquipmentType.PANTS:
-                                    PlayableCharacter.Inst.SetPants(itemSlot.item);
+                                    PlayableCharacter.Inst.SetPants(targetItem);
                                     break;
                                 case EquipmentType.MAINWEAPON:
-                                    PlayableCharacter.Inst.SetMainWeapon(itemSlot.item);
+                                    PlayableCharacter.Inst.SetMainWeapon(targetItem);
                                     break;
                                 case EquipmentType.SUBWEAPON:
-                                    PlayableCharacter.Inst.SetSubWeapon(itemSlot.item);
+                                    PlayableCharacter.Inst.SetSubWeapon(targetItem);
                                     break;
                             }
-                            itemSlot.item = targetItem;
-                            itemSlot.ea = temp;
+                            itemSlot.ea = temp; // 현재 아이템 개수를 대상 아이템 개수로 교체
                             inventoryData.InvokeBackpackChanged(targetIndex, targetItemSlot);
                             rect.anchoredPosition = Vector2.zero;
                             return;
@@ -328,10 +331,12 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                                 PlayableCharacter.Inst.SetSubWeapon(itemSlot.item);
                                 break;
                         }
+                        targetItemSlot.item = itemSlot.item;
                         targetItemSlot.ea = itemSlot.ea;
                         itemSlot.item = targetInstance;
                         itemSlot.ea = temp;
                         rect.anchoredPosition = Vector2.zero;
+                        inventoryData.InvokeEquipmentChanged(sourceType, targetItemSlot.item);
                         inventoryData.InvokeBackpackChanged(index, itemSlot);
                         return;
                     }
@@ -348,10 +353,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                 }
             }
         }
-        else
-        {
-            rect.anchoredPosition = Vector2.zero;
-        }
+        rect.anchoredPosition = Vector2.zero;
     }
     public void OnDrag(PointerEventData eventData)
     {

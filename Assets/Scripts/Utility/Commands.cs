@@ -491,7 +491,7 @@ namespace Looper.Console.Commands
                             return;
                     }
                 }
-                if (inventory.backpack[argIndex].item == default || inventory.backpack[argIndex].item.id == "00000")
+                if (inventory.backpack[argIndex].item == null || inventory.backpack[argIndex].item.id == "00000")
                 {
                     ctx.Info($"슬롯 {argIndex}는 비어있습니다.");
                     return;
@@ -554,7 +554,7 @@ namespace Looper.Console.Commands
                             return;
                     }
                 }
-                if (inventory.backpack[picked].item == default || inventory.backpack[picked].item.id == "00000")
+                if (inventory.backpack[picked].item == null || inventory.backpack[picked].item.id == "00000")
                 {
                     ctx.Info($"슬롯 {picked}는 비어 있습니다.");
                     return;

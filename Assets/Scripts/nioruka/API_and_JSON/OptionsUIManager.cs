@@ -63,7 +63,6 @@ public class OptionsUIManager : MonoBehaviour, IUI
             AudioManager.Inst.SetBGMVolume(value);
         OnSave();
     }
-
     void OnSFXVolumeChanged(float value)
     {
         sfxValue = value;
@@ -75,7 +74,6 @@ public class OptionsUIManager : MonoBehaviour, IUI
         }
         OnSave();
     }
-
     void OnBGMEnabledChanged(bool enabled)
     {
         bgmOn = enabled;
@@ -83,7 +81,6 @@ public class OptionsUIManager : MonoBehaviour, IUI
             AudioManager.Inst.SetBGMEnabled(enabled);
         OnSave();
     }
-
     void OnSFXEnabledChanged(bool enabled)
     {
         sfxOn = enabled;
@@ -104,7 +101,6 @@ public class OptionsUIManager : MonoBehaviour, IUI
         bgmValueText.text = $"{Mathf.RoundToInt(bgmValue * 100)}%";
         sfxValueText.text = $"{Mathf.RoundToInt(sfxValue * 100)}%";
     }
-
     public void Show()
     {
         gameObject.SetActive(true);
@@ -114,12 +110,10 @@ public class OptionsUIManager : MonoBehaviour, IUI
         gameObject.SetActive(false);
         uiContext.UIRegistry.CloseUI(this);
     }
-
     public void PositiveInteract(InputAction.CallbackContext context)
     {
         Show();
     }
-
     public void NegativeInteract(InputAction.CallbackContext context)
     {
         Hide();

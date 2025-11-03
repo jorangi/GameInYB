@@ -59,7 +59,7 @@ public static class NPCDataManager
         GameObject gameObject = UnityEngine.Object.Instantiate(prefab, pos, Quaternion.identity);
         var npc = gameObject.GetComponent<INPCProfileInjector>();
         var profile = svc.GetProfile(id);
-        Debug.Log(profile.id);
+        // Debug.Log(profile.id);
         npc.InjectProfile(profile);
         var abilities = AbilityFactory.BuildFromProfile(profile, npc as NonPlayableCharacter);
         npc.BindAbilites(abilities);

@@ -16,6 +16,7 @@ using UnityEngine.UI;
 using static PlayerStats;
 using System.Text;
 using Unity.Cinemachine;
+using AnimationImporter.PyxelEdit;
 
 public sealed class UnityServiceProvider : IServiceProvider
 {
@@ -81,8 +82,8 @@ public interface IInventorySnapshotProvider { InventorySnapshot Snapshot(); }
 public class ItemSlot
 {
     public int index;
-    public Item item;
-    public int ea;
+    public Item item = default;
+    public int ea = 1;
     public override bool Equals(object obj) => base.Equals(obj);
     public override int GetHashCode() => base.GetHashCode();
     public static ItemSlot operator +(ItemSlot a, int ea)
@@ -105,7 +106,7 @@ public class ItemSlot
     }
     public override string ToString()
     {
-        return $"{index}: {item.id}, {ea}";
+        return $"{index}: {item}, {ea}";
     }
 }
 public enum EquipmentType
@@ -244,6 +245,7 @@ public class PlayableCharacterData : CharacterData, IPlayerStatMapper
         sb.Append("\"index\":").Append(index).Append(',');
         sb.Append("\"itemid\":\"").Append(EscapeJsonString(itemId ?? "")).Append("\",");
         sb.Append("\"ea\":").Append(ea);
+        Debug.Log($"{index}:{itemId}({ea})");
         sb.Append('}');
         return sb.ToString();
     }
@@ -580,12 +582,17 @@ public class Backpack : IEnumerable<ItemSlot>
     {
         for (int i = 0; i < items.Length; i++)
         {
-            items[i] = new(i);
+            if (items[i] == null) items[i] = new(i);
+            else
+            {
+                items[i].item = default;
+                items[i].ea = 0;
+            }
         }
     }
     public void RemoveSlot(int index)
     {
-        items[index] = default;
+        items[index] = null;
     }
 }
 public interface IInventoryData
@@ -920,7 +927,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     [SerializeField]private SpriteRenderer weaponSprite; // 플레이어의 무기 스프라이트 렌더러
     [SerializeField]private SpriteRenderer subWeaponSprite; // 플레이어의 무기 스프라이트 렌더러
     [SerializeField]private Weapon weaponScript; // 플레이어의 무기 스크립트
-    private bool isDropdown; // 드롭다운 여부
+    [SerializeField]private bool isDropdown; // 드롭다운 여부
     private SpriteAtlas weaponAtlas; // 무기 스프라이트 아틀라스
     public event Action<EquipmentType, Item> OnEquipmentChanged; //옵저버 패턴을 이용해 장비변경시 알림
     public event Action<int, ItemSlot> OnBackpackChanged;//옵저버 패턴을 이용해 인벤토리 변경시 알림
@@ -961,7 +968,6 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         OnReady?.Invoke(this);
         _tcs?.TrySetResult(this);
 
-        Debug.Log("캐릭터");
         ((PlayableCharacterData)data).SetInfoObj(CharacterInformationObj);
         // 인풋 액션 초기화
         inputAction = new();
@@ -1038,8 +1044,10 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     {
         if (isGround && landingLayer == LAYER.PLATFORM)
         {
-            col.isTrigger = true;
             isDropdown = true;
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Platform"), true);
+            dropDownTimer = 0.5f;
+            col.gameObject.layer = LayerMask.NameToLayer("PlayerDrop");
         }
     }
     /// <summary>
@@ -1058,15 +1066,35 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         base.Attack();
         weaponScript.StartSwing();
     }
+    float dropDownTimer = 10;
     protected override void Update()
     {
         // Character(부모 클래스)의 Update 메소드 호출
         base.Update();
 
         if (InvincibleTimer > 0.0f)
-                InvincibleTimer -= Time.deltaTime;
-            else
-                hitBox.gameObject.SetActive(true);
+            InvincibleTimer -= Time.deltaTime;
+        else
+            hitBox.gameObject.SetActive(true);
+
+        if (rigid.linearVelocityY <= 0.0f)
+        {
+            RaycastHit2D _hit;
+            if (!isDropdown)
+            {
+                _hit = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));
+                if (_hit.collider != null) Landing((LAYER)_hit.collider.gameObject.layer);
+            }
+            if (isDropdown)
+            {
+                if (dropDownTimer <= 0)
+                {
+                    isDropdown = false;
+                    col.gameObject.layer = LayerMask.NameToLayer("Player");
+                }
+                dropDownTimer-=Time.deltaTime;
+            }
+        }
     }
     /// <summary>
     /// 부드러운 체력바 채우기 코루틴
@@ -1077,6 +1105,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     {
         jumpCnt = Data.JumpCnt;
         isJump = false;
+        isDropdown = false;
         base.Landing(layer);
     }
     protected override void FixedUpdate()
@@ -1155,7 +1184,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
             rigid.gravityScale = 1.5f; // 중력 초기화
             isJump = true; // 점프 상태 등록
             rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, Data.JumpPower); // 점프 적용 계산
-            col.isTrigger = true;
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Platform"), true);
             jumpCnt--; // 점프 횟수 차감
         }
     }
@@ -1198,6 +1227,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     {
         messageObj.SetActive(false);
     }
+    /*
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("FallingZone"))
@@ -1205,13 +1235,13 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
             transform.position = savedPos + Vector3.up;
             TakeDamage(data.MaxHP * 0.2f);
         }
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Floor"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Floor") || collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
         {
-            col.isTrigger = false;
+            // Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Platform"), false);
         }
         RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));         // 바닥 충돌 처리 전용 레이캐스트 히트
 
-        if (h && !isDropdown && rigid.linearVelocityY <= 0.0f) // 바닥 착지 조건 분기
+        if (!isDropdown && rigid.linearVelocityY <= 0.0f && Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"))) // 바닥 착지 조건 분기
         {
             Landing((LAYER)collision.gameObject.layer); //착지 메소드 호출
         }
@@ -1220,7 +1250,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Floor"))
         {
-            col.isTrigger = false;
+            // Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Platform"), false);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -1232,6 +1262,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
             touchedGround = false;
         }
     }
+    */
     public void SetHP(int value) => Data.health.ApplyHP(value);
     public override void TakeDamage(float damage) // 피해 적용 로직
     {
@@ -1279,8 +1310,10 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     {
         SetSubWeapon(inventory.equipments.SubWeapon.item, item.twoHander);
         weaponSprite.sprite = ServiceHub.Get<IAtlasService>().GetSprite("Weapons", item.id);
+        Debug.Log($"[RemoveWeapon] id: {inventory.equipments.MainWeapon.item.id}");
         Data.GetStats().RemoveProvider(inventory.equipments.MainWeapon.item.GetProvider());
         inventory.equipments.MainWeapon.item = item;
+        Debug.Log($"[AddWeapon] id: {item.id}");
         Data.GetStats().AddProvider(item.GetProvider());
         weaponScript.anim.SetBool("IsSwing", false);
         weaponScript.anim.SetInteger("SwingCount", 0);
@@ -1293,7 +1326,6 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     /// <param name="isTwoHander"></param>
     public void SetSubWeapon(Item item, bool isTwoHander = false)
     {
-        Debug.Log($"{subWeaponSprite} {isTwoHander}");
         subWeaponSprite.color = isTwoHander ? new(1, 1, 1, 0) : Color.white;
         subWeaponSprite.sprite = ServiceHub.Get<IAtlasService>().GetSprite("Weapons", item.id);
         if (inventory.equipments.SubWeapon is ItemSlot i)
@@ -1316,7 +1348,9 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     public void SetHelmet(Item item)
     {
         if (inventory.equipments.Helmet is ItemSlot i)
+        {
             Data.GetStats().RemoveProvider(i.item.GetProvider());
+        }
 
         inventory.equipments.Helmet.item = item;
         Data.GetStats().AddProvider(item.GetProvider());
@@ -1378,10 +1412,6 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         emptySlot.ea = ea;
         Debug.Log($"{emptySlot.index}번 슬롯에 아이템 {emptySlot.item.id}이 추가되었습니다.");
         InvokeBackpackChanged(emptySlot.index, emptySlot);
-    }
-    public void SwapItem()
-    {
-
     }
     /// <summary>
     /// 아이템 제거

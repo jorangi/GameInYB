@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -83,6 +84,9 @@ public class CharacterStats
         providers.TryGetValue(provider, out var cur);
         if (!providers.ContainsKey(provider)) providers.Add(provider, cur + count);
         else providers[provider] = cur + count;
+        StringBuilder sb = new();
+        sb.AppendLine($"Add provider: {provider.GetStatModifiers()}");
+        Debug.Log(sb);
         dirty = true;
     }
     public void RemoveProvider(IStatModifierProvider provider, int count = 1)
@@ -240,13 +244,13 @@ public class Character : ParentObject
     protected Vector2 perp;
     protected float cAngle;
     public bool isSlope;
-    protected bool isGround;
-    protected bool isJump;
+    [SerializeField]protected bool isGround;
+    [SerializeField]protected bool isJump;
     protected float rayDistance = 0.2f;
     protected int jumpCnt;
     RaycastHit2D hit, fronthit;
     private Vector2 slopeTop;
-    protected float maxAngle = 60.0f;
+    protected float maxAngle = 80.0f;
     protected LAYER landingLayer = LAYER.FLOOR; //7 is Floor, 9 is Platform
     private float invincibleTimer = 0.0f;
     protected float InvincibleTimer
@@ -276,6 +280,7 @@ public class Character : ParentObject
     protected bool isRooted;
     public float FacingSign;
     protected bool isKnockback;
+    Vector2 rayDir;
     #endregion
     public async void Knockback(Vector2 force, ForceMode2D mode = ForceMode2D.Impulse)
     {
@@ -293,22 +298,26 @@ public class Character : ParentObject
         {
             isPrecipice = Physics2D.Raycast(frontRay.position, desiredMoveX > 0 ? new Vector2(1, -1).normalized : new Vector2(-1, -1).normalized,
             rayDistance, LayerMask.GetMask("Floor", "Platform"));
-            Debug.DrawRay(frontRay.position, (desiredMoveX > 0 ? new Vector2(1, -1).normalized : new Vector2(-1, -1).normalized) * rayDistance, Color.red);
+            Debug.DrawRay(frontRay.position, rayDir * rayDistance, Color.blue);
         }
         else
         {
-            isPrecipice = Physics2D.Raycast(frontRay.position, FacingSign < 0 ? new Vector2(-1, -2.5f).normalized : new Vector2(1, -2.5f).normalized, 1, LayerMask.GetMask("Floor", "Platform"));
+            isPrecipice = Physics2D.Raycast(
+                                        frontRay.position, FacingSign < 0 ? new Vector2(-1, -2.5f).normalized : new Vector2(1, -2.5f).normalized,
+                                        1, LayerMask.GetMask("Floor", "Platform"));
         }
 
         if (isPrecipice && isGround) savedPos = transform.position;
 
-        Vector2 rayDir = (Vector2.down + new Vector2(desiredMoveX, 0) * 0.25f).normalized;
+        // rayDir = desiredMoveX > 0 ? new(1, -1) : desiredMoveX < 0 ? new(-1,-1) : rayDir;
+        rayDir = Vector2.down;
         hit = Physics2D.Raycast(foot.position, rayDir, rayDistance, LayerMask.GetMask("Floor", "Platform"));
         fronthit = Physics2D.Raycast(
             frontRay.position,
             desiredMoveX > 0 ? Vector2.right : Vector2.left, 0.2f,
             LayerMask.GetMask("Floor", "Platform")
         );
+        Debug.DrawRay(frontRay.position, (desiredMoveX > 0 ? Vector2.right : Vector2.left)*0.2f, Color.green);
         if (!isKnockback)
         {
             if (!Mathf.Approximately(desiredMoveX, 0f))
@@ -321,9 +330,8 @@ public class Character : ParentObject
             rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
             touchedGround = false;
         }
-        if (fronthit)
+        if (fronthit.collider != null)
         {
-
             isSlope = SlopeCheck(fronthit);
             slopeTop = fronthit.point;
         }
@@ -336,7 +344,7 @@ public class Character : ParentObject
             else
                 isSlope = false;
 
-            if (!isJump && Mathf.Abs(slopeTop.y - foot.position.y) < 0.1f && cAngle > 15 && cAngle < 60)
+            if (!isJump && Mathf.Abs(slopeTop.y - foot.position.y) < 0.1f && cAngle > 15 && cAngle < 80)
             {
                 rigid.gravityScale = gravityScale;
             }
@@ -411,6 +419,9 @@ public class Character : ParentObject
     public float specialSpd = 1.0f;
     protected virtual void Movement()
     {
+        foot.transform.position = new Vector3(col.bounds.center.x, col.bounds.min.y, 0);
+        frontRay.transform.position = new Vector3(frontRay.position.x, foot.transform.position.y, 0);
+        
         if (isKnockback) return;
         if (isRooted || Mathf.Approximately(desiredMoveX, 0f))
         {
@@ -421,8 +432,10 @@ public class Character : ParentObject
             Mathf.Abs(frontRay.localPosition.x) * (desiredMoveX > 0 ? 1 : -1),
             frontRay.localPosition.y
         );
+        rigid.gravityScale = gravityScale;
         if (isGround && isSlope && !isJump)
         {
+            rigid.gravityScale = 0;
             rigid.linearVelocity = Mathf.Abs(desiredMoveX) * data.Spd * specialSpd * perp;
         }
         else if (!isSlope)
@@ -440,8 +453,8 @@ public class Character : ParentObject
     protected virtual void Landing(LAYER layer)
     {
         touchedGround = true;
-        col.isTrigger = false;
         landingLayer = layer;
+        // Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Platform"), false);
     }
     /// <summary>
     /// [경사로 체크 메소드] 정면에 레이캐스트를 발사한 결과인 hit를 매개변수로 받아 노멀벡터와 Vector2.up을 비교하여 그 각이 경사로 인정값 내라면 그에 수직(경사면과 일치하는)인 벡터를 반환
@@ -455,14 +468,14 @@ public class Character : ParentObject
             cAngle = Vector2.Angle(hit.normal, Vector2.up);
             if (cAngle > maxAngle) return false;
             perp = Vector2.Perpendicular(hit.normal).normalized;
-
+            Debug.DrawRay(hit.point, perp, Color.white);
             if (Vector2.Dot(perp, new Vector2(desiredMoveX, 0)) < 0)
                 perp = -perp;
         }
         bool slopeTemp = cAngle != 0.0f;
         return slopeTemp;
     }
-    private bool GroundCheck()
+    protected bool GroundCheck()
     {
         Debug.DrawRay(foot.position, Vector2.down * rayDistance, Color.red);
         RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));
@@ -473,8 +486,6 @@ public class Character : ParentObject
         }
         touchedGround = false;
         return false;
-
-        //return Physics2D.OverlapCircle(foot.position, chkGroundRad, LayerMask.GetMask("Floor", "Platform"));
     }
     public virtual void TakeDamage(float damage)
     {
@@ -483,20 +494,20 @@ public class Character : ParentObject
     protected bool touchedGround = false;
     void OnCollisionStay2D(Collision2D col)
     {
-        if (!this.CompareTag("Player")) return;
-        RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));
-        if (!h) return;
-        foreach (ContactPoint2D c in col.contacts)
-        {
-            if (c.collider.gameObject.layer.Equals((int)LAYER.FLOOR))
-            {
-                if (rigid.linearVelocityY <= 0.0f) Landing(LAYER.FLOOR);
-            }
-            else if (c.collider.gameObject.layer.Equals((int)LAYER.PLATFORM))
-            {
-                if (rigid.linearVelocityY <= 0.0f) Landing(LAYER.PLATFORM);
-            }
-        }
+        // if (!this.CompareTag("Player")) return;
+        // RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));
+        // if (!h) return;
+        // foreach (ContactPoint2D c in col.contacts)
+        // {
+        //     if (c.collider.gameObject.layer.Equals((int)LAYER.FLOOR))
+        //     {
+        //         if (rigid.linearVelocityY <= 0.0f) Landing(LAYER.FLOOR);
+        //     }
+        //     else if (c.collider.gameObject.layer.Equals((int)LAYER.PLATFORM))
+        //     {
+        //         if (rigid.linearVelocityY <= 0.0f) Landing(LAYER.PLATFORM);
+        //     }
+        // }
     }
     public float timeMul = 10.0f;
     protected virtual IEnumerator Hit()

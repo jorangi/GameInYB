@@ -68,11 +68,6 @@ public class GameBootstrapper : MonoBehaviour
             var saver = new StatsSaver(tokenProvider, Array.Empty<IStatsRefresher>());
             scope.Add<IStatsSaver>(saver);
         });
-        var c = FindAnyObjectByType<SceneTransition>();
-        c.OnFadeIn();
-        // ❌ 여기서 Inst를 직접 쓰지 말기 (Awake 타이밍 불안정)
-        // if (PlayerSession.Inst != null) { PlayableCharacter.Inst.Data.ApplyDto(...); }
-        // _ = NewRunAsync();  // 이것도 Start로 이동
     }
 
     private async void Start()
@@ -97,7 +92,7 @@ public class GameBootstrapper : MonoBehaviour
 
         _ = NewRunAsync();
     }
-    string initialMap = "Forest_Stage_01";
+    string initialMap = "Forest_Stage_02";
     string _loadedSubScene;
     public async UniTask LoadSubSceneAsync(string mapName)
     {
@@ -116,17 +111,9 @@ public class GameBootstrapper : MonoBehaviour
         // 맵 진입 훅: 카메라/레이어/스폰포인트 등 재바인드
         OnSubSceneLoaded();
     }
-    public async UniTask NewRunAsync() // 새 게임(튜토리얼/시작맵)
+    public async UniTask NewRunAsync()
     {
-        // 플레이어 런타임 상태 초기화 + DTO 주입
-        //var pc = PlayableCharacter.Inst;
-        //pc.ResetPlayerData();           // 네가 만든 데이터 리셋(파괴 X)
-        //await pc.SaveAsync();           // 필요 시
-
-        // 페이드아웃 → 맵 전환 → 페이드인(선택)
-        // SceneTransition.FadeOut();
         await LoadSubSceneAsync(initialMap);
-        // SceneTransition.FadeIn();
     }
     void OnSubSceneLoaded()
     {
@@ -147,8 +134,6 @@ public class GameBootstrapper : MonoBehaviour
     {
         var pc = PlayableCharacter.Inst;
         pc.ResetPlayerData();           // 데이터만 리셋, Player는 유지
-        //await pc.SaveAsync();
-
         // 현재 맵 정리 후 시작맵으로
         await LoadSubSceneAsync(initialMap);
 

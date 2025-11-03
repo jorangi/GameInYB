@@ -86,7 +86,6 @@ public class Weapon : MonoBehaviour
     private async void Awake()
     {
         await PlayableCharacter.ReadyAsync(this.GetCancellationTokenOnDestroy());
-        Debug.Log("웨폰");
         provider = PlayableCharacter.Inst.Data;
         stats ??= provider.GetStats();
         stats.OnRecalculated += OnStatChanged;

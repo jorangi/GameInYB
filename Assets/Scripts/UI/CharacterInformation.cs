@@ -200,16 +200,14 @@ public class CharacterInformation : MonoBehaviour, IUI, IInventoryUI
     /// </summary>
     public void Refresh()
     {
-        #region status
         hp.text = $"{PlayableCharacter.Inst.Data.health.HP}/{PlayableCharacter.Inst.Data.MaxHP}";
         atk.text = $"{PlayableCharacter.Inst.Data.Atk}";
         ats.text = $"{PlayableCharacter.Inst.Data.Ats}";
         def.text = $"{PlayableCharacter.Inst.Data.Def}";
-        cri.text = $"{PlayableCharacter.Inst.Data.Cri}";
-        crid.text = $"{PlayableCharacter.Inst.Data.CriDmg}";
+        cri.text = $"{Mathf.RoundToInt(PlayableCharacter.Inst.Data.Cri*100)}%";
+        crid.text = $"{Mathf.RoundToInt(PlayableCharacter.Inst.Data.CriDmg*100)}%";
         spd.text = $"{PlayableCharacter.Inst.Data.Spd}";
         jmp.text = $"{PlayableCharacter.Inst.Data.JumpPower}({PlayableCharacter.Inst.Data.JumpCnt})";
-        #endregion
     }
     public void ShowItemInformation(int i)
     {
