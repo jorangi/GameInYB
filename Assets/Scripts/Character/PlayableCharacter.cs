@@ -933,7 +933,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     public event Action<int, ItemSlot> OnBackpackChanged;//옵저버 패턴을 이용해 인벤토리 변경시 알림
     [SerializeField] private LogMessageParent logMessageParent;
     public static event Action<PlayableCharacter> OnReady;
-    private static Cysharp.Threading.Tasks.UniTaskCompletionSource<PlayableCharacter> _tcs;
+    private static UniTaskCompletionSource<PlayableCharacter> _tcs;
     public static UniTask<PlayableCharacter> ReadyAsync(CancellationToken ct = default)
     {
         if (inst != null) return UniTask.FromResult(inst);
@@ -1310,10 +1310,8 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     {
         SetSubWeapon(inventory.equipments.SubWeapon.item, item.twoHander);
         weaponSprite.sprite = ServiceHub.Get<IAtlasService>().GetSprite("Weapons", item.id);
-        Debug.Log($"[RemoveWeapon] id: {inventory.equipments.MainWeapon.item.id}");
         Data.GetStats().RemoveProvider(inventory.equipments.MainWeapon.item.GetProvider());
         inventory.equipments.MainWeapon.item = item;
-        Debug.Log($"[AddWeapon] id: {item.id}");
         Data.GetStats().AddProvider(item.GetProvider());
         weaponScript.anim.SetBool("IsSwing", false);
         weaponScript.anim.SetInteger("SwingCount", 0);

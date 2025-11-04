@@ -84,9 +84,6 @@ public class CharacterStats
         providers.TryGetValue(provider, out var cur);
         if (!providers.ContainsKey(provider)) providers.Add(provider, cur + count);
         else providers[provider] = cur + count;
-        StringBuilder sb = new();
-        sb.AppendLine($"Add provider: {provider.GetStatModifiers()}");
-        Debug.Log(sb);
         dirty = true;
     }
     public void RemoveProvider(IStatModifierProvider provider, int count = 1)

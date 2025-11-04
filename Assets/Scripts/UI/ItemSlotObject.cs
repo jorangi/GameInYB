@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -7,21 +8,25 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(RectTransform))]
 public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDragAndDropHandler
 {
-    [SerializeField]private int index;
+    [SerializeField] private IModalController modalController;
+    [SerializeField] private int index;
     bool equiped = false;
     private Inventory inventory;
     private IconOver icon;
-    private RectTransform rect;
+    [SerializeField]private RectTransform rect;
+    [SerializeField]private RectTransform iconRect;
     private Transform iconTransform;
     private IInventoryData inventoryData;
     private ItemSlot itemSlot;
     public string idcode;
     private void Start()
     {
+        rect = rect != null ? rect : GetComponent<RectTransform>();
         inventoryData = ServiceHub.Get<IInventoryData>();
+        modalController = FindAnyObjectByType<UIManager>();
         inventory = PlayableCharacter.Inst.Inventory;
-        icon = GetComponentInChildren<IconOver>();
-        rect = icon.GetComponent<RectTransform>();
+        icon = icon != null ? icon : GetComponentInChildren<IconOver>();
+        iconRect = iconRect != null ? iconRect : icon.GetComponent<RectTransform>();
         iconTransform = icon.transform;
         if (transform.parent.name.Equals("Backpack"))
             index = transform.GetSiblingIndex();
@@ -83,13 +88,23 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (itemSlot is null) return;
+        if (itemSlot.item == default || itemSlot.item.id == "00000") return;
         //정보 모달창 표시하기
+        int lang = 1; // kor
+        StringBuilder sb = new();
+        sb.AppendLine(itemSlot.item.description[lang]+'\n');
+        foreach (var option in itemSlot.item.GetProvider().GetStatModifiers())
+        {
+            sb.AppendLine($"{option.Stat} {(option.Op == StatOp.ADD ? '+' : '*')}{(option.Stat == StatType.CRI || option.Stat == StatType.CRID ? option.Value * 100 + "%" : option.Value)}");
+        }
+        modalController.SpawnModal(null, itemSlot.item.name[lang], sb.ToSafeString(), (Vector2)transform.position + rect.sizeDelta * 0.5f);
+        modalController.ParentModal.CancleHide();
     }
     public void OnPointerExit(PointerEventData eventData)
     {
         if (itemSlot is null) return;
         //정보 모달창 숨기기
+        if(modalController.ParentModal.gameObject.activeSelf) modalController.ParentModal.Hide();
     }
     public void PerformDragAndDrop()
     {
@@ -122,7 +137,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
             int targetIndex = targetSlot.index;
             if (ReferenceEquals(targetSlot,itemSlot))
             {
-                rect.anchoredPosition = Vector2.zero;
+                iconRect.anchoredPosition = Vector2.zero;
                 return;
             }
             ItemSlot targetItemSlot = targetSlot.itemSlot;
@@ -175,7 +190,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                         }
                         itemSlot.item = targetItem;
                         itemSlot.ea = temp;
-                        rect.anchoredPosition = Vector2.zero;
+                        iconRect.anchoredPosition = Vector2.zero;
                         inventoryData.InvokeBackpackChanged(targetIndex, targetItemSlot);
                         inventoryData.InvokeEquipmentChanged(sourceType, itemSlot.item);
                         return;
@@ -201,7 +216,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                                 targetType = EquipmentType.PANTS;
                                 break;
                             default:
-                                rect.anchoredPosition = Vector2.zero;
+                                iconRect.anchoredPosition = Vector2.zero;
                                 return;
                         }
                         if (sourceType == targetType) //장비의 타입이 같을 경우
@@ -231,18 +246,18 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                             }
                             itemSlot.ea = temp; // 현재 아이템 개수를 대상 아이템 개수로 교체
                             inventoryData.InvokeBackpackChanged(targetIndex, targetItemSlot);
-                            rect.anchoredPosition = Vector2.zero;
+                            iconRect.anchoredPosition = Vector2.zero;
                             return;
                         }
                         else // 장비의 타입이 다르므로 초기화
                         {
-                            rect.anchoredPosition = Vector2.zero;
+                            iconRect.anchoredPosition = Vector2.zero;
                             return;
                         }
                     }
                     else // 가방에 있는 아이템이 0으로 시작하지 않으므로 초기화
                     {
-                        rect.anchoredPosition = Vector2.zero;
+                        iconRect.anchoredPosition = Vector2.zero;
                         return;
                     }
                 }
@@ -258,7 +273,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
                     inventoryData.InvokeBackpackChanged(index, itemSlot);
                     inventoryData.InvokeBackpackChanged(targetIndex, targetItemSlot);
-                    rect.anchoredPosition = Vector2.zero;
+                    iconRect.anchoredPosition = Vector2.zero;
                     return;
                 }
             }
@@ -287,7 +302,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                             sourceType = EquipmentType.PANTS;
                             break;
                         default:
-                            rect.anchoredPosition = Vector2.zero;
+                            iconRect.anchoredPosition = Vector2.zero;
                             return;
                     }
                     //TargetType 책정
@@ -335,25 +350,25 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
                         targetItemSlot.ea = itemSlot.ea;
                         itemSlot.item = targetInstance;
                         itemSlot.ea = temp;
-                        rect.anchoredPosition = Vector2.zero;
+                        iconRect.anchoredPosition = Vector2.zero;
                         inventoryData.InvokeEquipmentChanged(sourceType, targetItemSlot.item);
                         inventoryData.InvokeBackpackChanged(index, itemSlot);
                         return;
                     }
                     else // 다른 타입의 장비이므로 초기화
                     {
-                        rect.anchoredPosition = Vector2.zero;
+                        iconRect.anchoredPosition = Vector2.zero;
                         return;
                     }
                 }
                 else // id가 0이 아니므로 초기화
                 {
-                    rect.anchoredPosition = Vector2.zero;
+                    iconRect.anchoredPosition = Vector2.zero;
                     return;
                 }
             }
         }
-        rect.anchoredPosition = Vector2.zero;
+        iconRect.anchoredPosition = Vector2.zero;
     }
     public void OnDrag(PointerEventData eventData)
     {

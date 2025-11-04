@@ -391,3 +391,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
+  rect: {fileID: 579198328714074881}
+  iconRect: {fileID: 6167102569171603121}
+  idcode: 

@@ -1,34 +1,54 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-public class MoveableInformationModal : MonoBehaviour, IUI
+[RequireComponent(typeof(RectTransform))]
+public class MoveableInformationModal : MonoBehaviour, IUI, IPointerEnterHandler, IPointerExitHandler
 {
-    private UIContext uiContext;
+    [SerializeField] private RectTransform rect;
+    [SerializeField]private UIContext uiContext;
+    [SerializeField]protected TextMeshProUGUI title, context;
+    private WaitForSeconds _wait = new(0.05f);
+    public Coroutine hideCoroutine = null;
+
+    private void Awake()
+    {
+        rect = rect != null ? rect : GetComponent<RectTransform>();
+        uiContext = FindAnyObjectByType<UIContext>();
+    }
     private void Start()
     {
-        uiContext = FindAnyObjectByType<UIContext>();
-        uiContext.UIRegistry.Register(this, UIType.KEYWORD_MODAL);
+        //uiContext.UIRegistry.Register(this, UIType.KEYWORD_MODAL);
     }
-    public void Show()
+    public virtual void Show()
     {
         gameObject.SetActive(true);
     }
-    public void Hide()
+    public virtual void Show(Transform parent)
     {
-        gameObject.SetActive(false);
-        uiContext.UIRegistry.CloseUI(this);
+        transform.SetParent(parent);
+        Show();
+    }
+    public virtual void Hide()
+    {
+        if (!gameObject.activeSelf) return;
+        CancleHide();
+        hideCoroutine = StartCoroutine(Hide_Coroutine());
+    }
+    public void CancleHide()
+    {
+        if (hideCoroutine is not null) StopCoroutine(hideCoroutine);
     }
     public void PositiveInteract(InputAction.CallbackContext context)
     {
-        
+        //Focus
     }
     public void NegativeInteract(InputAction.CallbackContext context)
     {
         Hide();
-    }
-    public virtual void Move(Vector2 screenPos, Camera cam)
-    {
-
     }
     public virtual void SetFollow(bool enabled = true)
     {
@@ -36,6 +56,23 @@ public class MoveableInformationModal : MonoBehaviour, IUI
     }
     public virtual void SetOffset(Vector2 offset)
     {
-        
+        if (transform.parent.name != "Canvas")
+        {
+            transform.parent.position = offset;
+        }
+    }
+    public IEnumerator Hide_Coroutine()
+    {
+        yield return _wait;
+        gameObject.SetActive(false);
+        hideCoroutine = null;
+    }
+    public virtual void OnPointerEnter(PointerEventData eventData)
+    {
+        CancleHide();
+    }
+    public virtual void OnPointerExit(PointerEventData eventData)
+    {
+        Hide();
     }
 }

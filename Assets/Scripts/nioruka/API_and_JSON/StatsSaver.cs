@@ -69,9 +69,11 @@ public sealed class StatsSaver : IStatsSaver
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + accessToken);
+        Debug.Log(accessToken);
         request.timeout = _timeoutSeconds;
 
-        Debug.Log("[SAVE] PUT 전송 JSON: " + jsonBody);
+        Debug.Log("[SAVE] PUT 전송 JSON: ");
+        Debug.Log(jsonBody);
 
         await request.SendWebRequest();
 

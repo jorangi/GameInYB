@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using System.Text;
 
 public interface IItemRepository
 {
@@ -47,6 +48,7 @@ public static class ItemDataManager
             if (trimmed.StartsWith("["))
             {
                 var wrapped = $"{{\"items\":{JSONData}}}";
+                //Debug.Log(wrapped);
                 var data = JsonUtility.FromJson<Wrap<Item>>(wrapped);
 
                 if (data?.items is null)

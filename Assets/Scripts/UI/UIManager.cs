@@ -15,7 +15,7 @@ public enum UIType
 {
     CHARACTER_INFORMATION,
     COMMAND_PANEL,
-    KEYWORD_MODAL,
+    // KEYWORD_MODAL,
     PAUSED_MENU,
     NONE
 }
@@ -26,11 +26,18 @@ public interface IUIRegistry
     public void Focus(IUI ui);
     public void CloseUI(IUI ui);
 }
+public interface IModalController
+{
+    public ItemInformationModal ParentModal{get; set;}
+    public Dictionary<string, ItemInformationModal> modals { get; set; }
+    public void SpawnModal(Transform parent, string title, string ctx, Vector2 pos);
+    public void HideModal(ItemInformationModal modal);
+}
 public interface INegativeSignal
 {
     public event Action Negative;
 }
-public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
+public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal, IModalController
 {
     #region field
     #region LinkEvent & Scope
@@ -40,13 +47,10 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     #endregion
     #region Moveable Modal
     [Header("Moveable Modal")]
+    [SerializeField] private ItemInformationModal parentModal;
+    public ItemInformationModal ParentModal{get => parentModal; set => parentModal = value;}
     [SerializeField] private ItemInformationModal itemModal;
-    #endregion
-    #region Keyword Static Modal
-    [Header("Keyword static modal")]
-    [SerializeField] private KeywordInformationModalController keywordModalPrefab;
-    [SerializeField] private RectTransform keywordContainer;
-    [Min(0)][SerializeField] private int keywordModalPoolingMax = 2;
+    [SerializeField] private Transform keywordModalContainer;
     #endregion
     #region Backdrop / Input
     [Header("Backdrop / Input")]
@@ -70,6 +74,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
 
     private void Awake()
     {
+        modals = new();
         cam = Camera.main;
         if (inputAction is null)
         {
@@ -77,18 +82,16 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
             inputAction.UserInterface.Enable();
         }
         if (canvas is null) canvas = GetComponentInParent<Canvas>();
-        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay && cam is null)
+        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay && cam == null)
         {
             canvasRect = canvas.GetComponent<RectTransform>();
             if (itemModal != null) itemModal.Hide();
             if (backdrop != null) backdrop.SetActive(false);
-            KeywordModalPooling(keywordModalPoolingMax);
         }
     }
     private void OnEnable()
     {
         inputAction.Enable();
-        if (linkEvent != null) linkEvent.OnRaised += OnLinkEvent;
         inputAction.UserInterface.ClickAction.performed += OnClickAction;
         inputAction.UserInterface.Command.performed += OnCommand;
         inputAction.UserInterface.CharacterInformation.performed += OnCharacterInformation;
@@ -99,6 +102,8 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     }
     private void KeyInput(InputAction.CallbackContext context) => keyInput = true;
     private List<RaycastResult> raycastResults = new();
+    public Dictionary<string, ItemInformationModal> modals { get; set; }
+
     /// <summary>
     /// 클릭 상호작용(UI 외부 마우스 클릭 감지)
     /// </summary>
@@ -126,17 +131,17 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
             if (menu is null && uiList[^1] is PausedMenu) uiList[^1].NegativeInteract(context);
             return;
         }
-        // 키워드 모달이 열려있을 때
-        else if (uiList.Contains(uiDic[UIType.KEYWORD_MODAL]))
-        {
-            MoveableInformationModal modal = null;
-            foreach (var r in raycastResults)
-            {
-                if (r.gameObject.TryGetComponent<MoveableInformationModal>(out modal))
-                    break;
-            }
-            if (modal is null && uiList[^1] is MoveableInformationModal) uiList[^1].NegativeInteract(context);
-        }
+        // // 키워드 모달이 열려있을 때
+        // else if (uiList.Contains(uiDic[UIType.KEYWORD_MODAL]))
+        // {
+        //     MoveableInformationModal modal = null;
+        //     foreach (var r in raycastResults)
+        //     {
+        //         if (r.gameObject.TryGetComponent<MoveableInformationModal>(out modal))
+        //             break;
+        //     }
+        //     if (modal is null && uiList[^1] is MoveableInformationModal) uiList[^1].NegativeInteract(context);
+        // }
     }
     /// <summary>
     /// 명령어 창을 여는 함수
@@ -184,7 +189,6 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     private void OnDisable()
     {
         inputAction?.Disable();
-        if (linkEvent != null) linkEvent.OnRaised -= OnLinkEvent;
 
         inputAction.UserInterface.Positive.performed += OnPositive;
         inputAction.UserInterface.Negative.performed += OnNegative;
@@ -207,178 +211,6 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
         IUI ui = uiList[^1];
         ui.NegativeInteract(context);
         keyInput = false;
-    }
-    private void OnLinkEvent(TMPLinkEvent.TMPLinkEventPayload payload)
-    {
-        if (payload.can != null && payload.can != canvas) return;
-        switch (payload.type)
-        {
-            case TMPLinkEvent.EventType.MOUSEOVER:
-                HandleMouseOver(payload);
-                break;
-            case TMPLinkEvent.EventType.MOUSEOUT:
-                HandleMouseOut(payload);
-                break;
-            case TMPLinkEvent.EventType.CLICK:
-                HandleClick(payload);
-                break;
-        }
-    }
-    private void HandleMouseOver(TMPLinkEvent.TMPLinkEventPayload payload)
-    {
-        string content = !string.IsNullOrEmpty(payload.id) ? payload.id : payload.linkText;
-        if (string.IsNullOrEmpty(content)) return;
-        ShowItemInfo(content, payload.screenPos, payload.cam);
-    }
-    private void ShowItemInfo(string content, Vector2 screenPos, Camera eventCam)
-    {
-        if (itemModal is null) return;
-        if (shown)
-        {
-            itemModal.Show(content, screenPos, eventCam != null ? eventCam : cam);
-            shown = true;
-        }
-        else
-        {
-            itemModal.SetText(content);
-            itemModal.Move(screenPos, eventCam != null ? eventCam : cam);
-        }
-    }
-    private void MoveItemInfo(Vector2 screenPos, Camera eventCam)
-    {
-        if (itemModal is null || shown) return;
-        itemModal.Move(screenPos, eventCam != null ? eventCam : cam);
-    }
-    private void HandleMouseOut(TMPLinkEvent.TMPLinkEventPayload payload)
-    {
-        HideItemInfo();
-    }
-    private void HideItemInfo()
-    {
-        if (itemModal is null) return;
-        if (shown)
-        {
-            itemModal.Hide();
-            shown = false;
-        }
-    }
-    private void HandleClick(TMPLinkEvent.TMPLinkEventPayload payload)
-    {
-        string termId = !string.IsNullOrEmpty(payload.id) ? payload.id : payload.linkText;
-        if (string.IsNullOrEmpty(termId)) return;
-        SpawnKeywordInfo(termId, payload.screenPos, cam);
-    }
-    private KeywordInformationModalController SpawnKeywordInfo(string termId, Vector2 screenPos, Camera cam)
-    {
-        if (keywordModalPrefab is null)
-        {
-            Debug.LogWarning("keywordModalPrefab(KeywordInformationModalController)이 없음");
-            return null;
-        }
-        if (keywordContainer is null)
-        {
-            Debug.LogWarning("keywordContainer(RectTransform)이 없음");
-            return null;
-        }
-        if (keywordModalByTerm.TryGetValue(termId, out KeywordInformationModalController existingModal))
-        {
-            Focus(existingModal);
-            return existingModal;
-        }
-        KeywordInformationModalController modal = GetKeywordModalInstance();
-        modal.transform.SetParent(keywordContainer, false);
-        modal.transform.SetAsLastSibling();
-        modal.gameObject.SetActive(true);
-
-        modal.Show(termId, screenPos, cam != null ? cam : this.cam);
-
-        keywordModalStack.Push(modal);
-        keywordModalByTerm[termId] = modal;
-        SetBackdrop(true);
-
-        return modal;
-    }
-    private void SetBackdrop(bool v)
-    {
-        if (backdrop is null) return;
-        backdrop.SetActive(v);
-        if (v) backdrop.transform.SetAsLastSibling();
-    }
-    private KeywordInformationModalController GetKeywordModalInstance()
-    {
-        if (keywordModalPooling.Count > 0) return keywordModalPooling.Dequeue();
-        return Instantiate(keywordModalPrefab);
-    }
-    private void Focus(KeywordInformationModalController existingModal)
-    {
-        if (existingModal is null) return;
-        existingModal.Focus();
-        existingModal.transform.SetAsLastSibling();
-        SetBackdrop(true);
-    }
-    private void CloseTopKeywordModal()
-    {
-        if (keywordModalStack.Count == 0) return;
-
-        KeywordInformationModalController top = keywordModalStack.Pop();
-        string keyToRemove = null;
-        foreach (var m in keywordModalByTerm)
-        {
-            if (m.Value == top)
-            {
-                keyToRemove = m.Key;
-                break;
-            }
-        }
-        if (!string.IsNullOrEmpty(keyToRemove)) keywordModalByTerm.Remove(keyToRemove);
-
-        CloseAndRecycle(top);
-        if (keywordModalStack.Count == 0) SetBackdrop(false);
-        else Focus(keywordModalStack.Peek());
-    }
-    private void CloseAllKeywordModal()
-    {
-        while (keywordModalStack.Count > 0)
-        {
-            var m = keywordModalStack.Pop();
-            CloseAndRecycle(m);
-        }
-        keywordModalByTerm.Clear();
-        SetBackdrop(false);
-    }
-    private void FocusTopKeywordModal()
-    {
-        if (keywordModalStack.Count == 0) return;
-        Focus(keywordModalStack.Peek());
-    }
-    private void OnBackdropClicked()
-    {
-        CloseTopKeywordModal();
-    }
-    private void KeywordModalPooling(int count)
-    {
-        if (keywordModalPrefab is null)
-        {
-            Debug.LogWarning("keywordModalPrefab(KeywordInformationModalController)이 없음");
-        }
-        if (keywordContainer is null)
-        {
-            Debug.LogWarning("keywordContainer(RectTransform)이 없음");
-        }
-        for (int i = 0; i < count; i++)
-        {
-            var m = Instantiate(keywordModalPrefab, keywordContainer);
-            m.gameObject.SetActive(false);
-            keywordModalPooling.Enqueue(m);
-        }
-    }
-    private void CloseAndRecycle(KeywordInformationModalController top)
-    {
-        if (top is null) return;
-        top.Hide();
-
-        if (top.transform.parent != keywordContainer) top.transform.SetParent(keywordContainer, false);
-        keywordModalPooling.Enqueue(top);
     }
     /// <summary>
     /// UI를 등록하는 함수
@@ -418,5 +250,34 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
     public void CloseUI(IUI ui)
     {
         uiList.Remove(ui);
+    }
+    public void SpawnModal(Transform parent, string title, string ctx, Vector2 pos)
+    {
+        if(parentModal)
+        if (modals.TryGetValue(title, out ItemInformationModal modal))
+        {
+            modal.Show(parent, title, ctx, pos);
+        }
+        else
+        {
+            GameObject obj = Instantiate(itemModal.gameObject);
+            modals[title] = obj.GetComponent<ItemInformationModal>();
+            if (parent == null) modals[title].Show();
+            else modals[title].Hide();
+        }
+        if (parent == null)
+        {
+            parentModal.Show(null, title, ctx, pos);
+            foreach (GameObject childModal in keywordModalContainer)
+            {
+                childModal.SetActive(false);
+            }
+            modals[title].transform.SetParent(transform);
+            modals[title].Hide();
+        }
+    }
+    public void HideModal(ItemInformationModal modal)
+    {
+        modal.Hide();
     }
 }

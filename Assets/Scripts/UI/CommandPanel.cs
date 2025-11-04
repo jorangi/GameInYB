@@ -244,12 +244,8 @@ namespace Looper.Console.UI
         }
         private void PrintLine(string s)
         {
-            if (outputSource is null)
-            {
-                Debug.Log(s);
-                return;
-            }
-            outputSource.text += (outputSource.text.Length > 0 ? "\n" : "") + s;
+            if (outputSource == null) return;
+            outputSource.text = s + "\n" + outputSource.text;
         }
         public void Show() => gameObject.SetActive(true);
         public void Hide()
