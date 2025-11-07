@@ -16,7 +16,7 @@ using UnityEngine.UI;
 using static PlayerStats;
 using System.Text;
 using Unity.Cinemachine;
-using AnimationImporter.PyxelEdit;
+
 
 public sealed class UnityServiceProvider : IServiceProvider
 {
@@ -894,6 +894,7 @@ public sealed class PlayerStatsLoader
 }
 public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotProvider
 {
+    [SerializeField] AudioSource footstep;
     public float gameTimeScale = 1.0f;
     private readonly Inventory inventory = new();
     public Inventory Inventory => inventory;
@@ -922,18 +923,25 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     public GameObject messageObj; // 메시지 박스 오브젝트
     private RectTransform messageBox; // 메시지 박스의 RectTransform
     private InputSystem_Actions inputAction; // 인풋 액션
-    private Camera cam; // 메인 카메라
     public Transform arm; // 플레이어의 팔 트랜스폼
-    [SerializeField]private SpriteRenderer weaponSprite; // 플레이어의 무기 스프라이트 렌더러
-    [SerializeField]private SpriteRenderer subWeaponSprite; // 플레이어의 무기 스프라이트 렌더러
-    [SerializeField]private Weapon weaponScript; // 플레이어의 무기 스크립트
-    [SerializeField]private bool isDropdown; // 드롭다운 여부
+    [SerializeField] private SpriteRenderer weaponSprite; // 플레이어의 무기 스프라이트 렌더러
+    [SerializeField] private SpriteRenderer subWeaponSprite; // 플레이어의 무기 스프라이트 렌더러
+    [SerializeField] private Weapon weaponScript; // 플레이어의 무기 스크립트
+    [SerializeField] private bool isDropdown; // 드롭다운 여부
     private SpriteAtlas weaponAtlas; // 무기 스프라이트 아틀라스
     public event Action<EquipmentType, Item> OnEquipmentChanged; //옵저버 패턴을 이용해 장비변경시 알림
     public event Action<int, ItemSlot> OnBackpackChanged;//옵저버 패턴을 이용해 인벤토리 변경시 알림
     [SerializeField] private LogMessageParent logMessageParent;
     public static event Action<PlayableCharacter> OnReady;
     private static UniTaskCompletionSource<PlayableCharacter> _tcs;
+    public const float walkDustMaxTimer = 0.5f;
+    [SerializeField] public float walkDustTimer = 0.49999f;
+    [SerializeField] private GameObject walkDust;
+    [SerializeField] private GameObject[] walkDustPooling = new GameObject[5];
+    private int walkDustCount = 0;
+    [SerializeField] private GameObject jumpDust;
+    [SerializeField] private GameObject[] jumpDustPooling = new GameObject[10];
+    private int jumpDustCount = 0;
     public static UniTask<PlayableCharacter> ReadyAsync(CancellationToken ct = default)
     {
         if (inst != null) return UniTask.FromResult(inst);
@@ -980,7 +988,20 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         weaponSprite = weaponSprite != null ? weaponSprite : weaponScript.GetComponent<SpriteRenderer>();
         subWeaponSprite = subWeaponSprite != null ? subWeaponSprite : transform.Find("Body").Find("SubWeapon").GetComponent<SpriteRenderer>();
         //SetupMessageBox();
-        cam = Camera.main;
+        DustSetup();
+    }
+    private void DustSetup()
+    {
+        for (int i = 0; i < walkDustPooling.Length; i++)
+        {
+            walkDustPooling[i] = Instantiate(walkDust);
+            walkDustPooling[i].SetActive(false);
+        }
+        for (int i = 0; i < jumpDustPooling.Length; i++)
+        {
+            jumpDustPooling[i] = Instantiate(jumpDust);
+            jumpDustPooling[i].SetActive(false);
+        }
     }
     private void OnDestroy()
     {
@@ -1025,6 +1046,8 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         inputAction.Player.Jump.performed += OnJump;
         inputAction.Player.Attack.performed += OnAttack;
         inputAction.Player.Dropdown.performed += OnDropdown;
+        inputAction.Player.Portal.performed += OnPortal;
+
     }
     void OnDisable()
     {
@@ -1034,6 +1057,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         inputAction.Player.Jump.performed -= OnJump;
         inputAction.Player.Attack.performed -= OnAttack;
         inputAction.Player.Dropdown.performed -= OnDropdown;
+        inputAction.Player.Portal.performed -= OnPortal;
         inputAction.Disable();
     }
     /// <summary>
@@ -1071,11 +1095,15 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     {
         // Character(부모 클래스)의 Update 메소드 호출
         base.Update();
-
+        if (!lateGroundCheck && isGround)
+        {
+            lateGroundCheck = isGround;
+            AudioManager.Inst.PlaySFX("land");
+        }
         if (InvincibleTimer > 0.0f)
-            InvincibleTimer -= Time.deltaTime;
-        else
-            hitBox.gameObject.SetActive(true);
+                InvincibleTimer -= Time.deltaTime;
+            else
+                hitBox.gameObject.SetActive(true);
 
         if (rigid.linearVelocityY <= 0.0f)
         {
@@ -1092,9 +1120,14 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
                     isDropdown = false;
                     col.gameObject.layer = LayerMask.NameToLayer("Player");
                 }
-                dropDownTimer-=Time.deltaTime;
+                dropDownTimer -= Time.deltaTime;
             }
         }
+    }
+    bool lateGroundCheck = false;
+    private void LateUpdate()
+    {
+        lateGroundCheck = isGround;
     }
     /// <summary>
     /// 부드러운 체력바 채우기 코루틴
@@ -1108,9 +1141,30 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         isDropdown = false;
         base.Landing(layer);
     }
+    private const float walkDustFillMaxTimer = 0.5f;
+    private float walkDustFillTimer = 0f;
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+
+        float x = desiredMoveX;
+        walkDustTimer += isGround && Mathf.Approximately(x, 0f) && !Mathf.Approximately(walkDustTimer, walkDustFillMaxTimer) ? -Time.fixedDeltaTime * 5f : Time.fixedDeltaTime; // 멈추면 타이머 빠르게 감소, 움직이면 타이머 증가
+        walkDustFillTimer = Mathf.Clamp(walkDustFillTimer + (isGround && Mathf.Approximately(x, 0f) ? Time.fixedDeltaTime : 0), 0.0f, walkDustFillMaxTimer);
+        walkDustTimer = Mathf.Clamp(walkDustTimer, 0.0f, walkDustMaxTimer); //타이머 임계값
+        if (!Mathf.Approximately(x, 0f) && walkDustTimer >= walkDustMaxTimer && isGround) //땅에서 움직이는 상태에서 타이머가 초과할시
+        {
+            GameObject dust = walkDustPooling[walkDustCount++];
+            if (walkDustCount == 5) walkDustCount = 0;
+            dust.SetActive(true);
+            dust.transform.position = foot.position;
+            dust.transform.localScale = new(desiredMoveX, 1, 1);
+            walkDustTimer = 0.0f;
+        }
+        if (walkDustFillTimer >= walkDustFillMaxTimer)
+        {
+            walkDustTimer = 0.5f;
+            walkDustFillTimer = 0.0f;
+        }
         //공중 판정 체크
         anim.SetBool("JUMP", !isGround);
         if (weaponScript.anim.GetBool("IsSwing")) return;
@@ -1173,8 +1227,17 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     }
     public void OnMovement(InputAction.CallbackContext context) // 이동 액션 등록
     {
-        if(isKnockback) return;
+        if (isKnockback) return;
         SetDesiredMove(context.ReadValue<Vector2>().x);
+    }
+    public void OnPortal(InputAction.CallbackContext context)
+    {
+        Debug.Log(context.performed + " / " + isOnPortal);
+        if (isOnPortal)
+        {
+            ServiceHub.Get<ISceneManager>().LoadSubSceneAsync($"Forest_Stage_0{UnityEngine.Random.Range(1, 9)}");
+            return;
+        }
     }
     public void OnJump(InputAction.CallbackContext context) // 점프 액션 등록
     {
@@ -1186,6 +1249,12 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
             rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, Data.JumpPower); // 점프 적용 계산
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Platform"), true);
             jumpCnt--; // 점프 횟수 차감
+            AudioManager.Inst.PlaySFX("jump");
+
+            GameObject dust = jumpDustPooling[jumpDustCount++];
+            if (jumpDustCount == 10) jumpDustCount = 0;
+            dust.SetActive(true);
+            dust.transform.position = foot.position;
         }
     }
     private void SetupMessageBox()
@@ -1227,42 +1296,20 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     {
         messageObj.SetActive(false);
     }
-    /*
+    [SerializeField] private bool isOnPortal = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.CompareTag("Portal")) isOnPortal = true;
         if (collision.gameObject.CompareTag("FallingZone"))
         {
             transform.position = savedPos + Vector3.up;
             TakeDamage(data.MaxHP * 0.2f);
         }
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Floor") || collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
-        {
-            // Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Platform"), false);
-        }
-        RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));         // 바닥 충돌 처리 전용 레이캐스트 히트
-
-        if (!isDropdown && rigid.linearVelocityY <= 0.0f && Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"))) // 바닥 착지 조건 분기
-        {
-            Landing((LAYER)collision.gameObject.layer); //착지 메소드 호출
-        }
-    }
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Floor"))
-        {
-            // Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Platform"), false);
-        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        // 하강 기능용 로직
-        if (collision.gameObject.layer == (int)LAYER.PLATFORM && isDropdown) // 하강은 플랫폼 레이어에서만 가능
-        {
-            isDropdown = false;
-            touchedGround = false;
-        }
+        if (collision.gameObject.CompareTag("Portal")) isOnPortal = false;
     }
-    */
     public void SetHP(int value) => Data.health.ApplyHP(value);
     public override void TakeDamage(float damage) // 피해 적용 로직
     {
@@ -1273,12 +1320,14 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
         SetHP(Data.health.HP - dmg);
         if (Data.health.HP <= 0)
         {
-            Debug.Log($"{Data.UnitName} has died.");
+            // Debug.Log($"{Data.UnitName} has died.");
         }
     }
     protected override void Movement()
     {
         base.Movement();
+        if (!isGround || Mathf.Approximately(desiredMoveX, 0.0f)) footstep.Pause();
+        else if (isGround && !footstep.isPlaying) footstep.Play();
         if (isGround) anim.SetBool("1_Move", !Mathf.Approximately(desiredMoveX, 0f));
     }
     protected override IEnumerator Hit()
@@ -1450,7 +1499,6 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     {
         transform.position = new(-3.93f, 0.08f, transform.position.z);
     }
-
     public InventorySnapshot Snapshot()
     {
         static string idOrEmpty(ItemSlot s)

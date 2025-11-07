@@ -101,7 +101,7 @@ namespace Looper.Console.Commands
                 return;
             }
             StringBuilder sb = new();
-            if (logMessageParent is null) return;
+            if (logMessageParent == null) return;
 
             logMessageParent = Component.FindAnyObjectByType<LogMessageParent>();
             foreach (var arg in args)
@@ -587,7 +587,7 @@ namespace Looper.Console.Commands
     {
         public string Name => "position";
 
-        public IReadOnlyList<string> Aliases => new string[] {"pos","location"};
+        public IReadOnlyList<string> Aliases => new string[] { "pos", "location" };
 
         public string Summary => "플레이어의 위치를 확인합니다.";
 
@@ -781,4 +781,28 @@ namespace Looper.Console.Commands
         }
         public UniTask ExecuteAsync(CommandContext ctx, string[] args) => UniTask.CompletedTask;
     }
+
+    public sealed class KillAllCommand : ICommand
+    {
+        public KillAllCommand() { }
+        public string Name => "killall";
+
+        public IReadOnlyList<string> Aliases => new string[] { "kill" };
+
+        public string Summary => "모든 몬스터를 처치합니다.";
+
+        public string Usage => "killall";
+
+        public bool IsAsync => false;
+
+        public void Execute(CommandContext ctx, string[] args)
+        {
+            foreach (var m in ServiceHub.Get<ISceneManager>().monsters)
+            {
+                m.TakeDamage(m.Data.health.HP+1);
+            }
+        }
+        public UniTask ExecuteAsync(CommandContext ctx, string[] args) => UniTask.CompletedTask;
+    }
+
 }

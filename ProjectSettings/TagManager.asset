@@ -8,6 +8,8 @@ TagManager:
   - FallingZone
   - MinimapCamera
   - PlayerSpawn
+  - Portal
+  - Ambient
   layers:
   - Default
   - TransparentFX
@@ -48,6 +50,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Portal
+    uniqueID: 2841514855
+    locked: 0
   - name: FloorBack
     uniqueID: 848795809
     locked: 0
@@ -62,6 +67,9 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 1581125099
+    locked: 0
+  - name: OverUI
+    uniqueID: 2582526101
     locked: 0
   m_RenderingLayers:
   - Default

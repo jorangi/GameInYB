@@ -171,6 +171,7 @@ namespace Looper.Console.UI
             _reg.Register(new SaveCommand());
             _reg.Register(new LoadCommand());
             _reg.Register(new DevConsoleModeCommand(new Action<bool>(SwitchDevMode)));
+            _reg.Register(new KillAllCommand());
         }
         void SwitchDevMode(bool devmode)
         {

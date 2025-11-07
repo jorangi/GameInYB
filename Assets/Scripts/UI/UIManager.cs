@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using TMPro;
 using Unity.VisualScripting;
@@ -28,16 +29,58 @@ public interface IUIRegistry
 }
 public interface IModalController
 {
-    public ItemInformationModal ParentModal{get; set;}
-    public Dictionary<string, ItemInformationModal> modals { get; set; }
-    public void SpawnModal(Transform parent, string title, string ctx, Vector2 pos);
-    public void HideModal(ItemInformationModal modal);
+    public ItemInformationModal[] Modals { get; set; }
+}
+public class ModalController : IModalController
+{
+    public ModalController()
+    {
+        Modals = new ItemInformationModal[4];
+        modalCount = 0;
+    }
+    public bool isShowing = false;
+    public ItemInformationModal[] Modals { get; set; }
+    int modalCount = 0;
+    public void SpawnModal(bool isParent, string title, string ctx, Vector2 pos)
+    {
+        if (isParent)
+            Modals[0].Show(title, ctx, pos);
+        else
+        {
+            modalCount = ((++modalCount) % 4) == 0 ? modalCount + 1 : modalCount % 4;
+            Modals[modalCount].Show(title, ctx, Vector2.zero);
+        }
+        isShowing = true;
+    }
+    //readonly UniTask delayTask = UniTask.Delay(50); // 50ms 대기
+    /// <summary>
+    /// 모달창 숨기기
+    /// </summary>
+    /// <returns></returns>
+    public async UniTask HideModal()
+    {
+        isShowing = false;
+        int check = await UniTask.WhenAny(UniTask.Delay(50)/*delayTask*/, UniTask.WaitUntil(() => isShowing == true)); //시간 대기 후 숨김 0 반환, 만일 중간에 isShowing이 true일 경우 1 반환
+        if (check == 0)
+        {
+            //Hide
+            for (int i = Modals.Length - 1; i >= 0; i--) //역순으로 모달창 비활성화
+            {
+                Modals[i].gameObject.SetActive(false);
+            }
+        }
+        else if (check == 1)
+        {
+            return;
+        }
+        modalCount = 0;
+    }
 }
 public interface INegativeSignal
 {
     public event Action Negative;
 }
-public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal, IModalController
+public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal
 {
     #region field
     #region LinkEvent & Scope
@@ -61,10 +104,6 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal, IModalCont
     [SerializeField] private Camera cam;
     #endregion
     private RectTransform canvasRect;
-    private readonly Stack<KeywordInformationModalController> keywordModalStack = new();
-    private readonly Dictionary<string, KeywordInformationModalController> keywordModalByTerm = new();
-    private readonly Queue<KeywordInformationModalController> keywordModalPooling = new();
-    private bool shown;
     public static InputSystem_Actions inputAction;
     public List<IUI> uiList = new();
     private readonly Dictionary<UIType, IUI> uiDic = new();
@@ -74,7 +113,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal, IModalCont
 
     private void Awake()
     {
-        modals = new();
+        modalController = new();
         cam = Camera.main;
         if (inputAction is null)
         {
@@ -88,6 +127,7 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal, IModalCont
             if (itemModal != null) itemModal.Hide();
             if (backdrop != null) backdrop.SetActive(false);
         }
+        ModalSetup();
     }
     private void OnEnable()
     {
@@ -102,8 +142,35 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal, IModalCont
     }
     private void KeyInput(InputAction.CallbackContext context) => keyInput = true;
     private List<RaycastResult> raycastResults = new();
-    public Dictionary<string, ItemInformationModal> modals { get; set; }
+    public ModalController modalController;
 
+    /// <summary>
+    /// 모달창 Pooling
+    /// </summary>
+    public void ModalSetup()
+    {
+        //부모 모달 1 + 자식 모달 (최대 3)
+        for (int i = 0; i < 4; i++)
+        {
+            if (i == 0)
+            {
+                modalController.Modals[0] = ParentModal;
+                ParentModal.ParentModal = ParentModal;
+                ParentModal.modalController = modalController;
+                ParentModal.gameObject.SetActive(false);
+            }
+            else
+            {
+                GameObject obj = Instantiate(itemModal.gameObject);
+                obj.name = "ChildModal_" + i;
+                modalController.Modals[i] = obj.GetComponent<ItemInformationModal>();
+                modalController.Modals[i].ParentModal = modalController.Modals[0];
+                modalController.Modals[i].modalController = modalController;
+                obj.transform.SetParent(modalController.Modals[0].transform.parent.Find("KeywordModalContainer"));
+                obj.SetActive(false);
+            }
+        }
+    }
     /// <summary>
     /// 클릭 상호작용(UI 외부 마우스 클릭 감지)
     /// </summary>
@@ -250,34 +317,5 @@ public class UIManager : MonoBehaviour, IUIRegistry, INegativeSignal, IModalCont
     public void CloseUI(IUI ui)
     {
         uiList.Remove(ui);
-    }
-    public void SpawnModal(Transform parent, string title, string ctx, Vector2 pos)
-    {
-        if(parentModal)
-        if (modals.TryGetValue(title, out ItemInformationModal modal))
-        {
-            modal.Show(parent, title, ctx, pos);
-        }
-        else
-        {
-            GameObject obj = Instantiate(itemModal.gameObject);
-            modals[title] = obj.GetComponent<ItemInformationModal>();
-            if (parent == null) modals[title].Show();
-            else modals[title].Hide();
-        }
-        if (parent == null)
-        {
-            parentModal.Show(null, title, ctx, pos);
-            foreach (GameObject childModal in keywordModalContainer)
-            {
-                childModal.SetActive(false);
-            }
-            modals[title].transform.SetParent(transform);
-            modals[title].Hide();
-        }
-    }
-    public void HideModal(ItemInformationModal modal)
-    {
-        modal.Hide();
     }
 }

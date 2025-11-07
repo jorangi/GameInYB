@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
-public class InteractableText : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
+public class InteractableText : UIHoverClickSFX, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private TMPLinkEvent e;
     [SerializeField] private bool enableHover = true;
@@ -36,7 +36,11 @@ public class InteractableText : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     {
 
     }
-    public void OnPointerEnter(PointerEventData eventData) => isOver = true;
+    public override void OnPointerEnter(PointerEventData eventData)
+    {
+        base.OnPointerEnter(eventData);
+        isOver = true;
+    }
 
     public void OnPointerExit(PointerEventData eventData)
     {

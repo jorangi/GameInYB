@@ -5,7 +5,11 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using Cysharp.Threading.Tasks;
 using System;
 
-public class LogMessageParent : MonoBehaviour
+public interface ILogMessage
+{
+    public void Spawn(string message);
+}
+public class LogMessageParent : MonoBehaviour, ILogMessage
 {
     private AsyncOperationHandle<GameObject> _prefabHandle;
     private GameObject _prefab;
@@ -25,6 +29,10 @@ public class LogMessageParent : MonoBehaviour
         {
             Debug.LogWarning($"[LogMessageParent]로드 실패함: {e}");
         }
+    }
+    private void Start()
+    {
+        ServiceHub.SceneScope.Add<ILogMessage>(this);
     }
     private void OnDestroy()
     {

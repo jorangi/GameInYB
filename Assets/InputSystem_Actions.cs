@@ -180,6 +180,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Portal"",
+                    ""type"": ""Button"",
+                    ""id"": ""0a0f6855-88a3-444f-9234-476b4e70f6b4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -556,6 +565,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Dropdown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19159cef-f83f-4932-994b-aad660a25542"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Portal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""489edf39-b7cd-401f-a0b9-a2db4cad4205"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Portal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -807,6 +838,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Dropdown = m_Player.FindAction("Dropdown", throwIfNotFound: true);
+        m_Player_Portal = m_Player.FindAction("Portal", throwIfNotFound: true);
         // UserInterface
         m_UserInterface = asset.FindActionMap("UserInterface", throwIfNotFound: true);
         m_UserInterface_Positive = m_UserInterface.FindAction("Positive", throwIfNotFound: true);
@@ -906,6 +938,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Next;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Dropdown;
+    private readonly InputAction m_Player_Portal;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -958,6 +991,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Dropdown => m_Wrapper.m_Player_Dropdown;
         /// <summary>
+        /// Provides access to the underlying input action "Player/Portal".
+        /// </summary>
+        public InputAction @Portal => m_Wrapper.m_Player_Portal;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -981,7 +1018,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="PlayerActions" />
         public void AddCallbacks(IPlayerActions instance)
         {
-            if (instance is null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
+            if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
@@ -1013,6 +1050,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Dropdown.started += instance.OnDropdown;
             @Dropdown.performed += instance.OnDropdown;
             @Dropdown.canceled += instance.OnDropdown;
+            @Portal.started += instance.OnPortal;
+            @Portal.performed += instance.OnPortal;
+            @Portal.canceled += instance.OnPortal;
         }
 
         /// <summary>
@@ -1054,6 +1094,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Dropdown.started -= instance.OnDropdown;
             @Dropdown.performed -= instance.OnDropdown;
             @Dropdown.canceled -= instance.OnDropdown;
+            @Portal.started -= instance.OnPortal;
+            @Portal.performed -= instance.OnPortal;
+            @Portal.canceled -= instance.OnPortal;
         }
 
         /// <summary>
@@ -1156,7 +1199,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UserInterfaceActions" />
         public void AddCallbacks(IUserInterfaceActions instance)
         {
-            if (instance is null || m_Wrapper.m_UserInterfaceActionsCallbackInterfaces.Contains(instance)) return;
+            if (instance == null || m_Wrapper.m_UserInterfaceActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_UserInterfaceActionsCallbackInterfaces.Add(instance);
             @Positive.started += instance.OnPositive;
             @Positive.performed += instance.OnPositive;
@@ -1380,6 +1423,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDropdown(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Portal" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPortal(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UserInterface" which allows adding and removing callbacks.

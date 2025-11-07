@@ -6,9 +6,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(RectTransform))]
-public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDragAndDropHandler
+public class ItemSlotObject : UIHoverClickSFX, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDragAndDropHandler
 {
-    [SerializeField] private IModalController modalController;
+    [SerializeField] private ModalController modalController;
     [SerializeField] private int index;
     bool equiped = false;
     private Inventory inventory;
@@ -23,7 +23,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
     {
         rect = rect != null ? rect : GetComponent<RectTransform>();
         inventoryData = ServiceHub.Get<IInventoryData>();
-        modalController = FindAnyObjectByType<UIManager>();
+        modalController = FindAnyObjectByType<UIManager>().modalController;
         inventory = PlayableCharacter.Inst.Inventory;
         icon = icon != null ? icon : GetComponentInChildren<IconOver>();
         iconRect = iconRect != null ? iconRect : icon.GetComponent<RectTransform>();
@@ -66,7 +66,7 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
             itemSlot = inventory.backpack[i];
         }
     }
-    public DragAndDropVisualMode dragAndDropVisualMode => throw new System.NotImplementedException();
+    public DragAndDropVisualMode dragAndDropVisualMode => throw new NotImplementedException();
     public bool AcceptsDragAndDrop()
     {
         Debug.Log("AcceptsDragAndDrop");
@@ -80,31 +80,33 @@ public class ItemSlotObject : MonoBehaviour, IPointerClickHandler, IPointerEnter
     {
         Debug.Log("ExitDragAndDrop");
     }
-    public void OnPointerClick(PointerEventData eventData)
+    public override void OnPointerClick(PointerEventData eventData)
     {
+        base.OnPointerClick(eventData);
         if (itemSlot is null) return;
         if (eventData.button != PointerEventData.InputButton.Left) return;
         inventory.NotifySlotClicked(equiped ? index-5 : index);
     }
-    public void OnPointerEnter(PointerEventData eventData)
+    public override void OnPointerEnter(PointerEventData eventData)
     {
+        base.OnPointerEnter(eventData);
         if (itemSlot.item == default || itemSlot.item.id == "00000") return;
         //정보 모달창 표시하기
         int lang = 1; // kor
         StringBuilder sb = new();
-        sb.AppendLine(itemSlot.item.description[lang]+'\n');
+        sb.AppendLine(itemSlot.item.description[lang] + '\n');
         foreach (var option in itemSlot.item.GetProvider().GetStatModifiers())
         {
+            // sb.AppendLine($"<link=\"{itemSlot.item.id}\"><u>{option.Stat}</u> {(option.Op == StatOp.ADD ? '+' : '*')}{(option.Stat == StatType.CRI || option.Stat == StatType.CRID ? option.Value * 100 + "%" : option.Value)}</link>");
             sb.AppendLine($"{option.Stat} {(option.Op == StatOp.ADD ? '+' : '*')}{(option.Stat == StatType.CRI || option.Stat == StatType.CRID ? option.Value * 100 + "%" : option.Value)}");
         }
-        modalController.SpawnModal(null, itemSlot.item.name[lang], sb.ToSafeString(), (Vector2)transform.position + rect.sizeDelta * 0.5f);
-        modalController.ParentModal.CancleHide();
+        modalController.SpawnModal(isParent: true, itemSlot.item.name[lang], sb.ToSafeString(), (Vector2)transform.position + rect.sizeDelta * 0.5f);
     }
     public void OnPointerExit(PointerEventData eventData)
     {
         if (itemSlot is null) return;
         //정보 모달창 숨기기
-        if(modalController.ParentModal.gameObject.activeSelf) modalController.ParentModal.Hide();
+        _ = modalController.HideModal();
     }
     public void PerformDragAndDrop()
     {

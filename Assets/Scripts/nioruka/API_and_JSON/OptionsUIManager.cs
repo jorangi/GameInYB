@@ -70,7 +70,6 @@ public class OptionsUIManager : MonoBehaviour, IUI
         if (AudioManager.Inst)
         {
             AudioManager.Inst.SetSFXVolume(value);
-            AudioManager.Inst.PlaySFX(); // 슬라이더 테스트용 소리
         }
         OnSave();
     }

@@ -329,4 +329,25 @@
       - 아이템 이름, 설명, 스탯 표시
       - 아이템 모달창을 슬롯 바로 옆에 배치
       - 아이템 모달창과 슬롯에 오버시 사라지지 않음(코루틴 0.01초 지연시간)
+    - 백엔드측 put과 문제 해결
+      - ats, jcnt가 put되지 않는 문제
+    # 251105
+    ## v.1(신종혁)
+    - GameBoostrapper를 통해 Monster와 Portal을 Registry, UnRegistry
+    - 포탈 추가
+      - 포탈 애니메이션 및 파티클 추가
+      - 맵 이동 기능 추가
+      - 몬스터 처치 조건 부여
+    - PlayerPrefs를 이용해 게임 실행시 오디오 동기화
+    - AudioManager 개선
+      - PlayerSFX(string sfxName)을 통해 효과음 일회 재생
+      - Serialized Dictionary 플러그인을 통해 인스펙터에 직렬화 가능한 Dictionary 사용
+      - music, sfx의 Dictionary 추가
+    - 음악 에셋 추가
+    - 마우스 오버와 클릭에 대한 소리 추가 - UIHoverAndClick.cs
+    - 플레이어의 착지, 점프, 이동, 공격에 대한 소리 추가
+    - 옵션 패널의 close 버튼 위치 수정, save 버튼 삭제
+    # 251108
+    ## v.1(신종혁)
+
 </details>

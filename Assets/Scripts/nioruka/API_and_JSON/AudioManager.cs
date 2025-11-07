@@ -1,7 +1,11 @@
+using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    public SerializedDictionary<string, AudioClip> sfxSources = new();
+    public SerializedDictionary<string, AudioClip> musicSources = new();
     public static AudioManager Inst;
 
     [Header("Audio Sources")]
@@ -15,9 +19,13 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Inst = this;
         DontDestroyOnLoad(gameObject);
+        
+        SetBGMEnabled(PlayerPrefs.GetInt("BGM_ON") == 1);
+        SetSFXEnabled(PlayerPrefs.GetInt("SFX_ON") == 1);
+        SetBGMVolume(PlayerPrefs.GetFloat("BGM_Volume"));
+        SetSFXVolume(PlayerPrefs.GetFloat("SFX_Volume"));
     }
 
     public void SetBGMVolume(float value)
@@ -44,10 +52,11 @@ public class AudioManager : MonoBehaviour
             sfxSource.mute = !enabled;
     }
 
-    // 테스트용 효과음 재생
-    public void PlaySFX()
+    public void PlaySFX(string sfxName)
     {
-        if (sfxSource && !sfxSource.mute)
-            sfxSource.Play();
+        sfxSources.TryGetValue(sfxName, out AudioClip clip);
+        if (clip == null) return;
+        Debug.Log(clip.name);
+        sfxSource.PlayOneShot(clip);
     }
 }

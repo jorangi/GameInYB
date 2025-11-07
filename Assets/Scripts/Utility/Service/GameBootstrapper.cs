@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -40,7 +41,19 @@ public static class FacadeAccessors
     public static IPlayableCharacterFacade GetPlayableCharacterFacadeOrNull()
         => new PlayableCharacterFacadeAdapter(() => PlayableCharacter.Inst);
 }
-public class GameBootstrapper : MonoBehaviour
+public interface ISceneManager
+{
+    public List<Portal> portals { get; set; }
+    public List<NonPlayableCharacter> monsters { get; set; }
+    public void PortalRegistry(Portal portal);
+    public void PortalUnRegistry(Portal portal);
+    public void MonsterRegistry(NonPlayableCharacter monster);
+    public void MonsterUnRegistry(NonPlayableCharacter monster);
+    public UniTask LoadSubSceneAsync(string mapName);
+    public UniTask NewRunAsync();
+    public void Giveup();
+}
+public class GameBootstrapper : MonoBehaviour, ISceneManager
 {
     [SerializeField] private UIManager uiManager;
     [SerializeField] private PlayableCharacter playableCharacter;
@@ -50,9 +63,9 @@ public class GameBootstrapper : MonoBehaviour
     private void Awake()
     {
         ServiceHub.EnsureRoot();
-
         ServiceHub.RebuildSceneScope(scope =>
         {
+            scope.Add<ISceneManager>(this);
             scope.Add<INegativeSignal>(uiManager);
             scope.Add<IInventoryData>(playableCharacter);
             scope.Add<IInventoryUI>(characterInformation);
@@ -68,17 +81,19 @@ public class GameBootstrapper : MonoBehaviour
             var saver = new StatsSaver(tokenProvider, Array.Empty<IStatsRefresher>());
             scope.Add<IStatsSaver>(saver);
         });
+        monsters = new();
+        portals = new();
     }
 
     private async void Start()
     {
         // 한 프레임 유예
-        await Cysharp.Threading.Tasks.UniTask.NextFrame();
+        await UniTask.NextFrame();
 
         // Inst가 아직 null일 수 있으니 안전 대기 (선택)
         var ct = this.GetCancellationTokenOnDestroy();
         if (PlayableCharacter.Inst == null)
-            await Cysharp.Threading.Tasks.UniTask.WaitUntil(
+            await UniTask.WaitUntil(
                 () => PlayableCharacter.Inst != null,
                 cancellationToken: ct
             );
@@ -92,8 +107,34 @@ public class GameBootstrapper : MonoBehaviour
 
         _ = NewRunAsync();
     }
-    string initialMap = "Forest_Stage_02";
+    string initialMap = "Forest_Stage_01";
     string _loadedSubScene;
+    public Action monsterAction;
+    public List<NonPlayableCharacter> monsters { get; set; }
+    public List<Portal> portals { get; set; }
+    public void PortalRegistry(Portal portal) => portals.Add(portal);
+    public void PortalUnRegistry(Portal portal)
+    {
+        if (portals.IndexOf(portal) != -1)
+            portals.Remove(portal);
+    }
+    public void MonsterRegistry(NonPlayableCharacter monster)
+    {
+        monsters.Add(monster);
+        monsterAction?.Invoke();
+    }
+    public void MonsterUnRegistry(NonPlayableCharacter monster)
+    {
+        if (monsters.IndexOf(monster) != -1)
+            monsters.Remove(monster);
+        monsterAction?.Invoke();
+        Debug.Log(monsters.Count);
+        if (monsters.Count == 0)
+        {
+            foreach (var p in portals) p.PortalOn();
+            ServiceHub.Get<ILogMessage>().Spawn($"모든 몬스터를 처치하여 {portals.Count}개의 포탈이 열렸습니다.");
+        }
+    }
     public async UniTask LoadSubSceneAsync(string mapName)
     {
         // 기존 맵 정리
@@ -127,8 +168,6 @@ public class GameBootstrapper : MonoBehaviour
         {
             vcam.Target.TrackingTarget = PlayableCharacter.Inst.transform;
         }
-        // 카메라, 레이어, FSM 타깃, 이벤트 등 재설정
-        // ex) CameraFollow.Target = pc; pc.RebindLevelRefs();
     }
     public async UniTask GiveUpAsync() // “게임 포기”
     {

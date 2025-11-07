@@ -23,14 +23,14 @@ public interface INPCProfileInjector
 [RequireComponent(typeof(Animator))]
 public class NonPlayableCharacter : Character, INPCProfileInjector
 {
-    [SerializeField]public bool IsAbilityRunning { get; set;}
+    [SerializeField] public bool IsAbilityRunning { get; set; }
     public AbilityConfig RunningAbilityCfg = null;
     private List<IAbility> _abilities = new();
     public IReadOnlyCollection<IAbility> Abilities => _abilities;
     private static readonly WaitForSeconds _waitForSeconds0_3 = new(0.3f);
     [Header("FSM관련")]
     public Blackboard blackboard = new();
-    [SerializeField]private NPCStateMachine _fsm;
+    [SerializeField] private NPCStateMachine _fsm;
     private StateRegistry _registry = new();
     private bool dieAnimFinished;
 
@@ -65,11 +65,6 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
     public GameObject DamageTextPrefab;
     public Animator animator;
     [SerializeField] private string id;
-    [SerializeField] LayerMask platformMask;   // Ground/Platform/Tilemap 등
-    [SerializeField] float minUpDy = 1.25f;    // '머리 위'로 간주할 최소 높이차
-    [SerializeField] float maxProbe = 6f;      // 최대 탐지 높이
-    [SerializeField] float headPad = 0.05f;    // 머리 위 시작 오프셋
-    [SerializeField] float boxShrinkX = 0.1f;  // 박스 폭 약간 축소
     protected override void Awake()
     {
         blackboard.self = transform;
@@ -131,13 +126,14 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
     }
     public void OnEnable()
     {
+        ServiceHub.Get<ISceneManager>().MonsterRegistry(this);
         RequestState<IdleState>();
     }
     protected override void Update()
     {
         base.Update();
         Sense();
-        
+
         //blackboard.CanSeeTarget = Mathf.Sign(blackboard.target.position.x - blackboard.self.position.x) == Mathf.Sign(FacingSign);
         wallChecker.localPosition = new(FacingSign > 0 ? 0.25f : -0.25f, 0.0f);
         Debug.DrawRay(wallChecker.position, FacingSign > 0 ? Vector2.right : Vector2.left, Color.yellow);
@@ -155,7 +151,7 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         blackboard.CanSeeTarget = blackboard.target != null
                             && Mathf.Abs(blackboard.DistToTarget) <= blackboard.DetectEnter
                             && Mathf.Sign(blackboard.target.position.x - blackboard.self.position.x) == FacingSign;
-                        // + 필요하면 Raycast 등 Line of Sight
+        // + 필요하면 Raycast 등 Line of Sight
         blackboard.DistToTarget = Vector2.Distance(blackboard.self.position, blackboard.target.position);
         // Debug.Log($"{blackboard.TimeNow} - {blackboard.LastSeenTime} = {blackboard.TimeNow - blackboard.LastSeenTime} <= {blackboard.LostMemoryTime}");
         blackboard.targetKnown = (blackboard.TimeNow - blackboard.LastSeenTime) <= blackboard.LostMemoryTime;
@@ -228,12 +224,6 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         GameObject dObj = Instantiate(DamageTextPrefab);
         dObj.transform.position = transform.position + new Vector3(0, 2f, 0);
         dObj.GetComponent<TextMeshPro>().text = Mathf.RoundToInt(dmg).ToString();
-        if (data.health.HP <= 0)
-        {
-            // Handle death logic here
-            RequestState<DieState>();
-            Debug.Log($"{data.UnitName} has died.");
-        }
     }
     protected override IEnumerator Hit()
     {
@@ -267,6 +257,11 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
     public void SetMinStateLock(float minStateDuration) => blackboard.MinStateEndTime = blackboard.TimeNow + blackboard.MinStateDuration;
     public void OnDieAnimationComplete() => dieAnimFinished = true;
     public bool IsDieAnimFinished() => dieAnimFinished;
+    protected override void OnDied()
+    {
+        RequestState<DieState>();
+        ServiceHub.Get<ISceneManager>().MonsterUnRegistry(this);
+    }
     public GameObject CheckHit()
     {
         var p = transform.Find("attackPosition").localPosition;
@@ -312,6 +307,16 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         AnimSetAttack(idx);
         AnimDoAttack();
     }
-    public NPCProfile Profile{ get; private set; }
+    public NPCProfile Profile { get; private set; }
     public void InjectProfile(NPCProfile profile) => Profile = profile;
+    bool fallIsDead = true;
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("FallingZone"))
+        {
+            rigid.simulated = !fallIsDead;
+            transform.position = fallIsDead ? transform.position : savedPos + Vector3.up;
+            TakeDamage(fallIsDead ? data.MaxHP : data.MaxHP * 0.2f);
+        }
+    }
 }

@@ -15,19 +15,13 @@ public class ItemInformationModal : MoveableInformationModal, IPointerClickHandl
         if (index == -1) return;
         TMP_LinkInfo info = source.textInfo.linkInfo[index];
         Debug.Log(info.GetLinkID());
+        Debug.Log(ItemDataManager.GetItem(info.GetLinkID()));
     }
-    public void Show(Transform parent, string title, string context, Vector2 pos)
+    public void Show(string title, string context, Vector2 pos)
     {
         this.title.text = title;
         this.context.text = context;
-        if (parent == null)
-        {
-            Show();
-        }
-        else
-        {
-            Show(parent);
-        }
+        Show();
         SetOffset(pos);
     }
     public override void Hide()

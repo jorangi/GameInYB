@@ -49,9 +49,9 @@ public class Health
     public Action OnDied;
     public void ApplyHP(int value)
     {
-        _HP = value;
+        _HP = Mathf.Max(value, 0);
         OnHPChanged?.Invoke();
-        if (_HP <= 0)
+        if (_HP == 0)
             OnDied?.Invoke();
     }
 }
@@ -472,7 +472,7 @@ public class Character : ParentObject
         bool slopeTemp = cAngle != 0.0f;
         return slopeTemp;
     }
-    protected bool GroundCheck()
+    protected virtual bool GroundCheck()
     {
         Debug.DrawRay(foot.position, Vector2.down * rayDistance, Color.red);
         RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));
@@ -489,23 +489,6 @@ public class Character : ParentObject
         hitCoroutine ??= StartCoroutine(Hit());
     }
     protected bool touchedGround = false;
-    void OnCollisionStay2D(Collision2D col)
-    {
-        // if (!this.CompareTag("Player")) return;
-        // RaycastHit2D h = Physics2D.Raycast(foot.position, Vector2.down, rayDistance, LayerMask.GetMask("Floor", "Platform"));
-        // if (!h) return;
-        // foreach (ContactPoint2D c in col.contacts)
-        // {
-        //     if (c.collider.gameObject.layer.Equals((int)LAYER.FLOOR))
-        //     {
-        //         if (rigid.linearVelocityY <= 0.0f) Landing(LAYER.FLOOR);
-        //     }
-        //     else if (c.collider.gameObject.layer.Equals((int)LAYER.PLATFORM))
-        //     {
-        //         if (rigid.linearVelocityY <= 0.0f) Landing(LAYER.PLATFORM);
-        //     }
-        // }
-    }
     public float timeMul = 10.0f;
     protected virtual IEnumerator Hit()
     {
