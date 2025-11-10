@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class TestPortalObject : TestInteractItems
+public class TestPortalObject : InteractableObject
 {
     public Transform targetPosition;
     protected override void OnInteract(InputAction.CallbackContext context)

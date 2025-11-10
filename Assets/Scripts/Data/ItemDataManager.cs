@@ -99,6 +99,15 @@ public static class ItemDataManager
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
+    public static Item[] GetItems(params string[] rarity)
+    {
+        List<Item> results = new();
+        foreach (KeyValuePair<string, Item> kv in itemDic)
+        {
+            if (Array.IndexOf(rarity, kv.Value.rarity) > -1) results.Add(kv.Value);
+        }
+        return results.ToArray();
+    }
     public static Item GetItem(string id)
     {
         if (itemDic.TryGetValue(id, out Item item)) return item;

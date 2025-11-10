@@ -922,7 +922,7 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     private TextMeshProUGUI unitName, message; // 메시지 박스에 표시되는 유닛 이름과 메시지
     public GameObject messageObj; // 메시지 박스 오브젝트
     private RectTransform messageBox; // 메시지 박스의 RectTransform
-    private InputSystem_Actions inputAction; // 인풋 액션
+    public InputSystem_Actions inputAction; // 인풋 액션
     public Transform arm; // 플레이어의 팔 트랜스폼
     [SerializeField] private SpriteRenderer weaponSprite; // 플레이어의 무기 스프라이트 렌더러
     [SerializeField] private SpriteRenderer subWeaponSprite; // 플레이어의 무기 스프라이트 렌더러
@@ -1515,25 +1515,26 @@ public class PlayableCharacter : Character, IInventoryData, IInventorySnapshotPr
     /// </summary>
     /// <param name="item"></param>
     /// <param name="ea"></param>
-    public void GetItem(Item item, int ea = 1)
+    public bool GetItem(Item item, int ea = 1)
     {
         if (inventory.backpack.IsFull)
         {
             Debug.Log("인벤토리가 가득 찼습니다.");
             logMessageParent.Spawn("인벤토리가 가득 찼습니다.");
-            return;
+            return false;
         }
         if (inventory.backpack.GetItem(item.id) is ItemSlot slot && slot.ea >= maxStack && item.stackable)
         {
             slot.ea += ea;
             InvokeBackpackChanged(slot.index, slot);
-            return;
+            return true;
         }
         ItemSlot emptySlot = inventory.backpack.EmptySlot();
         emptySlot.item = item;
         emptySlot.ea = ea;
         Debug.Log($"{emptySlot.index}번 슬롯에 아이템 {emptySlot.item.id}이 추가되었습니다.");
         InvokeBackpackChanged(emptySlot.index, emptySlot);
+        return true;
     }
     /// <summary>
     /// 아이템 제거

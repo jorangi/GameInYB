@@ -122,6 +122,7 @@ public class GameBootstrapper : MonoBehaviour, ISceneManager, IHitManager
         });
         monsters = new();
         portals = new();
+        AudioManager.Inst.bgmSource.resource = AudioManager.Inst.musicSources["field"];
     }
 
     private async void Start()

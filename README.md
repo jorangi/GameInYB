@@ -395,4 +395,9 @@
     - 데미지 숫자 추가(sprite 기반)
     - TakeDamage 함수 인자 수정
       - critical여부, 낙사데미지 여부(가드 방지)
+    ## v.2(신종혁)
+    - ItemDataManager에 등급별 아이템 배열 획득 함수 추가
+    - 아이템 획득 상자 추가
+      - 애니메이션 추가
+      - Interactable Object 클래스 상속
 </details>

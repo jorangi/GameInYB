@@ -3,18 +3,6 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using System;
 [System.Serializable]
-public class ItemData
-{
-    [SerializeField] private string id;
-    [HideInInspector] public string Id => id;
-    [SerializeField] private string name;
-    [HideInInspector] public string Name => name;
-    [SerializeField] private string description;
-    [HideInInspector] public string Description => description;
-    [SerializeField] private Sprite icon;
-    [HideInInspector] public Sprite Icon => icon;
-}
-[System.Serializable]
 public static class SpriteTopUtil
 {
     public static Vector3 GetTopWorldPosition(SpriteRenderer sr)

@@ -115,13 +115,13 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 1
-  m_colorMode: 2
+  m_enableVertexGradient: 0
+  m_colorMode: 0
   m_fontColorGradient:
-    topLeft: {r: 1, g: 0, b: 0.18339252, a: 1}
-    topRight: {r: 1, g: 0, b: 0.18339252, a: 1}
-    bottomLeft: {r: 1, g: 0.50570625, b: 0.31671154, a: 1}
-    bottomRight: {r: 1, g: 0.50570625, b: 0.31671154, a: 1}
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 11400000, guid: ebf6d349521a8d54b8b9f75e71b4160a, type: 2}
   m_tintAllSprites: 0

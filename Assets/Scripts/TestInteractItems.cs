@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class TestInteractItems : MonoBehaviour
+public class TestInteractItem : MonoBehaviour
 {
     public enum ItemType
     {
@@ -23,6 +23,11 @@ public class TestInteractItems : MonoBehaviour
     {
         inputAction.Enable();
         inputAction.Player.Interact.performed += OnInteract;
+    }
+    private void OnDisable()
+    {
+        inputAction.Enable();
+        inputAction.Player.Interact.performed -= OnInteract;
     }
 
     protected virtual void OnInteract(InputAction.CallbackContext context)

@@ -2,13 +2,12 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class TestInteractObjectWeapon : TestInteractItems
+public class TestInteractObjectWeapon : InteractableObject
 {
     public string weaponId;
     public Item data;
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
         itemType = ItemType.Weapon;
     }
     protected async UniTaskVoid Start()
