@@ -19,7 +19,10 @@ MonoBehaviour:
   enter: 10
   exit: 5
   backAttack: 0
+  rootDuring: 1
+  speed: 8
+  AttackSize: 1
+  Hit: -1
   duration: 1
   dir: 0
-  speed: 8
   stopOnWall: 1

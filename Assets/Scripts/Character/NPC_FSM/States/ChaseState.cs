@@ -53,7 +53,7 @@ public class ChaseState : StateBase
                     }
                 }
 
-            if (TryExecuteAbilityOnce(out var bestOne)) return;
+            if (TryExecuteAbilityOnce(out var bestOne) || npc.AnimGetTriggerAttack()) return;
             else if (bestOne != null)
             {
                 //현재 공격을 당장은 할 수 없을 경우 해당 공격에 적합한 위치로 이동
@@ -72,6 +72,7 @@ public class ChaseState : StateBase
                     npc.SetDesiredMove(0);
                     npc.AnimSetMoving(false);
                     npc.FacingSign = Mathf.Sign(dirToTarget);
+                    npc.flipSprite(npc.FacingSign > 0);
                     return;
                 }
 
@@ -82,6 +83,7 @@ public class ChaseState : StateBase
                     npc.FacingSign = Mathf.Sign(dirToTarget);
                     npc.SetDesiredMove(0);
                     npc.AnimSetMoving(false);
+                    npc.flipSprite(npc.FacingSign > 0);
                     return;
                 }
                 if (Mathf.Abs(delta) <= dead)
@@ -90,6 +92,7 @@ public class ChaseState : StateBase
                     npc.FacingSign = Mathf.Sign(dirToTarget);
                     npc.SetDesiredMove(0);
                     npc.AnimSetMoving(false);
+                    npc.flipSprite(npc.FacingSign > 0);
                     return;
                 }
                 if (Mathf.Abs(delta) > 0.1f && !bb.IsPrecipiceAhead && bb.IsWallAhead)

@@ -53,11 +53,34 @@ public interface ISceneManager
     public UniTask NewRunAsync();
     public void Giveup();
 }
-public class GameBootstrapper : MonoBehaviour, ISceneManager
+public enum HitObjectType
+{
+    HITBOX,
+    NPC_HITBOX,
+    HIT_EFFECT,
+    CRITICAL_EFFECT
+}
+public interface IHitManager
+{
+    public GameObject GetGameObject(HitObjectType type);
+    public HitBox GetHitBox(IStatProvider provider);
+    public NPC__AttackHitBox GetNPCHitBox(IStatProvider provider);
+    public HitSpark GetHitEffect();
+    public HitSpark GetCriticalEffect();
+}
+public class GameBootstrapper : MonoBehaviour, ISceneManager, IHitManager
 {
     [SerializeField] private UIManager uiManager;
     [SerializeField] private PlayableCharacter playableCharacter;
     [SerializeField] private CharacterInformation characterInformation;
+    [SerializeField] private GameObject hitBox;
+    [SerializeField] private Transform hitBoxPool;
+    [SerializeField] private GameObject monsterHitBox;
+    [SerializeField] private Transform MonsterHitBoxPool;
+    [SerializeField] private GameObject hitEffect;
+    [SerializeField] private Transform hitEffectPool;
+    [SerializeField] private GameObject criticalHitEffect;
+    [SerializeField] private Transform criticalHitEffectPool;
     private bool _applied = false;
 
     private void Awake()
@@ -66,9 +89,25 @@ public class GameBootstrapper : MonoBehaviour, ISceneManager
         ServiceHub.RebuildSceneScope(scope =>
         {
             scope.Add<ISceneManager>(this);
+            scope.Add<IHitManager>(this);
             scope.Add<INegativeSignal>(uiManager);
             scope.Add<IInventoryData>(playableCharacter);
             scope.Add<IInventoryUI>(characterInformation);
+
+            for (int i = 0; i < 100; i++)
+            {
+                GameObject _hitBox = Instantiate(hitBox, hitBoxPool);
+                _hitBox.name = "AttackHitBox";
+
+                GameObject _monsterHitBox = Instantiate(monsterHitBox, MonsterHitBoxPool);
+                _monsterHitBox.name = "MonsterAttackHitBox";
+
+                GameObject _hitEffect = Instantiate(hitEffect, hitEffectPool);
+                _hitEffect.name = "HitEffect";
+                
+                GameObject _criticalHitEffect = Instantiate(criticalHitEffect, criticalHitEffectPool);
+                _criticalHitEffect.name = "CriticalHitEffect";
+            }
 
             // 🔸 옵션 A 유지: 지연 접근 Facade 등록 (호출 ‘시점’에만 Inst 쓰도록)
             var facade = new PlayableCharacterFacadeAdapter(() => PlayableCharacter.Inst);
@@ -128,7 +167,6 @@ public class GameBootstrapper : MonoBehaviour, ISceneManager
         if (monsters.IndexOf(monster) != -1)
             monsters.Remove(monster);
         monsterAction?.Invoke();
-        Debug.Log(monsters.Count);
         if (monsters.Count == 0)
         {
             foreach (var p in portals) p.PortalOn();
@@ -180,5 +218,42 @@ public class GameBootstrapper : MonoBehaviour, ISceneManager
     public void Giveup()
     {
         _ = GiveUpAsync();
+    }
+    public GameObject GetGameObject(HitObjectType type)
+    {
+        return type switch
+        {
+            HitObjectType.HITBOX => hitBoxPool.GetChild(0).gameObject,
+            HitObjectType.NPC_HITBOX => MonsterHitBoxPool.GetChild(0).gameObject,
+            HitObjectType.HIT_EFFECT => hitEffectPool.GetChild(0).gameObject,
+            HitObjectType.CRITICAL_EFFECT => criticalHitEffectPool.GetChild(0).gameObject,
+            _ => null,
+        };
+    }
+    public HitBox GetHitBox(IStatProvider provider)
+    {
+        var h = GetGameObject(HitObjectType.HITBOX).GetComponent<HitBox>();
+        h.provider ??= provider;
+        h.gameObject.SetActive(true);
+        return h;
+    }
+    public NPC__AttackHitBox GetNPCHitBox(IStatProvider provider)
+    {
+        var h = GetGameObject(HitObjectType.NPC_HITBOX).GetComponent<NPC__AttackHitBox>();
+        h.provider = provider;
+        h.gameObject.SetActive(true);
+        return h;
+    }
+    public HitSpark GetHitEffect()
+    {
+        var h = GetGameObject(HitObjectType.HIT_EFFECT).GetComponent<HitSpark>();
+        h.gameObject.SetActive(true);
+        return h;
+    }
+    public HitSpark GetCriticalEffect()
+    {
+        var h = GetGameObject(HitObjectType.CRITICAL_EFFECT).GetComponent<HitSpark>();
+        h.gameObject.SetActive(true);
+        return h;
     }
 }

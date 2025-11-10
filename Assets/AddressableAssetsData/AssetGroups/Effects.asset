@@ -21,6 +21,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - EffectPrefab
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5d6c88ff0ff0b6499dae979aa000cd6
+    m_Address: StabEffect
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectPrefab
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d50ac9544877097439b39700a1e0b892
+    m_Address: FloatingDamage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectPrefab
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 34a7f3955eb1b6c4cad861ae9a5fb6aa, type: 2}
   m_SchemaSet:

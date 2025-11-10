@@ -33,6 +33,7 @@ public sealed class PushKnockback : IAbility
         {
             var target = npc.blackboard.target.GetComponent<PlayableCharacter>();
             target.Knockback(new Vector2(Mathf.Sign(ctx.target.position.x - ctx.self.position.x) * 10, 5f), ForceMode2D.Impulse);
+            //밀치는 로직
             if (_cfg.advanceDistanceOnHit != 0f)
             {
                 float dir = Mathf.Sign(ctx.target.position.x - ctx.self.position.x);

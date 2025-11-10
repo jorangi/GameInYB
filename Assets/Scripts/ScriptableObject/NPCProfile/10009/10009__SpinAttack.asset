@@ -22,3 +22,4 @@ MonoBehaviour:
   rootDuring: 0
   speed: 1
   AttackSize: 2
+  Hit: -1

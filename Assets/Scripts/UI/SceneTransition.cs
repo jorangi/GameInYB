@@ -4,7 +4,7 @@ using UnityEngine;
 public class SceneTransition : MonoBehaviour
 {
     [SerializeField] private Transform fadePanel;
-    readonly WaitForSecondsRealtime waitTime = new(0.01f);
+    readonly WaitForSecondsRealtime waitTime = new(0.005f);
     private const int COLS = 16;
     private const int ROWS = 9;
     public bool end = false;

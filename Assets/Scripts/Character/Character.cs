@@ -100,6 +100,7 @@ public class CharacterStats
         if (dirty) Recalculate();
         return finalCache;
     }
+    public void ForceRecalulate() => Recalculate();
     private void Recalculate()
     {
         finalCache.Clear();
@@ -484,7 +485,7 @@ public class Character : ParentObject
         touchedGround = false;
         return false;
     }
-    public virtual void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage, bool isCritical = false, bool isFallingDmg = false)
     {
         hitCoroutine ??= StartCoroutine(Hit());
     }

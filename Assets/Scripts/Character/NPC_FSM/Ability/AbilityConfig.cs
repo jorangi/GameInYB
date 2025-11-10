@@ -1,6 +1,16 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEditor;
+
+[Flags]
+public enum HitPosition
+{
+    None = 0,
+    AttackPosition = 1 << 0,
+    Body = 1 << 1,
+    All = ~0
+}
 
 public abstract class AbilityConfig : ScriptableObject
 {
@@ -13,5 +23,7 @@ public abstract class AbilityConfig : ScriptableObject
     public bool rootDuring = true;
     public float speed = 0f;
     public float AttackSize = 1.0f;
+    private readonly HitPosition hit = HitPosition.AttackPosition;
+    public HitPosition Hit = HitPosition.AttackPosition;
     public abstract IAbility Build(NonPlayableCharacter npc);
 }

@@ -33,6 +33,7 @@ public sealed class MeleeAttack : IAbility
         npc.SetRooted(_cfg.rootDuring);
         hitByBody = () =>
         {
+            if (!_cfg.Hit.HasFlag(HitPosition.Body)) return null;
             hitByBodyCount++;
             if (hitByBodyCount > 1 && obj != null)
             {
@@ -46,8 +47,10 @@ public sealed class MeleeAttack : IAbility
             obj.transform.localPosition = Vector3.zero;
             return obj;
         };
+        
         meleeHitLogic = () =>
         {
+            //제자리 공격일 경우 움직이지 않고 공격
             if (!_cfg.rootDuring)
             {
                 float dir = Mathf.Sign(npc.blackboard.target.position.x - npc.blackboard.self.position.x);

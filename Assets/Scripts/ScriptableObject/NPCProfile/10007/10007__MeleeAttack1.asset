@@ -20,4 +20,6 @@ MonoBehaviour:
   exit: 1
   backAttack: 0
   rootDuring: 1
-  advanceDistanceOnHit: 0
+  speed: 0
+  AttackSize: 1
+  hit: 1

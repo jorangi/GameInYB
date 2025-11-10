@@ -24,8 +24,8 @@ public class AudioManager : MonoBehaviour
         
         SetBGMEnabled(PlayerPrefs.GetInt("BGM_ON") == 1);
         SetSFXEnabled(PlayerPrefs.GetInt("SFX_ON") == 1);
-        SetBGMVolume(PlayerPrefs.GetFloat("BGM_Volume"));
-        SetSFXVolume(PlayerPrefs.GetFloat("SFX_Volume"));
+        SetBGMVolume(PlayerPrefs.GetFloat("BGM_VOLUME"));
+        SetSFXVolume(PlayerPrefs.GetFloat("SFX_VOLUME"));
     }
 
     public void SetBGMVolume(float value)
@@ -56,7 +56,6 @@ public class AudioManager : MonoBehaviour
     {
         sfxSources.TryGetValue(sfxName, out AudioClip clip);
         if (clip == null) return;
-        Debug.Log(clip.name);
         sfxSource.PlayOneShot(clip);
     }
 }

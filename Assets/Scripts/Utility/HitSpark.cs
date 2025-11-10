@@ -2,15 +2,6 @@ using UnityEngine;
 
 public class HitSpark : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public void OnEnable() => transform.SetAsLastSibling();
+    public void OnFin() => gameObject.SetActive(false);
 }

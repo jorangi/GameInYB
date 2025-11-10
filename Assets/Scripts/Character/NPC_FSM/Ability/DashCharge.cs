@@ -38,11 +38,14 @@ public sealed class DashCharge : IAbility
         npc.SetRooted(false);
         hitByBody = () =>
         {
-            obj = npc.CheckHit();
-            obj.GetComponent<NPC__AttackHitBox>().timer = 10.0f;
-            obj.transform.parent = npc.transform;
-            obj.transform.localScale = new Vector3(_cfg.AttackSize, _cfg.AttackSize, 1.0f);
-            obj.transform.localPosition = Vector3.zero;
+            if (_cfg.Hit.HasFlag(HitPosition.Body))
+            {
+                obj = npc.CheckHit();
+                obj.GetComponent<NPC__AttackHitBox>().timer = 10.0f;
+                obj.transform.parent = npc.transform;
+                obj.transform.localScale = new Vector3(_cfg.AttackSize, _cfg.AttackSize, 1.0f);
+                obj.transform.localPosition = Vector3.zero;
+            }
             return obj;
         };
         dashLogic = () =>

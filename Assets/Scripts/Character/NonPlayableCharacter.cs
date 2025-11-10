@@ -84,7 +84,7 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         _npcData.health.ApplyHP(_npcData.MaxHP);
         OnHitFrame += CheckHit;
         FSMInit();
-
+        hitManager = ServiceHub.Get<IHitManager>();
 
         provider = Data;
         if (provider is null) Debug.LogError("[WeaponScript] provider에 stats할당 실패");
@@ -165,8 +165,9 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
     protected override void Movement()
     {
         base.Movement();
-        sprite.flipX = desiredMoveX > 0 || desiredMoveX >= 0 && sprite.flipX;
+        flipSprite(desiredMoveX > 0 || desiredMoveX >= 0 && sprite.flipX);
     }
+    public void flipSprite(bool x) => sprite.flipX = x;
     IEnumerator HpBarFillsSmooth(SpriteRenderer bar)
     {
         yield return _waitForSeconds0_3;
@@ -213,7 +214,7 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
             RequestState<DieState>();
         }
     }
-    public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage, bool isCritical = false, bool isFallingDmg = false)
     {
         base.TakeDamage(damage);
         if (damage < 0.0f) return;
@@ -222,8 +223,11 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         SetHP(data.health.HP - dmg);
 
         GameObject dObj = Instantiate(DamageTextPrefab);
-        dObj.transform.position = transform.position + new Vector3(0, 2f, 0);
-        dObj.GetComponent<TextMeshPro>().text = Mathf.RoundToInt(dmg).ToString();
+        dObj.transform.position = transform.position + new Vector3(UnityEngine.Random.Range(-1f, 1f), 2f, 0);
+        StringBuilder sb = new();
+        foreach (char c in Mathf.RoundToInt(dmg).ToString())
+            sb.Append(isCritical ? $"<sprite name=\"critical_{c}\">" : $"<sprite name=\"normal_{c}\">");
+        dObj.GetComponent<TextMeshPro>().text = sb.ToString();
     }
     protected override IEnumerator Hit()
     {
@@ -262,22 +266,18 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         RequestState<DieState>();
         ServiceHub.Get<ISceneManager>().MonsterUnRegistry(this);
     }
+
+    IHitManager hitManager = null;
     public GameObject CheckHit()
     {
+        if (hitManager == null) return null;
         var p = transform.Find("attackPosition").localPosition;
         transform.Find("attackPosition").localPosition = new(Mathf.Abs(p.x) * FacingSign, p.y, p.z);
-        GameObject hitbox = Instantiate(attackHitBox);
-        hitbox.GetComponent<BoxCollider2D>().size = new Vector2(1f, 1f);
-        hitbox.GetComponent<NPC__AttackHitBox>().provider = provider;
+        NPC__AttackHitBox hitbox = hitManager.GetNPCHitBox(provider);
+        hitbox.SetSize(2f, 2f);
         hitbox.transform.position = transform.Find("attackPosition").position;
-        hitbox.transform.localScale = new(2f, 2f);
-        return hitbox;
+        return hitbox.gameObject;
     }
-    /// <summary>
-    /// EngageState 등록(후처리)
-    /// </summary>
-    /// <param name="engage"></param>
-    private void BindAbilites(EngageState engage) => _registry.Register(engage);
     /// <summary>
     /// abilities를 이용한 등록
     /// </summary>
@@ -287,14 +287,11 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         _abilities.Clear();
         _abilities = abilities;
 
-
-        var engage = new EngageState(this, blackboard, abilities);
-        StringBuilder sb = new();
-        sb.AppendLine($"[{id}]");
-        foreach (var a in abilities)
-            sb.AppendLine(a.Id);
+        // StringBuilder sb = new();
+        // sb.AppendLine($"[{id}]");
+        // foreach (var a in abilities)
+        //     sb.AppendLine(a.Id);
         // Debug.Log(sb.ToString());
-        BindAbilites(engage);
     }
     private void AnimSetAttack(int idx) => animator.SetFloat("AttackIndex", idx);
     private void AnimDoAttack()
@@ -316,7 +313,7 @@ public class NonPlayableCharacter : Character, INPCProfileInjector
         {
             rigid.simulated = !fallIsDead;
             transform.position = fallIsDead ? transform.position : savedPos + Vector3.up;
-            TakeDamage(fallIsDead ? data.MaxHP : data.MaxHP * 0.2f);
+            TakeDamage(fallIsDead ? data.MaxHP : data.MaxHP * 0.2f, false, true);
         }
     }
 }
