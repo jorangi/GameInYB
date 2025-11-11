@@ -18,7 +18,7 @@ public static class EnhancedToString
 [DefaultExecutionOrder(-10000)]
 public class DataLoader : MonoBehaviour
 {
-    [SerializeField]private Texture2D cursorTex;
+    [SerializeField] private Texture2D cursorTex;
     private static DataLoader instance;
     private string getResult;
     private readonly Uri baseURI = new("https://api-looper.duckdns.org/api/");
@@ -48,6 +48,7 @@ public class DataLoader : MonoBehaviour
         try
         {
             await ItemDataLoad();
+            await SkillDataLoad();
         }
         catch (Exception e)
         {
@@ -74,5 +75,11 @@ public class DataLoader : MonoBehaviour
         string itemData = await HttpGetUniTask.GetJsonAsync(new Uri(baseURI, "items"));
         ItemDataManager.Init(itemData);
         Debug.Log($"items 데이터를 성공적으로 받아왔습니다.\n\n{itemData}");
+    }
+    private async Task SkillDataLoad()
+    {
+        string skillData = await HttpGetUniTask.GetJsonAsync(new Uri(baseURI, "skills"));
+        SkillDataManager.Init(skillData);
+        Debug.Log($"skills 데이터를 성공적으로 받아왔습니다.\n\n{skillData}");
     }
 }

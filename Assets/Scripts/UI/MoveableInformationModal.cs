@@ -39,7 +39,7 @@ public class MoveableInformationModal : MonoBehaviour, IUI, IPointerEnterHandler
     {
         if (ParentModal == this)
         {
-            transform.parent.position = offset;
+            transform.parent.position = offset + Vector2.down * 50;
         }
     }
     public virtual void OnPointerEnter(PointerEventData eventData)

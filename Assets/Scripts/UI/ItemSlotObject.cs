@@ -93,14 +93,61 @@ public class ItemSlotObject : UIHoverClickSFX, IPointerClickHandler, IPointerEnt
         if (itemSlot.item == default || itemSlot.item.id == "00000") return;
         //정보 모달창 표시하기
         int lang = 1; // kor
-        StringBuilder sb = new();
-        sb.AppendLine(itemSlot.item.description[lang] + '\n');
-        foreach (var option in itemSlot.item.GetProvider().GetStatModifiers())
+        Vector2 pos = (Vector2)transform.position + rect.sizeDelta * 0.5f;
+        if (itemSlot.item.id.ToString()[0] == '0') // 아이템일 경우
         {
-            // sb.AppendLine($"<link=\"{itemSlot.item.id}\"><u>{option.Stat}</u> {(option.Op == StatOp.ADD ? '+' : '*')}{(option.Stat == StatType.CRI || option.Stat == StatType.CRID ? option.Value * 100 + "%" : option.Value)}</link>");
-            sb.AppendLine($"{option.Stat} {(option.Op == StatOp.ADD ? '+' : '*')}{(option.Stat == StatType.CRI || option.Stat == StatType.CRID ? option.Value * 100 + "%" : option.Value)}");
+            Item item = ServiceHub.Get<IItemRepository>().GetItem(itemSlot.item.id.ToString());
+            StringBuilder sb = new();
+            sb.AppendLine(item.description[lang] + '\n');
+            foreach (var option in item.GetProvider().GetStatModifiers())
+            {
+                sb.AppendLine($"{option.Stat} {(option.Op == StatOp.ADD ? '+' : '*')}{(option.Stat == StatType.CRI || option.Stat == StatType.CRID ? option.Value * 100 + "%" : option.Value)}");
+            }
+            if (item.skills.Length > 0)
+            {
+                sb.AppendLine("\n<size=\"20%\">보유 스킬 :");
+                var svc = ServiceHub.Get<ISkillRepository>();
+                foreach (var skill in item.skills)
+                {
+                    sb.AppendLine($"<link=\"{skill}\"><u><color=#b8b8b8>{svc.GetSkill(skill).name[1]}</color></u></link>");
+                }
+                sb.AppendLine("</size>");
+            }
+            string titleColor = item.rarity switch
+            {
+                "uncommon" => "green",
+                "rare" => "blue",
+                "epic" => "purple",
+                "legendary" => "orange",
+                _ => "white",
+            };
+            string gradeKor = item.rarity switch
+            {
+                "uncommon" => "드문",
+                "rare" => "레어",
+                "epic" => "에픽",
+                "legendary" => "레전더리",
+                _ => "흔함",
+            };
+            string itemType = item.id[1] switch
+            {
+                '1' => item.twoHander ? "양손무기" : "한손무기",
+                '2' => "보조무기",
+                '3' => "투구",
+                '4' => "갑옷",
+                '5' => "바지",
+                _ => "아이템"
+            };
+            _ = modalController.SpawnModal(isParent: true,
+                                $"<color=\"{titleColor}\">{item.name[lang]}</color>    <align=\"right\"><size=\"20%\">({gradeKor}-{itemType})</align>",
+                                sb.ToString(),
+                                pos);
         }
-        modalController.SpawnModal(isParent: true, itemSlot.item.name[lang], sb.ToSafeString(), (Vector2)transform.position + rect.sizeDelta * 0.5f);
+        else if (itemSlot.item.id.ToString()[0] == '2') // 스킬일 경우
+        {
+            Skill skill = ServiceHub.Get<ISkillRepository>().GetSkill(itemSlot.item.id.ToString());
+            _ = modalController.SpawnModal(isParent: false, title: $"{skill.name[lang]}", ctx: $"{skill.description[1]}", Vector2.zero);
+        }
     }
     public void OnPointerExit(PointerEventData eventData)
     {

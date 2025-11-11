@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using TMPro;
@@ -30,6 +31,7 @@ public interface IUIRegistry
 public interface IModalController
 {
     public ItemInformationModal[] Modals { get; set; }
+    public UniTask SpawnModal(bool isParent, string title, string ctx, Vector2 pos);
 }
 public class ModalController : IModalController
 {
@@ -41,13 +43,16 @@ public class ModalController : IModalController
     public bool isShowing = false;
     public ItemInformationModal[] Modals { get; set; }
     int modalCount = 0;
-    public void SpawnModal(bool isParent, string title, string ctx, Vector2 pos)
+    public async UniTask SpawnModal(bool isParent, string title, string ctx, Vector2 pos)
     {
         if (isParent)
+        {
+            await HideModal();
             Modals[0].Show(title, ctx, pos);
+        }
         else
         {
-            modalCount = ((++modalCount) % 4) == 0 ? modalCount + 1 : modalCount % 4;
+            modalCount = ++modalCount == 4 ? 1 : modalCount;
             Modals[modalCount].Show(title, ctx, Vector2.zero);
         }
         isShowing = true;

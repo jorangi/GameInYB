@@ -15,11 +15,13 @@ public class InteractableObject : MonoBehaviour
     protected bool isOn = false;
     private void OnEnable()
     {
-        PlayableCharacter.Inst.inputAction.Player.Interact.performed += OnInteract;
+        if(PlayableCharacter.Inst.inputAction != null)
+            PlayableCharacter.Inst.inputAction.Player.Interact.performed += OnInteract;
     }
     private void OnDisable()
     {
-        PlayableCharacter.Inst.inputAction.Player.Interact.performed -= OnInteract;
+        if(PlayableCharacter.Inst.inputAction != null)
+            PlayableCharacter.Inst.inputAction.Player.Interact.performed -= OnInteract;
     }
     protected virtual void OnInteract(InputAction.CallbackContext context)
     {

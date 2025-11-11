@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 63.56, y: -50}
-  m_SizeDelta: {x: 67.12, y: 50}
+  m_AnchoredPosition: {x: 66.005005, y: -50}
+  m_SizeDelta: {x: 72.01, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8782971065001698594
 CanvasRenderer:
@@ -188,8 +188,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30, y: -175.92}
-  m_SizeDelta: {x: 355.72, y: 0}
+  m_AnchoredPosition: {x: 30, y: -150.005}
+  m_SizeDelta: {x: 350, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &5024363155225392597
 CanvasRenderer:
@@ -219,10 +219,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC124\uBA85\uC744 \uC801\uB294 \uACF3. <link=\"asd\">\n<u><color=\"red\">\uB9C1\uD06C\uB791
-    \uC5B8\uB354\uBC14\uB85C \uC774\uB7F0\uAC83\uB3C4 \uAC00\uB2A5</color></u></link>\n<i>\uBCFC\uB4DC\uB294
-    \uC548\uC4F0\uB294\uAC8C \uC88B\uC744\uB4EF</i>\n<link=\"asd\"><color=\"green\">\uC774\uAC70\uB294
-    \uB450\uBC88\uC9F8 \uB9C1\uD06C\uC784</color></link>"
+  m_text: "\uB0B4\uC6A9\uC744 \uAE38\uAC8C \uC801\uB2E4\uBCF4\uBA74 \uC5B4\uB290\uC815\uB3C4
+    \uAE38\uC774\uAE4C\uC9C0 \uB298\uC5B4\uB0A0 \uC218 \uC788\uC744\uAE4C\uC694?"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3eb8814ef47fb8a4085f89f87a73873e, type: 2}
   m_sharedMaterial: {fileID: 6173337107237856897, guid: 3eb8814ef47fb8a4085f89f87a73873e, type: 2}
@@ -320,8 +318,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   widthRange:
-    min: 250
-    max: 600
+    min: 200
+    max: 350
   clampHeight: 0
   heightRange:
     min: 0
@@ -474,7 +472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b62a3e36bd903a7408e468eec31c48bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ParentModal: {fileID: 0}
   rect: {fileID: 1414776270185692543}
-  uiContext: {fileID: 0}
   title: {fileID: 7639650758818591506}
   context: {fileID: 582529077897810576}

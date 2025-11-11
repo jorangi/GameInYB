@@ -13,6 +13,7 @@ public static class ServiceHub
 
         Root.Add(PlayerSession.Inst);
         Root.Add<IItemRepository>(new ItemRepositoryAdapter());
+        Root.Add<ISkillRepository>(new SkillRepositoryAdapter());
         Root.Add<INPCRepository>(new NPCRepositoryAdapter());
 
         Root.Add<ILoginService>(new LoginManager(new PlayableCharacterAccessTokenProvider()));
